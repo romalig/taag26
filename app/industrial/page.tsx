@@ -169,7 +169,7 @@ export default function IndustrialPage() {
             </div>
 
             {/* GRID PRINCIPAL */}
-            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 w-full -mt-26 md:-mt-16">
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 w-full -mt-26 md:-mt-28">
               {FEATURED_SOLUTIONS.map((solution, idx) => {
                 // --- TARJETA HERO (#1) ---
                 if (idx === 0) {
