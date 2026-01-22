@@ -21,7 +21,7 @@ const FEATURED_SOLUTIONS = [
     title: "Zero-Risk Pathogen Control",
     descriptionLeft: "Detect Salmonella and Listeria in <24h with RNA accuracy.",
     descriptionRight: "Stop waiting for cultures. Get definitive results faster.",
-    image: "/2bacterias_verdes2.png",
+    image: "/2bacterias_verdes3.png",
     tags: ["Safety", "Speed"],
   },
   {
@@ -160,7 +160,7 @@ export default function IndustrialPage() {
               }`}
             >
               <Image
-                src="/2bacterias_verdes2.png"
+                src="/2bacterias_verdes3.png"
                 alt="Microbiology Hero"
                 fill
                 className="object-contain"
@@ -169,7 +169,7 @@ export default function IndustrialPage() {
             </div>
 
             {/* GRID PRINCIPAL */}
-            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 w-full -mt-12 md:-mt-16">
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 w-full -mt-26 md:-mt-16">
               {FEATURED_SOLUTIONS.map((solution, idx) => {
                 // --- TARJETA HERO (#1) ---
                 if (idx === 0) {
