@@ -21,7 +21,7 @@ const FEATURED_SOLUTIONS = [
     title: "Zero-Risk Pathogen Control",
     descriptionLeft: "Detect Salmonella and Listeria in <24h with RNA accuracy.",
     descriptionRight: "Stop waiting for cultures. Get definitive results faster.",
-    image: "/2bacterias_verdes.png",
+    image: "/2bacterias_verdes2.png",
     tags: ["Safety", "Speed"],
   },
   {
@@ -153,14 +153,14 @@ export default function IndustrialPage() {
             {/* IMAGEN DECORATIVA SUPERIOR */}
             <div
               ref={imageRef}
-              className={`relative w-full max-w-lg h-[250px] md:h-[350px] z-0 mb-2 transition-all duration-1000 ease-out transform ${
+              className={`relative w-full max-w-lg h-[250px] md:h-[350px] z-0 mb-12 transition-all duration-1000 ease-out transform ${
                 isImageVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-24"
               }`}
             >
               <Image
-                src="/2bacterias_verdes.png"
+                src="/2bacterias_verdes2.png"
                 alt="Microbiology Hero"
                 fill
                 className="object-contain"
@@ -179,7 +179,8 @@ export default function IndustrialPage() {
                       className="md:col-span-3 group bg-[#FDF6E3] rounded-[2rem] p-0 md:px-6 md:pt-6 md:pb-0 flex flex-col md:grid md:grid-cols-3 gap-0 md:gap-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-yellow-300 overflow-hidden relative"
                     >
                       {/* 1. TEXTO SUPERIOR (Móvil) / IZQUIERDA (Desktop) */}
-                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-8 px-8 md:px-0 md:pt-12 pb-4 md:pb-6">
+                      {/* AJUSTE MOVIL: pt-6 px-6 (más compacto) | Desktop intacto */}
+                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-6 px-6 md:px-0 md:pt-12 pb-4 md:pb-6">
                         <div className="flex gap-2 justify-start mb-6">
                           {solution.tags.map((tag) => (
                             <span
@@ -202,15 +203,17 @@ export default function IndustrialPage() {
                       <div
                         className="
                           order-2 relative w-full pointer-events-none
-                          h-[240px] sm:h-[280px] md:h-[400px]
+                          /* AJUSTE MÓVIL: h-[280px] (reducido de 440px) para que no sea tan alta */
+                          h-[280px] sm:h-[350px] md:h-[400px]
                           overflow-hidden
                           my-3 md:my-0
+                          mb-6
                           
                           /* FORZAR ABAJO EN DESKTOP */
                           self-end 
                           
                           /* MARGEN NEGATIVO AGRESIVO EN DESKTOP */
-                          md:-mb-4
+                          md:-mb-0
                           md:translate-y-1
                         "
                       >
@@ -218,8 +221,7 @@ export default function IndustrialPage() {
                           <Image
                             src={solution.image}
                             alt={solution.title}
-                            width={900}
-                            height={700}
+                            fill
                             className="
                               h-auto
                               w-[92%] sm:w-[85%] md:w-full
@@ -229,7 +231,7 @@ export default function IndustrialPage() {
                               group-hover:scale-105
                               
                               /* MASCARA SOLO EN MÓVIL (para el efecto fade) */
-                              [mask-image:linear-gradient(to_bottom,black_0%,black_65%,transparent_100%)]
+                              [mask-image:linear-gradient(to_bottom,black_50%,black_35%,transparent_100%)]
                               
                               /* SIN MASCARA EN DESKTOP (imagen limpia) */
                               md:[mask-image:none]
@@ -240,12 +242,13 @@ export default function IndustrialPage() {
                       </div>
 
                       {/* 3. TEXTO INFERIOR (Móvil) / DERECHA (Desktop) */}
-                      <div className="order-3 text-left flex flex-col justify-start h-full relative z-20 px-8 pb-8 md:px-0 md:pb-6 md:pt-12">
-                        <p className="text-gray-600 text-sm leading-relaxed mb-8 font-medium">
+                      {/* AJUSTE MOVIL: px-6 (más compacto) | Desktop intacto */}
+                      <div className="order-3 text-left flex flex-col justify-start h-full relative z-20 px-6 pb-0 md:px-0 md:pb-6 md:pt-12">
+                        <p className="text-gray-600 text-sm leading-relaxed mb-4 font-medium">
                           {solution.descriptionRight}
                         </p>
 
-                        <div className="flex gap-3 mt-auto md:mt-0">
+                        <div className="flex gap-3 mt-4 md:mt-0">
                           <button
                             onClick={openMeeting}
                             className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md"
