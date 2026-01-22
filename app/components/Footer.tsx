@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Linkedin, Twitter, Globe, CheckCircle2 } from "lucide-react"; // Asegúrate de tener estos iconos o usa los que prefieras
+import { Linkedin, Twitter, Globe, CheckCircle2 } from "lucide-react"; 
 
 export default function Footer() {
   return (
@@ -12,12 +12,11 @@ export default function Footer() {
         {/* SECCIÓN SUPERIOR: Logo + Enlaces */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
           
-          {/* COLUMNA 1: Marca & Misión (Logo Blanco Aquí) */}
+          {/* COLUMNA 1: Marca */}
           <div className="lg:col-span-4 space-y-8">
-            {/* LOGO DE IMAGEN - Reemplaza al texto tipográfico */}
             <div className="relative w-40 h-12">
               <Image
-                src="/logo-white.png" // Asegúrate que el archivo esté en /public
+                src="/logo-white.png"
                 alt="TAAG Logo"
                 fill
                 className="object-contain object-left"
@@ -36,58 +35,50 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* COLUMNA 2: Platform */}
+          {/* COLUMNA 2: Solutions */}
           <div className="lg:col-span-2 lg:col-start-6">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-6">Platform</h4>
+            <h4 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-6">SOLUTIONS</h4>
             <ul className="space-y-4 text-sm font-medium text-white/80">
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Industrial Micro</Link></li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">MILA™ Custom Design</Link></li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">TxA™ AI Software</Link></li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Global Hubs</Link></li>
+              <li>
+                <Link href="/industrial" className="hover:text-[#FF270A] transition-colors">
+                Industrial Microbiology
+                </Link>
+              </li>
+              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Customized Molecular</Link></li>
+              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Digital Transformation</Link></li>
+              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Resources</Link></li>
             </ul>
           </div>
 
-          {/* COLUMNA 3: Company */}
+          {/* COLUMNA 3: Technologies */}
+          <div className="lg:col-span-2">
+            <h4 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-6">TECHNOLOGIES</h4>
+            <ul className="space-y-4 text-sm font-medium text-white/80">
+              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">AIGOR</Link></li>
+              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">MILA</Link></li>
+              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">KAI</Link></li>
+            </ul>
+          </div>
+
+          {/* COLUMNA 4: Company */}
           <div className="lg:col-span-2">
             <h4 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-6">Company</h4>
             <ul className="space-y-4 text-sm font-medium text-white/80">
               <li><Link href="#" className="hover:text-[#FF270A] transition-colors">About Us</Link></li>
               <li>
-                <Link href="#" className="hover:text-[#FF270A] transition-colors flex items-center gap-2">
-                  Careers 
-                  <span className="bg-white/10 text-[10px] px-1.5 py-0.5 rounded text-white/60">Hiring</span>
-                </Link>
-              </li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Contact</Link></li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">News & Press</Link></li>
-            </ul>
-          </div>
-
-          {/* COLUMNA 4: Connect */}
-          <div className="lg:col-span-2">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-6">Connect</h4>
-            <ul className="space-y-4 text-sm font-medium text-white/80">
-              <li>
-                <a href="#" className="flex items-center gap-2 hover:text-[#FF270A] transition-colors">
-                  <Linkedin className="w-4 h-4" /> LinkedIn
-                </a>
-              </li>
-              <li>
-                <a href="#" className="flex items-center gap-2 hover:text-[#FF270A] transition-colors">
-                  <Twitter className="w-4 h-4" /> X (Twitter)
-                </a>
-              </li>
-              <li>
                 <a href="#" className="flex items-center gap-2 hover:text-[#FF270A] transition-colors">
                   <Globe className="w-4 h-4" /> Locations
                 </a>
               </li>
+              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Contact</Link></li>
             </ul>
           </div>
         </div>
 
-        {/* SECCIÓN MEDIA: Ubicaciones & Certificación */}
+        {/* SECCIÓN MEDIA: Ubicaciones & Certificación (CORREGIDA) */}
         <div className="border-t border-white/10 py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+           
+           {/* IZQUIERDA: Ubicaciones */}
            <div className="flex flex-wrap gap-6 text-[10px] font-bold uppercase tracking-widest text-white/40">
              <span>Chicago, US</span>
              <span>Brussels, Be</span>
@@ -95,9 +86,16 @@ export default function Footer() {
              <span>Santiago, CL</span>
            </div>
 
-           <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 rounded-full bg-white/5">
-             <CheckCircle2 className="w-3 h-3 text-green-500" />
-             <span className="text-[10px] font-medium text-white/70">ISO/IEC 17025 Accredited</span>
+           {/* DERECHA: Grupo de Certificaciones (Wrapper Nuevo) */}
+           <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 rounded-full bg-white/5">
+                <CheckCircle2 className="w-3 h-3 text-green-500" />
+                <span className="text-[10px] font-medium text-white/70">ISO/IEC 17025 Accredited</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 border border-white/10 rounded-full bg-white/5">
+                <CheckCircle2 className="w-3 h-3 text-green-500" />
+                <span className="text-[10px] font-medium text-white/70">ISO 13485 Accredited</span>
+              </div>
            </div>
         </div>
 
@@ -109,7 +107,6 @@ export default function Footer() {
           <div className="flex gap-6 text-xs text-white/30 font-medium">
             <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="#" className="hover:text-white transition-colors">Sitemap</Link>
           </div>
         </div>
 

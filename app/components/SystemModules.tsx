@@ -22,7 +22,7 @@ const MODULES = [
     title: "Industrial Microbiology",
     description: "Decisions in as fast as 3 hours. Replace traditional holds with rapid RNA screening.",
     img: CARD_IMG,
-    link: "#industrial",
+    link: "/industrial",
   },
   {
     id: "custom",
