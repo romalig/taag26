@@ -177,7 +177,7 @@ export default function Header() {
                     {/* Texto Descriptivo */}
                     <div className="pt-1">
                         <h4 className="text-lg font-bold text-[#111111] leading-tight mb-1">AiGOR™ Technology</h4>
-                        <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-gray-500 line-clamp-3 leading-relaxed">
                             RNA-based detection, 10,000X more sensitive than PCR, for same-shift results.
                         </p>
                     </div>
