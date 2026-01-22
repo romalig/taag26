@@ -231,8 +231,8 @@ export default function IndustrialPage() {
                               group-hover:scale-105
                               
                               /* MASCARA SOLO EN MÓVIL (para el efecto fade) */
-                              [mask-image:linear-gradient(to_bottom,black_50%,black_35%,transparent_100%)]
-                              
+                              [mask-image:linear-gradient(to_bottom,black_0%,black_45%,transparent_85%)]
+                              [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_45%,transparent_85%)]
                               /* SIN MASCARA EN DESKTOP (imagen limpia) */
                               md:[mask-image:none]
                             "
