@@ -169,7 +169,7 @@ export default function IndustrialPage() {
             </div>
 
             {/* GRID PRINCIPAL */}
-            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 w-full -mt-12 md:-mt-24">
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 w-full -mt-12 md:-mt-16">
               {FEATURED_SOLUTIONS.map((solution, idx) => {
                 // --- TARJETA HERO (#1) ---
                 if (idx === 0) {
@@ -180,7 +180,7 @@ export default function IndustrialPage() {
                     >
                       {/* 1. TEXTO SUPERIOR (Móvil) / IZQUIERDA (Desktop) */}
                       {/* AJUSTE MOVIL: pt-6 px-6 (más compacto) | Desktop intacto */}
-                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-6 px-6 md:px-0 md:pt-12 pb-4 md:pb-6">
+                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-6 px-6 md:px-0 md:pt-12 pb-0 md:pb-6">
                         <div className="flex gap-2 justify-start mb-6">
                           {solution.tags.map((tag) => (
                             <span
@@ -204,10 +204,10 @@ export default function IndustrialPage() {
                         className="
                           order-2 relative w-full pointer-events-none
                           /* AJUSTE MÓVIL: h-[280px] (reducido de 440px) para que no sea tan alta */
-                          h-[280px] sm:h-[350px] md:h-[400px]
+                          h-[280px] sm:h-[350px] md:h-[340px]
                           overflow-hidden
                           my-3 md:my-0
-                          mb-6
+                          mb-6 md:mb-0
                           
                           /* FORZAR ABAJO EN DESKTOP */
                           self-end 
@@ -243,23 +243,26 @@ export default function IndustrialPage() {
 
                       {/* 3. TEXTO INFERIOR (Móvil) / DERECHA (Desktop) */}
                       {/* AJUSTE MOVIL: px-6 (más compacto) | Desktop intacto */}
-                      <div className="order-3 text-left flex flex-col justify-start h-full relative z-20 px-6 pb-0 md:px-0 md:pb-6 md:pt-12">
-                        <p className="text-gray-600 text-sm leading-relaxed mb-4 font-medium">
-                          {solution.descriptionRight}
-                        </p>
+                      {/* 3. TEXTO INFERIOR (Móvil) / DERECHA (Desktop) */}
+<div className="order-3 text-left flex flex-col justify-start md:justify-between relative z-20 px-6 pb-12 md:px-0 md:pb-2 md:pt-12">
+  <div>
+    <p className="text-gray-600 text-sm leading-relaxed mb-4 font-medium">
+      {solution.descriptionRight}
+    </p>
+  </div>
 
-                        <div className="flex gap-3 mt-4 md:mt-0">
-                          <button
-                            onClick={openMeeting}
-                            className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md"
-                          >
-                            Contact <ArrowRight className="w-3 h-3" />
-                          </button>
-                          <button className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm">
-                            Details
-                          </button>
-                        </div>
-                      </div>
+  <div className="flex gap-3 mt-4 md:mt-0">
+    <button
+      onClick={openMeeting}
+      className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md"
+    >
+      Contact <ArrowRight className="w-3 h-3" />
+    </button>
+    <button className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm">
+      Details
+    </button>
+  </div>
+</div>
                     </div>
                   );
                 }
