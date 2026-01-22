@@ -58,7 +58,6 @@ export default function IndustrialPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
-  // ESTADO PARA LA ANIMACIÓN DE SCROLL
   const [isImageVisible, setIsImageVisible] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -68,11 +67,10 @@ export default function IndustrialPage() {
         const [entry] = entries;
         if (entry.isIntersecting) {
           setIsImageVisible(true);
-          // Opcional: desconectar el observer si solo quieres que pase una vez
           observer.disconnect();
         }
       },
-      { threshold: 0.2 } // Se activa cuando el 20% del elemento es visible
+      { threshold: 0.1 }
     );
 
     if (imageRef.current) {
@@ -96,11 +94,13 @@ export default function IndustrialPage() {
       {/* 1. HERO SECTION */}
       <section className="pt-40 pb-10 px-6 max-w-7xl mx-auto text-center relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-b from-gray-50 to-transparent rounded-full blur-3xl -z-10 opacity-60" />
-        <h1 className="text-5xl md:text-7xl font-extrabold text-[#111111] mb-8 tracking-tight leading-[1.1]">
+        
+        {/* FIX TÍTULO: Agregado hyphens-auto y break-words para palabras largas como Microbiological */}
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-8 tracking-tight leading-[1.1] break-words hyphens-auto max-w-[95vw] mx-auto">
           The Next Generation of <br />
           <span className="text-gray-400">Microbiological Solutions.</span>
         </h1>
-        <p className="text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed">
+        <p className="text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed px-2">
           Explore microbiological solutions for multiplex and ultra-fast detection.
         </p>
       </section>
@@ -123,13 +123,13 @@ export default function IndustrialPage() {
                </p>
             </div>
 
-            {/* IMAGEN CENTRAL CON ANIMACIÓN SCROLL TRIGGERED */}
+            {/* IMAGEN DECORATIVA SUPERIOR */}
             <div 
               ref={imageRef}
               className={`relative w-full max-w-lg h-[250px] md:h-[350px] z-0 mb-8 transition-all duration-1000 ease-out transform ${
                 isImageVisible 
                   ? "opacity-100 translate-y-0" 
-                  : "opacity-0 translate-y-24" // Empieza invisible y abajo
+                  : "opacity-0 translate-y-24"
               }`}
             >
                <Image 
@@ -151,10 +151,10 @@ export default function IndustrialPage() {
                    return (
                     <div 
                       key={solution.id} 
-                      className="md:col-span-3 group bg-[#FDF6E3] rounded-[2rem] p-6 grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-yellow-300 overflow-hidden relative"
+                      className="md:col-span-3 group bg-[#FDF6E3] rounded-[2rem] p-0 md:p-6 flex flex-col md:grid md:grid-cols-3 gap-0 md:gap-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-yellow-300 overflow-hidden relative"
                     >
-                      {/* 1. COLUMNA IZQUIERDA */}
-                      <div className="text-left order-2 md:order-1 relative z-10 flex flex-col justify-start pt-8 md:pt-12">
+                      {/* 1. TEXTO SUPERIOR (Móvil) / IZQUIERDA (Desktop) */}
+                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-8 px-8 md:px-0 md:pt-12 pb-4 md:pb-0">
                         <div className="flex gap-2 justify-start mb-6">
                            {solution.tags.map(tag => (
                              <span key={tag} className="px-3 py-1 bg-white text-[10px] font-bold uppercase tracking-wider rounded-full text-[#111111] shadow-sm">
@@ -168,19 +168,28 @@ export default function IndustrialPage() {
                         </p>
                       </div>
 
-                      {/* 2. COLUMNA CENTRAL */}
-                      <div className="relative h-64 md:h-[350px] w-full order-1 md:order-2 flex items-end justify-center -mb-6 md:-mb-10">
+                      {/* 2. IMAGEN CENTRAL (Sandwich en móvil) */}
+                      {/* En móvil: Altura fija, sin márgenes negativos para evitar solapamientos raros */}
+                      <div className="order-2 relative h-[220px] md:h-[400px] w-full flex items-end justify-center pointer-events-none md:-mb-10">
+                        
+                        {/* DEGRADADO SUPERIOR (Solo móvil): Fundido suave hacia el texto de arriba */}
+                        <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-[#FDF6E3] to-transparent z-10 md:hidden" />
+                        
                         <Image 
                           src={solution.image} 
                           alt={solution.title} 
                           fill 
-                          className="object-contain object-bottom group-hover:scale-105 transition-transform duration-700 drop-shadow-2xl" 
+                          // FIX: object-contain + object-center en movil para que se vea completa
+                          className="object-contain object-center md:object-bottom group-hover:scale-105 transition-transform duration-700 drop-shadow-2xl relative z-0 p-4 md:p-0" 
                         />
+
+                        {/* DEGRADADO INFERIOR (Solo móvil): Fundido suave hacia el texto de abajo */}
+                        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#FDF6E3] to-transparent z-10 md:hidden" />
                       </div>
 
-                      {/* 3. COLUMNA DERECHA */}
-                      <div className="text-left flex flex-col justify-start h-full order-3 relative z-10 pt-8 md:pt-12">
-                         <p className="text-gray-600 text-sm leading-relaxed mb-10 font-medium">
+                      {/* 3. TEXTO INFERIOR (Móvil) / DERECHA (Desktop) */}
+                      <div className="order-3 text-left flex flex-col justify-start h-full relative z-20 px-8 pb-8 md:px-0 md:pb-0 md:pt-12">
+                         <p className="text-gray-600 text-sm leading-relaxed mb-8 font-medium">
                             {solution.descriptionRight}
                          </p>
                          
@@ -200,14 +209,13 @@ export default function IndustrialPage() {
                    );
                 } 
                 
-                // --- TARJETAS NORMALES (#2, #3, #4) ---
+                // --- TARJETAS NORMALES ---
                 else {
                    return (
                     <div 
                       key={solution.id} 
                       className="md:col-span-1 group bg-white rounded-[2rem] p-2 flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
                     >
-                      {/* Imagen */}
                       <div className="relative bg-gray-50 rounded-[1.5rem] overflow-hidden h-48 w-full flex items-end justify-center">
                         <Image 
                           src={solution.image} 
@@ -224,7 +232,6 @@ export default function IndustrialPage() {
                         </div>
                       </div>
 
-                      {/* Texto */}
                       <div className="flex flex-col justify-between p-6 flex-1">
                         <div>
                           <h3 className="text-xl font-bold text-[#111111] mb-3">{solution.title}</h3>
@@ -256,7 +263,7 @@ export default function IndustrialPage() {
         </div>
       </section>
 
-      {/* 3. WORKFLOW & 4. CATALOG (Sin cambios) */}
+      {/* SECCIONES RESTANTES */}
       <section className="py-24 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6">
            <div className="text-center mb-20">
