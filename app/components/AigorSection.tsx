@@ -117,7 +117,7 @@ export default function AigorSection() {
           <div className="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm text-left hover:bg-white/10 transition-colors">
             <Zap className="w-8 h-8 text-blue-400 mb-4" />
             <div className="text-4xl font-bold text-white mb-2">Protocol Zero</div>
-            <p className="text-sm font-bold uppercase tracking-wider text-white/40 mb-2">Enrichment Required</p>
+            <p className="text-sm font-bold uppercase tracking-wider text-white/40 mb-2">NO Enrichment Required</p>
             <p className="text-sm text-white/60">
               Direct detection capabilities mean you stop growing pathogens and start eliminating them.
             </p>
