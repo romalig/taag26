@@ -16,12 +16,14 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useCTA } from "../components/CTAProvider";
 
-// --- DATOS ---
+// --- DATOS CORREGIDOS ---
 const FEATURED_SOLUTIONS = [
   {
     id: "pathogen-control",
     title: "Zero-Risk and Ultra-fast Internal EMP Pathogen Testing",
-    descriptionLeft: "Detect pathogens in < 3 hours without enrichment. Bring testing in-house with absolute safety and efficiency.",
+    // CORRECCIÓN: Separamos el texto para que coincida con descriptionLeft y description
+    descriptionLeft: "Detect pathogens in < 3 hours without enrichment.",
+    description: "Bring testing in-house with absolute safety and efficiency.", 
     advantages: [
       "Zero Biohazard: No enrichment means no pathogen growth on-site.",
       "Fast Results: Results in hours rather than days.",
@@ -191,7 +193,7 @@ export default function IndustrialPage() {
                       </div>
 
                       {/* =====================================================================
-                          2. COMPONENTE VISUAL: "TIME BENCHMARK" (Ajustado Desktop)
+                          2. COMPONENTE VISUAL: "TIME BENCHMARK" (Optimizado Desktop/Móvil)
                          ===================================================================== */}
                       <div
                         className="
@@ -268,6 +270,7 @@ export default function IndustrialPage() {
                              Advantages
                            </h4>
                            <p className="text-gray-600 text-sm leading-relaxed mb-3 font-medium">
+                              {/* AQUÍ SE USABA solution.description, AHORA YA EXISTE EN LOS DATOS */}
                               {solution.description}
                            </p>
                            {/* Lista con iconos */}
