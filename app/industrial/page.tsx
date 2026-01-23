@@ -9,6 +9,8 @@ import {
   Activity,
   Microscope,
   CheckCircle2,
+  Clock,
+  TrendingDown,
 } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -18,11 +20,16 @@ import { useCTA } from "../components/CTAProvider";
 const FEATURED_SOLUTIONS = [
   {
     id: "pathogen-control",
-    title: "Zero-Risk Pathogen Control",
-    descriptionLeft: "Detect Salmonella and Listeria in <24h with RNA accuracy.",
-    descriptionRight: "Stop waiting for cultures. Get definitive results faster.",
-    image: "/2bacterias_verdes3.png",
-    tags: ["Safety", "Speed"],
+    title: "Zero-Risk and Ultra-fast Internal EMP Pathogen Testing",
+    descriptionLeft: "Detect pathogens in < 3 hours without enrichment. Bring testing in-house with absolute safety and efficiency.",
+    advantages: [
+      "Zero Biohazard: No enrichment means no pathogen growth on-site.",
+      "Fast Results: Results in hours rather than days.",
+      "Instant Action: Shift from reactive waiting to same-day intervention.",
+      "Cost Efficiency: Eliminate external lab fees and shipping delays.",
+    ],
+    image: null, 
+    tags: ["EMP", "AiGOR"],
   },
   {
     id: "spoilage-prevention",
@@ -49,21 +56,11 @@ const FEATURED_SOLUTIONS = [
 
 const PRODUCT_CATALOG = [
   { id: 1, name: "SalmoQuick™ PCR Kit", category: "Pathogens", type: "Kit" },
-  {
-    id: 2,
-    name: "Listeria Monocytogenes PCR",
-    category: "Pathogens",
-    type: "Kit",
-  },
+  { id: 2, name: "Listeria Monocytogenes PCR", category: "Pathogens", type: "Kit" },
   { id: 3, name: "Total Yeast & Mold", category: "Spoilage", type: "Kit" },
   { id: 4, name: "E. Coli O157:H7 Rapid", category: "Pathogens", type: "Kit" },
   { id: 5, name: "TxA Software License", category: "Software", type: "Digital" },
-  {
-    id: 6,
-    name: "Surface Swab Pro",
-    category: "Consumables",
-    type: "Accessory",
-  },
+  { id: 6, name: "Surface Swab Pro", category: "Consumables", type: "Accessory" },
   { id: 7, name: "S. Aureus Detect", category: "Pathogens", type: "Kit" },
   { id: 8, name: "Lactic Acid Bacteria", category: "Spoilage", type: "Kit" },
 ];
@@ -120,8 +117,7 @@ export default function IndustrialPage() {
         </h1>
 
         <p className="text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed px-2">
-          Explore microbiological solutions for multiplex and ultra-fast
-          detection.
+          Explore microbiological solutions for multiplex and ultra-fast detection to accelerate decisions, reduce risk, and improve productivity.
         </p>
       </section>
 
@@ -132,22 +128,18 @@ export default function IndustrialPage() {
             <div
               className="absolute inset-0 opacity-[0.03]"
               style={{
-                backgroundImage:
-                  "radial-gradient(#111 1px, transparent 1px)",
+                backgroundImage: "radial-gradient(#111 1px, transparent 1px)",
                 backgroundSize: "24px 24px",
               }}
             />
 
             <div className="relative z-10 text-center mb-8 max-w-2xl mx-auto">
               <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
-                Featured Bundles
+                Featured SOLUTIONS
               </span>
               <h2 className="text-4xl md:text-5xl font-bold text-[#111111]">
-                Targeted Solutions
+                This is how the future looks like
               </h2>
-              <p className="text-gray-500 mt-4 text-sm font-medium">
-                Pre-configured combinations designed for specific goals.
-              </p>
             </div>
 
             {/* IMAGEN DECORATIVA SUPERIOR */}
@@ -178,9 +170,8 @@ export default function IndustrialPage() {
                       key={solution.id}
                       className="md:col-span-3 group bg-[#FDF6E3] rounded-[2rem] p-0 md:px-6 md:pt-6 md:pb-0 flex flex-col md:grid md:grid-cols-3 gap-0 md:gap-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-yellow-300 overflow-hidden relative"
                     >
-                      {/* 1. TEXTO SUPERIOR (Móvil) / IZQUIERDA (Desktop) */}
-                      {/* AJUSTE MOVIL: pt-6 px-6 (más compacto) | Desktop intacto */}
-                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-6 px-6 md:px-0 md:pt-12 pb-0 md:pb-6">
+                      {/* 1. TEXTO IZQUIERDA */}
+                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-8 px-8 md:px-0 md:pt-6 pb-4 md:pb-6">
                         <div className="flex gap-2 justify-start mb-6">
                           {solution.tags.map((tag) => (
                             <span
@@ -199,75 +190,126 @@ export default function IndustrialPage() {
                         </p>
                       </div>
 
-                      {/* 2. IMAGEN CENTRAL */}
+                      {/* =====================================================================
+                          2. COMPONENTE VISUAL: "TIME BENCHMARK" (Ajustado Desktop)
+                         ===================================================================== */}
                       <div
                         className="
-                          order-2 relative w-full pointer-events-none
-                          /* AJUSTE MÓVIL: h-[280px] (reducido de 440px) para que no sea tan alta */
-                          h-[280px] sm:h-[350px] md:h-[340px]
-                          overflow-hidden
-                          my-3 md:my-0
+                          order-2 relative w-full
+                          /* Altura automática en móvil, mínima en desktop */
+                          h-auto min-h-[340px] md:min-h-[340px]
+                          flex flex-col items-center
+                          pt-8 pb-8 md:pt-6 md:pb-6
+                          px-8 md:px-6
                           mb-6 md:mb-0
-                          
-                          /* FORZAR ABAJO EN DESKTOP */
-                          self-end 
-                          
-                          /* MARGEN NEGATIVO AGRESIVO EN DESKTOP */
-                          md:-mb-0
-                          md:translate-y-1
                         "
                       >
-                        <div className="absolute inset-0 flex items-center md:items-end justify-center">
-                          <Image
-                            src={solution.image}
-                            alt={solution.title}
-                            fill
-                            className="
-                              h-auto
-                              w-[92%] sm:w-[85%] md:w-full
-                              object-contain
-                              object-center md:object-bottom
-                              transition-transform duration-700
-                              group-hover:scale-105
+                         <style dangerouslySetInnerHTML={{__html: `
+                          @keyframes grow-up-slow { from { height: 0%; } to { height: 85%; } }
+                          @keyframes grow-up-fast { from { height: 0%; } to { height: 15%; } }
+                        `}} />
+
+                        {/* Contenedor Flex Vertical Completo */}
+                        <div className="w-full max-w-[280px] md:max-w-none mx-auto flex flex-col h-full justify-between gap-6 md:gap-0">
+                           
+                           {/* A. Header */}
+                           <div className="flex items-center justify-center md:justify-start gap-2">
+                              <Clock className="w-4 h-4 text-yellow-700" />
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-yellow-700">Time to Result</span>
+                           </div>
+
+                           {/* B. Cuerpo: Barras Verticales */}
+                           {/* Aumentado el margen inferior en desktop (md:mb-16) para separar del box de savings */}
+                           <div className="flex-1 flex items-end justify-center gap-4 md:gap-8 relative z-10 min-h-[200px] mb-8 md:mb-16 mt-4">
                               
-                              /* MASCARA SOLO EN MÓVIL (para el efecto fade) */
-                              [mask-image:linear-gradient(to_bottom,black_0%,black_45%,transparent_75%)]
-                              [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_45%,transparent_75%)]
-                              /* SIN MASCARA EN DESKTOP (imagen limpia) */
-                              md:[mask-image:none]
-                            "
-                            priority
-                          />
+                              {/* Barra 1: Competencia */}
+                              <div className="flex flex-col items-center gap-3 w-14 group">
+                                 <div className="w-12 bg-white border border-gray-50 rounded-t-full relative overflow-hidden h-[150px] md:h-[160px] flex items-end justify-center">
+                                    <div className="w-full bg-gray-300 rounded-t-full" style={{height: '85%', animation: 'grow-up-slow 2s ease-out forwards'}}></div>
+                                 </div>
+                                 <div className="text-center">
+                                    <div className="text-[9px] font-bold text-gray-400 uppercase leading-tight">External Lab</div>
+                                    <div className="text-[9px] font-medium text-gray-400 mt-1">3-5 Days</div>
+                                 </div>
+                              </div>
+
+                              {/* Barra 2: AiGOR Tech */}
+                              <div className="flex flex-col items-center gap-3 w-14 group">
+                                 <div className="w-12 bg-white border border-gray-50 rounded-t-full relative overflow-hidden h-[150px] md:h-[160px] flex items-end justify-center">
+                                    <div className="w-full bg-[#FF270A] rounded-t-full shadow-[0_0_20px_rgba(255,39,10,0.3)] relative" style={{height: '15%', animation: 'grow-up-fast 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'}}>
+                                       <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-1 w-full h-[2px] bg-white/50"></div>
+                                    </div>
+                                 </div>
+                                 <div className="text-center">
+                                    <div className="text-[9px] font-bold text-[#111111] uppercase leading-tight">AiGOR Tech</div>
+                                    <div className="text-[9px] font-bold text-[#FF270A] mt-1">&lt; 3 Hours</div>
+                                 </div>
+                              </div>
+
+                           </div>
+
+                           {/* C. Footer: Badge de Ahorro */}
+                           <div className="flex justify-center md:justify-center">
+                              <div className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-50 border border-emerald-100 rounded-full w-full justify-center">
+                                <TrendingDown className="w-3.5 h-3.5 text-emerald-600" />
+                                <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Significant Cost Savings</span>
+                              </div>
+                           </div>
+
                         </div>
                       </div>
+                      {/* ==================== FIN COMPONENTE ==================== */}
 
-                      {/* 3. TEXTO INFERIOR (Móvil) / DERECHA (Desktop) */}
-                      {/* AJUSTE MOVIL: px-6 (más compacto) | Desktop intacto */}
-                      {/* 3. TEXTO INFERIOR (Móvil) / DERECHA (Desktop) */}
-<div className="order-3 text-left flex flex-col justify-start md:justify-between relative z-20 px-6 pb-12 md:px-0 md:pb-2 md:pt-12">
-  <div>
-    <p className="text-gray-600 text-sm leading-relaxed mb-4 font-medium">
-      {solution.descriptionRight}
-    </p>
-  </div>
 
-  <div className="flex gap-3 mt-4 md:mt-0">
-    <button
-      onClick={openMeeting}
-      className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md"
-    >
-      Contact <ArrowRight className="w-3 h-3" />
-    </button>
-    <button className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm">
-      Details
-    </button>
-  </div>
-</div>
+                      {/* 3. TEXTO DERECHA: VENTAJAS */}
+                      <div className="order-3 text-left flex flex-col justify-start md:justify-between relative z-20 px-8 pb-6 md:px-0 md:pb-6 md:pt-6">
+                        <div className="mb-6">
+                           <h4 className="text-[#111111] font-bold text-sm uppercase tracking-widest mb-6">
+                             Advantages
+                           </h4>
+                           <p className="text-gray-600 text-sm leading-relaxed mb-3 font-medium">
+                              {solution.descriptionRight}
+                           </p>
+                           {/* Lista con iconos */}
+                           {solution.advantages && (
+                             <ul className="flex flex-col gap-2">
+                               {solution.advantages.map((adv, i) => {
+                                 const [title, ...rest] = adv.split(":");
+                                 const description = rest.join(":");
+
+                                 return (
+                                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600 font-medium leading-tight">
+                                     <CheckCircle2 className="w-4 h-4 text-[#FF270A] shrink-0 mt-0.5" />
+                                     <span>
+                                       <span className="text-[#111111] font-bold">
+                                         {title}{description ? ":" : ""}
+                                       </span>
+                                       {description}
+                                     </span>
+                                   </li>
+                                 );
+                               })}
+                             </ul>
+                           )}
+                        </div>
+
+                         <div className="flex gap-3 mt-auto md:mt-4">
+                           <button
+                            onClick={openMeeting}
+                            className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md"
+                            >
+                           Contact <ArrowRight className="w-3 h-3" />
+                           </button>
+                            <button className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm">
+                            Details
+                           </button>
+                          </div>
+                        </div>
                     </div>
                   );
                 }
 
-                // --- TARJETAS NORMALES ---
+                // --- TARJETAS NORMALES (Index > 0) ---
                 return (
                   <div
                     key={solution.id}
