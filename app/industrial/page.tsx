@@ -35,8 +35,8 @@ const FEATURED_SOLUTIONS = [
   },
   {
     id: "pathogen-control2",
-    title: "Fast control of Salmonella in the food industry",
-    description: "Same-shift Results for Salmonella in Environmental and Food Samples.",
+    title: "Fast Control of Salmonella in the Food Industry",
+    description: "Same-shift results for Salmonella in environmental and food samples.",
     image: "/chocolate3.png",
     tags: ["Salmonella", "Fast"],
   },
