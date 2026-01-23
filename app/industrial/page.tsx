@@ -268,7 +268,7 @@ export default function IndustrialPage() {
                              Advantages
                            </h4>
                            <p className="text-gray-600 text-sm leading-relaxed mb-3 font-medium">
-                              {solution.descriptionRight}
+                              {solution.description}
                            </p>
                            {/* Lista con iconos */}
                            {solution.advantages && (
