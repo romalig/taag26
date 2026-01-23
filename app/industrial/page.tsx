@@ -579,8 +579,6 @@ export default function IndustrialPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </main>
   );
 }
