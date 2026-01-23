@@ -16,21 +16,22 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useCTA } from "../components/CTAProvider";
 
-// --- DATOS CORREGIDOS ---
+// --- DATOS ---
 const FEATURED_SOLUTIONS = [
   {
     id: "pathogen-control",
     title: "Zero-Risk and Ultra-fast Internal EMP Pathogen Testing",
-    // CORRECCIÓN: Separamos el texto para que coincida con descriptionLeft y description
     descriptionLeft: "Detect pathogens in < 3 hours without enrichment.",
-    description: "Bring testing in-house with absolute safety and efficiency.", 
+    description: "Bring testing in-house with absolute safety and efficiency.",
     advantages: [
       "Zero Biohazard: No enrichment means no pathogen growth on-site.",
       "Fast Results: Results in hours rather than days.",
       "Instant Action: Shift from reactive waiting to same-day intervention.",
       "Cost Efficiency: Eliminate external lab fees and shipping delays.",
     ],
-    image: null, 
+    // CORRECCIÓN: TypeScript requiere un string aquí para el tipo 'src', aunque no se renderice visualmente.
+    // Usamos una imagen válida para evitar el error de build.
+    image: "/2bacterias_verdes3.png", 
     tags: ["EMP", "AiGOR"],
   },
   {
