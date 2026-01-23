@@ -36,21 +36,21 @@ const FEATURED_SOLUTIONS = [
   {
     id: "pathogen-control2",
     title: "Fast control of Salmonella in the food industry",
-    description: "Same-shift results for Salmonella in environmental and food samples.",
+    description: "Same-shift Results for Salmonella in Environmental and Food Samples.",
     image: "/chocolate3.png",
     tags: ["Salmonella", "Fast"],
   },
   {
     id: "simultaneous-detection",
-    title: "Multiplex Process Control",
-    description: "Detect Pathogens & Indicators in a single reaction. Preventive control meets efficiency.", 
+    title: "Comprehensive and Preventive Process Control",
+    description: "Detect Pathogens & Indicators in a single PCR reaction. Preventive control meets efficiency.", 
     image: null, // Usaremos componente CSS personalizado
     tags: ["4-in-1", "Preventive"],
   },
   {
     id: "spoilage",
-    title: "Detection of most spoilage microorganisms",
-    description: "Fast and reliable detection of most critical spoilage microorganisms in a single molecular workflow.",
+    title: "Comprehensive Spoilage Control",
+    description: "Fast and accurate detection of spoilage yeast, mold, and acidiphilic bacteria in a single PCR run.",
     image: "/spoilage.png",
     tags: ["Spoilage", "Productivity"],
   },
