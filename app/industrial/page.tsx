@@ -11,7 +11,8 @@ import {
   CheckCircle2,
   Clock,
   TrendingDown,
-  Zap, 
+  ShieldCheck,
+  FileCheck,
 } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -19,6 +20,7 @@ import { useCTA } from "../components/CTAProvider";
 
 // --- DATOS ---
 const FEATURED_SOLUTIONS = [
+  // --- 0. HERO SUPERIOR ---
   {
     id: "pathogen-control",
     title: "Zero-Risk and Ultra-Fast Internal EMP Pathogen Testing",
@@ -31,28 +33,47 @@ const FEATURED_SOLUTIONS = [
       "Cost Efficiency: Eliminate external lab fees and shipping delays.",
     ],
     image: "/2bacterias_verdes3.png", 
-    tags: ["EMP", "efficiciency"],
+    tags: ["EMP", "AiGOR"],
   },
+  // --- 1. SALMONELLA ---
   {
     id: "pathogen-control2",
-    title: "Fast Control of Salmonella in the Food Industry",
+    title: "Fast control of Salmonella in the food industry",
     description: "Same-shift results for Salmonella in environmental and food samples.",
-    image: "/chocolate3.png",
-    tags: ["Salmonella", "Fast"],
+    image: "/chocolate14.png",
+    tags: ["Salmonella", "AiGOR"],
   },
+  // --- 2. MULTIPLEX ---
   {
     id: "simultaneous-detection",
-    title: "Comprehensive and Preventive Process Control",
-    description: "Detect Pathogens & Indicators in a single PCR reaction. Preventive control meets efficiency.", 
-    image: null, // Usaremos componente CSS personalizado
+    title: "Multiplex Process Control",
+    description: "Detect Pathogens & Indicators in a single reaction. Preventive control meets efficiency.", 
+    image: "/F41-3.png", 
     tags: ["4-in-1", "Preventive"],
   },
+  // --- 3. SPOILAGE JUGO ---
   {
-    id: "spoilage",
-    title: "Comprehensive Spoilage Control",
-    description: "Fast and accurate detection of spoilage yeast, mold, and acidiphilic bacteria in a single PCR run.",
-    image: "/spoilage.png",
-    tags: ["Spoilage", "Productivity"],
+    id: "spoilage-detection",
+    title: "Broad-Spectrum Spoilage Defense",
+    description: "Screen for yeast, mold, and bacteria in a single run. Secure shelf-life with absolute molecular precision.",
+    image: "/spoilage-4.png", 
+    tags: ["Spoilage", "Beverages"],
+  },
+  // --- 4. HIGIENE ---
+  {
+    id: "hygiene-monitoring",
+    title: "Surface & Drain Hygiene Pro",
+    description: "Quantitative tracking of hygiene indicators to prevent biofilm formation.",
+    image: "/F39-2.png", 
+    tags: ["Hygiene", "Prevention"],
+  },
+  // --- 5. TxA INTEGRATION (FULL IMAGE + CLEAN DOTTED DIAGRAM) ---
+  {
+    id: "txa-integration",
+    title: "All seamlessly integrated to TxA",
+    description: "Ai platform to turn complex data into preventive action.",
+    image: "/hims4.png", 
+    tags: ["TxA", "Software"],
   },
 ];
 
@@ -123,10 +144,11 @@ export default function IndustrialPage() {
         </p>
       </section>
 
-      {/* 2. FEATURED SOLUTIONS */}
+      {/* 2. FEATURED SOLUTIONS GRID */}
       <section className="px-4 md:px-6 mb-32">
         <div className="max-w-7xl mx-auto">
-          <div className="relative bg-[#F4F4F5] rounded-[3rem] overflow-hidden pt-16 pb-24 px-6 md:px-16 flex flex-col items-center">
+          <div className="relative bg-[#F4F4F5] rounded-[3rem] overflow-hidden pt-16 pb-32 px-6 md:px-16 flex flex-col items-center">
+            
             <div
               className="absolute inset-0 opacity-[0.03]"
               style={{
@@ -144,7 +166,6 @@ export default function IndustrialPage() {
               </h2>
             </div>
 
-            {/* IMAGEN DECORATIVA SUPERIOR */}
             <div
               ref={imageRef}
               className={`relative w-full max-w-lg h-[250px] md:h-[350px] z-0 mb-12 transition-all duration-1000 ease-out transform ${
@@ -163,132 +184,89 @@ export default function IndustrialPage() {
             </div>
 
             {/* GRID PRINCIPAL */}
-            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 w-full -mt-26 md:-mt-28">
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 w-full -mt-26 md:-mt-28">
+              
               {FEATURED_SOLUTIONS.map((solution, idx) => {
                 
                 // ========================================================================
-                // 1. TARJETA HERO (ÍNDICE 0)
+                // 1. HERO SUPERIOR (ÍNDICE 0)
                 // ========================================================================
                 if (idx === 0) {
                   return (
                     <div
                       key={solution.id}
-                      className="md:col-span-3 group bg-[#FDF6E3] rounded-[2rem] p-0 md:px-6 md:pt-6 md:pb-0 flex flex-col md:grid md:grid-cols-3 gap-0 md:gap-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-yellow-300 overflow-hidden relative"
+                      className="md:col-span-2 group bg-[#FDF6E3] rounded-[2.5rem] p-0 md:px-8 md:pt-8 md:pb-0 flex flex-col md:grid md:grid-cols-3 gap-0 md:gap-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-yellow-300 overflow-hidden relative"
                     >
-                      {/* 1. TEXTO IZQUIERDA */}
-                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-8 px-8 md:px-0 md:pt-6 pb-4 md:pb-6">
-                        <div className="flex gap-2 justify-start mb-6">
-                          {solution.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-3 py-1 bg-white text-[10px] font-bold uppercase tracking-wider rounded-full text-[#111111] shadow-sm"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <h3 className="text-3xl font-bold text-[#111111] mb-4 leading-tight">
-                          {solution.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm leading-relaxed font-medium">
-                          {solution.descriptionLeft}
-                        </p>
+                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-10 px-10 md:px-0 md:pt-8 pb-6 md:pb-8">
+                        <h3 className="text-4xl font-bold text-[#111111] mb-6 leading-tight">{solution.title}</h3>
+                        <p className="text-gray-600 text-base leading-relaxed font-medium">{solution.descriptionLeft}</p>
                       </div>
 
-                      {/* 2. COMPONENTE VISUAL: "TIME BENCHMARK" */}
-                      <div
-                        className="
-                          order-2 relative w-full
-                          h-auto min-h-[340px] md:min-h-[340px]
-                          flex flex-col items-center
-                          pt-8 pb-8 md:pt-6 md:pb-6
-                          px-8 md:px-6
-                          mb-6 md:mb-0
-                        "
-                      >
+                      <div className="order-2 relative w-full h-auto min-h-[340px] md:min-h-[400px] flex flex-col items-center pt-8 pb-8 md:pt-8 md:pb-8 px-8 md:px-6 mb-6 md:mb-0">
                          <style dangerouslySetInnerHTML={{__html: `
                           @keyframes grow-up-slow { from { height: 0%; } to { height: 85%; } }
                           @keyframes grow-up-fast { from { height: 0%; } to { height: 15%; } }
                         `}} />
-
                         <div className="w-full max-w-[280px] md:max-w-none mx-auto flex flex-col h-full justify-between gap-6 md:gap-0">
                            <div className="flex items-center justify-center md:justify-start gap-2">
-                              <Clock className="w-4 h-4 text-yellow-700" />
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-yellow-700">Time to Result</span>
+                              <Clock className="w-5 h-5 text-yellow-700" />
+                              <span className="text-[11px] font-bold uppercase tracking-widest text-yellow-700">Time to Result</span>
                            </div>
-
-                           <div className="flex-1 flex items-end justify-center gap-4 md:gap-8 relative z-10 min-h-[200px] mb-8 md:mb-16 mt-4">
-                              <div className="flex flex-col items-center gap-3 w-14 group">
-                                 <div className="w-12 bg-white border border-gray-50 rounded-t-full relative overflow-hidden h-[150px] md:h-[160px] flex items-end justify-center">
+                           <div className="flex-1 flex items-end justify-center gap-6 md:gap-10 relative z-10 min-h-[240px] mb-10 md:mb-20 mt-6">
+                              <div className="flex flex-col items-center gap-3 w-16 group">
+                                 <div className="w-14 bg-white border border-gray-50 rounded-t-full relative overflow-hidden h-[180px] md:h-[200px] flex items-end justify-center">
                                     <div className="w-full bg-gray-300 rounded-t-full" style={{height: '85%', animation: 'grow-up-slow 2s ease-out forwards'}}></div>
                                  </div>
                                  <div className="text-center">
-                                    <div className="text-[9px] font-bold text-gray-400 uppercase leading-tight">External Lab</div>
-                                    <div className="text-[9px] font-medium text-gray-400 mt-1">3-5 Days</div>
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase leading-tight">External Lab</div>
+                                    <div className="text-[10px] font-medium text-gray-400 mt-1">3-5 Days</div>
                                  </div>
                               </div>
-                              <div className="flex flex-col items-center gap-3 w-14 group">
-                                 <div className="w-12 bg-white border border-gray-50 rounded-t-full relative overflow-hidden h-[150px] md:h-[160px] flex items-end justify-center">
+                              <div className="flex flex-col items-center gap-3 w-16 group">
+                                 <div className="w-14 bg-white border border-gray-50 rounded-t-full relative overflow-hidden h-[180px] md:h-[200px] flex items-end justify-center">
                                     <div className="w-full bg-[#FF270A] rounded-t-full shadow-[0_0_20px_rgba(255,39,10,0.3)] relative" style={{height: '15%', animation: 'grow-up-fast 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'}}>
                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-1 w-full h-[2px] bg-white/50"></div>
                                     </div>
                                  </div>
                                  <div className="text-center">
-                                    <div className="text-[9px] font-bold text-[#111111] uppercase leading-tight">AiGOR Tech</div>
-                                    <div className="text-[9px] font-bold text-[#FF270A] mt-1">&lt; 3 Hours</div>
+                                    <div className="text-[10px] font-bold text-[#111111] uppercase leading-tight">AiGOR Tech</div>
+                                    <div className="text-[10px] font-bold text-[#FF270A] mt-1">&lt; 3 Hours</div>
                                  </div>
                               </div>
                            </div>
-
                            <div className="flex justify-center md:justify-center">
-                              <div className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-50 border border-emerald-100 rounded-full w-full justify-center">
-                                <TrendingDown className="w-3.5 h-3.5 text-emerald-600" />
-                                <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">Significant Cost Savings</span>
+                              <div className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-50 border border-emerald-100 rounded-full w-full justify-center">
+                                <TrendingDown className="w-4 h-4 text-emerald-600" />
+                                <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Significant Cost Savings</span>
                               </div>
                            </div>
                         </div>
                       </div>
 
-                      {/* 3. TEXTO DERECHA */}
-                      <div className="order-3 text-left flex flex-col justify-start md:justify-between relative z-20 px-8 pb-6 md:px-0 md:pb-6 md:pt-6">
-                        <div className="mb-6">
-                           <h4 className="text-[#111111] font-bold text-sm uppercase tracking-widest mb-6">
-                             Advantages
-                           </h4>
-                           <p className="text-gray-600 text-sm leading-relaxed mb-3 font-medium">
-                              {solution.description}
-                           </p>
+                      <div className="order-3 text-left flex flex-col justify-start md:justify-between relative z-20 px-10 pb-8 md:px-0 md:pb-8 md:pt-8">
+                        <div className="mb-8">
+                           <h4 className="text-[#111111] font-bold text-sm uppercase tracking-widest mb-6">Advantages</h4>
+                           <p className="text-gray-600 text-sm leading-relaxed mb-4 font-medium">{solution.description}</p>
                            {solution.advantages && (
-                             <ul className="flex flex-col gap-2">
+                             <ul className="flex flex-col gap-3">
                                {solution.advantages.map((adv, i) => {
                                  const [title, ...rest] = adv.split(":");
                                  const description = rest.join(":");
                                  return (
                                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600 font-medium leading-tight">
                                      <CheckCircle2 className="w-4 h-4 text-[#FF270A] shrink-0 mt-0.5" />
-                                     <span>
-                                       <span className="text-[#111111] font-bold">
-                                         {title}{description ? ":" : ""}
-                                       </span>
-                                       {description}
-                                     </span>
+                                     <span><span className="text-[#111111] font-bold">{title}{description ? ":" : ""}</span>{description}</span>
                                    </li>
                                  );
                                })}
                              </ul>
                            )}
                         </div>
-
-                         <div className="flex gap-3 mt-auto md:mt-4">
-                           <button
-                            onClick={openMeeting}
-                            className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md"
-                            >
+                         <div className="flex gap-3 mt-auto md:mt-6">
+                           <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md">
                            Contact <ArrowRight className="w-3 h-3" />
                            </button>
-                            <button className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm">
-                            Details
-                           </button>
+                            <button className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm">Details</button>
                           </div>
                         </div>
                     </div>
@@ -296,148 +274,112 @@ export default function IndustrialPage() {
                 }
 
                 // ========================================================================
-                // 2. TARJETA MULTIPLEX (ÍNDICE 2) - DISEÑO CON MÁS "AIRE"
+                // 5. TARJETA HORIZONTAL (TxA) CON DIAGRAMA CIRCULAR PUNTEADO (SIN FLECHAS)
                 // ========================================================================
-                if (idx === 2) {
-                  return (
+                if (idx === 5) {
+                   return (
                     <div
                       key={solution.id}
-                      className="md:col-span-1 group bg-white rounded-[2rem] p-2 flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-gray-100"
+                      className="md:col-span-2 group relative h-[200px] rounded-[2.5rem] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-[#111111]"
                     >
-                      {/* --- COMPONENTE VISUAL: DIAGRAMA SOBRE FONDO GRIS PLANO --- */}
-                      <div className="relative bg-gray-50 rounded-[1.5rem] overflow-hidden h-48 w-full flex items-center justify-center">
-                        
-                        {/* CONTENEDOR PRINCIPAL DEL DIAGRAMA - AUMENTADO PADDING (p-4 -> p-6) */}
-                        <div className="relative w-full h-full flex items-center justify-center p-6">
-
-                           {/* NUCLEO CENTRAL */}
-                           <div className="absolute z-20 w-14 h-14 bg-gray-900/90 border border-white/20 rounded-full flex flex-col items-center justify-center shadow-[0_0_25px_rgba(0,0,0,0.1)] backdrop-blur-md">
-                              <Zap className="w-5 h-5 text-yellow-400 mb-0.5" />
-                              <span className="block text-[7px] text-white font-bold uppercase leading-none">1 Reaction</span>
-                           </div>
-
-                           {/* ESTRUCTURA DE 4 PANELES GRANDES - AUMENTADO GAP (gap-3 -> gap-5) */}
-                           <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-5 relative z-10">
-                              
-                              {/* Panel 1: Salmonella - REDUCIDO PADDING INTERNO (p-3 -> p-2) */}
-                              <div className="relative flex flex-col justify-start items-start p-2 rounded-xl bg-gradient-to-br from-[#FF270A]/20 to-transparent border border-[#FF270A]/30 group-hover:border-[#FF270A]/60 transition-colors">
-                                 <span className="text-gray-900 font-black text-base md:text-lg leading-none mb-1 tracking-tight">Salmonella</span>
-                                 <span className="text-[#FF270A] text-[9px] font-bold uppercase tracking-wider">Pathogen</span>
-                                 <div className="absolute bottom-0 right-0 w-8 h-px bg-gradient-to-l from-[#FF270A]/50 to-transparent origin-right rotate-45 translate-x-2 translate-y-2"></div>
-                              </div>
-
-                              {/* Panel 2: Listeria - REDUCIDO PADDING INTERNO (p-3 -> p-2) */}
-                              <div className="relative flex flex-col justify-start items-end p-2 rounded-xl bg-gradient-to-bl from-purple-500/20 to-transparent border border-purple-500/30 group-hover:border-purple-500/60 transition-colors text-right">
-                                 <span className="text-gray-900 font-black text-base md:text-lg leading-none mb-1 tracking-tight">L. mono</span>
-                                 <span className="text-purple-600 text-[9px] font-bold uppercase tracking-wider">Pathogen</span>
-                                 <div className="absolute bottom-0 left-0 w-8 h-px bg-gradient-to-r from-purple-500/50 to-transparent origin-left -rotate-45 -translate-x-2 translate-y-2"></div>
-                              </div>
-
-                              {/* Panel 3: Gram- - REDUCIDO PADDING INTERNO (p-3 -> p-2) */}
-                              <div className="relative flex flex-col justify-end items-start p-2 rounded-xl bg-gradient-to-tr from-emerald-500/20 to-transparent border border-emerald-500/30 group-hover:border-emerald-500/60 transition-colors">
-                                 <span className="text-emerald-600 text-[9px] font-bold uppercase tracking-wider mb-1">Indicator</span>
-                                 <span className="text-gray-900 font-black text-base md:text-lg leading-none tracking-tight">Gram (-)</span>
-                                 <div className="absolute top-0 right-0 w-8 h-px bg-gradient-to-l from-emerald-500/50 to-transparent origin-right -rotate-45 translate-x-2 -translate-y-2"></div>
-                              </div>
-
-                              {/* Panel 4: Gram+ - REDUCIDO PADDING INTERNO (p-3 -> p-2) */}
-                              <div className="relative flex flex-col justify-end items-end p-2 rounded-xl bg-gradient-to-tl from-blue-500/20 to-transparent border border-blue-500/30 group-hover:border-blue-500/60 transition-colors text-right">
-                                 <span className="text-blue-600 text-[9px] font-bold uppercase tracking-wider mb-1">Indicator</span>
-                                 <span className="text-gray-900 font-black text-base md:text-lg leading-none tracking-tight">Gram (+)</span>
-                                 <div className="absolute top-0 left-0 w-8 h-px bg-gradient-to-r from-blue-500/50 to-transparent origin-left rotate-45 -translate-x-2 -translate-y-2"></div>
-                              </div>
-
-                           </div>
-                        </div>
-
-                        {/* Etiquetas Flotantes */}
-                        <div className="absolute top-3 left-3 flex gap-2 z-30">
-                          {solution.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-2 py-0.5 bg-white/80 backdrop-blur text-[8px] font-bold uppercase tracking-wider rounded-full text-gray-800 border border-black/5 shadow-sm"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
+                      {/* CAPA 1: IMAGEN DE FONDO */}
+                      <div className="absolute inset-0 z-0">
+                         {solution.image && (
+                             <Image
+                               src={solution.image} 
+                               alt={solution.title}
+                               fill
+                               className="object-cover object-center" 
+                             />
+                         )}
+                         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/5 to-transparent z-10"></div>
                       </div>
 
-                      {/* TEXTOS INFERIORES */}
-                      <div className="flex flex-col justify-between p-6 flex-1">
-                        <div>
-                          <h3 className="text-xl font-bold text-[#111111] mb-3 leading-tight">
-                            {solution.title}
-                          </h3>
-                          <p className="text-gray-500 text-sm leading-relaxed font-medium mb-6">
-                            {solution.description}
-                          </p>
+                      {/* CAPA 2: CONTENIDO */}
+                      <div className="relative z-20 w-full h-full flex items-center justify-between px-12">
+                        
+                        {/* 1. TEXTO (Izquierda) */}
+                        <div className="max-w-[260px] z-20">
+                            <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-sm">{solution.title}</h3>
+                            <p className="text-gray-200 text-sm font-medium leading-relaxed drop-shadow-sm">{solution.description}</p>
                         </div>
 
-                        <div className="flex gap-3 mt-auto">
-                          <button
-                            onClick={openMeeting}
-                            className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2"
-                          >
-                            Contact <ArrowRight className="w-3 h-3" />
-                          </button>
-                          <button className="flex-1 py-3 border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors">
-                            Details
-                          </button>
+                        {/* 2. DIAGRAMA CIRCULAR PUNTEADO SIN FLECHAS (Centro-Izquierda) */}
+                        <div className="absolute left-[380px] top-1/2 -translate-y-1/2 hidden md:block z-20 select-none">
+                           <div className="relative w-40 h-40 scale-90">
+                              {/* SVG con líneas punteadas y colores pastel, sin markers */}
+                              <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full" fill="none" strokeWidth="1.5" strokeLinecap="round" style={{filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))'}}>
+                                  {/* Path 1: Results -> AI (Amarillo Pastel) */}
+                                  <path d="M100 30 A 70 70 0 0 1 165 130" stroke="#FDE047" strokeDasharray="6 6" opacity="0.9" />
+                                  {/* Path 2: AI -> Improve EMP (Rojo Pastel) */}
+                                  <path d="M165 130 A 70 70 0 0 1 35 130" stroke="#FCA5A5" strokeDasharray="6 6" opacity="0.9" />
+                                  {/* Path 3: Improve EMP -> Results (Verde Pastel) */}
+                                  <path d="M35 130 A 70 70 0 0 1 100 30" stroke="#86EFAC" strokeDasharray="6 6" opacity="0.9" />
+                              </svg>
+
+                              {/* Etiquetas de Texto */}
+                              {/* Results (Top) - Amarillo Pastel */}
+                              <div className="absolute top-2 left-1/2 -translate-x-1/2 text-center">
+                                  <span className="block text-[9px] font-medium text-[#FDE047] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#FDE047]/20">Results</span>
+                              </div>
+                              {/* AI (Bottom Right) - Rojo Pastel */}
+                              <div className="absolute bottom-8 right-0 text-center">
+                                  <span className="block text-[9px] font-medium text-[#FCA5A5] uppercase tracking-widest bg-black/70 px-4 py-1 rounded-full backdrop-blur-sm border border-[#FCA5A5]/20">Ai</span>
+                              </div>
+                              {/* Improve EMP (Bottom Left) - Verde Pastel */}
+                              <div className="absolute bottom-8 left-0 text-center">
+                                  <span className="block text-[9px] font-medium text-[#86EFAC] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#86EFAC]/20 leading-none">Improve<br/>EMP</span>
+                              </div>
+                           </div>
+                        </div>
+
+                        {/* 3. BOTÓN (Extremo Derecha) */}
+                        <div className="absolute bottom-6 right-10 z-30 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                           <button onClick={openMeeting} className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
+                             Learn More <ArrowRight className="w-3 h-3" />
+                           </button>
                         </div>
                       </div>
                     </div>
-                  );
+                   );
                 }
 
                 // ========================================================================
-                // 3. TARJETAS NORMALES (RESTO: ÍNDICES 1 y 3)
+                // TARJETAS ESTÁNDAR
                 // ========================================================================
+                
                 return (
                   <div
                     key={solution.id}
-                    className="md:col-span-1 group bg-white rounded-[2rem] p-2 flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+                    className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[400px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center"
                   >
-                    <div className="relative bg-gray-50 rounded-[1.5rem] overflow-hidden h-48 w-full flex items-end justify-center">
-                      <Image
-                        src={solution.image!} // El "!" asegura a TS que no es null
-                        alt={solution.title}
-                        fill
-                        className="object-contain object-bottom p-4 pb-0 group-hover:scale-105 transition-transform duration-700"
-                      />
-                      <div className="absolute top-4 left-4 flex gap-2">
-                        {solution.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="px-3 py-1 bg-white/80 backdrop-blur text-[10px] font-bold uppercase tracking-wider rounded-full text-[#111111] border border-black/5"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
+                    <div className="relative z-10 w-full max-w-[400px] flex flex-col items-center">
+                      <h3 className="text-2xl font-bold text-[#111111] mb-4 leading-tight">{solution.title}</h3>
+                      <p className="text-gray-500 text-sm leading-relaxed">{solution.description}</p>
                     </div>
 
-                    <div className="flex flex-col justify-between p-6 flex-1">
-                      <div>
-                        <h3 className="text-xl font-bold text-[#111111] mb-3">
-                          {solution.title}
-                        </h3>
-                        <p className="text-gray-500 text-sm leading-relaxed mb-6">
-                          {solution.description}
-                        </p>
+                    {solution.image && (
+                      <div className="absolute bottom-0 left-0 right-0 h-[220px] z-0 flex items-end justify-center">
+                         <div className="relative w-full h-full">
+                           <Image
+                             src={solution.image} 
+                             alt={solution.title}
+                             fill
+                             className="object-contain object-bottom"
+                           />
+                         </div>
                       </div>
+                    )}
+                    
+                    {!solution.image && (
+                        <div className="flex-grow"></div>
+                    )}
 
-                      <div className="flex gap-3 mt-auto">
-                        <button
-                          onClick={openMeeting}
-                          className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2"
-                        >
-                          Contact <ArrowRight className="w-3 h-3" />
-                        </button>
-                        <button className="flex-1 py-3 border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors">
-                          Details
-                        </button>
-                      </div>
+                    <div className="absolute bottom-6 left-10 right-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
+                      <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111]/90 backdrop-blur text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-xl">
+                        Contact <ArrowRight className="w-3 h-3" />
+                      </button>
+                      <button className="flex-1 py-3 bg-white/90 backdrop-blur border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors shadow-xl">Details</button>
                     </div>
                   </div>
                 );
@@ -579,6 +521,8 @@ export default function IndustrialPage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }
