@@ -56,7 +56,7 @@ const FEATURED_SOLUTIONS = [
     id: "spoilage-detection",
     title: "Broad-Spectrum Spoilage Defense",
     description: "Screen for yeast, mold, and bacteria in a single run. Secure shelf-life with absolute molecular precision.",
-    image: "/spoilage-4.png", 
+    image: "/spoilage-5.png", 
     tags: ["Spoilage", "Beverages"],
   },
   // --- 4. HIGIENE ---
