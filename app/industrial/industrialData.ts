@@ -57,7 +57,8 @@ export const PANEL_CATEGORIES = [
   { id: "Spoilage", label: "Spoilage" },
   { id: "Beverages", label: "Juices & Soft Drinks" },
   { id: "Brewing", label: "Brewing Quality" },
-  { id: "Wine", label: "Wine & Enology" },
+  { id: "Wine", label: "Wine Quality" },
+  { id: "Consumables", label: "Lab consumables" },
 ];
 
 export const PANEL_SOLUTIONS: Record<string, { title: string; description: string; targets: string }[]> = {
@@ -78,11 +79,16 @@ export const PANEL_SOLUTIONS: Record<string, { title: string; description: strin
       targets: "Targets: stx1, stx2",
     },
   ],
-  "General Spoilage": [
+  "Spoilage": [
     {
       title: "Total Spoilage Organisms",
       description: "Broad spectrum detection of yeast and mold to predict shelf-life stability.",
       targets: "Targets: 18S rRNA, bacterial 16S",
+    },
+    {
+      title: "Salmonella spp. Rapid Kit",
+      description: "Detect Salmonella in environmental sponges and raw materials with high sensitivity.",
+      targets: "Target: invA gene",
     },
     {
       title: "Indicator Bacteria Count",
@@ -127,3 +133,91 @@ export const PANEL_SOLUTIONS: Record<string, { title: string; description: strin
     },
   ],
 };
+
+// ... (al final del archivo data/industrialData.ts)
+
+export const WORKFLOW_STEPS = [
+  {
+    id: "intro",
+    step: "The Ecosystem",
+    title: "End-to-End Microbiology",
+    description: "Stop juggling multiple vendors. We provide the complete scientific chain—from the sampling tool to the digital report.",
+    image: "/hero16.png", // Reusando hero para la intro
+    color: "bg-[#111111]",
+    textColor: "text-white",
+  },
+  {
+    id: "sample",
+    step: "Step 01",
+    title: "Universal Sampling",
+    description: "Our kits work with standard sponges, swabs, and liquids. No complex pre-processing or enrichment required for most matrices.",
+    image: "/2bacterias_verdes3.png", // Placeholder visual
+    color: "bg-[#F4F4F5]",
+    textColor: "text-[#111111]",
+  },
+  {
+    id: "extraction",
+    step: "Step 02",
+    title: "Rapid DNA Extraction",
+    description: "Simplified protocols designed for speed. Go from raw sample to high-quality DNA in minutes, not hours.",
+    image: "/chocolate16.png", // Placeholder visual
+    color: "bg-[#F4F4F5]",
+    textColor: "text-[#111111]",
+  },
+  {
+    id: "pcr",
+    step: "Step 03",
+    title: "Multiplex PCR",
+    description: "The core of our technology. Detect multiple pathogens and indicators in a single reaction with maximum sensitivity.",
+    image: "/F41-9.png", // Imagen de kit PCR
+    color: "bg-[#F4F4F5]",
+    textColor: "text-[#111111]",
+  },
+  {
+    id: "interpretation",
+    step: "Step 04",
+    title: "AiGOR Interpretation",
+    description: "Eliminate human error. Our AI analyzes PCR curves instantly, giving you a clear Positive/Negative result.",
+    image: "/spoilage-5.png", // Placeholder visual
+    color: "bg-[#E6FFFA]", // Un tono suave diferente para resaltar la AI
+    textColor: "text-[#111111]",
+  },
+  {
+    id: "management",
+    step: "Step 05",
+    title: "TxA Management",
+    description: "Your Digital Lab Manager. Organize results, track historical trends, and automate corrective actions in one platform.",
+    image: "/hims4.png", // Imagen del software
+    color: "bg-[#111111]", // Oscuro para cerrar con fuerza (Software)
+    textColor: "text-white",
+  },
+];
+
+// ... (al final de data/industrialData.ts)
+
+export const LAB_SPECS = [
+  {
+    label: "Space Required",
+    value: "3 m²",
+    subtext: "Standard benchtop area",
+    icon: "space"
+  },
+  {
+    label: "Operators",
+    value: "1 Person",
+    subtext: "No specialized degree needed",
+    icon: "users"
+  },
+  {
+    label: "Setup Time",
+    value: "< 48 Hrs",
+    subtext: "Installation & Training",
+    icon: "time"
+  },
+  {
+    label: "Infrastructure",
+    value: "Minimal",
+    subtext: "Standard power & internet",
+    icon: "plug"
+  }
+];

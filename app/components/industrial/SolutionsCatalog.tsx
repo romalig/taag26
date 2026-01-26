@@ -174,7 +174,7 @@ export default function SolutionsCatalog() {
                        </div>
                        <h4 className="text-2xl font-extrabold text-[#111111] mb-3">Didn't find what you're looking for?</h4>
                        <p className="text-gray-500 text-base font-medium mb-8 max-w-lg leading-relaxed">
-                          Our R&D team thrives on challenges. If we don't have it in our catalog, we can develop a custom solution specifically for your needs.
+                          Powered by Mila, our R&D team turns unique challenges into custom solutions. If it’s not in our catalog, our AI-driven development engine can build it specifically for your needs.
                        </p>
                        <button 
                           onClick={openMeeting} 

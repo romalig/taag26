@@ -10,7 +10,7 @@ export default function IndustrialHero() {
         <span className="text-gray-400">Microbiological Solutions.</span>
       </h1>
 
-      <p className="text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed px-2">
+      <p className="text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed px-2 mb-10">
         Explore microbiological solutions for multiplex and ultra-fast detection to accelerate decisions, reduce risk, and improve productivity.
       </p>
     </section>

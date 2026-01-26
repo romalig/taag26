@@ -4,6 +4,8 @@ import Header from "../components/Header";
 import IndustrialHero from "../components/industrial/IndustrialHero";
 import FeaturedSolutions from "../components/industrial/FeaturedSolutions";
 import SolutionsCatalog from "../components/industrial/SolutionsCatalog";
+import HowItWorks from "../components/industrial/HowItWorks"; // <--- Importar
+import FinalCTA from "../components/FinalCTA";
 // import Footer from "../../components/Footer"; // Si tienes footer global
 
 export default function IndustrialPage() {
@@ -20,6 +22,12 @@ export default function IndustrialPage() {
 
       {/* 3. CATALOGO INTERACTIVO (Tabs Sticky) */}
       <SolutionsCatalog />
+
+      {/* 3. NUEVA SECCIÓN: CÓMO FUNCIONA (Workflow) */}
+      <HowItWorks />
+
+      {/* 6. Invitación Final (Tarjeta Gris Flotante) */}
+      <FinalCTA />
       
     </main>
   );

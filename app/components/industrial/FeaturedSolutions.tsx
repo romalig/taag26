@@ -183,7 +183,7 @@ export default function FeaturedSolutions() {
                                className="object-cover object-center" 
                              />
                          )}
-                         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/5 to-transparent z-10"></div>
+                         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/30 to-transparent z-10"></div>
                       </div>
 
                       <div className="relative z-20 w-full h-full flex flex-col md:flex-row items-start md:items-center justify-between p-10 md:px-12">
