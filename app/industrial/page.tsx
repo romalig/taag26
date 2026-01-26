@@ -48,7 +48,7 @@ const FEATURED_SOLUTIONS = [
     id: "simultaneous-detection",
     title: "Multiplex Process Control",
     description: "Detect Pathogens & Indicators in a single reaction. Preventive control meets efficiency.", 
-    image: "/F41-8.png", 
+    image: "/F41-7.png", 
     tags: ["4-in-1", "Preventive"],
   },
   // --- 3. SPOILAGE JUGO ---
@@ -67,7 +67,7 @@ const FEATURED_SOLUTIONS = [
     image: "/F39-3.png", 
     tags: ["Hygiene", "Prevention"],
   },
-  // --- 5. TxA INTEGRATION (FULL IMAGE + CLEAN DOTTED DIAGRAM) ---
+  // --- 5. TxA INTEGRATION ---
   {
     id: "txa-integration",
     title: "All seamlessly integrated to TxA",
@@ -274,16 +274,20 @@ export default function IndustrialPage() {
                 }
 
                 // ========================================================================
-                // 5. TARJETA HORIZONTAL (TxA) CON DIAGRAMA CIRCULAR PUNTEADO (SIN FLECHAS)
+                // 5. TARJETA TxA (MODIFICADA PARA MÓVIL)
                 // ========================================================================
                 if (idx === 5) {
                    return (
                     <div
                       key={solution.id}
-                      className="md:col-span-2 group relative h-[200px] rounded-[2.5rem] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-[#111111]"
+                      // MODIFICADO: 
+                      // - Flex column en móvil, row en desktop.
+                      // - Borde rojo y sombra en móvil, sin borde en desktop.
+                      // - Altura automática en móvil, fija en desktop.
+                      className="md:col-span-2 group relative rounded-[2.5rem] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-[#111111] flex flex-col md:flex-row h-auto md:h-[200px] border border-[#FF270A] shadow-[0_0_15px_rgba(255,39,10,0.2)] md:border-none md:shadow-none"
                     >
-                      {/* CAPA 1: IMAGEN DE FONDO */}
-                      <div className="absolute inset-0 z-0">
+                      {/* CAPA 1: IMAGEN DE FONDO (OCULTA EN MÓVIL) */}
+                      <div className="absolute inset-0 z-0 hidden md:block">
                          {solution.image && (
                              <Image
                                src={solution.image} 
@@ -296,49 +300,41 @@ export default function IndustrialPage() {
                       </div>
 
                       {/* CAPA 2: CONTENIDO */}
-                      <div className="relative z-20 w-full h-full flex items-center justify-between px-12">
+                      {/* Padding ajustado para móvil y desktop */}
+                      <div className="relative z-20 w-full h-full flex flex-col md:flex-row items-start md:items-center justify-between p-10 md:px-12">
                         
-                        {/* 1. TEXTO (Izquierda) */}
+                        {/* 1. TEXTO */}
                         <div className="max-w-[260px] z-20">
                             <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-sm">{solution.title}</h3>
                             <p className="text-gray-200 text-sm font-medium leading-relaxed drop-shadow-sm">{solution.description}</p>
                         </div>
 
-                        {/* 2. DIAGRAMA CIRCULAR PUNTEADO SIN FLECHAS (Centro-Izquierda) */}
+                        {/* 2. DIAGRAMA CIRCULAR (Solo Desktop) */}
                         <div className="absolute left-[380px] top-1/2 -translate-y-1/2 hidden md:block z-20 select-none">
                            <div className="relative w-40 h-40 scale-90">
-                              {/* SVG con líneas punteadas y colores pastel, sin markers */}
                               <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full" fill="none" strokeWidth="1.5" strokeLinecap="round" style={{filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))'}}>
-                                  {/* Path 1: Results -> AI (Amarillo Pastel) */}
                                   <path d="M100 30 A 70 70 0 0 1 165 130" stroke="#FDE047" strokeDasharray="6 6" opacity="0.9" />
-                                  {/* Path 2: AI -> Improve EMP (Rojo Pastel) */}
                                   <path d="M165 130 A 70 70 0 0 1 35 130" stroke="#FCA5A5" strokeDasharray="6 6" opacity="0.9" />
-                                  {/* Path 3: Improve EMP -> Results (Verde Pastel) */}
                                   <path d="M35 130 A 70 70 0 0 1 100 30" stroke="#86EFAC" strokeDasharray="6 6" opacity="0.9" />
                               </svg>
-
-                              {/* Etiquetas de Texto */}
-                              {/* Results (Top) - Amarillo Pastel */}
                               <div className="absolute top-2 left-1/2 -translate-x-1/2 text-center">
                                   <span className="block text-[9px] font-medium text-[#FDE047] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#FDE047]/20">Results</span>
                               </div>
-                              {/* AI (Bottom Right) - Rojo Pastel */}
                               <div className="absolute bottom-8 right-0 text-center">
                                   <span className="block text-[9px] font-medium text-[#FCA5A5] uppercase tracking-widest bg-black/70 px-4 py-1 rounded-full backdrop-blur-sm border border-[#FCA5A5]/20">Ai</span>
                               </div>
-                              {/* Improve EMP (Bottom Left) - Verde Pastel */}
                               <div className="absolute bottom-8 left-0 text-center">
                                   <span className="block text-[9px] font-medium text-[#86EFAC] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#86EFAC]/20 leading-none">Improve<br/>EMP</span>
                               </div>
                            </div>
                         </div>
 
-                        {/* 3. BOTÓN (Extremo Derecha) */}
-                        {/* MODIFICADO:
-                           - Mobile (default): opacity-100 translate-y-0 (Visible siempre)
-                           - Desktop (md:): opacity-0 translate-y-2 (Efecto hover restaurado)
+                        {/* 3. BOTÓN */}
+                        {/* MODIFICADO: 
+                           - Móvil: Relative, margin-top, visible siempre (opacity-100).
+                           - Desktop: Absolute, bottom-6, hover effect (opacity-0 -> 100).
                         */}
-                        <div className="absolute bottom-6 right-10 z-30 transition-all duration-300 opacity-100 translate-y-0 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0">
+                        <div className="relative mt-6 z-30 opacity-100 translate-y-0 md:absolute md:bottom-6 md:right-10 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
                            <button onClick={openMeeting} className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
                              Learn More <ArrowRight className="w-3 h-3" />
                            </button>
@@ -355,15 +351,28 @@ export default function IndustrialPage() {
                 return (
                   <div
                     key={solution.id}
-                    className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[400px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center"
+                    // MODIFICADO: h-[520px] en móvil para que quepan los botones debajo de la imagen.
+                    className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[520px] md:h-[400px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center"
                   >
+                    {solution.decoration && (
+                        <div className="absolute top-6 right-6 w-24 h-24 z-0 opacity-80 mix-blend-multiply pointer-events-none">
+                            <Image 
+                                src={solution.decoration} 
+                                alt="" 
+                                fill 
+                                className="object-contain" 
+                            />
+                        </div>
+                    )}
+
                     <div className="relative z-10 w-full max-w-[400px] flex flex-col items-center">
                       <h3 className="text-2xl font-bold text-[#111111] mb-4 leading-tight">{solution.title}</h3>
                       <p className="text-gray-500 text-sm leading-relaxed">{solution.description}</p>
                     </div>
 
                     {solution.image && (
-                      <div className="absolute bottom-0 left-0 right-0 h-[220px] z-0 flex items-end justify-center">
+                      // MODIFICADO: En móvil la imagen sube a bottom-24 para dejar espacio a los botones abajo.
+                      <div className="absolute bottom-24 md:bottom-0 left-0 right-0 h-[220px] z-0 flex items-end justify-center">
                          <div className="relative w-full h-full">
                            <Image
                              src={solution.image} 
@@ -379,10 +388,7 @@ export default function IndustrialPage() {
                         <div className="flex-grow"></div>
                     )}
 
-                    {/* MODIFICADO:
-                       - Mobile (default): opacity-100 (Visible siempre)
-                       - Desktop (md:): opacity-0 (Efecto hover restaurado)
-                    */}
+                    {/* MODIFICADO: En móvil opacity-100 siempre visible. */}
                     <div className="absolute bottom-6 left-10 right-10 flex gap-2 z-30 transition-opacity duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                       <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111]/90 backdrop-blur text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-xl">
                         Contact <ArrowRight className="w-3 h-3" />
