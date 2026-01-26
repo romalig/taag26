@@ -40,7 +40,7 @@ const FEATURED_SOLUTIONS = [
     id: "pathogen-control2",
     title: "Fast control of Salmonella in the food industry",
     description: "Same-shift results for Salmonella in environmental and food samples.",
-    image: "/chocolate15.png",
+    image: "/chocolate16.png",
     tags: ["Salmonella", "AiGOR"],
   },
   // --- 2. MULTIPLEX ---
@@ -354,17 +354,6 @@ export default function IndustrialPage() {
                     // MODIFICADO: h-[520px] en móvil para que quepan los botones debajo de la imagen.
                     className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[520px] md:h-[400px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center"
                   >
-                    {solution.decoration && (
-                        <div className="absolute top-6 right-6 w-24 h-24 z-0 opacity-80 mix-blend-multiply pointer-events-none">
-                            <Image 
-                                src={solution.decoration} 
-                                alt="" 
-                                fill 
-                                className="object-contain" 
-                            />
-                        </div>
-                    )}
-
                     <div className="relative z-10 w-full max-w-[400px] flex flex-col items-center">
                       <h3 className="text-2xl font-bold text-[#111111] mb-4 leading-tight">{solution.title}</h3>
                       <p className="text-gray-500 text-sm leading-relaxed">{solution.description}</p>
