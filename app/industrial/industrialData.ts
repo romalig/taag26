@@ -54,7 +54,7 @@ export const FEATURED_SOLUTIONS = [
 
 export const PANEL_CATEGORIES = [
   { id: "Pathogens", label: "Pathogens" },
-  { id: "General Spoilage", label: "General Spoilage" },
+  { id: "General Spoilage", label: "Spoilage" },
   { id: "Beverages", label: "Juices & Soft Drinks" },
   { id: "Brewing", label: "Brewing Quality" },
   { id: "Wine", label: "Wine & Enology" },

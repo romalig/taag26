@@ -26,14 +26,13 @@ export default function SolutionsCatalog() {
     }
   };
 
-  // Lógica de búsqueda: Incluye Título, Descripción y TARGETS (ej. "Target: invA gene")
   const currentSolutions = PANEL_SOLUTIONS[activePanelTab] || [];
   const filteredSolutions = currentSolutions.filter((item) => {
     const query = searchQuery.toLowerCase();
     return (
       item.title.toLowerCase().includes(query) ||
       item.description.toLowerCase().includes(query) ||
-      item.targets.toLowerCase().includes(query) // <--- Aquí busca dentro del tag Target
+      item.targets.toLowerCase().includes(query)
     );
   });
 
@@ -44,9 +43,11 @@ export default function SolutionsCatalog() {
           
           {/* HERO DEL CATALOGO */}
           <div className="relative h-[420px] md:h-[500px] rounded-t-[3rem] overflow-hidden">
-             <Image src="/hero.png" alt="TAAG Solutions Ecosystem" fill className="object-cover object-center" priority />
+             <Image src="/hero7.png" alt="TAAG Solutions Ecosystem" fill className="object-cover object-center" priority />
              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/10" />
-             <div className="relative z-10 h-full flex items-center">
+             
+             {/* CAMBIO AQUÍ: items-center -> items-start, y se añadió pt-20 md:pt-32 */}
+             <div className="relative z-10 h-full flex items-start pt-20 md:pt-24">
                <div className="px-10 md:px-20 max-w-3xl">
                  <h2 className="text-white text-4xl md:text-6xl font-extrabold leading-tight">Explore all our solutions</h2>
                </div>
@@ -61,7 +62,7 @@ export default function SolutionsCatalog() {
                 {/* --- CONTENEDOR STICKY (TABS + BUSCADOR) --- */}
                 <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl pt-4 pb-6 -mx-6 px-6 md:-mx-0 md:px-0 transition-all">
                    
-                   {/* 1. TABS (Sticky Buttons) - Estilo suave (No Bold, No Uppercase) */}
+                   {/* 1. TABS (Sticky Buttons) - Estilo suave */}
                    <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-4 no-scrollbar items-center justify-start">
                       {PANEL_CATEGORIES.map((category) => (
                          <button
@@ -111,14 +112,14 @@ export default function SolutionsCatalog() {
                               <h4 className="text-lg font-bold text-[#111111] mb-2 group-hover:text-[#FF270A] transition-colors">{item.title}</h4>
                               <p className="text-gray-500 text-sm font-medium mb-3 max-w-2xl leading-relaxed">{item.description}</p>
                               
-                              {/* Tag Targets: Lo dejé font-bold para resaltar, pero sin uppercase forzado */}
+                              {/* Tag Targets */}
                               <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold text-gray-600 tracking-wider">
                                  <div className="w-1.5 h-1.5 rounded-full bg-[#FF270A]"></div>
                                  {item.targets}
                               </span>
                            </div>
 
-                           {/* Botones Derecha - RESTAURADOS AL FORMATO ORIGINAL (Uppercase + Bold) */}
+                           {/* Botones Derecha (Uppercase + Bold) */}
                            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 transition-all duration-300">
                               <button onClick={openMeeting} className="px-6 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors shadow-md min-w-[100px]">
                                  Contact
