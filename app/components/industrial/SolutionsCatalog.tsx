@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { ChevronRight, Search, X } from "lucide-react";
+import { ChevronRight, Search, X, Download } from "lucide-react";
 import { useCTA } from "../CTAProvider";
 import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
 
@@ -22,7 +22,8 @@ export default function SolutionsCatalog() {
     setActivePanelTab(categoryId);
     setSearchQuery("");
     if (panelRef.current) {
-        scrollToTarget(panelRef.current, 180); 
+        // Ajustamos el scroll para que caiga justo donde empieza el panel
+        scrollToTarget(panelRef.current, 200); 
     }
   };
 
@@ -46,7 +47,6 @@ export default function SolutionsCatalog() {
             <Image src="/hero16.png" alt="TAAG Solutions Ecosystem" fill className="object-cover object-right md:object-center" priority />
              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/10" />
              
-             {/* CAMBIO AQUÍ: items-center -> items-start, y se añadió pt-20 md:pt-32 */}
              <div className="relative z-10 h-full flex items-start pt-20 md:pt-24">
                <div className="px-10 md:px-20 max-w-3xl">
                  <h2 className="text-white text-4xl md:text-6xl font-extrabold leading-tight">Explore all our solutions</h2>
@@ -56,14 +56,14 @@ export default function SolutionsCatalog() {
           </div>
 
           {/* CONTENIDO DEL PANEL */}
-          <div className="px-6 pb-12 pt-8 md:px-24 md:pb-24 bg-white relative z-20 rounded-b-[3rem]">
+          <div className="px-6 pb-12 pt-0 md:px-24 md:pb-24 bg-white relative z-20 rounded-b-[3rem]">
              <div className="max-w-5xl mx-auto" ref={panelRef} id="panel-start">
                 
-                {/* --- CONTENEDOR STICKY (TABS + BUSCADOR) --- */}
-                <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl pt-4 pb-6 -mx-6 px-6 md:-mx-0 md:px-0 transition-all">
-                   
-                   {/* 1. TABS (Sticky Buttons) - Estilo suave */}
-                   <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-4 no-scrollbar items-center justify-start">
+                {/* --- 1. CONTENEDOR STICKY (SOLO LOS BOTONES) --- */}
+                {/* CORRECCIÓN: top-[80px] para que no quede tapado por el Header principal */}
+                {/* Nota: Si tu header mide más de 80px, aumenta este número (ej: top-[100px]) */}
+                <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-xl pt-8 pb-4 -mx-6 px-6 md:-mx-0 md:px-0 transition-all border-b border-transparent">
+                   <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-2 no-scrollbar items-center justify-start">
                       {PANEL_CATEGORIES.map((category) => (
                          <button
                             key={category.id}
@@ -78,28 +78,43 @@ export default function SolutionsCatalog() {
                          </button>
                       ))}
                    </div>
+                </div>
 
-                   {/* 2. BUSCADOR (Alineado izquierda) */}
-                   <div className="mt-2 max-w-md relative">
-                      <div className="relative group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#FF270A] transition-colors" />
-                        <input 
-                          type="text" 
-                          placeholder={`Search inside ${activePanelTab}...`}
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          className="w-full bg-gray-50 border border-gray-200 rounded-full py-2.5 pl-10 pr-10 text-sm font-medium text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF270A]/20 focus:border-[#FF270A] transition-all placeholder:text-gray-400"
-                        />
-                        {searchQuery && (
-                          <button 
-                            onClick={() => setSearchQuery("")}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 rounded-full transition-colors"
-                          >
-                            <X className="w-3 h-3 text-gray-500" />
-                          </button>
-                        )}
-                      </div>
+                {/* --- 2. CONTENEDOR DE BÚSQUEDA Y DESCARGA (NO STICKY) --- */}
+                <div className="mt-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                   
+                   {/* Buscador */}
+                   <div className="relative group w-full md:max-w-md">
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#FF270A] transition-colors" />
+                      <input 
+                        type="text" 
+                        placeholder={`Search inside ${activePanelTab}...`}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-full py-2.5 pl-10 pr-10 text-sm font-medium text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF270A]/20 focus:border-[#FF270A] transition-all placeholder:text-gray-400"
+                      />
+                      {searchQuery && (
+                        <button 
+                          onClick={() => setSearchQuery("")}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-200 rounded-full transition-colors"
+                        >
+                          <X className="w-3 h-3 text-gray-500" />
+                        </button>
+                      )}
                    </div>
+
+                   {/* Link de Descarga (Texto corregido) */}
+                   <a 
+                     href="/catalogo.pdf" 
+                     download
+                     className="flex items-center gap-2 text-xs font-bold text-[#111111] hover:text-[#FF270A] transition-colors uppercase tracking-widest whitespace-nowrap group cursor-pointer"
+                   >
+                     <div className="p-2 bg-gray-100 rounded-full group-hover:bg-[#FF270A] group-hover:text-white transition-all">
+                        <Download className="w-4 h-4" />
+                     </div>
+                     Download Product Selection Guide
+                   </a>
+
                 </div>
 
                 {/* --- LISTA DE SOLUCIONES --- */}
@@ -119,7 +134,7 @@ export default function SolutionsCatalog() {
                               </span>
                            </div>
 
-                           {/* Botones Derecha (Uppercase + Bold) */}
+                           {/* Botones Derecha */}
                            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 transition-all duration-300">
                               <button onClick={openMeeting} className="px-6 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors shadow-md min-w-[100px]">
                                  Contact
@@ -138,6 +153,31 @@ export default function SolutionsCatalog() {
                         <p className="text-sm text-gray-400">Try searching for a target (e.g., "invA") or name.</p>
                      </div>
                    )}
+
+                   {/* --- SECCIÓN "DIDN'T FIND IT?" CON IMAGEN CORREGIDA --- */}
+                   <div className="mt-12 mb-4 p-8 md:p-10 text-center flex flex-col items-center">
+                       {/* Logo de MILA */}
+                       <div className="mb-6">
+                          <Image 
+                            src="/logo_mila.png" // Nombre de archivo corregido
+                            alt="MILA Logo" 
+                            width={80} 
+                            height={80} 
+                            className="mx-auto"
+                          />
+                       </div>
+                       <h4 className="text-2xl font-extrabold text-[#111111] mb-3">Didn't find what you're looking for?</h4>
+                       <p className="text-gray-500 text-base font-medium mb-8 max-w-lg leading-relaxed">
+                          Our R&D team thrives on challenges. If we don't have it in our catalog, we can develop a custom solution specifically for your needs.
+                       </p>
+                       <button 
+                          onClick={openMeeting} 
+                          className="px-8 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors shadow-lg"
+                       >
+                          Contact Us
+                       </button>
+                   </div>
+
                 </div>
 
              </div>
