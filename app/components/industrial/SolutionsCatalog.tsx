@@ -22,13 +22,15 @@ export default function SolutionsCatalog() {
     setActivePanelTab(categoryId);
     setSearchQuery("");
     if (panelRef.current) {
-        // Ajustamos el scroll para que caiga justo donde empieza el panel
         scrollToTarget(panelRef.current, 200); 
     }
   };
 
-  const currentSolutions = PANEL_SOLUTIONS[activePanelTab] || [];
-  const filteredSolutions = currentSolutions.filter((item) => {
+  const allSolutions = Object.values(PANEL_SOLUTIONS).flat();
+  const categorySolutions = PANEL_SOLUTIONS[activePanelTab] || [];
+  const sourceList = searchQuery ? allSolutions : categorySolutions;
+
+  const filteredSolutions = sourceList.filter((item) => {
     const query = searchQuery.toLowerCase();
     return (
       item.title.toLowerCase().includes(query) ||
@@ -59,39 +61,18 @@ export default function SolutionsCatalog() {
           <div className="px-6 pb-12 pt-0 md:px-24 md:pb-24 bg-white relative z-20 rounded-b-[3rem]">
              <div className="max-w-5xl mx-auto" ref={panelRef} id="panel-start">
                 
-                {/* --- 1. CONTENEDOR STICKY (SOLO LOS BOTONES) --- */}
-                {/* CORRECCIÓN: top-[80px] para que no quede tapado por el Header principal */}
-                {/* Nota: Si tu header mide más de 80px, aumenta este número (ej: top-[100px]) */}
-                <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-xl pt-8 pb-4 -mx-6 px-6 md:-mx-0 md:px-0 transition-all border-b border-transparent">
-                   <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-2 no-scrollbar items-center justify-start">
-                      {PANEL_CATEGORIES.map((category) => (
-                         <button
-                            key={category.id}
-                            onClick={() => handleTabClick(category.id)}
-                            className={`px-5 py-2.5 rounded-full text-xs font-medium tracking-wide transition-all duration-300 border whitespace-nowrap shrink-0 ${
-                               activePanelTab === category.id
-                                  ? "bg-[#111111] text-white border-[#111111] shadow-lg scale-105"
-                                  : "bg-white text-gray-500 border-gray-200 hover:border-gray-400 hover:text-[#111111]"
-                            }`}
-                         >
-                            {category.label}
-                         </button>
-                      ))}
-                   </div>
-                </div>
-
-                {/* --- 2. CONTENEDOR DE BÚSQUEDA Y DESCARGA (NO STICKY) --- */}
-                <div className="mt-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                {/* --- 1. BUSCADOR Y DESCARGA (ARRIBA) --- */}
+                <div className="pt-12 mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                    
-                   {/* Buscador */}
+                   {/* Buscador Global */}
                    <div className="relative group w-full md:max-w-md">
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#FF270A] transition-colors" />
                       <input 
                         type="text" 
-                        placeholder={`Search inside ${activePanelTab}...`}
+                        placeholder={searchQuery ? "Searching in all categories..." : "Search across all solutions..."}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-gray-50 border border-gray-200 rounded-full py-2.5 pl-10 pr-10 text-sm font-medium text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF270A]/20 focus:border-[#FF270A] transition-all placeholder:text-gray-400"
+                        className="w-full bg-gray-50 border border-gray-200 rounded-full py-3 pl-10 pr-10 text-sm font-medium text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF270A]/20 focus:border-[#FF270A] transition-all placeholder:text-gray-400"
                       />
                       {searchQuery && (
                         <button 
@@ -103,22 +84,47 @@ export default function SolutionsCatalog() {
                       )}
                    </div>
 
-                   {/* Link de Descarga (Texto corregido) */}
+                   {/* Link de Descarga (CORREGIDO PARA MÓVIL) */}
                    <a 
                      href="/catalogo.pdf" 
                      download
-                     className="flex items-center gap-2 text-xs font-bold text-[#111111] hover:text-[#FF270A] transition-colors uppercase tracking-widest whitespace-nowrap group cursor-pointer"
+                     className="flex items-center gap-3 text-xs font-bold text-[#111111] hover:text-[#FF270A] transition-colors uppercase tracking-widest group cursor-pointer"
                    >
-                     <div className="p-2 bg-gray-100 rounded-full group-hover:bg-[#FF270A] group-hover:text-white transition-all">
+                     {/* Icono con shrink-0 para que no se aplaste */}
+                     <div className="p-2 bg-gray-100 rounded-full group-hover:bg-[#FF270A] group-hover:text-white transition-all shrink-0">
                         <Download className="w-4 h-4" />
                      </div>
-                     Download Product Selection Guide
+                     {/* Texto con salto de línea permitido en móvil */}
+                     <span className="leading-relaxed md:whitespace-nowrap text-left">
+                        Download Product<br className="block md:hidden"/> Selection Guide
+                     </span>
                    </a>
+                </div>
 
+                {/* --- 2. CONTENEDOR STICKY (TABS DE CATEGORÍAS) --- */}
+                <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-xl py-4 -mx-6 px-6 md:-mx-0 md:px-0 transition-all border-b border-transparent">
+                   <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-2 no-scrollbar items-center justify-start">
+                      {PANEL_CATEGORIES.map((category) => (
+                         <button
+                            key={category.id}
+                            onClick={() => handleTabClick(category.id)}
+                            disabled={!!searchQuery}
+                            className={`px-5 py-2.5 rounded-full text-xs font-medium tracking-wide transition-all duration-300 border whitespace-nowrap shrink-0 ${
+                               activePanelTab === category.id && !searchQuery
+                                  ? "bg-[#111111] text-white border-[#111111] shadow-lg scale-105"
+                                  : searchQuery 
+                                    ? "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed" 
+                                    : "bg-white text-gray-500 border-gray-200 hover:border-gray-400 hover:text-[#111111]"
+                            }`}
+                         >
+                            {category.label}
+                         </button>
+                      ))}
+                   </div>
                 </div>
 
                 {/* --- LISTA DE SOLUCIONES --- */}
-                <div className="flex flex-col mt-6 min-h-[300px]">
+                <div className="flex flex-col mt-4 min-h-[300px]">
                    {filteredSolutions.length > 0 ? (
                      filteredSolutions.map((item, index) => (
                         <div key={index} className="flex flex-col md:flex-row justify-between items-start md:items-center py-8 px-4 -mx-4 rounded-2xl group hover:bg-gray-50/80 transition-all duration-300">
@@ -150,16 +156,16 @@ export default function SolutionsCatalog() {
                      <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
                         <Search className="w-12 h-12 text-gray-300 mb-4" />
                         <p className="text-lg font-bold text-gray-400">No matching solutions found.</p>
-                        <p className="text-sm text-gray-400">Try searching for a target (e.g., "invA") or name.</p>
+                        <p className="text-sm text-gray-400">Try searching for a target (e.g., "invA") or name across all categories.</p>
                      </div>
                    )}
 
-                   {/* --- SECCIÓN "DIDN'T FIND IT?" CON IMAGEN CORREGIDA --- */}
+                   {/* --- SECCIÓN "DIDN'T FIND IT?" --- */}
                    <div className="mt-12 mb-4 p-8 md:p-10 text-center flex flex-col items-center">
                        {/* Logo de MILA */}
                        <div className="mb-6">
                           <Image 
-                            src="/logo_mila.png" // Nombre de archivo corregido
+                            src="/logo_mila.png" 
                             alt="MILA Logo" 
                             width={80} 
                             height={80} 
