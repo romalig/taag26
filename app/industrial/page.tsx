@@ -171,8 +171,6 @@ export default function IndustrialPage() {
   }, []);
 
   // --- FUNCIÓN MAESTRA DE SCROLL ---
-  // Esta función calcula la posición absoluta y resta el Header.
-  // Funciona mejor que scrollIntoView porque controlamos el offset exacto.
   const scrollToTarget = (elementId: string | HTMLElement, offset = 120) => {
     let element: HTMLElement | null = null;
 
@@ -198,7 +196,8 @@ export default function IndustrialPage() {
     setActivePanelTab(categoryId);
     // Cuando cambias de tab, scroll suave al inicio de la lista del panel
     if (panelRef.current) {
-        scrollToTarget(panelRef.current, 140); // 140px de espacio para header + tabs
+        // Reducimos el offset ligeramente ya que quitamos el título grande
+        scrollToTarget(panelRef.current, 100); 
     }
   };
 
@@ -337,12 +336,10 @@ export default function IndustrialPage() {
                            )}
                         </div>
                          <div className="flex gap-3 mt-auto md:mt-6">
-                           {/* CORREGIDO: Uppercase + Font Bold */}
                            <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md">
                            Contact <ArrowRight className="w-3 h-3" />
                            </button>
                             
-                            {/* BOTÓN CON SCROLL JS CORREGIDO */}
                             <button 
                               onClick={() => scrollToTarget('solutions', 120)}
                               className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm flex items-center justify-center"
@@ -355,7 +352,6 @@ export default function IndustrialPage() {
                   );
                 }
 
-                // TARJETA TxA (IDX 5)
                 if (idx === 5) {
                    return (
                     <div
@@ -398,7 +394,6 @@ export default function IndustrialPage() {
                            </div>
                         </div>
                         <div className="relative mt-6 z-30 opacity-100 translate-y-0 md:absolute md:bottom-6 md:right-10 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
-                           {/* CORREGIDO: Uppercase + Font Bold */}
                            <button onClick={openMeeting} className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
                              Learn More <ArrowRight className="w-3 h-3" />
                            </button>
@@ -408,7 +403,6 @@ export default function IndustrialPage() {
                    );
                 }
 
-                // TARJETAS ESTÁNDAR
                 return (
                   <div
                     key={solution.id}
@@ -437,7 +431,6 @@ export default function IndustrialPage() {
                     )}
 
                     <div className="absolute bottom-6 left-10 right-10 flex gap-2 z-30 transition-opacity duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100">
-                      {/* CORREGIDO: Uppercase + Font Bold */}
                       <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111]/90 backdrop-blur text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-xl">
                         Contact <ArrowRight className="w-3 h-3" />
                       </button>
@@ -485,18 +478,13 @@ export default function IndustrialPage() {
                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
             </div>
 
-            {/* 2. BOTTOM CONTENT (PANEL "SEE WHAT'S INSIDE") */}
-            <div className="p-10 md:p-24 bg-white relative z-20 rounded-b-[3rem]">
+            {/* 2. BOTTOM CONTENT (PANEL SIN TÍTULO) */}
+            <div className="p-10 md:p-8 bg-white relative z-20 rounded-b-[3rem]">
                
-               <div className="max-w-5xl mx-auto">
+               {/* MODIFICACIÓN: Eliminado el título, pero movemos el ref al contenedor principal para que el scroll funcione */}
+               <div className="max-w-5xl mx-auto" ref={panelRef} id="panel-start">
                   
-                  {/* Título de sección */}
-                  <div className="mb-8" ref={panelRef} id="panel-start">
-                     <h3 className="text-3xl md:text-4xl font-bold text-[#111111] mb-8">See what's inside the panel</h3>
-                  </div>
-
                   {/* 3. STICKY TABS CONTAINER */}
-                  {/* Estos son los botones Sticky a los que posiblemente te referías */}
                   <div className="sticky top-0 md:top-20 z-40 bg-white/95 backdrop-blur-md py-4 -mx-4 px-4 md:-mx-0 md:px-0 border-b border-gray-100/50">
                      <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-2 md:pb-0 no-scrollbar items-center">
                         {PANEL_CATEGORIES.map((category) => (
@@ -533,7 +521,6 @@ export default function IndustrialPage() {
                            </div>
 
                            {/* Botones Derecha */}
-                           {/* CORREGIDO: Uppercase + Font Bold */}
                            <div className="flex items-center gap-3 w-full md:w-auto shrink-0">
                               <button 
                                  onClick={openMeeting}
