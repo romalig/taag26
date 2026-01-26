@@ -43,7 +43,7 @@ export default function SolutionsCatalog() {
           
           {/* HERO DEL CATALOGO */}
           <div className="relative h-[420px] md:h-[500px] rounded-t-[3rem] overflow-hidden">
-             <Image src="/hero7.png" alt="TAAG Solutions Ecosystem" fill className="object-cover object-center" priority />
+             <Image src="/hero15.png" alt="TAAG Solutions Ecosystem" fill className="object-cover object-center" priority />
              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/10" />
              
              {/* CAMBIO AQUÍ: items-center -> items-start, y se añadió pt-20 md:pt-32 */}
