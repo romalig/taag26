@@ -40,7 +40,7 @@ const FEATURED_SOLUTIONS = [
     id: "pathogen-control2",
     title: "Fast control of Salmonella in the food industry",
     description: "Same-shift results for Salmonella in environmental and food samples.",
-    image: "/chocolate14.png",
+    image: "/chocolate15.png",
     tags: ["Salmonella", "AiGOR"],
   },
   // --- 2. MULTIPLEX ---
@@ -48,7 +48,7 @@ const FEATURED_SOLUTIONS = [
     id: "simultaneous-detection",
     title: "Multiplex Process Control",
     description: "Detect Pathogens & Indicators in a single reaction. Preventive control meets efficiency.", 
-    image: "/F41-3.png", 
+    image: "/F41-8.png", 
     tags: ["4-in-1", "Preventive"],
   },
   // --- 3. SPOILAGE JUGO ---
@@ -64,7 +64,7 @@ const FEATURED_SOLUTIONS = [
     id: "hygiene-monitoring",
     title: "Surface & Drain Hygiene Pro",
     description: "Quantitative tracking of hygiene indicators to prevent biofilm formation.",
-    image: "/F39-2.png", 
+    image: "/F39-3.png", 
     tags: ["Hygiene", "Prevention"],
   },
   // --- 5. TxA INTEGRATION (FULL IMAGE + CLEAN DOTTED DIAGRAM) ---
@@ -334,7 +334,11 @@ export default function IndustrialPage() {
                         </div>
 
                         {/* 3. BOTÓN (Extremo Derecha) */}
-                        <div className="absolute bottom-6 right-10 z-30 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                        {/* MODIFICADO:
+                           - Mobile (default): opacity-100 translate-y-0 (Visible siempre)
+                           - Desktop (md:): opacity-0 translate-y-2 (Efecto hover restaurado)
+                        */}
+                        <div className="absolute bottom-6 right-10 z-30 transition-all duration-300 opacity-100 translate-y-0 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0">
                            <button onClick={openMeeting} className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
                              Learn More <ArrowRight className="w-3 h-3" />
                            </button>
@@ -375,7 +379,11 @@ export default function IndustrialPage() {
                         <div className="flex-grow"></div>
                     )}
 
-                    <div className="absolute bottom-6 left-10 right-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
+                    {/* MODIFICADO:
+                       - Mobile (default): opacity-100 (Visible siempre)
+                       - Desktop (md:): opacity-0 (Efecto hover restaurado)
+                    */}
+                    <div className="absolute bottom-6 left-10 right-10 flex gap-2 z-30 transition-opacity duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                       <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111]/90 backdrop-blur text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-xl">
                         Contact <ArrowRight className="w-3 h-3" />
                       </button>
