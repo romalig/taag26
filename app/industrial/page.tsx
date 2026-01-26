@@ -4,23 +4,16 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import {
   ArrowRight,
-  Search,
-  FlaskConical,
-  Activity,
-  Microscope,
   CheckCircle2,
   Clock,
   TrendingDown,
-  ShieldCheck,
-  FileCheck,
+  ChevronRight,
 } from "lucide-react";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { useCTA } from "../components/CTAProvider";
 
-// --- DATOS ---
+// --- DATOS SECCIÓN SUPERIOR (GRID) ---
 const FEATURED_SOLUTIONS = [
-  // --- 0. HERO SUPERIOR ---
   {
     id: "pathogen-control",
     title: "Zero-Risk and Ultra-Fast Internal EMP Pathogen Testing",
@@ -32,10 +25,9 @@ const FEATURED_SOLUTIONS = [
       "Instant Action: Shift from reactive waiting to same-day intervention.",
       "Cost Efficiency: Eliminate external lab fees and shipping delays.",
     ],
-    image: "/2bacterias_verdes3.png", 
+    image: "/2bacterias_verdes3.png",
     tags: ["EMP", "AiGOR"],
   },
-  // --- 1. SALMONELLA ---
   {
     id: "pathogen-control2",
     title: "Fast control of Salmonella in the food industry",
@@ -43,60 +35,121 @@ const FEATURED_SOLUTIONS = [
     image: "/chocolate16.png",
     tags: ["Salmonella", "AiGOR"],
   },
-  // --- 2. MULTIPLEX ---
   {
     id: "simultaneous-detection",
     title: "Multiplex Process Control",
-    description: "Detect Pathogens & Indicators in a single reaction. Preventive control meets efficiency.", 
-    image: "/F41-7.png", 
+    description: "Detect Pathogens & Indicators in a single reaction. Preventive control meets efficiency.",
+    image: "/F41-9.png",
     tags: ["4-in-1", "Preventive"],
   },
-  // --- 3. SPOILAGE JUGO ---
   {
     id: "spoilage-detection",
     title: "Broad-Spectrum Spoilage Defense",
     description: "Screen for yeast, mold, and bacteria in a single run. Secure shelf-life with absolute molecular precision.",
-    image: "/spoilage-5.png", 
+    image: "/spoilage-5.png",
     tags: ["Spoilage", "Beverages"],
   },
-  // --- 4. HIGIENE ---
   {
     id: "hygiene-monitoring",
     title: "Surface & Drain Hygiene Pro",
     description: "Quantitative tracking of hygiene indicators to prevent biofilm formation.",
-    image: "/F39-3.png", 
+    image: "/F39-3.png",
     tags: ["Hygiene", "Prevention"],
   },
-  // --- 5. TxA INTEGRATION ---
   {
     id: "txa-integration",
     title: "All seamlessly integrated to TxA",
     description: "Ai platform to turn complex data into preventive action.",
-    image: "/hims4.png", 
+    image: "/hims4.png",
     tags: ["TxA", "Software"],
   },
 ];
 
-const PRODUCT_CATALOG = [
-  { id: 1, name: "SalmoQuick™ PCR Kit", category: "Pathogens", type: "Kit" },
-  { id: 2, name: "Listeria Monocytogenes PCR", category: "Pathogens", type: "Kit" },
-  { id: 3, name: "Total Yeast & Mold", category: "Spoilage", type: "Kit" },
-  { id: 4, name: "E. Coli O157:H7 Rapid", category: "Pathogens", type: "Kit" },
-  { id: 5, name: "TxA Software License", category: "Software", type: "Digital" },
-  { id: 6, name: "Surface Swab Pro", category: "Consumables", type: "Accessory" },
-  { id: 7, name: "S. Aureus Detect", category: "Pathogens", type: "Kit" },
-  { id: 8, name: "Lactic Acid Bacteria", category: "Spoilage", type: "Kit" },
+// --- DATOS DEL CATÁLOGO (PANEL INTERNO) ---
+const PANEL_CATEGORIES = [
+  { id: "Pathogens", label: "Pathogens" },
+  { id: "General Spoilage", label: "General Spoilage" },
+  { id: "Beverages", label: "Juices & Soft Drinks" },
+  { id: "Brewing", label: "Brewing Quality" },
+  { id: "Wine", label: "Wine & Enology" },
 ];
 
-const CATEGORIES = ["All", "Pathogens", "Spoilage", "Software", "Consumables"];
+const PANEL_SOLUTIONS: Record<string, { title: string; description: string; targets: string }[]> = {
+  "Pathogens": [
+    {
+      title: "Salmonella spp. Rapid Kit",
+      description: "Detect Salmonella in environmental sponges and raw materials with high sensitivity.",
+      targets: "Target: invA gene",
+    },
+    {
+      title: "Listeria monocytogenes Pro",
+      description: "Specific identification of L. mono to prevent outbreaks in RTE foods.",
+      targets: "Target: hlyA gene",
+    },
+    {
+      title: "E. coli O157:H7 Screen",
+      description: "Critical screening for pathogenic E. coli in meat and fresh produce.",
+      targets: "Targets: stx1, stx2",
+    },
+  ],
+  "General Spoilage": [
+    {
+      title: "Total Spoilage Organisms",
+      description: "Broad spectrum detection of yeast and mold to predict shelf-life stability.",
+      targets: "Targets: 18S rRNA, bacterial 16S",
+    },
+    {
+      title: "Indicator Bacteria Count",
+      description: "Quantification of Total Aerobic Bacteria and Enterobacteriaceae.",
+      targets: "Targets: TAB, Enteros",
+    },
+  ],
+  "Beverages": [
+    {
+      title: "Alicyclobacillus (TAB) Detect",
+      description: "Prevent 'medicinal' off-flavors in juices caused by thermo-acidophilic bacteria.",
+      targets: "Target: Guaiacol producers",
+    },
+    {
+      title: "Osmophilic Yeast Panel",
+      description: "Targeted detection of Zygosaccharomyces in high-sugar concentrates.",
+      targets: "Targets: Z. rouxii, Z. bailii",
+    },
+  ],
+  "Brewing": [
+    {
+      title: "Hop-Resistance Screen",
+      description: "Identify bacteria capable of growing in hopped beers and spoiling flavor.",
+      targets: "Targets: horA, horC genes",
+    },
+    {
+      title: "Strict Anaerobes Detect",
+      description: "Identification of obligate anaerobes detrimental to beer quality.",
+      targets: "Targets: Megasphaera, Pectinatus",
+    },
+  ],
+  "Wine": [
+    {
+      title: "Brettanomyces Guard",
+      description: "Early warning system for Brettanomyces contamination in aging barrels.",
+      targets: "Target: B. bruxellensis",
+    },
+    {
+      title: "Acetic Acid Bacteria Flow",
+      description: "Monitor volatile acidity producers during fermentation.",
+      targets: "Targets: Acetobacter, Gluconobacter",
+    },
+  ],
+};
 
 export default function IndustrialPage() {
   const { openMeeting } = useCTA();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
-
   const [isImageVisible, setIsImageVisible] = useState(false);
+  const [activePanelTab, setActivePanelTab] = useState("Pathogens");
   const imageRef = useRef<HTMLDivElement>(null);
+
+  // REFERENCIA PARA EL SCROLL DEL PANEL
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -117,14 +170,37 @@ export default function IndustrialPage() {
     return () => observer.disconnect();
   }, []);
 
-  const filteredProducts = PRODUCT_CATALOG.filter((product) => {
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      activeCategory === "All" || product.category === activeCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // --- FUNCIÓN MAESTRA DE SCROLL ---
+  // Esta función calcula la posición absoluta y resta el Header.
+  // Funciona mejor que scrollIntoView porque controlamos el offset exacto.
+  const scrollToTarget = (elementId: string | HTMLElement, offset = 120) => {
+    let element: HTMLElement | null = null;
+
+    if (typeof elementId === "string") {
+      element = document.getElementById(elementId);
+    } else {
+      element = elementId;
+    }
+
+    if (element) {
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Handler para los botones del menú Sticky (Panel)
+  const handleTabClick = (categoryId: string) => {
+    setActivePanelTab(categoryId);
+    // Cuando cambias de tab, scroll suave al inicio de la lista del panel
+    if (panelRef.current) {
+        scrollToTarget(panelRef.current, 140); // 140px de espacio para header + tabs
+    }
+  };
 
   return (
     <main className="bg-white min-h-screen font-sans selection:bg-[#FF270A] selection:text-white">
@@ -145,7 +221,7 @@ export default function IndustrialPage() {
       </section>
 
       {/* 2. FEATURED SOLUTIONS GRID */}
-      <section className="px-4 md:px-6 mb-32">
+      <section id="solutions" className="px-4 md:px-6 mb-8">
         <div className="max-w-7xl mx-auto">
           <div className="relative bg-[#F4F4F5] rounded-[3rem] overflow-hidden pt-16 pb-32 px-6 md:px-16 flex flex-col items-center">
             
@@ -188,9 +264,7 @@ export default function IndustrialPage() {
               
               {FEATURED_SOLUTIONS.map((solution, idx) => {
                 
-                // ========================================================================
-                // 1. HERO SUPERIOR (ÍNDICE 0)
-                // ========================================================================
+                // HERO SUPERIOR (IDX 0)
                 if (idx === 0) {
                   return (
                     <div
@@ -263,30 +337,31 @@ export default function IndustrialPage() {
                            )}
                         </div>
                          <div className="flex gap-3 mt-auto md:mt-6">
+                           {/* CORREGIDO: Uppercase + Font Bold */}
                            <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md">
                            Contact <ArrowRight className="w-3 h-3" />
                            </button>
-                            <button className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm">Details</button>
+                            
+                            {/* BOTÓN CON SCROLL JS CORREGIDO */}
+                            <button 
+                              onClick={() => scrollToTarget('solutions', 120)}
+                              className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm flex items-center justify-center"
+                            >
+                              Details
+                            </button>
                           </div>
                         </div>
                     </div>
                   );
                 }
 
-                // ========================================================================
-                // 5. TARJETA TxA (MODIFICADA PARA MÓVIL)
-                // ========================================================================
+                // TARJETA TxA (IDX 5)
                 if (idx === 5) {
                    return (
                     <div
                       key={solution.id}
-                      // MODIFICADO: 
-                      // - Flex column en móvil, row en desktop.
-                      // - Borde rojo y sombra en móvil, sin borde en desktop.
-                      // - Altura automática en móvil, fija en desktop.
                       className="md:col-span-2 group relative rounded-[2.5rem] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-[#111111] flex flex-col md:flex-row h-auto md:h-[200px] border border-[#FF270A] shadow-[0_0_15px_rgba(255,39,10,0.2)] md:border-none md:shadow-none"
                     >
-                      {/* CAPA 1: IMAGEN DE FONDO (OCULTA EN MÓVIL) */}
                       <div className="absolute inset-0 z-0 hidden md:block">
                          {solution.image && (
                              <Image
@@ -299,17 +374,11 @@ export default function IndustrialPage() {
                          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/5 to-transparent z-10"></div>
                       </div>
 
-                      {/* CAPA 2: CONTENIDO */}
-                      {/* Padding ajustado para móvil y desktop */}
                       <div className="relative z-20 w-full h-full flex flex-col md:flex-row items-start md:items-center justify-between p-10 md:px-12">
-                        
-                        {/* 1. TEXTO */}
                         <div className="max-w-[260px] z-20">
                             <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-sm">{solution.title}</h3>
                             <p className="text-gray-200 text-sm font-medium leading-relaxed drop-shadow-sm">{solution.description}</p>
                         </div>
-
-                        {/* 2. DIAGRAMA CIRCULAR (Solo Desktop) */}
                         <div className="absolute left-[380px] top-1/2 -translate-y-1/2 hidden md:block z-20 select-none">
                            <div className="relative w-40 h-40 scale-90">
                               <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full" fill="none" strokeWidth="1.5" strokeLinecap="round" style={{filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))'}}>
@@ -328,13 +397,8 @@ export default function IndustrialPage() {
                               </div>
                            </div>
                         </div>
-
-                        {/* 3. BOTÓN */}
-                        {/* MODIFICADO: 
-                           - Móvil: Relative, margin-top, visible siempre (opacity-100).
-                           - Desktop: Absolute, bottom-6, hover effect (opacity-0 -> 100).
-                        */}
                         <div className="relative mt-6 z-30 opacity-100 translate-y-0 md:absolute md:bottom-6 md:right-10 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
+                           {/* CORREGIDO: Uppercase + Font Bold */}
                            <button onClick={openMeeting} className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
                              Learn More <ArrowRight className="w-3 h-3" />
                            </button>
@@ -344,14 +408,10 @@ export default function IndustrialPage() {
                    );
                 }
 
-                // ========================================================================
                 // TARJETAS ESTÁNDAR
-                // ========================================================================
-                
                 return (
                   <div
                     key={solution.id}
-                    // MODIFICADO: h-[520px] en móvil para que quepan los botones debajo de la imagen.
                     className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[520px] md:h-[400px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center"
                   >
                     <div className="relative z-10 w-full max-w-[400px] flex flex-col items-center">
@@ -360,7 +420,6 @@ export default function IndustrialPage() {
                     </div>
 
                     {solution.image && (
-                      // MODIFICADO: En móvil la imagen sube a bottom-24 para dejar espacio a los botones abajo.
                       <div className="absolute bottom-24 md:bottom-0 left-0 right-0 h-[220px] z-0 flex items-end justify-center">
                          <div className="relative w-full h-full">
                            <Image
@@ -377,8 +436,8 @@ export default function IndustrialPage() {
                         <div className="flex-grow"></div>
                     )}
 
-                    {/* MODIFICADO: En móvil opacity-100 siempre visible. */}
                     <div className="absolute bottom-6 left-10 right-10 flex gap-2 z-30 transition-opacity duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100">
+                      {/* CORREGIDO: Uppercase + Font Bold */}
                       <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111]/90 backdrop-blur text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-xl">
                         Contact <ArrowRight className="w-3 h-3" />
                       </button>
@@ -392,140 +451,111 @@ export default function IndustrialPage() {
         </div>
       </section>
 
-      {/* SECCIONES RESTANTES */}
-      <section className="py-24 bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-20">
-            <span className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-4 block">
-              The Ecosystem
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-[#111111]">
-              Connected Intelligence
-            </h2>
-          </div>
-          <div className="relative">
-            <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gray-100 -translate-y-1/2 z-0" />
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
-              <div className="bg-white p-6 text-center group">
-                <div className="w-20 h-20 mx-auto bg-[#F5F5F7] rounded-full flex items-center justify-center mb-6 border border-transparent group-hover:border-[#FF270A]">
-                  <FlaskConical className="w-8 h-8 text-[#111111]" />
-                </div>
-                <h3 className="text-lg font-bold mb-2">1. Sample</h3>
-                <p className="text-sm text-gray-500">
-                  Universal enrichment protocol.
-                </p>
-              </div>
-              <div className="bg-white p-6 text-center group">
-                <div className="w-20 h-20 mx-auto bg-[#F5F5F7] rounded-full flex items-center justify-center mb-6 border border-transparent group-hover:border-[#FF270A]">
-                  <Microscope className="w-8 h-8 text-[#111111]" />
-                </div>
-                <h3 className="text-lg font-bold mb-2">2. Analyze</h3>
-                <p className="text-sm text-gray-500">
-                  Run on standard qPCR equipment.
-                </p>
-              </div>
-              <div className="bg-[#111111] rounded-3xl p-6 text-center shadow-2xl scale-110 relative group">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#FF270A] text-white text-[10px] font-bold uppercase px-3 py-1 rounded-full">
-                  The Brain
-                </div>
-                <div className="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-6 backdrop-blur">
-                  <Activity className="w-8 h-8 text-[#FF270A]" />
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">3. TxA™ AI</h3>
-                <p className="text-sm text-white/60">
-                  Automated interpretation.
-                </p>
-              </div>
-              <div className="bg-white p-6 text-center group">
-                <div className="w-20 h-20 mx-auto bg-[#F5F5F7] rounded-full flex items-center justify-center mb-6 border border-transparent group-hover:border-[#FF270A]">
-                  <CheckCircle2 className="w-8 h-8 text-[#111111]" />
-                </div>
-                <h3 className="text-lg font-bold mb-2">4. Decision</h3>
-                <p className="text-sm text-gray-500">
-                  Release product instantly.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-[#F5F5F7] px-6" id="catalog">
+      {/* --- SECCIÓN UNIFICADA: CATALOGO (SUPER CARD) --- */}
+      <section className="pb-24 pt-0 bg-white px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#111111] mb-4">
-                Find your Kit
-              </h2>
-              <p className="text-gray-500">Search our complete catalog.</p>
-            </div>
-            <div className="relative w-full md:w-96">
-              <input
-                type="text"
-                placeholder="Search by pathogen..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 rounded-full bg-white border border-gray-200 outline-none transition-all text-sm font-medium"
-              />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            </div>
-          </div>
+          
+          {/* Tarjeta Unificada Contenedor Principal */}
+          <div className="bg-white rounded-[3rem] border border-gray-200">
+            
+            {/* 1. TOP HERO (IMAGEN Y TITULO) */}
+            <div className="relative h-[420px] md:h-[500px] rounded-t-[3rem] overflow-hidden">
+               {/* Imagen Hero */}
+               <Image
+                 src="/hero.png"
+                 alt="TAAG Solutions Ecosystem"
+                 fill
+                 className="object-cover object-center"
+                 priority
+               />
+               
+               {/* Overlay */}
+               <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/10" />
 
-          <div className="flex flex-wrap gap-3 mb-12">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${
-                  activeCategory === cat
-                    ? "bg-[#111111] text-white shadow-lg scale-105"
-                    : "bg-white text-gray-500 hover:bg-gray-100 border border-gray-200"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+               {/* Contenido Titulo */}
+               <div className="relative z-10 h-full flex items-center">
+                 <div className="px-10 md:px-20 max-w-3xl">
+                   <h2 className="text-white text-4xl md:text-6xl font-extrabold leading-tight">
+                     Explore all our solutions
+                   </h2>
+                 </div>
+               </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white p-6 rounded-3xl hover:shadow-xl transition-all duration-300 group cursor-pointer border border-transparent hover:border-gray-100"
-              >
-                <div className="flex justify-between items-start mb-6">
-                  <span className="px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold uppercase text-gray-500">
-                    {product.type}
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center -rotate-45 group-hover:rotate-0 transition-transform">
-                    <ArrowRight className="w-4 h-4 text-white" />
+               {/* EDGE FADE */}
+               <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
+            </div>
+
+            {/* 2. BOTTOM CONTENT (PANEL "SEE WHAT'S INSIDE") */}
+            <div className="p-10 md:p-24 bg-white relative z-20 rounded-b-[3rem]">
+               
+               <div className="max-w-5xl mx-auto">
+                  
+                  {/* Título de sección */}
+                  <div className="mb-8" ref={panelRef} id="panel-start">
+                     <h3 className="text-3xl md:text-4xl font-bold text-[#111111] mb-8">See what's inside the panel</h3>
                   </div>
-                </div>
-                <h4 className="text-lg font-bold text-[#111111] leading-tight mb-2 group-hover:text-[#FF270A] transition-colors">
-                  {product.name}
-                </h4>
-                <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">
-                  Category: {product.category}
-                </p>
-              </div>
-            ))}
-          </div>
 
-          <div className="mt-16 text-center">
-            <p className="text-gray-500 text-sm mb-4">
-              Don't see the target you need?
-            </p>
-            <button
-              onClick={openMeeting}
-              className="text-[#FF270A] font-bold text-sm uppercase tracking-widest hover:underline decoration-2 underline-offset-4"
-            >
-              Request Custom Assay Development
-            </button>
+                  {/* 3. STICKY TABS CONTAINER */}
+                  {/* Estos son los botones Sticky a los que posiblemente te referías */}
+                  <div className="sticky top-0 md:top-20 z-40 bg-white/95 backdrop-blur-md py-4 -mx-4 px-4 md:-mx-0 md:px-0 border-b border-gray-100/50">
+                     <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-2 md:pb-0 no-scrollbar items-center">
+                        {PANEL_CATEGORIES.map((category) => (
+                           <button
+                              key={category.id}
+                              onClick={() => handleTabClick(category.id)}
+                              className={`px-6 py-3 rounded-full text-sm font-normal transition-all duration-300 border whitespace-nowrap shrink-0 ${
+                                 activePanelTab === category.id
+                                    ? "bg-[#111111] text-white border-[#111111] shadow-lg"
+                                    : "bg-white text-gray-500 border-gray-200 hover:border-gray-400 hover:text-[#111111]"
+                              }`}
+                           >
+                              {category.label}
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+
+                  {/* 4. LISTA DE SOLUCIONES */}
+                  <div className="flex flex-col mt-4">
+                     {PANEL_SOLUTIONS[activePanelTab]?.map((item, index) => (
+                        <div 
+                           key={index} 
+                           className="flex flex-col md:flex-row justify-between items-start md:items-center py-10 border-b border-gray-100 hover:bg-gray-50/50 transition-colors px-4 -mx-4 rounded-xl group"
+                        >
+                           {/* Info Izquierda */}
+                           <div className="flex-1 pr-0 md:pr-12 mb-6 md:mb-0">
+                              <h4 className="text-xl font-bold text-[#111111] mb-2 group-hover:text-[#FF270A] transition-colors">{item.title}</h4>
+                              <p className="text-gray-500 font-normal mb-3 max-w-2xl">{item.description}</p>
+                              <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-normal text-gray-600 tracking-wider">
+                                 <div className="w-1.5 h-1.5 rounded-full bg-[#FF270A]"></div>
+                                 {item.targets}
+                              </span>
+                           </div>
+
+                           {/* Botones Derecha */}
+                           {/* CORREGIDO: Uppercase + Font Bold */}
+                           <div className="flex items-center gap-3 w-full md:w-auto shrink-0">
+                              <button 
+                                 onClick={openMeeting}
+                                 className="px-8 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors shadow-sm min-w-[120px]"
+                              >
+                                 Contact
+                              </button>
+                              <button className="px-6 py-3 bg-white border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors flex items-center gap-2 min-w-[140px] justify-center">
+                                 Learn More <ChevronRight className="w-3 h-3" />
+                              </button>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+
+               </div>
+            </div>
+
           </div>
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }
