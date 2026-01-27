@@ -247,7 +247,7 @@ export default function HowItWorks() {
             </div>
             {/* Columna Derecha */}
             <div className="relative h-[600px] md:h-[700px] w-full rounded-[3rem] overflow-hidden shadow-2xl">
-               <Image src="/termo.png" alt="Laboratory Setup" fill className="object-cover object-center" />
+               <Image src="/termo1.png" alt="Laboratory Setup" fill className="object-cover object-center" />
             </div>
           </div>
         </div>
