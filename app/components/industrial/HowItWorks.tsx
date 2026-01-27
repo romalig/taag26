@@ -15,7 +15,7 @@ import {
 import { WORKFLOW_STEPS, LAB_SPECS } from "../../industrial/industrialData";
 
 export default function HowItWorks() {
-  // --- LÓGICA DEL CARRUSEL (Sin cambios) ---
+  // --- LÓGICA DEL CARRUSEL ---
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -104,38 +104,117 @@ export default function HowItWorks() {
             style={{ paddingLeft: edgePadding, paddingRight: edgePadding, scrollPaddingLeft: edgePadding, scrollPaddingRight: edgePadding }}
             className="flex gap-4 md:gap-6 overflow-x-auto pb-12 w-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
           >
-            {WORKFLOW_STEPS.map((step, index) => (
-              <div 
-                key={step.id}
-                className={`relative flex-shrink-0 w-[85vw] md:w-[420px] h-[620px] rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between snap-start transition-transform duration-300 hover:scale-[1.01] bg-[#F4F2ED] text-[#111111]`}
-              >
-                <div className="relative z-10">
-                  <span className={`text-xs font-bold uppercase tracking-widest opacity-60 mb-5 block`}>{step.step}</span>
-                  <h3 className="text-3xl md:text-4xl font-bold mb-4 leading-tight tracking-tight">{step.title}</h3>
-                  <p className={`text-base font-medium leading-relaxed opacity-80 max-w-sm`}>{step.description}</p>
+            {WORKFLOW_STEPS.map((step, index) => {
+              const isFirstCard = index === 0;
+
+              return (
+                <div 
+                  key={step.id}
+                  className={`
+                    relative flex-shrink-0 w-[85vw] md:w-[420px] 
+                    h-[620px] 
+                    rounded-[2.5rem] 
+                    flex flex-col justify-between 
+                    snap-start transition-transform duration-300 hover:scale-[1.01]
+                    overflow-hidden
+                    ${isFirstCard 
+                      ? 'border-0' // Sin borde en la primera tarjeta
+                      : 'bg-[#F4F2ED] text-[#111111] p-8 md:p-10 border border-transparent'
+                    }
+                  `}
+                >
+                  {/* === CASO 1: PRIMERA TARJETA (IMAGEN FULL) === */}
+                  {isFirstCard ? (
+                    <>
+                      {/* Imagen de Fondo Completa */}
+                      <div className="absolute inset-0 z-0">
+                        <Image 
+                          src="/howitworks.png" 
+                          alt={step.title} 
+                          fill 
+                          className="object-cover"
+                        />
+                        {/* Overlay Inferior (Solo abajo, para texto blanco) */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent" />
+                      </div>
+
+                      {/* Contenido sobre la imagen */}
+                      <div className="relative z-10 h-full flex flex-col justify-between p-8 md:p-10">
+                         {/* Bloque Superior (Títulos Negros) */}
+                         <div>
+                           <span className="text-xs font-bold uppercase tracking-widest opacity-100 mb-3 block text-[#111111]">
+                             {step.step}
+                           </span>
+                           {/* TÍTULO EN COLOR NEGRO */}
+                           <h3 className="text-2xl font-bold leading-tight tracking-tight text-[#111111]">
+                             {step.title}
+                           </h3>
+                         </div>
+
+                         {/* Bloque Inferior (Descripción Blanca) */}
+                         <div>
+                           <p className="text-sm font-medium leading-relaxed opacity-90 mb-6 text-white/90">
+                             {step.description}
+                           </p>
+                           {/* Contenedor alineado */}
+                           <div className="pt-6 border-t border-white/20">
+                              <button className="text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-80 transition-opacity text-white">
+                                  Learn more <ArrowRight className="w-3 h-3" />
+                              </button>
+                           </div>
+                         </div>
+                      </div>
+                    </>
+                  ) : (
+                    /* === CASO 2: TARJETAS ESTÁNDAR === */
+                    <>
+                      {/* 1. Header */}
+                      <div className="relative z-10">
+                        <span className="text-xs font-bold uppercase tracking-widest opacity-60 mb-3 block">
+                          {step.step}
+                        </span>
+                        <h3 className="text-2xl font-bold leading-tight tracking-tight">
+                          {step.title}
+                        </h3>
+                      </div>
+
+                      {/* 2. Imagen Central */}
+                      <div className="relative w-full flex-1 min-h-[200px] my-6 rounded-2xl overflow-hidden mix-blend-multiply">
+                         <Image 
+                           src={step.image} 
+                           alt={step.title} 
+                           fill 
+                           className="object-contain p-2"
+                         />
+                      </div>
+
+                      {/* 3. Footer */}
+                      <div className="relative z-10">
+                         <p className="text-sm font-medium leading-relaxed opacity-80 mb-6">
+                           {step.description}
+                         </p>
+                         <div className="pt-6 border-t border-black/5">
+                            <button className="text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-70 transition-opacity">
+                               Learn more <ArrowRight className="w-3 h-3" />
+                            </button>
+                         </div>
+                      </div>
+                    </>
+                  )}
                 </div>
-                <div className="relative w-full h-[260px] mt-6 rounded-[2rem] overflow-hidden mix-blend-multiply">
-                   <Image src={step.image} alt={step.title} fill className={`${index === 0 || index === WORKFLOW_STEPS.length - 1 ? 'object-cover' : 'object-contain p-4'} transition-transform duration-700 hover:scale-105`} />
-                </div>
-                <div className="mt-8 flex items-center justify-between border-t border-black/5 pt-6">
-                   <button className={`text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:opacity-70 transition-opacity`}>Learn more <ArrowRight className="w-3 h-3" /></button>
-                </div>
-                {index === 0 && (<div className="absolute top-10 right-10 w-12 h-12 bg-[#FF270A] rounded-full flex items-center justify-center animate-pulse shadow-xl z-20"><Check className="text-white w-6 h-6" /></div>)}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
 
       {/* ==============================================
-          PARTE 2: LAB SPECS (ESTILO HIMS LABS - CLEAN LIST)
+          PARTE 2: LAB SPECS (SIN CAMBIOS)
       =============================================== */}
       <div className="relative w-full pb-24 pt-12">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            
-            {/* --- COLUMNA IZQUIERDA: Lista Simple --- */}
+            {/* Columna Izquierda */}
             <div>
               <div className="mb-10">
                 <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-3 block">
@@ -149,17 +228,13 @@ export default function HowItWorks() {
                   Designed for efficiency. Our ecosystem fits into your existing lab space without the need for expensive renovations or specialized personnel.
                 </p>
               </div>
-
-              {/* LISTA VERTICAL (Estilo Hims Check) */}
+              {/* Lista Vertical */}
               <div className="space-y-6">
                 {LAB_SPECS.map((spec, index) => (
                   <div key={index} className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors duration-200">
-                    {/* Icono pequeño */}
                     <div className="shrink-0 mt-1 w-8 h-8 rounded-full bg-[#FF270A]/10 flex items-center justify-center">
                       {getIcon(spec.icon)}
                     </div>
-                    
-                    {/* Texto */}
                     <div>
                       <h4 className="text-xl font-bold text-[#111111]">{spec.label}</h4>
                       <p className="text-gray-500 font-medium text-sm mt-1">
@@ -170,25 +245,10 @@ export default function HowItWorks() {
                 ))}
               </div>
             </div>
-
-            {/* --- COLUMNA DERECHA: Imagen Vertical con Degradados --- */}
-            <div className="relative h-[600px] md:h-[700px] w-full max-w-md mx-auto lg:mx-0 lg:ml-auto rounded-[3rem] overflow-hidden">
-               {/* Imagen: object-cover para llenar el alto vertical */}
-               <Image 
-                 src="/termo.png" 
-                 alt="Laboratory Thermocycler Setup" 
-                 fill
-                 className="object-cover object-center"
-               />
-               
-               {/* === DEGRADADOS (Faders) === */}
-               {/* Arriba: Blanco hacia transparente */}
-               <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white to-transparent pointer-events-none" />
-               
-               {/* Abajo: Blanco hacia transparente */}
-               <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+            {/* Columna Derecha */}
+            <div className="relative h-[600px] md:h-[700px] w-full rounded-[3rem] overflow-hidden shadow-2xl">
+               <Image src="/termo.jpg" alt="Laboratory Setup" fill className="object-cover object-center" />
             </div>
-
           </div>
         </div>
       </div>
