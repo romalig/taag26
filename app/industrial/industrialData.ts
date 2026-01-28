@@ -149,45 +149,45 @@ export const WORKFLOW_STEPS = [
   {
     id: "sample",
     step: "Step 01",
-    title: "Universal Sampling",
+    title: "Sampling",
     description: "Our kits work with standard sponges, swabs, and liquids. No complex pre-processing or enrichment required for most matrices.",
-    image: "/2bacterias_verdes3.png", // Placeholder visual
+    image: "/muestreo5.png", // Placeholder visual
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
   {
     id: "extraction",
     step: "Step 02",
-    title: "Rapid DNA Extraction",
+    title: "Short enrichment, if needed",
     description: "Simplified protocols designed for speed. Go from raw sample to high-quality DNA in minutes, not hours.",
-    image: "/chocolate16.png", // Placeholder visual
+    image: "/enrich4.png", // Placeholder visual
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
   {
     id: "pcr",
     step: "Step 03",
-    title: "Multiplex PCR",
+    title: "DNA/RNA extration",
     description: "The core of our technology. Detect multiple pathogens and indicators in a single reaction with maximum sensitivity.",
-    image: "/F41-9.png", // Imagen de kit PCR
+    image: "/extraccion1.png", // Imagen de kit PCR
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
   {
     id: "interpretation",
     step: "Step 04",
-    title: "AiGOR Interpretation",
+    title: "Real time PCR",
     description: "Eliminate human error. Our AI analyzes PCR curves instantly, giving you a clear Positive/Negative result.",
-    image: "/spoilage-5.png", // Placeholder visual
+    image: "/PCR.png", // Placeholder visual
     color: "bg-[#E6FFFA]", // Un tono suave diferente para resaltar la AI
     textColor: "text-[#111111]",
   },
   {
     id: "management",
     step: "Step 05",
-    title: "TxA Management",
+    title: "Automated results",
     description: "Your Digital Lab Manager. Organize results, track historical trends, and automate corrective actions in one platform.",
-    image: "/hims4.png", // Imagen del software
+    image: "/laptop.png", // Imagen del software
     color: "bg-[#111111]", // Oscuro para cerrar con fuerza (Software)
     textColor: "text-white",
   },
