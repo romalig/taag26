@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { 
   ChevronUp, 
   ChevronDown,
+  ChevronLeft, // Nuevo para móvil
+  ChevronRight, // Nuevo para móvil
   Plus,
   Smartphone,
   CheckCircle2
@@ -22,27 +24,19 @@ const SHORT_LABELS = [
 
 export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0);
-  // Estado para trackear la imagen "anterior" y poder animar su salida
   const [prevStep, setPrevStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  // Referencia para manejar timeouts si el usuario clickea rápido
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleChange = (nextStep: number) => {
     if (nextStep === activeStep) return;
-    
-    // Antes de cambiar, guardamos el actual como "previo"
     setPrevStep(activeStep);
     setActiveStep(nextStep);
     setIsAnimating(true);
 
-    // Reiniciamos el flag de animación después de que termine la transición CSS (800ms)
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       setIsAnimating(false);
-      // Opcional: sincronizar prevStep con activeStep al final para limpiar el DOM,
-      // pero dejarlo así permite que la imagen "vieja" se quede oculta detrás lista para la prox.
       setPrevStep(nextStep); 
     }, 800); 
   };
@@ -57,59 +51,119 @@ export default function HowItWorks() {
 
   const currentData = WORKFLOW_STEPS[activeStep];
   const prevData = WORKFLOW_STEPS[prevStep];
+  const label = SHORT_LABELS[activeStep];
 
   return (
-    <section className="bg-black text-white py-24 px-4 md:px-8">
+    <section className="bg-black text-white py-12 md:py-24 px-4 md:px-8">
       
       <div className="max-w-[1400px] mx-auto">
-        <h2 className="text-5xl md:text-6xl font-bold text-white mb-12 tracking-tight">
+        <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 md:mb-12 tracking-tight text-center md:text-left">
           Take a closer look.
         </h2>
 
         {/* CONTENEDOR PRINCIPAL */}
-        <div className="relative w-full h-[600px] md:h-[750px] bg-[#151516] rounded-[3rem] overflow-hidden border border-white/5">
+        {/* Altura ajustada: más alta en desktop, más compacta en móvil para que quepa todo */}
+        <div className="relative w-full h-[600px] md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5 flex flex-col md:block">
           
           {/* =========================================================
-              LAYER 0: SISTEMA DE IMÁGENES (TRANSICIÓN APPLE)
+              LAYER 0: IMÁGENES (Fondo Común)
+              En móvil ocupa la parte superior, en desktop todo el fondo.
           ========================================================== */}
-          <div className="absolute inset-0 w-full h-full z-0">
+          <div className="relative w-full h-1/2 md:h-full z-0 order-1 md:order-none">
              
-             {/* IMAGEN DE SALIDA (PREVIA) */}
-             {/* Solo la renderizamos si hay una animación en curso o si es diferente a la actual */}
+             {/* IMAGEN SALIENTE */}
              {isAnimating && (
                <div key={`prev-${prevStep}`} className="absolute inset-0 z-0 animate-slideOutLeft">
                   <Image 
                     src={prevData.image} 
                     alt={prevData.title}
                     fill
-                    className="object-cover object-center"
+                    className="object-contain md:object-cover object-center p-4 md:p-0" // Padding en móvil para que no se corte
                     priority
                   />
-                  <div className="absolute inset-0 bg-black/20" />
+                  {/* Overlay solo en desktop */}
+                  <div className="hidden md:block absolute inset-0 bg-black/20" />
                </div>
              )}
 
-             {/* IMAGEN DE ENTRADA (ACTUAL) */}
-             {/* Esta capa está encima (z-10) y entra desde la derecha */}
+             {/* IMAGEN ENTRANTE */}
              <div key={`current-${activeStep}`} className="absolute inset-0 z-10 animate-slideInRight">
                 <Image 
                   src={currentData.image} 
                   alt={currentData.title}
                   fill
-                  className="object-cover object-center"
+                  className="object-contain md:object-cover object-center p-4 md:p-0"
                   priority
                 />
-                <div className="absolute inset-0 bg-black/20" />
+                <div className="hidden md:block absolute inset-0 bg-black/20" />
              </div>
-
           </div>
 
           {/* =========================================================
-              LAYER 1: INTERFAZ FLOTANTE (SIN CAMBIOS EN ANIMACIÓN)
+              LAYER 1: INTERFAZ MÓVIL (VISIBLE SOLO EN MÓVIL)
+              Diseño tipo carrusel inferior con flechas laterales
           ========================================================== */}
-          <div className="absolute top-0 bottom-0 left-0 z-20 w-full max-w-lg p-8 md:p-12 flex items-start gap-6 pointer-events-none">
+          <div className="md:hidden flex-1 z-20 flex flex-col justify-end pb-8 px-4 order-2 bg-[#151516]">
             
-            {/* Controles */}
+            <div className="flex items-center justify-between gap-2 w-full">
+              
+              {/* Flecha Izquierda */}
+              <button 
+                onClick={handlePrev}
+                disabled={activeStep === 0}
+                className={`w-10 h-10 rounded-full bg-[#2c2c2e] flex items-center justify-center shrink-0 transition-opacity ${activeStep === 0 ? 'opacity-30' : 'active:scale-95'}`}
+              >
+                <ChevronLeft className="w-6 h-6 text-white" />
+              </button>
+
+              {/* Tarjeta Central (Contenido) */}
+              <div className="flex-1 bg-[#1c1c1e] rounded-2xl p-5 min-h-[180px] flex flex-col justify-center animate-scaleIn">
+                <div className="mb-2">
+                   <h3 className="text-lg font-bold text-white tracking-wide leading-tight">
+                     {label}. <span className="text-white font-normal block mt-1 text-sm">{currentData.title}</span>
+                   </h3>
+                </div>
+                
+                <p className="text-sm text-gray-300 leading-snug">
+                   {currentData.description}
+                </p>
+
+                {(currentData as any).txa_status && (
+                  <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2">
+                      <Smartphone className="w-3 h-3 text-white/70" />
+                      <span className="text-[10px] uppercase tracking-widest font-bold text-white/70">
+                        TxA: {(currentData as any).txa_status}
+                      </span>
+                  </div>
+                )}
+                
+                {/* Paginación visual (Puntos) */}
+                <div className="flex justify-center gap-1.5 mt-4">
+                  {WORKFLOW_STEPS.map((_, i) => (
+                    <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i === activeStep ? 'bg-white' : 'bg-white/20'}`} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Flecha Derecha */}
+              <button 
+                onClick={handleNext}
+                disabled={activeStep === WORKFLOW_STEPS.length - 1}
+                className={`w-10 h-10 rounded-full bg-[#2c2c2e] flex items-center justify-center shrink-0 transition-opacity ${activeStep === WORKFLOW_STEPS.length - 1 ? 'opacity-30' : 'active:scale-95'}`}
+              >
+                <ChevronRight className="w-6 h-6 text-white" />
+              </button>
+
+            </div>
+          </div>
+
+          {/* =========================================================
+              LAYER 2: INTERFAZ DESKTOP (VISIBLE SOLO EN PC)
+              Menú vertical flotante a la izquierda
+          ========================================================== */}
+          <div className="hidden md:flex absolute top-0 bottom-0 left-0 z-20 w-full max-w-lg p-12 items-start gap-6 pointer-events-none">
+            
+            {/* Controles Desktop */}
             <div className="flex flex-col gap-3 mt-2 pointer-events-auto">
               <button 
                 onClick={handlePrev}
@@ -127,20 +181,19 @@ export default function HowItWorks() {
               </button>
             </div>
 
-            {/* Lista de Pasos */}
+            {/* Lista Vertical Desktop */}
             <div className="flex flex-col gap-3 w-full pointer-events-auto">
               {WORKFLOW_STEPS.map((step, index) => {
                 const isActive = activeStep === index;
-                const label = SHORT_LABELS[index];
+                const desktopLabel = SHORT_LABELS[index];
 
                 return (
                   <div key={index} className="transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]">
-                    {/* ESTADO ACTIVO */}
                     {isActive ? (
-                      <div className="bg-[#1D1D1F]/70 backdrop-blur-xl border border-white/10 rounded-[1.5rem] p-6 w-full md:w-[380px] shadow-2xl animate-scaleIn origin-top-left">
+                      <div className="bg-[#1D1D1F]/70 backdrop-blur-xl border border-white/10 rounded-[1.5rem] p-6 w-[380px] shadow-2xl animate-scaleIn origin-top-left">
                         <div className="flex flex-col gap-3">
                           <h3 className="text-lg font-bold text-white tracking-wide">
-                            {label}. <span className="text-white font-medium">{step.title}</span>
+                            {desktopLabel}. <span className="text-white font-medium">{step.title}</span>
                           </h3>
                           <p className="text-sm font-medium text-white leading-relaxed opacity-90">
                             {step.description}
@@ -157,7 +210,6 @@ export default function HowItWorks() {
                         </div>
                       </div>
                     ) : (
-                      /* ESTADO INACTIVO */
                       <button 
                         onClick={() => handleChange(index)}
                         className="group flex items-center gap-3 bg-[#333336]/60 hover:bg-[#454548]/80 backdrop-blur-md border border-white/5 rounded-full pl-2 pr-5 py-2 w-fit transition-all duration-300"
@@ -166,7 +218,7 @@ export default function HowItWorks() {
                             <Plus className="w-3 h-3 text-white" />
                          </div>
                          <span className="text-sm font-bold text-white tracking-wide">
-                           {label}
+                           {desktopLabel}
                          </span>
                       </button>
                     )}
@@ -180,42 +232,26 @@ export default function HowItWorks() {
       </div>
 
       <style jsx global>{`
-        /* ANIMACIÓN DE ENTRADA (DESDE LA DERECHA) */
+        /* Animaciones Desktop & Mobile */
         @keyframes slideInRight {
-          from { 
-            opacity: 0; 
-            transform: translateX(80px) scale(1.05); 
-            filter: blur(8px);
-          }
-          to { 
-            opacity: 1; 
-            transform: translateX(0) scale(1); 
-            filter: blur(0);
-          }
+          from { opacity: 0; transform: translateX(50px); filter: blur(5px); }
+          to { opacity: 1; transform: translateX(0); filter: blur(0); }
         }
         .animate-slideInRight {
-          animation: slideInRight 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+          animation: slideInRight 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* ANIMACIÓN DE SALIDA (HACIA LA IZQUIERDA) */
         @keyframes slideOutLeft {
-          from { 
-            opacity: 1; 
-            transform: translateX(0) scale(1); 
-          }
-          to { 
-            opacity: 0; 
-            transform: translateX(-80px) scale(0.95); 
-          }
+          from { opacity: 1; transform: translateX(0); }
+          to { opacity: 0; transform: translateX(-50px); }
         }
         .animate-slideOutLeft {
-          animation: slideOutLeft 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+          animation: slideOutLeft 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* ANIMACIÓN DE TARJETAS (Mantenida) */
         @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.95) translateY(-10px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
         }
         .animate-scaleIn {
           animation: scaleIn 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards;
