@@ -26,8 +26,15 @@ export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0);
   const [prevStep, setPrevStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  
+  // --- LÓGICA DE SWIPE (TACTIL) ---
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const minSwipeDistance = 50; // Distancia mínima para considerar que fue un swipe
+
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // --- MANEJADORES DE CAMBIO ---
   const handleChange = (nextStep: number) => {
     if (nextStep === activeStep) return;
     setPrevStep(activeStep);
@@ -49,6 +56,32 @@ export default function HowItWorks() {
     if (activeStep < WORKFLOW_STEPS.length - 1) handleChange(activeStep + 1);
   };
 
+  // --- HANDLERS TÁCTILES ---
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null); // Reseteamos al tocar
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    // Swipe Izquierda -> Siguiente (Como pasar página)
+    if (isLeftSwipe) {
+      handleNext();
+    }
+    // Swipe Derecha -> Anterior
+    if (isRightSwipe) {
+      handlePrev();
+    }
+  };
+
   const currentData = WORKFLOW_STEPS[activeStep];
   const prevData = WORKFLOW_STEPS[prevStep];
   const label = SHORT_LABELS[activeStep];
@@ -62,10 +95,16 @@ export default function HowItWorks() {
         </h2>
 
         {/* CONTENEDOR PRINCIPAL */}
-        <div className="relative w-full h-[600px] md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5">
+        {/* AÑADIDOS LOS EVENTOS ONTOUCH AQUÍ PARA DETECTAR EL SWIPE EN TODO EL ÁREA */}
+        <div 
+          className="relative w-full h-[600px] md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           
           {/* =========================================================
-              LAYER 0: IMÁGENES (Fondo Completo para Desktop y Móvil)
+              LAYER 0: IMÁGENES (Fondo Completo)
           ========================================================== */}
           <div className="absolute inset-0 w-full h-full z-0">
              
@@ -76,7 +115,6 @@ export default function HowItWorks() {
                     src={prevData.image} 
                     alt={prevData.title}
                     fill
-                    // Usamos object-cover en ambos para llenar todo el espacio
                     className="object-cover object-center" 
                     priority
                   />
@@ -92,13 +130,12 @@ export default function HowItWorks() {
                   className="object-cover object-center"
                   priority
                 />
-                {/* Overlay sutil general (Desktop y Móvil) */}
                 <div className="absolute inset-0 bg-black/10" />
              </div>
           </div>
 
           {/* =========================================================
-              LAYER 1: INTERFAZ MÓVIL (OVERLAY INFERIOR)
+              LAYER 1: INTERFAZ MÓVIL (SWIPEABLE)
           ========================================================== */}
           
           {/* Gradiente inferior para legibilidad en móvil */}
@@ -118,7 +155,7 @@ export default function HowItWorks() {
                 <ChevronLeft className="w-6 h-6 text-white" />
               </button>
 
-              {/* Tarjeta Central Flotante (Glassmorphism) */}
+              {/* Tarjeta Central Flotante */}
               <div className="flex-1 bg-[#1c1c1e]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-5 min-h-[160px] flex flex-col justify-center animate-scaleIn shadow-2xl">
                 <div className="mb-2">
                    <h3 className="text-lg font-bold text-white tracking-wide leading-tight">
@@ -160,7 +197,7 @@ export default function HowItWorks() {
           </div>
 
           {/* =========================================================
-              LAYER 2: INTERFAZ DESKTOP (MENÚ LATERAL FLOTANTE)
+              LAYER 2: INTERFAZ DESKTOP
           ========================================================== */}
           <div className="hidden md:flex absolute top-0 bottom-0 left-0 z-20 w-full max-w-lg p-12 items-start gap-6 pointer-events-none">
             
