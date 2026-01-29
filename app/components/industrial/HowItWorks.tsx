@@ -30,7 +30,7 @@ export default function HowItWorks() {
   // --- LÓGICA DE SWIPE (TACTIL) ---
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const minSwipeDistance = 50; // Distancia mínima para considerar que fue un swipe
+  const minSwipeDistance = 50; 
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -58,7 +58,7 @@ export default function HowItWorks() {
 
   // --- HANDLERS TÁCTILES ---
   const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEnd(null); // Reseteamos al tocar
+    setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
   };
 
@@ -72,14 +72,8 @@ export default function HowItWorks() {
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
     
-    // Swipe Izquierda -> Siguiente (Como pasar página)
-    if (isLeftSwipe) {
-      handleNext();
-    }
-    // Swipe Derecha -> Anterior
-    if (isRightSwipe) {
-      handlePrev();
-    }
+    if (isLeftSwipe) handleNext();
+    if (isRightSwipe) handlePrev();
   };
 
   const currentData = WORKFLOW_STEPS[activeStep];
@@ -87,15 +81,20 @@ export default function HowItWorks() {
   const label = SHORT_LABELS[activeStep];
 
   return (
-    <section className="bg-black text-white py-12 md:py-24 px-4 md:px-8">
+    // 1. Padding de sección igual a SolutionsCatalog (px-4 md:px-6)
+    <section className="bg-black text-white py-24 md:py-32 px-4 md:px-6">
       
-      <div className="max-w-[1400px] mx-auto">
-        <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 md:mb-12 tracking-tight text-center md:text-left">
-          Take a closer look.
-        </h2>
+      {/* 2. Contenedor centrado igual a SolutionsCatalog (max-w-7xl) */}
+      <div className="max-w-7xl mx-auto">
+        
+        {/* 3. Padding del título igual al texto del Hero (px-10 md:px-20) */}
+        <div className="px-10 md:px-20 mb-12 md:mb-16">
+          <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-left leading-tight">
+            Take a closer look.
+          </h2>
+        </div>
 
-        {/* CONTENEDOR PRINCIPAL */}
-        {/* AÑADIDOS LOS EVENTOS ONTOUCH AQUÍ PARA DETECTAR EL SWIPE EN TODO EL ÁREA */}
+        {/* CONTENEDOR PRINCIPAL DEL WIDGET */}
         <div 
           className="relative w-full h-[600px] md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5"
           onTouchStart={onTouchStart}
@@ -103,12 +102,8 @@ export default function HowItWorks() {
           onTouchEnd={onTouchEnd}
         >
           
-          {/* =========================================================
-              LAYER 0: IMÁGENES (Fondo Completo)
-          ========================================================== */}
+          {/* LAYER 0: IMÁGENES */}
           <div className="absolute inset-0 w-full h-full z-0">
-             
-             {/* IMAGEN SALIENTE */}
              {isAnimating && (
                <div key={`prev-${prevStep}`} className="absolute inset-0 z-0 animate-slideOutLeft">
                   <Image 
@@ -121,7 +116,6 @@ export default function HowItWorks() {
                </div>
              )}
 
-             {/* IMAGEN ENTRANTE */}
              <div key={`current-${activeStep}`} className="absolute inset-0 z-10 animate-slideInRight">
                 <Image 
                   src={currentData.image} 
@@ -134,19 +128,12 @@ export default function HowItWorks() {
              </div>
           </div>
 
-          {/* =========================================================
-              LAYER 1: INTERFAZ MÓVIL (SWIPEABLE)
-          ========================================================== */}
-          
-          {/* Gradiente inferior para legibilidad en móvil */}
+          {/* LAYER 1: INTERFAZ MÓVIL (SWIPEABLE) */}
           <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/30 to-transparent md:hidden pointer-events-none" />
 
-          {/* Controles superpuestos */}
-          <div className="absolute bottom-0 left-0 right-0 z-20 md:hidden flex flex-col justify-end pb-6 px-4">
-            
+          <div className="absolute bottom-0 left-0 right-0 z-20 md:hidden flex flex-col justify-end pb-8 px-4">
             <div className="flex items-center justify-between gap-3 w-full">
               
-              {/* Flecha Izquierda */}
               <button 
                 onClick={handlePrev}
                 disabled={activeStep === 0}
@@ -155,7 +142,6 @@ export default function HowItWorks() {
                 <ChevronLeft className="w-6 h-6 text-white" />
               </button>
 
-              {/* Tarjeta Central Flotante */}
               <div className="flex-1 bg-[#1c1c1e]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-5 min-h-[160px] flex flex-col justify-center animate-scaleIn shadow-2xl">
                 <div className="mb-2">
                    <h3 className="text-lg font-bold text-white tracking-wide leading-tight">
@@ -176,7 +162,6 @@ export default function HowItWorks() {
                   </div>
                 )}
                 
-                {/* Paginación visual (Puntos) */}
                 <div className="flex justify-center gap-1.5 mt-3">
                   {WORKFLOW_STEPS.map((_, i) => (
                     <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i === activeStep ? 'bg-white' : 'bg-white/20'}`} />
@@ -184,7 +169,6 @@ export default function HowItWorks() {
                 </div>
               </div>
 
-              {/* Flecha Derecha */}
               <button 
                 onClick={handleNext}
                 disabled={activeStep === WORKFLOW_STEPS.length - 1}
@@ -192,16 +176,11 @@ export default function HowItWorks() {
               >
                 <ChevronRight className="w-6 h-6 text-white" />
               </button>
-
             </div>
           </div>
 
-          {/* =========================================================
-              LAYER 2: INTERFAZ DESKTOP
-          ========================================================== */}
+          {/* LAYER 2: INTERFAZ DESKTOP */}
           <div className="hidden md:flex absolute top-0 bottom-0 left-0 z-20 w-full max-w-lg p-12 items-start gap-6 pointer-events-none">
-            
-            {/* Controles Desktop */}
             <div className="flex flex-col gap-3 mt-2 pointer-events-auto">
               <button 
                 onClick={handlePrev}
@@ -219,7 +198,6 @@ export default function HowItWorks() {
               </button>
             </div>
 
-            {/* Lista Vertical Desktop */}
             <div className="flex flex-col gap-3 w-full pointer-events-auto">
               {WORKFLOW_STEPS.map((step, index) => {
                 const isActive = activeStep === index;
@@ -270,7 +248,6 @@ export default function HowItWorks() {
       </div>
 
       <style jsx global>{`
-        /* Animaciones Desktop & Mobile */
         @keyframes slideInRight {
           from { opacity: 0; transform: translateX(50px); filter: blur(5px); }
           to { opacity: 1; transform: translateX(0); filter: blur(0); }
