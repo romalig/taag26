@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import { 
   ChevronUp, 
   ChevronDown,
-  ChevronLeft, // Nuevo para móvil
-  ChevronRight, // Nuevo para móvil
+  ChevronLeft,
+  ChevronRight,
   Plus,
   Smartphone,
   CheckCircle2
@@ -62,14 +62,12 @@ export default function HowItWorks() {
         </h2>
 
         {/* CONTENEDOR PRINCIPAL */}
-        {/* Altura ajustada: más alta en desktop, más compacta en móvil para que quepa todo */}
-        <div className="relative w-full h-[600px] md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5 flex flex-col md:block">
+        <div className="relative w-full h-[600px] md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5">
           
           {/* =========================================================
-              LAYER 0: IMÁGENES (Fondo Común)
-              En móvil ocupa la parte superior, en desktop todo el fondo.
+              LAYER 0: IMÁGENES (Fondo Completo para Desktop y Móvil)
           ========================================================== */}
-          <div className="relative w-full h-1/2 md:h-full z-0 order-1 md:order-none">
+          <div className="absolute inset-0 w-full h-full z-0">
              
              {/* IMAGEN SALIENTE */}
              {isAnimating && (
@@ -78,11 +76,10 @@ export default function HowItWorks() {
                     src={prevData.image} 
                     alt={prevData.title}
                     fill
-                    className="object-contain md:object-cover object-center p-4 md:p-0" // Padding en móvil para que no se corte
+                    // Usamos object-cover en ambos para llenar todo el espacio
+                    className="object-cover object-center" 
                     priority
                   />
-                  {/* Overlay solo en desktop */}
-                  <div className="hidden md:block absolute inset-0 bg-black/20" />
                </div>
              )}
 
@@ -92,44 +89,49 @@ export default function HowItWorks() {
                   src={currentData.image} 
                   alt={currentData.title}
                   fill
-                  className="object-contain md:object-cover object-center p-4 md:p-0"
+                  className="object-cover object-center"
                   priority
                 />
-                <div className="hidden md:block absolute inset-0 bg-black/20" />
+                {/* Overlay sutil general (Desktop y Móvil) */}
+                <div className="absolute inset-0 bg-black/10" />
              </div>
           </div>
 
           {/* =========================================================
-              LAYER 1: INTERFAZ MÓVIL (VISIBLE SOLO EN MÓVIL)
-              Diseño tipo carrusel inferior con flechas laterales
+              LAYER 1: INTERFAZ MÓVIL (OVERLAY INFERIOR)
           ========================================================== */}
-          <div className="md:hidden flex-1 z-20 flex flex-col justify-end pb-8 px-4 order-2 bg-[#151516]">
+          
+          {/* Gradiente inferior para legibilidad en móvil */}
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/30 to-transparent md:hidden pointer-events-none" />
+
+          {/* Controles superpuestos */}
+          <div className="absolute bottom-0 left-0 right-0 z-20 md:hidden flex flex-col justify-end pb-6 px-4">
             
-            <div className="flex items-center justify-between gap-2 w-full">
+            <div className="flex items-center justify-between gap-3 w-full">
               
               {/* Flecha Izquierda */}
               <button 
                 onClick={handlePrev}
                 disabled={activeStep === 0}
-                className={`w-10 h-10 rounded-full bg-[#2c2c2e] flex items-center justify-center shrink-0 transition-opacity ${activeStep === 0 ? 'opacity-30' : 'active:scale-95'}`}
+                className={`w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center shrink-0 transition-opacity ${activeStep === 0 ? 'opacity-30' : 'active:scale-95'}`}
               >
                 <ChevronLeft className="w-6 h-6 text-white" />
               </button>
 
-              {/* Tarjeta Central (Contenido) */}
-              <div className="flex-1 bg-[#1c1c1e] rounded-2xl p-5 min-h-[180px] flex flex-col justify-center animate-scaleIn">
+              {/* Tarjeta Central Flotante (Glassmorphism) */}
+              <div className="flex-1 bg-[#1c1c1e]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-5 min-h-[160px] flex flex-col justify-center animate-scaleIn shadow-2xl">
                 <div className="mb-2">
                    <h3 className="text-lg font-bold text-white tracking-wide leading-tight">
                      {label}. <span className="text-white font-normal block mt-1 text-sm">{currentData.title}</span>
                    </h3>
                 </div>
                 
-                <p className="text-sm text-gray-300 leading-snug">
+                <p className="text-xs text-gray-200 leading-snug line-clamp-3">
                    {currentData.description}
                 </p>
 
                 {(currentData as any).txa_status && (
-                  <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2">
+                  <div className="mt-3 pt-2 border-t border-white/10 flex items-center gap-2">
                       <Smartphone className="w-3 h-3 text-white/70" />
                       <span className="text-[10px] uppercase tracking-widest font-bold text-white/70">
                         TxA: {(currentData as any).txa_status}
@@ -138,7 +140,7 @@ export default function HowItWorks() {
                 )}
                 
                 {/* Paginación visual (Puntos) */}
-                <div className="flex justify-center gap-1.5 mt-4">
+                <div className="flex justify-center gap-1.5 mt-3">
                   {WORKFLOW_STEPS.map((_, i) => (
                     <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i === activeStep ? 'bg-white' : 'bg-white/20'}`} />
                   ))}
@@ -149,7 +151,7 @@ export default function HowItWorks() {
               <button 
                 onClick={handleNext}
                 disabled={activeStep === WORKFLOW_STEPS.length - 1}
-                className={`w-10 h-10 rounded-full bg-[#2c2c2e] flex items-center justify-center shrink-0 transition-opacity ${activeStep === WORKFLOW_STEPS.length - 1 ? 'opacity-30' : 'active:scale-95'}`}
+                className={`w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center shrink-0 transition-opacity ${activeStep === WORKFLOW_STEPS.length - 1 ? 'opacity-30' : 'active:scale-95'}`}
               >
                 <ChevronRight className="w-6 h-6 text-white" />
               </button>
@@ -158,8 +160,7 @@ export default function HowItWorks() {
           </div>
 
           {/* =========================================================
-              LAYER 2: INTERFAZ DESKTOP (VISIBLE SOLO EN PC)
-              Menú vertical flotante a la izquierda
+              LAYER 2: INTERFAZ DESKTOP (MENÚ LATERAL FLOTANTE)
           ========================================================== */}
           <div className="hidden md:flex absolute top-0 bottom-0 left-0 z-20 w-full max-w-lg p-12 items-start gap-6 pointer-events-none">
             
