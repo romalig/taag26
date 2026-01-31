@@ -142,7 +142,7 @@ export const WORKFLOW_STEPS = [
     step: "The Ecosystem",
     title: "End-to-End Microbiology",
     description: "Stop juggling multiple vendors. We provide the complete scientific chain—from the sampling tool to the digital report.",
-    image: "/hero16.png", // Reusando hero para la intro
+    image: "/onebacteria.png", // Reusando hero para la intro
     color: "bg-[#111111]",
     textColor: "text-white",
   },

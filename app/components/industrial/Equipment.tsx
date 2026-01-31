@@ -80,7 +80,7 @@ export default function EquipmentSection() {
                    alt={activeData.title}
                    fill
                    // CAMBIO AQUÍ: 'object-right' aplicado siempre (sin prefijo md:)
-                   className="object-cover object-right transition-transform duration-700 scale-[1.01] group-hover:scale-105"
+                   className="object-cover object-right transition-transform duration-700 scale-[1.01]"
                    priority
                  />
                  {/* Degradado SOLO en Desktop */}
