@@ -29,9 +29,7 @@ export default function EquipmentSection() {
     <section className="py-12 md:py-24 bg-white px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         
-        {/* =========================================================
-            1. HEADER & CONTROLES
-        ========================================================== */}
+        {/* HEADER & CONTROLES */}
         <div className="flex flex-col items-center text-center mb-8 md:mb-12 space-y-6 md:space-y-8">
            
            <div className="max-w-3xl">
@@ -71,37 +69,30 @@ export default function EquipmentSection() {
            </div>
         </div>
 
-        {/* =========================================================
-            2. TARJETA HÍBRIDA (STACK EN MÓVIL / OVERLAY EN DESKTOP)
-        ========================================================== */}
-        {/* Móvil: Flex Column (Imagen arriba, texto abajo con fondo sólido).
-            Desktop: Block (Imagen ocupa todo, texto absoluto encima).
-        */}
+        {/* TARJETA HÍBRIDA */}
         <div className="relative w-full flex flex-col md:block md:h-[600px] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl bg-[#151516] group transform-gpu">
            
            {/* --- A. IMAGEN --- */}
-           {/* Móvil: Altura fija de 300px. Desktop: Absolute full. */}
            <div className="relative w-full h-[280px] md:absolute md:inset-0 md:h-full shrink-0">
               <div key={activeTab} className="relative w-full h-full animate-scaleFade">
                  <Image 
                    src={activeData.image}
                    alt={activeData.title}
                    fill
-                   className="object-cover object-center md:object-right transition-transform duration-700 scale-[1.01] group-hover:scale-105"
+                   // CAMBIO AQUÍ: 'object-right' aplicado siempre (sin prefijo md:)
+                   className="object-cover object-right transition-transform duration-700 scale-[1.01] group-hover:scale-105"
                    priority
                  />
-                 {/* Degradado SOLO en Desktop (hidden md:block) */}
+                 {/* Degradado SOLO en Desktop */}
                  <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
               </div>
            </div>
 
            {/* --- B. CONTENIDO TEXTO --- */}
-           {/* Móvil: Bloque relativo con padding y fondo oscuro. Desktop: Absolute overlay. */}
            <div className="relative p-8 md:absolute md:inset-0 md:p-16 flex flex-col justify-start md:justify-end items-start bg-[#151516] md:bg-transparent">
               
               <div key={activeTab + "-text"} className="max-w-xl animate-slideUp">
                  
-                 {/* Badge Contexto */}
                  <div className="flex flex-wrap items-center gap-2 mb-4 md:mb-6">
                     <div className="px-3 py-1 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white text-[10px] md:text-xs font-bold uppercase tracking-wider">
                        Recommended Setup
