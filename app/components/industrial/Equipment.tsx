@@ -26,33 +26,33 @@ export default function EquipmentSection() {
   const activeData = EQUIPMENT_SCENARIOS[activeTab];
 
   return (
-    <section className="py-24 bg-white px-6">
+    <section className="py-12 md:py-24 bg-white px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         
         {/* =========================================================
             1. HEADER & CONTROLES
         ========================================================== */}
-        <div className="flex flex-col items-center text-center mb-12 space-y-8">
+        <div className="flex flex-col items-center text-center mb-8 md:mb-12 space-y-6 md:space-y-8">
            
            <div className="max-w-3xl">
               <span className="text-[#FF270A] font-bold tracking-widest uppercase text-xs mb-3 block">
                 Infrastructure & Equipment
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-[#111111] mb-6 tracking-tight">
+              <h2 className="text-3xl md:text-5xl font-bold text-[#111111] mb-4 md:mb-6 tracking-tight">
                 Open platforms. Total flexibility.
               </h2>
-              <p className="text-lg text-gray-500 leading-relaxed">
+              <p className="text-base md:text-lg text-gray-500 leading-relaxed">
                 We believe in open ecosystems. Whether you need a simple manual setup or a fully automated robot, our kits adapt to your lab's reality.
               </p>
            </div>
 
            {/* Botones de Selección */}
-           <div className="inline-flex bg-gray-100 p-1.5 rounded-full border border-gray-200">
+           <div className="inline-flex flex-col md:flex-row bg-gray-100 p-1.5 rounded-2xl md:rounded-full border border-gray-200 w-full md:w-auto">
               <button
                 onClick={() => setActiveTab("simple")}
-                className={`px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 ${
+                className={`px-6 md:px-8 py-3 rounded-xl md:rounded-full text-sm font-bold transition-all duration-300 ${
                   activeTab === "simple" 
-                    ? "bg-white text-[#111111] shadow-md transform scale-105" 
+                    ? "bg-white text-[#111111] shadow-md" 
                     : "text-gray-500 hover:text-[#111111]"
                 }`}
               >
@@ -60,9 +60,9 @@ export default function EquipmentSection() {
               </button>
               <button
                 onClick={() => setActiveTab("complex")}
-                className={`px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 ${
+                className={`px-6 md:px-8 py-3 rounded-xl md:rounded-full text-sm font-bold transition-all duration-300 ${
                   activeTab === "complex" 
-                    ? "bg-white text-[#111111] shadow-md transform scale-105" 
+                    ? "bg-white text-[#111111] shadow-md" 
                     : "text-gray-500 hover:text-[#111111]"
                 }`}
               >
@@ -72,48 +72,51 @@ export default function EquipmentSection() {
         </div>
 
         {/* =========================================================
-            2. TARJETA GRANDE
+            2. TARJETA HÍBRIDA (STACK EN MÓVIL / OVERLAY EN DESKTOP)
         ========================================================== */}
-        {/* CORRECCIÓN: Cambiado bg-black a bg-gray-900 y añadido border-transparent para evitar artefactos */}
-        <div className="relative w-full h-[600px] rounded-[3rem] overflow-hidden shadow-2xl bg-[#151516] group transform-gpu">
+        {/* Móvil: Flex Column (Imagen arriba, texto abajo con fondo sólido).
+            Desktop: Block (Imagen ocupa todo, texto absoluto encima).
+        */}
+        <div className="relative w-full flex flex-col md:block md:h-[600px] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl bg-[#151516] group transform-gpu">
            
-           {/* IMAGEN DE FONDO */}
-           <div className="absolute inset-0 w-full h-full">
+           {/* --- A. IMAGEN --- */}
+           {/* Móvil: Altura fija de 300px. Desktop: Absolute full. */}
+           <div className="relative w-full h-[280px] md:absolute md:inset-0 md:h-full shrink-0">
               <div key={activeTab} className="relative w-full h-full animate-scaleFade">
                  <Image 
                    src={activeData.image}
                    alt={activeData.title}
                    fill
-                   // CORRECCIÓN: scale-[1.01] asegura que la imagen cubra cualquier sub-píxel del borde
-                   className="object-cover object-right md:object-right transition-transform duration-700 scale-[1.01] group-hover:scale-105"
+                   className="object-cover object-center md:object-right transition-transform duration-700 scale-[1.01] group-hover:scale-105"
                    priority
                  />
-                 {/* Degradado */}
-                 <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
+                 {/* Degradado SOLO en Desktop (hidden md:block) */}
+                 <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
               </div>
            </div>
 
-           {/* CONTENIDO */}
-           <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-end items-start">
+           {/* --- B. CONTENIDO TEXTO --- */}
+           {/* Móvil: Bloque relativo con padding y fondo oscuro. Desktop: Absolute overlay. */}
+           <div className="relative p-8 md:absolute md:inset-0 md:p-16 flex flex-col justify-start md:justify-end items-start bg-[#151516] md:bg-transparent">
               
               <div key={activeTab + "-text"} className="max-w-xl animate-slideUp">
                  
                  {/* Badge Contexto */}
-                 <div className="flex items-center gap-2 mb-6">
-                    <div className="px-3 py-1 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider">
+                 <div className="flex flex-wrap items-center gap-2 mb-4 md:mb-6">
+                    <div className="px-3 py-1 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white text-[10px] md:text-xs font-bold uppercase tracking-wider">
                        Recommended Setup
                     </div>
-                    <div className="flex items-center gap-1.5 text-white/80 text-xs font-medium">
-                       <CheckCircle2 className="w-4 h-4 text-[#FF270A]" />
+                    <div className="flex items-center gap-1.5 text-white/80 text-[10px] md:text-xs font-medium">
+                       <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4 text-[#FF270A]" />
                        <span>Analytik Jena Preferred</span>
                     </div>
                  </div>
 
-                 <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                 <h3 className="text-2xl md:text-5xl font-bold text-white mb-4 md:mb-6 leading-tight">
                     {activeData.title}
                  </h3>
                  
-                 <p className="text-gray-300 text-lg md:text-xl leading-relaxed">
+                 <p className="text-gray-300 text-base md:text-xl leading-relaxed">
                     {activeData.description}
                  </p>
 
@@ -126,8 +129,8 @@ export default function EquipmentSection() {
 
       <style jsx global>{`
         @keyframes scaleFade {
-          from { opacity: 0; transform: scale(1.06); } /* Empezamos un poco más grande para el efecto */
-          to { opacity: 1; transform: scale(1.01); }    /* Terminamos en 1.01 para evitar la línea negra */
+          from { opacity: 0; transform: scale(1.06); }
+          to { opacity: 1; transform: scale(1.01); }
         }
         .animate-scaleFade {
           animation: scaleFade 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
