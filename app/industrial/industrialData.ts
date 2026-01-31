@@ -151,7 +151,7 @@ export const WORKFLOW_STEPS = [
     step: "Step 01",
     title: "Sampling",
     description: "Our kits work with standard sponges, swabs, and liquids. No complex pre-processing or enrichment required for most matrices.",
-    image: "/muestreo5.png", // Placeholder visual
+    image: "/food.png", // Placeholder visual
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
