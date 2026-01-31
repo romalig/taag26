@@ -88,7 +88,7 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto">
         
         {/* 3. Padding del título igual al texto del Hero (px-10 md:px-20) */}
-        <div className="px-10 md:px-20 mb-12 md:mb-16">
+        <div className="px-10 md:px-20 mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-left leading-tight">
             Take a closer look.
           </h2>

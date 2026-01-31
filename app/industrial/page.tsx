@@ -3,9 +3,11 @@
 import Header from "../components/Header";
 import IndustrialHero from "../components/industrial/IndustrialHero";
 import FeaturedSolutions from "../components/industrial/FeaturedSolutions";
+import Equipment from "../components/industrial/Equipment";
 import SolutionsCatalog from "../components/industrial/SolutionsCatalog";
 import HowItWorks from "../components/industrial/HowItWorks"; // <--- Importar
 import FinalCTA from "../components/FinalCTA";
+import EquipmentSection from "../components/industrial/Equipment";
 // import Footer from "../../components/Footer"; // Si tienes footer global
 
 export default function IndustrialPage() {
@@ -19,6 +21,9 @@ export default function IndustrialPage() {
 
       {/* 2. GRID PRINCIPAL (Tarjetas animadas) */}
       <FeaturedSolutions />
+      
+      {/* 3. CATALOGO INTERACTIVO (Tabs Sticky) */}
+      <Equipment />
 
       {/* 3. CATALOGO INTERACTIVO (Tabs Sticky) */}
       <SolutionsCatalog />
