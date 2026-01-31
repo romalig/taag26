@@ -70,7 +70,7 @@ export default function EquipmentSection() {
         </div>
 
         {/* TARJETA HÍBRIDA */}
-        <div className="relative w-full flex flex-col md:block md:h-[600px] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl bg-[#151516] group transform-gpu">
+        <div className="relative w-full flex flex-col md:block md:h-[600px] rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#151516] group transform-gpu">
            
            {/* --- A. IMAGEN --- */}
            <div className="relative w-full h-[280px] md:absolute md:inset-0 md:h-full shrink-0">
