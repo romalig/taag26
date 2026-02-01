@@ -3,10 +3,15 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { 
-  ChevronLeft, ChevronRight, Plus, Smartphone, 
-  CheckCircle2, ChevronUp, ChevronDown, Zap 
+  ChevronLeft, 
+  ChevronRight, 
+  Plus, 
+  Smartphone, 
+  CheckCircle2, 
+  ChevronUp, 
+  ChevronDown, 
+  Zap 
 } from "lucide-react";
-// Importamos la data actualizada
 import { WORKFLOW_STEPS } from "../../industrial/industrialData";
 
 const SHORT_LABELS = [
@@ -18,16 +23,37 @@ const SHORT_LABELS = [
   "TxA Platform"
 ];
 
-// SOLO mantenemos las variantes específicas del Paso 3 aquí
-// porque esto responde a un click de botón (UI State)
-const PCR_VARIANTS = {
-  ZERO: {
-    desktop: "/zero4.png",
-    mobile: "/zero4-mobile.png"
+// --- CONFIGURACIÓN CENTRAL DE IMÁGENES ---
+const IMAGE_CONFIG = {
+  0: { 
+    desktop: "/onebacteria3.png",
+    mobile: "/onebacteria3-mobile.png" 
   },
-  XPRESS: {
-    desktop: "/xpress.png",
-    mobile: "/xpress-mobile.png"
+  1: { 
+    desktop: "/food.png",
+    mobile: "/food-mobile.png"         
+  },
+  2: { 
+    desktop: "/swabs6.png",
+    mobile: "/swabs6-mobile.png"        
+  },
+  3: { // Multiplex PCR
+    ZERO: {
+      desktop: "/zero4.png",
+      mobile: "/zero4-mobile.png" 
+    },
+    XPRESS: {
+      desktop: "/xpress.png",
+      mobile: "/xpress-mobile.png"  
+    }
+  },
+  4: { 
+    desktop: "/PCR.png",
+    mobile: "/PCR-mobile.png"          
+  },
+  5: { 
+    desktop: "/laptop.png",
+    mobile: "/laptop-mobile.png"       
   }
 };
 
@@ -47,21 +73,13 @@ export default function HowItWorks() {
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // --- HELPER ACTUALIZADO Y MÁS LIMPIO ---
+  // --- HELPER PARA OBTENER LAS IMÁGENES ---
   const getStepImages = (stepIndex: number, variant: PcrVariant) => {
-    // 1. Caso especial: Paso 3 (PCR) usa las variantes locales
     if (stepIndex === 3) {
-      return PCR_VARIANTS[variant];
+      return IMAGE_CONFIG[3][variant];
     }
-    
-    // 2. Casos normales: Leen directamente de industrialData.ts
-    // Como TypeScript puede quejarse si no definiste mobileImage opcional, hacemos un fallback seguro.
-    const stepData = WORKFLOW_STEPS[stepIndex];
-    return {
-      desktop: stepData.image,
-      // @ts-ignore: Si TS se queja de que mobileImage no existe en el tipo
-      mobile: stepData.mobileImage || stepData.image 
-    };
+    // @ts-ignore
+    return IMAGE_CONFIG[stepIndex] || { desktop: "", mobile: "" };
   };
 
   const handleChange = (nextStep: number) => {
@@ -99,7 +117,6 @@ export default function HowItWorks() {
     if (activeStep < WORKFLOW_STEPS.length - 1) handleChange(activeStep + 1);
   };
 
-  // ... (Resto de handlers touch igual que antes) ...
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
@@ -128,90 +145,154 @@ export default function HowItWorks() {
   return (
     <section className="bg-black text-white py-24 md:py-32 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
+        
         <div className="px-10 md:px-20 mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-left leading-tight">
             Take a closer look into the future.
           </h2>
         </div>
 
+        {/* CONTENEDOR PRINCIPAL */}
+        {/* Cambiado a flex-col en móvil para apilar Imagen arriba / Texto abajo */}
         <div 
-          className="relative w-full h-[550px] md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5"
+          className="relative w-full flex flex-col md:block md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5"
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
         >
+          
           {/* LAYER 0: IMÁGENES */}
-          <div className="absolute inset-0 w-full h-full z-0">
-             {/* IMAGEN SALIENTE (PREV) */}
+          {/* En móvil tiene altura fija (h-[500px]), en desktop es absoluto y llena todo */}
+          <div className="relative w-full h-[500px] md:absolute md:inset-0 md:h-full z-0 shrink-0">
+             
+             {/* --- IMAGEN SALIENTE (PREV) --- */}
              {isAnimating && (
                <div key={`prev-${prevStep}-${prevPcrVariant}`} className="absolute inset-0 z-0 animate-slideOutLeft">
+                  
+                  {/* VERSIÓN MÓVIL */}
                   <div className="block md:hidden relative w-full h-full">
-                    <Image src={prevImgs.mobile} alt="Prev mobile" fill className="object-cover object-center" priority />
+                    <Image 
+                      src={prevImgs.mobile} 
+                      alt="Previous step mobile"
+                      fill
+                      className="object-cover object-center" 
+                      priority
+                    />
                   </div>
+                  
+                  {/* VERSIÓN DESKTOP */}
                   <div className="hidden md:block relative w-full h-full">
-                    <Image src={prevImgs.desktop} alt="Prev desktop" fill className="object-cover object-center" priority />
+                    <Image 
+                      src={prevImgs.desktop} 
+                      alt="Previous step desktop"
+                      fill
+                      className="object-cover object-center" 
+                      priority
+                    />
                   </div>
                </div>
              )}
 
-             {/* IMAGEN ENTRANTE (CURRENT) */}
+             {/* --- IMAGEN ENTRANTE (CURRENT) --- */}
              <div key={`current-${activeStep}-${pcrVariant}`} className="absolute inset-0 z-10 animate-slideInRight">
+                
+                {/* VERSIÓN MÓVIL */}
                 <div className="block md:hidden relative w-full h-full">
-                  <Image src={currentImgs.mobile} alt="Current mobile" fill className="object-cover object-center" priority />
+                  <Image 
+                    src={currentImgs.mobile} 
+                    alt="Current step mobile"
+                    fill
+                    className="object-cover object-center"
+                    priority
+                  />
                 </div>
+
+                {/* VERSIÓN DESKTOP */}
                 <div className="hidden md:block relative w-full h-full">
-                  <Image src={currentImgs.desktop} alt="Current desktop" fill className="object-cover object-center" priority />
+                  <Image 
+                    src={currentImgs.desktop} 
+                    alt="Current step desktop"
+                    fill
+                    className="object-cover object-center"
+                    priority
+                  />
+                  {/* Overlay solo en desktop para texto sobre imagen */}
+                  <div className="absolute inset-0 bg-black/10" />
                 </div>
-                <div className="absolute inset-0 bg-black/10" />
              </div>
           </div>
 
-          {/* ... (El resto del JSX se mantiene exactamente igual) ... */}
-          
-          {/* LAYER 1: INTERFAZ MÓVIL (SWIPEABLE) */}
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/30 to-transparent md:hidden pointer-events-none" />
-
-          <div className="absolute bottom-0 left-0 right-0 z-20 md:hidden flex flex-col justify-end pb-8 px-4">
-             {/* ... Controles móvil ... */}
+          {/* LAYER 1: INTERFAZ MÓVIL (CONTENIDO DEBAJO DE LA IMAGEN) */}
+          {/* Quitamos 'absolute bottom-0' y usamos 'relative' con fondo sólido */}
+          <div className="relative z-20 bg-[#151516] px-6 pb-8 pt-6 md:hidden flex flex-col justify-between flex-1">
+             
              <div className="flex items-center justify-between gap-3 w-full">
-                <button onClick={handlePrev} disabled={activeStep === 0} className={`w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center shrink-0 transition-opacity ${activeStep === 0 ? 'opacity-30' : 'active:scale-95'}`}>
+                {/* Flecha Izq */}
+                <button 
+                  onClick={handlePrev} 
+                  disabled={activeStep === 0} 
+                  className={`w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 transition-opacity ${activeStep === 0 ? 'opacity-30' : 'active:scale-95'}`}
+                >
                   <ChevronLeft className="w-6 h-6 text-white" />
                 </button>
 
-                <div className="flex-1 bg-[#1c1c1e]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-5 min-h-[160px] flex flex-col justify-center animate-scaleIn shadow-2xl">
-                   <div className="mb-2">
+                {/* Tarjeta de Texto */}
+                <div className="flex-1 flex flex-col items-center text-center">
+                   <div className="mb-3">
                       <h3 className="text-lg font-bold text-white tracking-wide leading-tight">
-                        {label}. <span className="text-white font-normal block mt-1 text-sm">{currentData.title}</span>
+                        {label}. <span className="text-white/60 font-normal block mt-1 text-sm">{currentData.title}</span>
                       </h3>
                    </div>
-                   <p className="text-xs text-gray-200 leading-snug line-clamp-3">{currentData.description}</p>
+                   
+                   <p className="text-sm text-gray-400 leading-relaxed line-clamp-4 px-2">
+                      {currentData.description}
+                   </p>
 
                    {/* SUB-CONTROLES MÓVIL (SOLO PASO 3) */}
                    {activeStep === 3 && (
-                     <div className="flex gap-4 mt-3 pt-3 border-t border-white/10 pointer-events-auto">
-                       <button onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('ZERO'); }} className={`text-[10px] font-bold tracking-widest uppercase transition-colors flex items-center gap-1 ${pcrVariant === 'ZERO' ? 'text-[#FF270A]' : 'text-white/50'}`}>ZERO</button>
-                       <button onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('XPRESS'); }} className={`text-[10px] font-bold tracking-widest uppercase transition-colors flex items-center gap-1 ${pcrVariant === 'XPRESS' ? 'text-[#FF270A]' : 'text-white/50'}`}>XPRESS <Zap className="w-3 h-3" /></button>
+                     <div className="flex gap-4 mt-4 pt-4 border-t border-white/10 w-full justify-center">
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('ZERO'); }} 
+                         className={`text-xs font-bold tracking-widest uppercase transition-colors px-3 py-2 rounded-lg ${pcrVariant === 'ZERO' ? 'bg-[#FF270A]/10 text-[#FF270A]' : 'text-white/50 hover:bg-white/5'}`}
+                       >
+                         ZERO
+                       </button>
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('XPRESS'); }} 
+                         className={`text-xs font-bold tracking-widest uppercase transition-colors flex items-center gap-2 px-3 py-2 rounded-lg ${pcrVariant === 'XPRESS' ? 'bg-[#FF270A]/10 text-[#FF270A]' : 'text-white/50 hover:bg-white/5'}`}
+                       >
+                         XPRESS <Zap className="w-3 h-3" />
+                       </button>
                      </div>
                    )}
                    
                    {(currentData as any).txa_status && (
-                     <div className="mt-3 pt-2 border-t border-white/10 flex items-center gap-2">
-                         <Smartphone className="w-3 h-3 text-white/70" />
-                         <span className="text-[10px] uppercase tracking-widest font-bold text-white/70">TxA: {(currentData as any).txa_status}</span>
+                     <div className="mt-4 pt-3 border-t border-white/10 flex items-center gap-2 w-full justify-center">
+                         <Smartphone className="w-4 h-4 text-white/50" />
+                         <span className="text-xs uppercase tracking-widest font-bold text-white/50">TxA: {(currentData as any).txa_status}</span>
                      </div>
                    )}
-                   <div className="flex justify-center gap-1.5 mt-3">
-                     {WORKFLOW_STEPS.map((_, i) => (<div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i === activeStep ? 'bg-white' : 'bg-white/20'}`} />))}
+
+                   {/* Dots Indicadores */}
+                   <div className="flex justify-center gap-2 mt-6">
+                     {WORKFLOW_STEPS.map((_, i) => (
+                        <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i === activeStep ? 'bg-white' : 'bg-white/10'}`} />
+                     ))}
                    </div>
                 </div>
 
-                <button onClick={handleNext} disabled={activeStep === WORKFLOW_STEPS.length - 1} className={`w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center shrink-0 transition-opacity ${activeStep === WORKFLOW_STEPS.length - 1 ? 'opacity-30' : 'active:scale-95'}`}>
+                {/* Flecha Der */}
+                <button 
+                  onClick={handleNext} 
+                  disabled={activeStep === WORKFLOW_STEPS.length - 1} 
+                  className={`w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 transition-opacity ${activeStep === WORKFLOW_STEPS.length - 1 ? 'opacity-30' : 'active:scale-95'}`}
+                >
                   <ChevronRight className="w-6 h-6 text-white" />
                 </button>
              </div>
           </div>
 
-          {/* LAYER 2: INTERFAZ DESKTOP */}
+          {/* LAYER 2: INTERFAZ DESKTOP (Sin cambios, sigue flotando) */}
           <div className="hidden md:flex absolute top-0 bottom-0 left-0 z-20 w-full max-w-lg p-12 items-start gap-6 pointer-events-none">
              <div className="flex flex-col gap-3 mt-2 pointer-events-auto">
                <button onClick={handlePrev} disabled={activeStep === 0} className={`w-10 h-10 rounded-full bg-[#333336]/80 backdrop-blur-md flex items-center justify-center transition-all duration-300 border border-white/10 ${activeStep === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-[#454548]'}`}><ChevronUp className="w-5 h-5 text-white" /></button>
@@ -229,7 +310,6 @@ export default function HowItWorks() {
                          <div className="flex flex-col gap-3">
                            <h3 className="text-lg font-bold text-white tracking-wide">{desktopLabel}. <span className="text-white font-medium">{step.title}</span></h3>
                            <p className="text-sm font-medium text-white leading-relaxed opacity-90">{step.description}</p>
-                           {/* SUB-CONTROLES DESKTOP (SOLO PASO 3) */}
                            {index === 3 && (
                              <div className="flex gap-6 mt-2 pt-4 border-t border-white/10">
                                <button onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('ZERO'); }} className={`group/btn flex flex-col items-start gap-1 transition-all ${pcrVariant === 'ZERO' ? 'opacity-100' : 'opacity-50 hover:opacity-100'}`}>
