@@ -35,7 +35,7 @@ const IMAGE_CONFIG = {
   },
   2: { 
     desktop: "/swabs6.png",
-    mobile: "/swabs6-mobile.png"        
+    mobile: "/swabs7-mobile.png"        
   },
   3: { // Multiplex PCR
     ZERO: {
