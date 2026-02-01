@@ -31,7 +31,7 @@ const IMAGE_CONFIG = {
   },
   1: { 
     desktop: "/food.png",
-    mobile: "/food-mobile.png"         
+    mobile: "/food.png"         
   },
   2: { 
     desktop: "/swabs6.png",

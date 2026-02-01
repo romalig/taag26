@@ -164,7 +164,7 @@ export const WORKFLOW_STEPS = [
     title: "Short enrichment, if needed",
     description: "Simplified protocols designed for speed. Go from raw sample to high-quality DNA in minutes, not hours.",
     image: "/swabs6.png",
-    mobileImage: "/swabs6-mobile.png", // <--- NUEVO
+    mobileImage: "/swabs7-mobile.png", // <--- NUEVO
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
