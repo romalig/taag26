@@ -27,24 +27,24 @@ const SHORT_LABELS = [
 const IMAGE_CONFIG = {
   0: { 
     desktop: "/onebacteria3.png",
-    mobile: "/onebacteria3-mobile.png" 
+    mobile: "/onebacteria4-mobile.png" 
   },
   1: { 
-    desktop: "/food.png",
-    mobile: "/food.png"         
+    desktop: "/food3.png",
+    mobile: "/food3-mobile.png"         
   },
   2: { 
-    desktop: "/swabs6.png",
-    mobile: "/swabs7-mobile.png"        
+    desktop: "/swabs7.png",
+    mobile: "/swabs8-mobile.png"        
   },
   3: { // Multiplex PCR
     ZERO: {
-      desktop: "/zero4.png",
-      mobile: "/zero4-mobile.png" 
+      desktop: "/zero5.png",
+      mobile: "/zero6-mobile.png" 
     },
     XPRESS: {
-      desktop: "/xpress.png",
-      mobile: "/xpress-mobile.png"  
+      desktop: "/xpress2.png",
+      mobile: "/xpress2-mobile.png"  
     }
   },
   4: { 

@@ -144,7 +144,7 @@ export const WORKFLOW_STEPS = [
     title: "End-to-End Microbiology",
     description: "Stop juggling multiple vendors. We provide the complete scientific chain—from the sampling tool to the digital report.",
     image: "/onebacteria3.png",
-    mobileImage: "/onebacteria3-mobile.png", // <--- NUEVO
+    mobileImage: "/onebacteria4-mobile.png", // <--- NUEVO
     color: "bg-[#111111]",
     textColor: "text-white",
   },
@@ -153,8 +153,8 @@ export const WORKFLOW_STEPS = [
     step: "Step 01",
     title: "Sampling",
     description: "Our kits work with standard sponges, swabs, and liquids. No complex pre-processing or enrichment required for most matrices.",
-    image: "/food.png",
-    mobileImage: "/food.png", // <--- NUEVO
+    image: "/food3.png",
+    mobileImage: "/food3-mobile.png", // <--- NUEVO
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
@@ -163,8 +163,8 @@ export const WORKFLOW_STEPS = [
     step: "Step 02",
     title: "Short enrichment, if needed",
     description: "Simplified protocols designed for speed. Go from raw sample to high-quality DNA in minutes, not hours.",
-    image: "/swabs6.png",
-    mobileImage: "/swabs7-mobile.png", // <--- NUEVO
+    image: "/swabs7.png",
+    mobileImage: "/swabs8-mobile.png", // <--- NUEVO
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
@@ -174,8 +174,8 @@ export const WORKFLOW_STEPS = [
     title: "DNA/RNA extration",
     description: "The core of our technology. Detect multiple pathogens and indicators in a single reaction with maximum sensitivity.",
     // Aquí ponemos la imagen por defecto (por ejemplo, la de ZERO)
-    image: "/zero4.png",
-    mobileImage: "/zero4-mobile.png", // <--- NUEVO
+    image: "/zero5.png",
+    mobileImage: "/zero6-mobile.png", // <--- NUEVO
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
     // Opcional: Podrías guardar las variantes aquí también si quieres ser muy estricto, 
