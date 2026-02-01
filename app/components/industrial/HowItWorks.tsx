@@ -38,7 +38,6 @@ export default function HowItWorks() {
   
   // ESTADOS PARA EL SUB-MENÚ DEL PASO 3 (PCR)
   const [pcrVariant, setPcrVariant] = useState<PcrVariant>('ZERO');
-  // Nuevo estado para rastrear la variante anterior durante la animación
   const [prevPcrVariant, setPrevPcrVariant] = useState<PcrVariant>('ZERO');
 
   // --- LÓGICA DE SWIPE (TACTIL) ---
@@ -49,7 +48,6 @@ export default function HowItWorks() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // --- HELPER PARA OBTENER LA IMAGEN CORRECTA ---
-  // Ahora acepta la variante como argumento opcional para manejar estados previos/actuales
   const getStepImage = (stepIndex: number, variant: PcrVariant) => {
     if (stepIndex === 3) {
       return variant === 'ZERO' ? IMAGES.PCR_ZERO : IMAGES.PCR_XPRESS;
@@ -62,7 +60,6 @@ export default function HowItWorks() {
     if (nextStep === activeStep) return;
     setPrevStep(activeStep);
     setActiveStep(nextStep);
-    // Al cambiar de paso principal, sincronizamos la variante previa con la actual
     setPrevPcrVariant(pcrVariant); 
     setIsAnimating(true);
 
@@ -73,19 +70,18 @@ export default function HowItWorks() {
     }, 800); 
   };
 
-  // --- NUEVO MANEJADOR PARA CAMBIO DE VARIANTE PCR ---
-  // Esto asegura que la animación sea igual que al cambiar de paso
+  // --- MANEJADOR PARA CAMBIO DE VARIANTE PCR ---
   const handlePcrVariantChange = (newVariant: PcrVariant) => {
     if (newVariant === pcrVariant) return;
     
-    setPrevPcrVariant(pcrVariant); // Guardamos la variante que sale
-    setPcrVariant(newVariant);     // Establecemos la nueva
-    setIsAnimating(true);          // Activamos la animación
+    setPrevPcrVariant(pcrVariant);
+    setPcrVariant(newVariant);
+    setIsAnimating(true);
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       setIsAnimating(false);
-      setPrevPcrVariant(newVariant); // Sincronizamos al terminar
+      setPrevPcrVariant(newVariant);
     }, 800);
   };
 
@@ -120,11 +116,13 @@ export default function HowItWorks() {
   const currentData = WORKFLOW_STEPS[activeStep];
   const label = SHORT_LABELS[activeStep];
   
-  // Obtenemos las imágenes actuales y previas usando los estados correspondientes
   const currentImageSrc = getStepImage(activeStep, pcrVariant);
   const prevImageSrc = getStepImage(prevStep, prevPcrVariant);
 
-  // Clase común para las imágenes: derecha en móvil, centrada en desktop
+  // AJUSTE DE CLASES DE IMAGEN:
+  // 'object-cover': Llena el contenedor manteniendo el aspecto.
+  // 'object-right': En móvil, ancla la imagen a la derecha (muestra la mitad derecha).
+  // 'md:object-center': En escritorio, la centra.
   const imageClasses = "object-cover object-right md:object-center";
 
   return (
@@ -139,8 +137,9 @@ export default function HowItWorks() {
         </div>
 
         {/* CONTENEDOR PRINCIPAL DEL WIDGET */}
+        {/* AJUSTE DE ALTURA: Se redujo de 600px a 550px en móvil para mejorar el encuadre vertical */}
         <div 
-          className="relative w-full h-[600px] md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5"
+          className="relative w-full h-[550px] md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5"
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
@@ -149,26 +148,24 @@ export default function HowItWorks() {
           {/* LAYER 0: IMÁGENES */}
           <div className="absolute inset-0 w-full h-full z-0">
              {isAnimating && (
-               // Key actualizada para incluir la variante previa
                <div key={`prev-${prevStep}-${prevPcrVariant}`} className="absolute inset-0 z-0 animate-slideOutLeft">
                   <Image 
                     src={prevImageSrc} 
                     alt="Previous step"
                     fill
-                    // CORRECCIÓN ALINEACIÓN: object-right md:object-center
+                    // Aplicamos las clases ajustadas
                     className={imageClasses} 
                     priority
                   />
                </div>
              )}
 
-             {/* Key actualizada para incluir la variante actual */}
              <div key={`current-${activeStep}-${pcrVariant}`} className="absolute inset-0 z-10 animate-slideInRight">
                 <Image 
                   src={currentImageSrc} 
                   alt="Current step"
                   fill
-                  // CORRECCIÓN ALINEACIÓN: object-right md:object-center
+                  // Aplicamos las clases ajustadas
                   className={imageClasses}
                   priority
                 />
@@ -205,14 +202,12 @@ export default function HowItWorks() {
                 {activeStep === 3 && (
                   <div className="flex gap-4 mt-3 pt-3 border-t border-white/10 pointer-events-auto">
                     <button 
-                      // Usamos el nuevo manejador
                       onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('ZERO'); }}
                       className={`text-[10px] font-bold tracking-widest uppercase transition-colors flex items-center gap-1 ${pcrVariant === 'ZERO' ? 'text-[#FF270A]' : 'text-white/50'}`}
                     >
                       ZERO
                     </button>
                     <button 
-                      // Usamos el nuevo manejador
                       onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('XPRESS'); }}
                       className={`text-[10px] font-bold tracking-widest uppercase transition-colors flex items-center gap-1 ${pcrVariant === 'XPRESS' ? 'text-[#FF270A]' : 'text-white/50'}`}
                     >
@@ -287,7 +282,6 @@ export default function HowItWorks() {
                           {index === 3 && (
                             <div className="flex gap-6 mt-2 pt-4 border-t border-white/10">
                               <button 
-                                // Usamos el nuevo manejador
                                 onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('ZERO'); }}
                                 className={`group/btn flex flex-col items-start gap-1 transition-all ${pcrVariant === 'ZERO' ? 'opacity-100' : 'opacity-50 hover:opacity-100'}`}
                               >
@@ -298,7 +292,6 @@ export default function HowItWorks() {
                               </button>
 
                               <button 
-                                // Usamos el nuevo manejador
                                 onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('XPRESS'); }}
                                 className={`group/btn flex flex-col items-start gap-1 transition-all ${pcrVariant === 'XPRESS' ? 'opacity-100' : 'opacity-50 hover:opacity-100'}`}
                               >
