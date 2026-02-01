@@ -30,8 +30,8 @@ const IMAGE_CONFIG = {
     mobile: "/onebacteria4-mobile.png" 
   },
   1: { 
-    desktop: "/food3.png",
-    mobile: "/food3-mobile.png"         
+    desktop: "/food4.png",
+    mobile: "/food4-mobile.png"         
   },
   2: { 
     desktop: "/swabs7.png",
@@ -39,12 +39,12 @@ const IMAGE_CONFIG = {
   },
   3: { // Multiplex PCR
     ZERO: {
-      desktop: "/zero5.png",
-      mobile: "/zero6-mobile.png" 
+      desktop: "/zero6.png",
+      mobile: "/zero7-mobile.png" 
     },
     XPRESS: {
-      desktop: "/xpress2.png",
-      mobile: "/xpress2-mobile.png"  
+      desktop: "/xpress3.png",
+      mobile: "/xpress3-mobile.png"  
     }
   },
   4: { 

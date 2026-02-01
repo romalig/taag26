@@ -153,8 +153,8 @@ export const WORKFLOW_STEPS = [
     step: "Step 01",
     title: "Sampling",
     description: "Our kits work with standard sponges, swabs, and liquids. No complex pre-processing or enrichment required for most matrices.",
-    image: "/food3.png",
-    mobileImage: "/food3-mobile.png", // <--- NUEVO
+    image: "/food4.png",
+    mobileImage: "/food4-mobile.png", // <--- NUEVO
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
@@ -174,8 +174,8 @@ export const WORKFLOW_STEPS = [
     title: "DNA/RNA extration",
     description: "The core of our technology. Detect multiple pathogens and indicators in a single reaction with maximum sensitivity.",
     // Aquí ponemos la imagen por defecto (por ejemplo, la de ZERO)
-    image: "/zero5.png",
-    mobileImage: "/zero6-mobile.png", // <--- NUEVO
+    image: "/zero6.png",
+    mobileImage: "/zero7-mobile.png", // <--- NUEVO
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
     // Opcional: Podrías guardar las variantes aquí también si quieres ser muy estricto, 
