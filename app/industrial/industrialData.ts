@@ -196,8 +196,8 @@ export const WORKFLOW_STEPS = [
     step: "Step 05",
     title: "Automated results",
     description: "Your Digital Lab Manager. Organize results, track historical trends, and automate corrective actions in one platform.",
-    image: "/laptop.png",
-    mobileImage: "/laptop-mobile.png", // <--- NUEVO
+    image: "/bacterias.png",
+    mobileImage: "/bacterias-mobile.png", // <--- NUEVO
     color: "bg-[#111111]",
     textColor: "text-white",
   },

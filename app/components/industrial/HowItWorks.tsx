@@ -43,13 +43,13 @@ const IMAGE_CONFIG = {
       mobile: "/zero7-mobile.png" 
     },
     XPRESS: {
-      desktop: "/xpress3.png",
-      mobile: "/xpress3-mobile.png"  
+      desktop: "/xpress4.png",
+      mobile: "/xpress4-mobile.png"  
     }
   },
   4: { 
-    desktop: "/PCR.png",
-    mobile: "/PCR-mobile.png"          
+    desktop: "/bacterias.png",
+    mobile: "/bacterias-mobile.png"          
   },
   5: { 
     desktop: "/laptop.png",
