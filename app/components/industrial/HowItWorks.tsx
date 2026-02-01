@@ -48,12 +48,12 @@ const IMAGE_CONFIG = {
     }
   },
   4: { 
-    desktop: "/bacterias.png",
+    desktop: "/bacterias6.png",
     mobile: "/bacterias-mobile.png"          
   },
   5: { 
-    desktop: "/laptop.png",
-    mobile: "/laptop-mobile.png"       
+    desktop: "/screen_TxA.png",
+    mobile: "/screen_TxA-mobile.png"       
   }
 };
 

@@ -186,8 +186,8 @@ export const WORKFLOW_STEPS = [
     step: "Step 04",
     title: "Real time PCR",
     description: "Eliminate human error. Our AI analyzes PCR curves instantly, giving you a clear Positive/Negative result.",
-    image: "/PCR.png",
-    mobileImage: "/PCR-mobile.png", // <--- NUEVO
+    image: "/screen_TxA.png",
+    mobileImage: "/screen_TxA-mobile.png", // <--- NUEVO
     color: "bg-[#E6FFFA]",
     textColor: "text-[#111111]",
   },
@@ -196,7 +196,7 @@ export const WORKFLOW_STEPS = [
     step: "Step 05",
     title: "Automated results",
     description: "Your Digital Lab Manager. Organize results, track historical trends, and automate corrective actions in one platform.",
-    image: "/bacterias.png",
+    image: "/bacterias6.png",
     mobileImage: "/bacterias-mobile.png", // <--- NUEVO
     color: "bg-[#111111]",
     textColor: "text-white",
