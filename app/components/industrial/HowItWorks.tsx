@@ -9,7 +9,8 @@ import {
   ChevronRight,
   Plus,
   Smartphone,
-  CheckCircle2
+  CheckCircle2,
+  Zap
 } from "lucide-react";
 import { WORKFLOW_STEPS } from "../../industrial/industrialData";
 
@@ -22,11 +23,24 @@ const SHORT_LABELS = [
   "TxA Platform"
 ];
 
+// DEFINICIÓN DE IMÁGENES ESPECÍFICAS PARA EL PASO 3
+const IMAGES = {
+  PCR_ZERO: "/zero4.png", 
+  PCR_XPRESS: "/xpress.png" 
+};
+
+type PcrVariant = 'ZERO' | 'XPRESS';
+
 export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(0);
   const [prevStep, setPrevStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   
+  // ESTADOS PARA EL SUB-MENÚ DEL PASO 3 (PCR)
+  const [pcrVariant, setPcrVariant] = useState<PcrVariant>('ZERO');
+  // Nuevo estado para rastrear la variante anterior durante la animación
+  const [prevPcrVariant, setPrevPcrVariant] = useState<PcrVariant>('ZERO');
+
   // --- LÓGICA DE SWIPE (TACTIL) ---
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -34,18 +48,45 @@ export default function HowItWorks() {
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // --- MANEJADORES DE CAMBIO ---
+  // --- HELPER PARA OBTENER LA IMAGEN CORRECTA ---
+  // Ahora acepta la variante como argumento opcional para manejar estados previos/actuales
+  const getStepImage = (stepIndex: number, variant: PcrVariant) => {
+    if (stepIndex === 3) {
+      return variant === 'ZERO' ? IMAGES.PCR_ZERO : IMAGES.PCR_XPRESS;
+    }
+    return WORKFLOW_STEPS[stepIndex].image;
+  };
+
+  // --- MANEJADOR DE CAMBIO DE PASO PRINCIPAL ---
   const handleChange = (nextStep: number) => {
     if (nextStep === activeStep) return;
     setPrevStep(activeStep);
     setActiveStep(nextStep);
+    // Al cambiar de paso principal, sincronizamos la variante previa con la actual
+    setPrevPcrVariant(pcrVariant); 
     setIsAnimating(true);
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       setIsAnimating(false);
-      setPrevStep(nextStep); 
+      setPrevStep(nextStep);
     }, 800); 
+  };
+
+  // --- NUEVO MANEJADOR PARA CAMBIO DE VARIANTE PCR ---
+  // Esto asegura que la animación sea igual que al cambiar de paso
+  const handlePcrVariantChange = (newVariant: PcrVariant) => {
+    if (newVariant === pcrVariant) return;
+    
+    setPrevPcrVariant(pcrVariant); // Guardamos la variante que sale
+    setPcrVariant(newVariant);     // Establecemos la nueva
+    setIsAnimating(true);          // Activamos la animación
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setIsAnimating(false);
+      setPrevPcrVariant(newVariant); // Sincronizamos al terminar
+    }, 800);
   };
 
   const handlePrev = () => {
@@ -77,17 +118,20 @@ export default function HowItWorks() {
   };
 
   const currentData = WORKFLOW_STEPS[activeStep];
-  const prevData = WORKFLOW_STEPS[prevStep];
   const label = SHORT_LABELS[activeStep];
+  
+  // Obtenemos las imágenes actuales y previas usando los estados correspondientes
+  const currentImageSrc = getStepImage(activeStep, pcrVariant);
+  const prevImageSrc = getStepImage(prevStep, prevPcrVariant);
+
+  // Clase común para las imágenes: derecha en móvil, centrada en desktop
+  const imageClasses = "object-cover object-right md:object-center";
 
   return (
-    // 1. Padding de sección igual a SolutionsCatalog (px-4 md:px-6)
     <section className="bg-black text-white py-24 md:py-32 px-4 md:px-6">
       
-      {/* 2. Contenedor centrado igual a SolutionsCatalog (max-w-7xl) */}
       <div className="max-w-7xl mx-auto">
         
-        {/* 3. Padding del título igual al texto del Hero (px-10 md:px-20) */}
         <div className="px-10 md:px-20 mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-left leading-tight">
             Take a closer look into the future.
@@ -105,23 +149,27 @@ export default function HowItWorks() {
           {/* LAYER 0: IMÁGENES */}
           <div className="absolute inset-0 w-full h-full z-0">
              {isAnimating && (
-               <div key={`prev-${prevStep}`} className="absolute inset-0 z-0 animate-slideOutLeft">
+               // Key actualizada para incluir la variante previa
+               <div key={`prev-${prevStep}-${prevPcrVariant}`} className="absolute inset-0 z-0 animate-slideOutLeft">
                   <Image 
-                    src={prevData.image} 
-                    alt={prevData.title}
+                    src={prevImageSrc} 
+                    alt="Previous step"
                     fill
-                    className="object-cover object-center" 
+                    // CORRECCIÓN ALINEACIÓN: object-right md:object-center
+                    className={imageClasses} 
                     priority
                   />
                </div>
              )}
 
-             <div key={`current-${activeStep}`} className="absolute inset-0 z-10 animate-slideInRight">
+             {/* Key actualizada para incluir la variante actual */}
+             <div key={`current-${activeStep}-${pcrVariant}`} className="absolute inset-0 z-10 animate-slideInRight">
                 <Image 
-                  src={currentData.image} 
-                  alt={currentData.title}
+                  src={currentImageSrc} 
+                  alt="Current step"
                   fill
-                  className="object-cover object-center"
+                  // CORRECCIÓN ALINEACIÓN: object-right md:object-center
+                  className={imageClasses}
                   priority
                 />
                 <div className="absolute inset-0 bg-black/10" />
@@ -152,6 +200,26 @@ export default function HowItWorks() {
                 <p className="text-xs text-gray-200 leading-snug line-clamp-3">
                    {currentData.description}
                 </p>
+
+                {/* --- SUB-CONTROLES PARA MÓVIL (SOLO PASO 3) --- */}
+                {activeStep === 3 && (
+                  <div className="flex gap-4 mt-3 pt-3 border-t border-white/10 pointer-events-auto">
+                    <button 
+                      // Usamos el nuevo manejador
+                      onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('ZERO'); }}
+                      className={`text-[10px] font-bold tracking-widest uppercase transition-colors flex items-center gap-1 ${pcrVariant === 'ZERO' ? 'text-[#FF270A]' : 'text-white/50'}`}
+                    >
+                      ZERO
+                    </button>
+                    <button 
+                      // Usamos el nuevo manejador
+                      onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('XPRESS'); }}
+                      className={`text-[10px] font-bold tracking-widest uppercase transition-colors flex items-center gap-1 ${pcrVariant === 'XPRESS' ? 'text-[#FF270A]' : 'text-white/50'}`}
+                    >
+                      XPRESS <Zap className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
 
                 {(currentData as any).txa_status && (
                   <div className="mt-3 pt-2 border-t border-white/10 flex items-center gap-2">
@@ -214,6 +282,34 @@ export default function HowItWorks() {
                           <p className="text-sm font-medium text-white leading-relaxed opacity-90">
                             {step.description}
                           </p>
+
+                          {/* --- SUB-CONTROLES PARA DESKTOP (SOLO PASO 3) --- */}
+                          {index === 3 && (
+                            <div className="flex gap-6 mt-2 pt-4 border-t border-white/10">
+                              <button 
+                                // Usamos el nuevo manejador
+                                onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('ZERO'); }}
+                                className={`group/btn flex flex-col items-start gap-1 transition-all ${pcrVariant === 'ZERO' ? 'opacity-100' : 'opacity-50 hover:opacity-100'}`}
+                              >
+                                <span className={`text-xs font-bold tracking-widest uppercase transition-colors ${pcrVariant === 'ZERO' ? 'text-[#FF270A]' : 'text-white'}`}>
+                                  ZERO
+                                </span>
+                                <span className="h-0.5 w-full bg-[#FF270A] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left" style={{ transform: pcrVariant === 'ZERO' ? 'scaleX(1)' : undefined }} />
+                              </button>
+
+                              <button 
+                                // Usamos el nuevo manejador
+                                onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('XPRESS'); }}
+                                className={`group/btn flex flex-col items-start gap-1 transition-all ${pcrVariant === 'XPRESS' ? 'opacity-100' : 'opacity-50 hover:opacity-100'}`}
+                              >
+                                <span className={`text-xs font-bold tracking-widest uppercase transition-colors flex items-center gap-1 ${pcrVariant === 'XPRESS' ? 'text-[#FF270A]' : 'text-white'}`}>
+                                  XPRESS <Zap className="w-3 h-3" />
+                                </span>
+                                <span className="h-0.5 w-full bg-[#FF270A] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left" style={{ transform: pcrVariant === 'XPRESS' ? 'scaleX(1)' : undefined }} />
+                              </button>
+                            </div>
+                          )}
+
                           {(step as any).txa_status && (
                             <div className="mt-2 pt-3 border-t border-white/10 flex items-center gap-2">
                                <Smartphone className="w-3 h-3 text-white opacity-70" />

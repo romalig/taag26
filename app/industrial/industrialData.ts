@@ -142,7 +142,7 @@ export const WORKFLOW_STEPS = [
     step: "The Ecosystem",
     title: "End-to-End Microbiology",
     description: "Stop juggling multiple vendors. We provide the complete scientific chain—from the sampling tool to the digital report.",
-    image: "/onebacteria.png", // Reusando hero para la intro
+    image: "/onebacteria3.png", // Reusando hero para la intro
     color: "bg-[#111111]",
     textColor: "text-white",
   },
@@ -160,7 +160,7 @@ export const WORKFLOW_STEPS = [
     step: "Step 02",
     title: "Short enrichment, if needed",
     description: "Simplified protocols designed for speed. Go from raw sample to high-quality DNA in minutes, not hours.",
-    image: "/enrich4.png", // Placeholder visual
+    image: "/swabs6.png", // Placeholder visual
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
@@ -169,7 +169,7 @@ export const WORKFLOW_STEPS = [
     step: "Step 03",
     title: "DNA/RNA extration",
     description: "The core of our technology. Detect multiple pathogens and indicators in a single reaction with maximum sensitivity.",
-    image: "/extraccion1.png", // Imagen de kit PCR
+    image: "/zero4.png", // Imagen de kit PCR
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
