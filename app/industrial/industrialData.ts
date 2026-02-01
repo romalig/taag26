@@ -135,6 +135,7 @@ export const PANEL_SOLUTIONS: Record<string, { title: string; description: strin
 };
 
 // ... (al final del archivo data/industrialData.ts)
+// data/industrialData.ts
 
 export const WORKFLOW_STEPS = [
   {
@@ -142,7 +143,8 @@ export const WORKFLOW_STEPS = [
     step: "The Ecosystem",
     title: "End-to-End Microbiology",
     description: "Stop juggling multiple vendors. We provide the complete scientific chain—from the sampling tool to the digital report.",
-    image: "/onebacteria3.png", // Reusando hero para la intro
+    image: "/onebacteria3.png",
+    mobileImage: "/onebacteria3-mobile.png", // <--- NUEVO
     color: "bg-[#111111]",
     textColor: "text-white",
   },
@@ -151,7 +153,8 @@ export const WORKFLOW_STEPS = [
     step: "Step 01",
     title: "Sampling",
     description: "Our kits work with standard sponges, swabs, and liquids. No complex pre-processing or enrichment required for most matrices.",
-    image: "/food.png", // Placeholder visual
+    image: "/food.png",
+    mobileImage: "/food.png", // <--- NUEVO
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
@@ -160,7 +163,8 @@ export const WORKFLOW_STEPS = [
     step: "Step 02",
     title: "Short enrichment, if needed",
     description: "Simplified protocols designed for speed. Go from raw sample to high-quality DNA in minutes, not hours.",
-    image: "/swabs6.png", // Placeholder visual
+    image: "/swabs6.png",
+    mobileImage: "/swabs6-mobile.png", // <--- NUEVO
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
   },
@@ -169,17 +173,22 @@ export const WORKFLOW_STEPS = [
     step: "Step 03",
     title: "DNA/RNA extration",
     description: "The core of our technology. Detect multiple pathogens and indicators in a single reaction with maximum sensitivity.",
-    image: "/zero4.png", // Imagen de kit PCR
+    // Aquí ponemos la imagen por defecto (por ejemplo, la de ZERO)
+    image: "/zero4.png",
+    mobileImage: "/zero4-mobile.png", // <--- NUEVO
     color: "bg-[#F4F4F5]",
     textColor: "text-[#111111]",
+    // Opcional: Podrías guardar las variantes aquí también si quieres ser muy estricto, 
+    // pero para no complicar la estructura de datos, las variantes las manejaremos en el componente.
   },
   {
     id: "interpretation",
     step: "Step 04",
     title: "Real time PCR",
     description: "Eliminate human error. Our AI analyzes PCR curves instantly, giving you a clear Positive/Negative result.",
-    image: "/PCR.png", // Placeholder visual
-    color: "bg-[#E6FFFA]", // Un tono suave diferente para resaltar la AI
+    image: "/PCR.png",
+    mobileImage: "/PCR-mobile.png", // <--- NUEVO
+    color: "bg-[#E6FFFA]",
     textColor: "text-[#111111]",
   },
   {
@@ -187,12 +196,12 @@ export const WORKFLOW_STEPS = [
     step: "Step 05",
     title: "Automated results",
     description: "Your Digital Lab Manager. Organize results, track historical trends, and automate corrective actions in one platform.",
-    image: "/laptop.png", // Imagen del software
-    color: "bg-[#111111]", // Oscuro para cerrar con fuerza (Software)
+    image: "/laptop.png",
+    mobileImage: "/laptop-mobile.png", // <--- NUEVO
+    color: "bg-[#111111]",
     textColor: "text-white",
   },
 ];
-
 // ... (al final de data/industrialData.ts)
 
 export const LAB_SPECS = [
