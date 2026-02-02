@@ -7,10 +7,11 @@ export default function FinalCTA() {
   const { openMeeting } = useCTA();
 
   return (
-    <section className="bg-white py-24 lg:py-32">
+    // CAMBIO ESPACIADO: py-16 md:py-24
+    <section className="bg-white py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
         
-        {/* TARJETA FLOTANTE (Estilo Global Hubs) */}
+        {/* TARJETA FLOTANTE */}
         <div className="relative overflow-hidden rounded-[3rem] bg-[#F5F5F7] px-6 py-16 md:px-16 md:py-20 text-center lg:text-left shadow-sm">
           
           <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">

@@ -3,15 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowRight, CheckCircle2, Clock, TrendingDown } from "lucide-react";
-import { useCTA } from "../CTAProvider"; // Ajusta la ruta según tu estructura
-import { FEATURED_SOLUTIONS } from "../../industrial/industrialData"; // Ajusta ruta
+import { useCTA } from "../CTAProvider";
+import { FEATURED_SOLUTIONS } from "../../industrial/industrialData";
 
 export default function FeaturedSolutions() {
   const { openMeeting } = useCTA();
   const [isImageVisible, setIsImageVisible] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
 
-  // Intersection Observer para la imagen
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -31,7 +30,6 @@ export default function FeaturedSolutions() {
     return () => observer.disconnect();
   }, []);
 
-  // Función de scroll interna (por si quieres usar el botón Details para ir al panel)
   const scrollToId = (id: string, offset = 120) => {
     const element = document.getElementById(id);
     if (element) {
@@ -42,7 +40,8 @@ export default function FeaturedSolutions() {
   };
 
   return (
-    <section id="solutions" className="px-4 md:px-6 mb-8">
+    // CAMBIO ESPACIADO: py-16 md:py-24 (Más compacto)
+    <section id="solutions" className="bg-white px-4 md:px-6 py-16 md:py-24">
       <div className="max-w-7xl mx-auto">
         <div className="relative bg-[#F4F4F5] rounded-[3rem] overflow-hidden pt-16 pb-32 px-6 md:px-16 flex flex-col items-center">
           
@@ -157,7 +156,6 @@ export default function FeaturedSolutions() {
                            Contact <ArrowRight className="w-3 h-3" />
                            </button>
                            
-                           {/* Botón Details con Scroll */}
                             <button 
                               onClick={() => scrollToId('solutions', 120)}
                               className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm flex items-center justify-center"
@@ -191,7 +189,6 @@ export default function FeaturedSolutions() {
                             <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-sm">{solution.title}</h3>
                             <p className="text-gray-200 text-sm font-medium leading-relaxed drop-shadow-sm">{solution.description}</p>
                         </div>
-                        {/* SVG y animaciones... */}
                         <div className="absolute left-[380px] top-1/2 -translate-y-1/2 hidden md:block z-20 select-none">
                            <div className="relative w-40 h-40 scale-90">
                               <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full" fill="none" strokeWidth="1.5" strokeLinecap="round" style={{filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))'}}>
@@ -199,7 +196,6 @@ export default function FeaturedSolutions() {
                                   <path d="M165 130 A 70 70 0 0 1 35 130" stroke="#FCA5A5" strokeDasharray="6 6" opacity="0.9" />
                                   <path d="M35 130 A 70 70 0 0 1 100 30" stroke="#86EFAC" strokeDasharray="6 6" opacity="0.9" />
                               </svg>
-                              {/* Texto dentro del círculo */}
                               <div className="absolute top-2 left-1/2 -translate-x-1/2 text-center">
                                   <span className="block text-[9px] font-medium text-[#FDE047] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#FDE047]/20">Results</span>
                               </div>

@@ -30,13 +30,22 @@ export default function SolutionsCatalog() {
   const categorySolutions = PANEL_SOLUTIONS[activePanelTab] || [];
   const sourceList = searchQuery ? allSolutions : categorySolutions;
 
+  // --- LÓGICA DE BÚSQUEDA MEJORADA (MULTI-PALABRA) ---
   const filteredSolutions = sourceList.filter((item) => {
-    const query = searchQuery.toLowerCase();
-    return (
-      item.title.toLowerCase().includes(query) ||
-      item.description.toLowerCase().includes(query) ||
-      item.targets.toLowerCase().includes(query)
-    );
+    // 1. Convertimos la búsqueda a minúsculas y separamos por espacios para tener las palabras clave
+    const searchTerms = searchQuery.toLowerCase().split(" ").filter(term => term.length > 0);
+    
+    // 2. Creamos un "super string" con todo el contenido del item para buscar ahí
+    const itemText = `
+      ${item.title} 
+      ${item.description} 
+      ${item.targets} 
+      ${item.technology}
+    `.toLowerCase();
+
+    // 3. Verificamos que TODAS las palabras escritas aparezcan en el item (AND logic)
+    // Si quieres que sea "al menos una" (OR logic), cambia .every por .some
+    return searchTerms.every((term) => itemText.includes(term));
   });
 
   return (
@@ -49,7 +58,6 @@ export default function SolutionsCatalog() {
             <Image src="/hero16.png" alt="TAAG Solutions Ecosystem" fill className="object-cover object-right md:object-center" priority />
              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/10" />
              
-             {/* ALINEACIÓN DEL TÍTULO: px-10 md:px-20 */}
              <div className="relative z-10 h-full flex items-start pt-20 md:pt-24">
                <div className="px-10 md:px-20 max-w-3xl">
                  <h2 className="text-white text-4xl md:text-6xl font-extrabold leading-tight">Explore all our solutions</h2>
@@ -59,9 +67,7 @@ export default function SolutionsCatalog() {
           </div>
 
           {/* CONTENIDO DEL PANEL */}
-          {/* CAMBIO: Eliminado px-6...md:px-24 y usado px-0 en el wrapper para controlar el padding internamente */}
           <div className="pb-12 pt-0 bg-white relative z-20 rounded-b-[3rem]">
-             {/* CAMBIO: Eliminado max-w-5xl mx-auto. Usamos px-10 md:px-20 para alinear con el título */}
              <div className="w-full px-10 md:px-20" ref={panelRef} id="panel-start">
                 
                 {/* --- 1. BUSCADOR Y DESCARGA (ARRIBA) --- */}
@@ -103,7 +109,6 @@ export default function SolutionsCatalog() {
                 </div>
 
                 {/* --- 2. CONTENEDOR STICKY (TABS DE CATEGORÍAS) --- */}
-                {/* CAMBIO: Ajustado margin negativo (-mx) para que coincida con el nuevo padding px-10 md:px-20 */}
                 <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-xl py-4 -mx-10 md:-mx-20 px-10 md:px-20 transition-all border-b border-transparent">
                    <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-2 no-scrollbar items-center justify-start">
                       {PANEL_CATEGORIES.map((category) => (
@@ -135,15 +140,11 @@ export default function SolutionsCatalog() {
                               <h4 className="text-lg font-bold text-[#111111] mb-2 group-hover:text-[#FF270A] transition-colors">{item.title}</h4>
                               <p className="text-gray-500 text-sm font-medium mb-3 max-w-2xl leading-relaxed">{item.description}</p>
                               
-                              {/* TAGS ROW: Target & Technology */}
                               <div className="flex flex-wrap gap-2 mt-3">
-                                {/* Tag Target */}
                                 <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold text-gray-600 tracking-wider border border-gray-200">
                                    <Target className="w-3 h-3 text-[#FF270A]" />
                                    {item.targets}
                                 </span>
-
-                                {/* NUEVO: Tag Technology */}
                                 <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold text-gray-600 tracking-wider border border-gray-200">
                                    <Cpu className="w-3 h-3 text-[#111111]" />
                                    {item.technology}
@@ -166,12 +167,11 @@ export default function SolutionsCatalog() {
                      <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
                         <Search className="w-12 h-12 text-gray-300 mb-4" />
                         <p className="text-lg font-bold text-gray-400">No matching solutions found.</p>
-                        <p className="text-sm text-gray-400">Try searching for a target (e.g., "invA") or name across all categories.</p>
+                        <p className="text-sm text-gray-400">Try searching for a target (e.g., "invA"), technology, or name.</p>
                      </div>
                    )}
 
                    {/* --- SECCIÓN "DIDN'T FIND IT?" --- */}
-                   {/* CAMBIO: Reducción drástica de espaciado (mt-6, p-6 md:p-8) */}
                    <div className="mt-6 mb-2 p-6 md:p-8 text-center flex flex-col items-center bg-gray-50 rounded-3xl border border-gray-100">
                        <div className="mb-4">
                           <Image 

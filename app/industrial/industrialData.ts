@@ -236,3 +236,60 @@ export const LAB_SPECS = [
     icon: "plug"
   }
 ];
+
+// data/industrialData.ts
+
+// ... (Tus otros exports: FEATURED_SOLUTIONS, PANEL_CATEGORIES, etc.)
+
+export const SUCCESS_STORIES = [
+  {
+    id: "hero-case",
+    client: "Global Dairy Leader",
+    title: "Zero Salmonella in < 24 Hours",
+    metric: "99% Faster Release",
+    description: "How a top-tier dairy producer replaced traditional culture methods (5 days) with TAAG's workflow to achieve same-day product release, eliminating warehousing bottlenecks.",
+    image: "/onebacteria3.png", // Imagen impactante para la tarjeta ancha
+    tags: ["Dairy", "Safety"],
+    isHero: true, 
+  },
+  {
+    id: "case-1",
+    client: "Major Beverage Brand",
+    title: "Preventing Spoilage Recalls",
+    metric: "$2M Saved",
+    description: "Implementation of Alicyclobacillus detection at the filling line prevented a massive recall campaign.",
+    image: "/hero16.png", 
+    tags: ["Beverages", "Savings"],
+    isHero: false,
+  },
+  {
+    id: "case-2",
+    client: "Meat Processing Plant",
+    title: "Digital Hygiene Tracking",
+    metric: "100% Paperless",
+    description: "Transitioned 5 facilities from manual logbooks to TxA software, allowing real-time sanitation monitoring.",
+    image: "/laptop.png",
+    tags: ["Meat", "Digitalization"],
+    isHero: false,
+  },
+  {
+    id: "case-3",
+    client: "Craft Brewery Network",
+    title: "Hop-Resistance Screening",
+    metric: "Zero Spoilage",
+    description: "Routine screening for horA/horC genes ensured consistent flavor profiles and prevented cross-contamination.",
+    image: "/food.png",
+    tags: ["Brewing", "Quality"],
+    isHero: false,
+  },
+  {
+    id: "case-4",
+    client: "Fruit Exporter",
+    title: "Listeria Environmental Control",
+    metric: "3x Coverage",
+    description: "Expanded testing points by 300% without increasing budget thanks to our high-efficiency multiplex protocols.",
+    image: "/swabs.png",
+    tags: ["Produce", "Efficiency"],
+    isHero: false,
+  },
+];

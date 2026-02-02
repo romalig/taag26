@@ -26,10 +26,11 @@ export default function EquipmentSection() {
   const activeData = EQUIPMENT_SCENARIOS[activeTab];
 
   return (
-    <section className="py-12 md:py-24 bg-white px-4 md:px-6">
+    // CAMBIO ESPACIADO: py-16 md:py-24
+    <section className="py-16 md:py-24 bg-white px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         
-        {/* HEADER & CONTROLES */}
+        {/* HEADER CENTRADO */}
         <div className="flex flex-col items-center text-center mb-8 md:mb-12 space-y-6 md:space-y-8">
            
            <div className="max-w-3xl">
@@ -44,7 +45,7 @@ export default function EquipmentSection() {
               </p>
            </div>
 
-           {/* Botones de Selección */}
+           {/* Botones */}
            <div className="inline-flex flex-col md:flex-row bg-gray-100 p-1.5 rounded-2xl md:rounded-full border border-gray-200 w-full md:w-auto">
               <button
                 onClick={() => setActiveTab("simple")}
@@ -69,26 +70,22 @@ export default function EquipmentSection() {
            </div>
         </div>
 
-        {/* TARJETA HÍBRIDA */}
+        {/* TARJETA */}
         <div className="relative w-full flex flex-col md:block md:h-[600px] rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#151516] group transform-gpu">
            
-           {/* --- A. IMAGEN --- */}
            <div className="relative w-full h-[280px] md:absolute md:inset-0 md:h-full shrink-0">
               <div key={activeTab} className="relative w-full h-full animate-scaleFade">
                  <Image 
                    src={activeData.image}
                    alt={activeData.title}
                    fill
-                   // CAMBIO AQUÍ: 'object-right' aplicado siempre (sin prefijo md:)
                    className="object-cover object-right transition-transform duration-700 scale-[1.01]"
                    priority
                  />
-                 {/* Degradado SOLO en Desktop */}
                  <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent" />
               </div>
            </div>
 
-           {/* --- B. CONTENIDO TEXTO --- */}
            <div className="relative p-8 md:absolute md:inset-0 md:p-16 flex flex-col justify-start md:justify-end items-start bg-[#151516] md:bg-transparent">
               
               <div key={activeTab + "-text"} className="max-w-xl animate-slideUp">
