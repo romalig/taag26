@@ -148,7 +148,11 @@ export default function HowItWorks() {
         
         <div className="px-10 md:px-20 mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-left leading-tight">
-            Take a closer look into the future.
+            Take a closer look into the future, discover{" "}
+            {/* CAMBIO AQUÍ: Gradiente de Azul a Rojo TAAG (#FF270A) */}
+            <span className="bg-gradient-to-r from-blue-500 to-[#FF270A] bg-clip-text text-transparent">
+              AiGOR
+            </span>
           </h2>
         </div>
 
@@ -162,7 +166,6 @@ export default function HowItWorks() {
         >
           
           {/* LAYER 0: IMÁGENES */}
-          {/* En móvil tiene altura fija (h-[500px]), en desktop es absoluto y llena todo */}
           <div className="relative w-full h-[500px] md:absolute md:inset-0 md:h-full z-0 shrink-0">
              
              {/* --- IMAGEN SALIENTE (PREV) --- */}
@@ -223,7 +226,6 @@ export default function HowItWorks() {
           </div>
 
           {/* LAYER 1: INTERFAZ MÓVIL (CONTENIDO DEBAJO DE LA IMAGEN) */}
-          {/* Quitamos 'absolute bottom-0' y usamos 'relative' con fondo sólido */}
           <div className="relative z-20 bg-[#151516] px-6 pb-8 pt-6 md:hidden flex flex-col justify-between flex-1">
              
              <div className="flex items-center justify-between gap-3 w-full">
@@ -292,7 +294,7 @@ export default function HowItWorks() {
              </div>
           </div>
 
-          {/* LAYER 2: INTERFAZ DESKTOP (Sin cambios, sigue flotando) */}
+          {/* LAYER 2: INTERFAZ DESKTOP */}
           <div className="hidden md:flex absolute top-0 bottom-0 left-0 z-20 w-full max-w-lg p-12 items-start gap-6 pointer-events-none">
              <div className="flex flex-col gap-3 mt-2 pointer-events-auto">
                <button onClick={handlePrev} disabled={activeStep === 0} className={`w-10 h-10 rounded-full bg-[#333336]/80 backdrop-blur-md flex items-center justify-center transition-all duration-300 border border-white/10 ${activeStep === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-[#454548]'}`}><ChevronUp className="w-5 h-5 text-white" /></button>

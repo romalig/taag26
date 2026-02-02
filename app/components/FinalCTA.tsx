@@ -8,7 +8,7 @@ export default function FinalCTA() {
 
   return (
     // CAMBIO ESPACIADO: py-16 md:py-24
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white py-16 md:py-40">
       <div className="mx-auto max-w-7xl px-6">
         
         {/* TARJETA FLOTANTE */}

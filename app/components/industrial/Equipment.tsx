@@ -26,8 +26,8 @@ export default function EquipmentSection() {
   const activeData = EQUIPMENT_SCENARIOS[activeTab];
 
   return (
-    // CAMBIO ESPACIADO: py-16 md:py-24
-    <section className="py-6 md:py-36 bg-white px-4 md:px-6">
+    // AJUSTE: 'md:pb-48' aumenta drásticamente el espacio inferior en escritorio
+    <section className="bg-white px-4 md:px-6 pt-6 pb-32 md:pt-34 md:pb-48">
       <div className="max-w-7xl mx-auto">
         
         {/* HEADER CENTRADO */}
@@ -45,7 +45,7 @@ export default function EquipmentSection() {
               </p>
            </div>
 
-           {/* Botones */}
+           {/* Botones de Selección */}
            <div className="inline-flex flex-col md:flex-row bg-gray-100 p-1.5 rounded-2xl md:rounded-full border border-gray-200 w-full md:w-auto">
               <button
                 onClick={() => setActiveTab("simple")}
@@ -70,9 +70,10 @@ export default function EquipmentSection() {
            </div>
         </div>
 
-        {/* TARJETA */}
+        {/* TARJETA HÍBRIDA */}
         <div className="relative w-full flex flex-col md:block md:h-[600px] rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#151516] group transform-gpu">
            
+           {/* --- A. IMAGEN --- */}
            <div className="relative w-full h-[280px] md:absolute md:inset-0 md:h-full shrink-0">
               <div key={activeTab} className="relative w-full h-full animate-scaleFade">
                  <Image 
@@ -86,6 +87,7 @@ export default function EquipmentSection() {
               </div>
            </div>
 
+           {/* --- B. CONTENIDO TEXTO --- */}
            <div className="relative p-8 md:absolute md:inset-0 md:p-16 flex flex-col justify-start md:justify-end items-start bg-[#151516] md:bg-transparent">
               
               <div key={activeTab + "-text"} className="max-w-xl animate-slideUp">
