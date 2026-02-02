@@ -49,7 +49,7 @@ export default function SolutionsCatalog() {
   });
 
   return (
-    <section className="bg-white px-4 md:px-6 py-24 md:py-32">
+    <section className="bg-white px-4 md:px-6 py-24 md:py-42">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-[3rem] border border-gray-200 shadow-sm">
           

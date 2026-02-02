@@ -40,8 +40,7 @@ export default function FeaturedSolutions() {
   };
 
   return (
-    // CAMBIO ESPACIADO: py-16 md:py-24 (Más compacto)
-    <section id="solutions" className="bg-white px-4 md:px-6 py-16 md:py-24">
+    <section id="solutions" className="bg-white px-4 md:px-6 py-16 md:py-14">
       <div className="max-w-7xl mx-auto">
         <div className="relative bg-[#F4F4F5] rounded-[3rem] overflow-hidden pt-16 pb-32 px-6 md:px-16 flex flex-col items-center">
           
@@ -53,7 +52,7 @@ export default function FeaturedSolutions() {
             }}
           />
 
-          <div className="relative z-10 text-center mb-8 max-w-2xl mx-auto">
+          <div className="relative z-10 text-center mb-0 max-w-2xl mx-auto md:py-14">
             <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
               Featured SOLUTIONS
             </span>
@@ -217,11 +216,11 @@ export default function FeaturedSolutions() {
                 );
               }
 
-              // --- CARD TIPO 3: STANDARD ---
+              // --- CARD TIPO 3: STANDARD (TARJETAS CENTRALES) ---
               return (
-                <div key={solution.id} className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[520px] md:h-[400px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center">
+                <div key={solution.id} className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[520px] md:h-[480px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center">
                    <div className="relative z-10 w-full max-w-[400px] flex flex-col items-center">
-                      <h3 className="text-2xl font-bold text-[#111111] mb-4 leading-tight">{solution.title}</h3>
+                      <h3 className="text-2xl font-bold text-[#111111] mb-10 leading-tight">{solution.title}</h3>
                       <p className="text-gray-500 text-sm leading-relaxed">{solution.description}</p>
                     </div>
 

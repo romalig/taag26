@@ -27,7 +27,7 @@ export default function EquipmentSection() {
 
   return (
     // CAMBIO ESPACIADO: py-16 md:py-24
-    <section className="py-16 md:py-24 bg-white px-4 md:px-6">
+    <section className="py-6 md:py-36 bg-white px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         
         {/* HEADER CENTRADO */}

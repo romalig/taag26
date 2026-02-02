@@ -33,7 +33,6 @@ export default function SuccessStories() {
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const { current } = scrollRef;
-      // Ajuste de distancia de scroll
       const scrollAmount = window.innerWidth < 768 ? current.clientWidth * 0.85 : current.clientWidth * 0.5; 
       if (direction === "left") {
         current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
@@ -46,7 +45,7 @@ export default function SuccessStories() {
   const edgePadding = "max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem))";
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-white py-16 md:py-18">
       
       {/* ENCABEZADO */}
       <div className="max-w-7xl mx-auto px-10 md:px-20 mb-10 md:mb-16 relative z-10">
@@ -71,7 +70,7 @@ export default function SuccessStories() {
       {/* CARRUSEL */}
       <div className="relative w-full group">
         
-        {/* Flechas de Navegación (SOLO DESKTOP) */}
+        {/* Flechas Desktop */}
         <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 left-4 z-30 transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
            <button onClick={() => scroll("left")} className="w-14 h-14 rounded-full bg-white shadow-xl border border-gray-100 text-[#111111] flex items-center justify-center transition-all duration-300 active:scale-95 hover:bg-gray-50">
              <ChevronLeft className="w-8 h-8 opacity-60" />
@@ -99,7 +98,8 @@ export default function SuccessStories() {
                 className={`
                   relative flex-shrink-0 
                   ${isHero ? 'w-[85vw] md:w-[800px]' : 'w-[85vw] md:w-[420px]'}
-                  h-[580px] 
+                  /* CAMBIO: Altura reducida en móvil (460px), normal en desktop (580px) */
+                  h-[460px] md:h-[580px] 
                   rounded-[2.5rem] 
                   flex flex-col justify-between 
                   snap-start transition-transform duration-300 hover:scale-[1.01]
@@ -110,7 +110,7 @@ export default function SuccessStories() {
                   }
                 `}
               >
-                {/* Contenido de tarjetas (Sin cambios) */}
+                {/* --- CONTENIDO HERO --- */}
                 {isHero ? (
                   <>
                     <div className="absolute inset-0 z-0 opacity-60">
@@ -135,13 +135,13 @@ export default function SuccessStories() {
                             <Award className="w-8 h-8 text-[#FF270A]" />
                             <span className="text-white/80 font-bold uppercase tracking-widest text-sm">{story.client}</span>
                          </div>
-                         <h3 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+                         <h3 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
                            {story.metric}
                          </h3>
-                         <p className="text-xl font-bold text-white/90 mb-4">
+                         <p className="text-lg md:text-xl font-bold text-white/90 mb-4">
                            {story.title}
                          </p>
-                         <p className="text-base font-medium leading-relaxed text-gray-300 mb-8 line-clamp-3">
+                         <p className="text-sm md:text-base font-medium leading-relaxed text-gray-300 mb-6 md:mb-8 line-clamp-3">
                            {story.description}
                          </p>
                          
@@ -154,6 +154,7 @@ export default function SuccessStories() {
                     </div>
                   </>
                 ) : (
+                  /* --- CONTENIDO NORMAL --- */
                   <>
                     <div className="relative z-10 flex justify-between items-start mb-6">
                       <div className="flex flex-col">
@@ -184,7 +185,7 @@ export default function SuccessStories() {
                        <h4 className="text-xl font-bold text-[#111111] mb-3 leading-tight">
                          {story.title}
                        </h4>
-                       <p className="text-sm font-medium leading-relaxed text-gray-500 mb-8 line-clamp-3">
+                       <p className="text-sm font-medium leading-relaxed text-gray-500 mb-6 md:mb-8 line-clamp-3">
                          {story.description}
                        </p>
                        <div className="pt-6 border-t border-black/10">
@@ -200,7 +201,7 @@ export default function SuccessStories() {
           })}
         </div>
 
-        {/* --- CONTROLES MÓVILES (BAJO EL CARRUSEL, A LA DERECHA) --- */}
+        {/* --- CONTROLES MÓVILES (BAJO EL CARRUSEL) --- */}
         <div className="flex md:hidden justify-end gap-3 px-6 mt-4">
            <button 
              onClick={() => scroll("left")} 
