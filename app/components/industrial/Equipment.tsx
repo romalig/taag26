@@ -10,14 +10,14 @@ const EQUIPMENT_SCENARIOS = {
     label: "Environmental & Easy Food",
     image: "/termo6.png", 
     title: "Manual & Rapid Workflow",
-    description: "Ideal for environmental sponges and simple liquids. Skip the complex machinery with our rapid extraction protocols that get you to PCR results in record time.",
+    description: "Ideal for environmental and normal food matrices. Skip the complex machinery with our rapid extraction protocols that get you to PCR results in record time.",
   },
   complex: {
     id: "complex",
     label: "Complex Food Samples",
     image: "/auto3.png", 
     title: "Automated High-Throughput",
-    description: "For complex matrices like meat, chocolate, or spices. We integrate automated magnetic-bead extraction robots to ensure maximum purity and efficiency without bottlenecks.",
+    description: "For complex matrices like chocolate or spices. We integrate automated magnetic-bead extraction robots to ensure maximum purity and efficiency without bottlenecks.",
   }
 };
 
@@ -38,10 +38,10 @@ export default function EquipmentSection() {
                 Infrastructure & Equipment
               </span>
               <h2 className="text-3xl md:text-5xl font-bold text-[#111111] mb-4 md:mb-6 tracking-tight">
-                Open platforms. Total flexibility.
+                No specialized or complex equipment. Open platforms
               </h2>
               <p className="text-base md:text-lg text-gray-500 leading-relaxed">
-                We believe in open ecosystems. Whether you need a simple manual setup or a fully automated robot, our kits adapt to your lab's reality.
+                We believe in simplicity. Whether you need a simple manual setup or a fully automated robot, our kits adapt to your lab's reality.
               </p>
            </div>
 

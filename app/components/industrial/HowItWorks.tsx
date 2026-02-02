@@ -15,11 +15,11 @@ import {
 import { WORKFLOW_STEPS } from "../../industrial/industrialData";
 
 const SHORT_LABELS = [
-  "Ecosystem",
-  "Sampling",
-  "Extraction",
-  "Multiplex PCR",
-  "AiGOR Analysis",
+  "AiGOR",
+  "Food testing",
+  "Environmental testing",
+  "Environmental protocols",
+  "Microorganisms",
   "TxA Platform"
 ];
 
@@ -30,8 +30,8 @@ const IMAGE_CONFIG = {
     mobile: "/onebacteria4-mobile.png" 
   },
   1: { 
-    desktop: "/food4.png",
-    mobile: "/food4-mobile.png"         
+    desktop: "/food5.png",
+    mobile: "/food5-mobile.png"         
   },
   2: { 
     desktop: "/swabs7.png",
