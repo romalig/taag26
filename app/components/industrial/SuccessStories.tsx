@@ -33,8 +33,8 @@ export default function SuccessStories() {
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const { current } = scrollRef;
-      // En móvil movemos casi todo el ancho, en desktop la mitad
-      const scrollAmount = window.innerWidth < 768 ? current.clientWidth * 0.8 : current.clientWidth * 0.5; 
+      // Ajuste de distancia de scroll
+      const scrollAmount = window.innerWidth < 768 ? current.clientWidth * 0.85 : current.clientWidth * 0.5; 
       if (direction === "left") {
         current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
       } else {
@@ -49,7 +49,7 @@ export default function SuccessStories() {
     <section className="bg-white py-16 md:py-24">
       
       {/* ENCABEZADO */}
-      <div className="max-w-7xl mx-auto px-10 md:px-20 mb-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-10 md:px-20 mb-10 md:mb-16 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="max-w-2xl">
             <span className="text-[#FF270A] font-bold tracking-widest uppercase text-xs mb-3 block">
@@ -71,24 +71,15 @@ export default function SuccessStories() {
       {/* CARRUSEL */}
       <div className="relative w-full group">
         
-        {/* FLECHA IZQUIERDA (Visible en móvil ahora) */}
-        {/* Se ajustó tamaño (w-10 vs w-14) y posición (left-2 vs left-4) para móvil */}
-        <div className={`flex absolute top-1/2 -translate-y-1/2 left-2 md:left-4 z-30 transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-           <button 
-             onClick={() => scroll("left")} 
-             className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/90 backdrop-blur-sm shadow-xl border border-gray-100 text-[#111111] flex items-center justify-center transition-all duration-300 active:scale-95 hover:bg-gray-50"
-           >
-             <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 opacity-60" />
+        {/* Flechas de Navegación (SOLO DESKTOP) */}
+        <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 left-4 z-30 transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+           <button onClick={() => scroll("left")} className="w-14 h-14 rounded-full bg-white shadow-xl border border-gray-100 text-[#111111] flex items-center justify-center transition-all duration-300 active:scale-95 hover:bg-gray-50">
+             <ChevronLeft className="w-8 h-8 opacity-60" />
            </button>
         </div>
-
-        {/* FLECHA DERECHA (Visible en móvil ahora) */}
-        <div className={`flex absolute top-1/2 -translate-y-1/2 right-2 md:right-4 z-30 transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-           <button 
-             onClick={() => scroll("right")} 
-             className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/90 backdrop-blur-sm shadow-xl border border-gray-100 text-[#111111] flex items-center justify-center transition-all duration-300 active:scale-95 hover:bg-gray-50"
-           >
-             <ChevronRight className="w-6 h-6 md:w-8 md:h-8 opacity-60" />
+        <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 right-4 z-30 transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+           <button onClick={() => scroll("right")} className="w-14 h-14 rounded-full bg-white shadow-xl border border-gray-100 text-[#111111] flex items-center justify-center transition-all duration-300 active:scale-95 hover:bg-gray-50">
+             <ChevronRight className="w-8 h-8 opacity-60" />
            </button>
         </div>
 
@@ -97,7 +88,7 @@ export default function SuccessStories() {
           ref={scrollRef}
           onScroll={checkScroll}
           style={{ paddingLeft: edgePadding, paddingRight: edgePadding, scrollPaddingLeft: edgePadding, scrollPaddingRight: edgePadding }}
-          className="flex gap-4 md:gap-6 overflow-x-auto pb-12 w-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
+          className="flex gap-4 md:gap-6 overflow-x-auto pb-6 w-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
         >
           {SUCCESS_STORIES.map((story, index) => {
             const isHero = index === 0;
@@ -208,6 +199,27 @@ export default function SuccessStories() {
             );
           })}
         </div>
+
+        {/* --- CONTROLES MÓVILES (BAJO EL CARRUSEL, A LA DERECHA) --- */}
+        <div className="flex md:hidden justify-end gap-3 px-6 mt-4">
+           <button 
+             onClick={() => scroll("left")} 
+             disabled={!canScrollLeft}
+             className={`w-10 h-10 rounded-full bg-[#111111] text-white flex items-center justify-center transition-all active:scale-95 ${!canScrollLeft ? 'opacity-30 cursor-not-allowed' : 'opacity-100 shadow-lg'}`}
+             aria-label="Scroll left"
+           >
+             <ChevronLeft className="w-5 h-5" />
+           </button>
+           <button 
+             onClick={() => scroll("right")} 
+             disabled={!canScrollRight}
+             className={`w-10 h-10 rounded-full bg-[#111111] text-white flex items-center justify-center transition-all active:scale-95 ${!canScrollRight ? 'opacity-30 cursor-not-allowed' : 'opacity-100 shadow-lg'}`}
+             aria-label="Scroll right"
+           >
+             <ChevronRight className="w-5 h-5" />
+           </button>
+        </div>
+
       </div>
     </section>
   );
