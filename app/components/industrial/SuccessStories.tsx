@@ -33,7 +33,8 @@ export default function SuccessStories() {
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const { current } = scrollRef;
-      const scrollAmount = current.clientWidth * 0.5; 
+      // En móvil movemos casi todo el ancho, en desktop la mitad
+      const scrollAmount = window.innerWidth < 768 ? current.clientWidth * 0.8 : current.clientWidth * 0.5; 
       if (direction === "left") {
         current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
       } else {
@@ -45,7 +46,6 @@ export default function SuccessStories() {
   const edgePadding = "max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem))";
 
   return (
-    // CAMBIO ESPACIADO: py-16 md:py-24
     <section className="bg-white py-16 md:py-24">
       
       {/* ENCABEZADO */}
@@ -71,19 +71,28 @@ export default function SuccessStories() {
       {/* CARRUSEL */}
       <div className="relative w-full group">
         
-        {/* Flechas */}
-        <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 left-4 z-30 transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-           <button onClick={() => scroll("left")} className="w-14 h-14 rounded-full bg-white shadow-xl border border-gray-100 text-[#111111] flex items-center justify-center transition-all duration-300 active:scale-95 hover:bg-gray-50">
-             <ChevronLeft className="w-8 h-8 opacity-60" />
-           </button>
-        </div>
-        <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 right-4 z-30 transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-           <button onClick={() => scroll("right")} className="w-14 h-14 rounded-full bg-white shadow-xl border border-gray-100 text-[#111111] flex items-center justify-center transition-all duration-300 active:scale-95 hover:bg-gray-50">
-             <ChevronRight className="w-8 h-8 opacity-60" />
+        {/* FLECHA IZQUIERDA (Visible en móvil ahora) */}
+        {/* Se ajustó tamaño (w-10 vs w-14) y posición (left-2 vs left-4) para móvil */}
+        <div className={`flex absolute top-1/2 -translate-y-1/2 left-2 md:left-4 z-30 transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+           <button 
+             onClick={() => scroll("left")} 
+             className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/90 backdrop-blur-sm shadow-xl border border-gray-100 text-[#111111] flex items-center justify-center transition-all duration-300 active:scale-95 hover:bg-gray-50"
+           >
+             <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 opacity-60" />
            </button>
         </div>
 
-        {/* Scrolleable */}
+        {/* FLECHA DERECHA (Visible en móvil ahora) */}
+        <div className={`flex absolute top-1/2 -translate-y-1/2 right-2 md:right-4 z-30 transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+           <button 
+             onClick={() => scroll("right")} 
+             className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/90 backdrop-blur-sm shadow-xl border border-gray-100 text-[#111111] flex items-center justify-center transition-all duration-300 active:scale-95 hover:bg-gray-50"
+           >
+             <ChevronRight className="w-6 h-6 md:w-8 md:h-8 opacity-60" />
+           </button>
+        </div>
+
+        {/* Área Scrolleable */}
         <div 
           ref={scrollRef}
           onScroll={checkScroll}
@@ -110,6 +119,7 @@ export default function SuccessStories() {
                   }
                 `}
               >
+                {/* Contenido de tarjetas (Sin cambios) */}
                 {isHero ? (
                   <>
                     <div className="absolute inset-0 z-0 opacity-60">
