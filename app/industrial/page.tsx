@@ -25,11 +25,11 @@ export default function IndustrialPage() {
       {/* 3. CATALOGO INTERACTIVO (Tabs Sticky) */}
       <Equipment />
 
-      {/* 3. CATALOGO INTERACTIVO (Tabs Sticky) */}
-      <SolutionsCatalog />
-
       {/* 3. NUEVA SECCIÓN: CÓMO FUNCIONA (Workflow) */}
       <HowItWorks />
+
+      {/* 3. CATALOGO INTERACTIVO (Tabs Sticky) */}
+      <SolutionsCatalog />
 
       {/* 6. Invitación Final (Tarjeta Gris Flotante) */}
       <FinalCTA />

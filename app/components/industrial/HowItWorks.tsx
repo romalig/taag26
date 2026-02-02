@@ -143,7 +143,7 @@ export default function HowItWorks() {
   const prevImgs = getStepImages(prevStep, prevPcrVariant);
 
   return (
-    <section className="bg-black text-white py-24 md:py-32 px-4 md:px-6">
+    <section className="bg-[#151516] text-white py-24 md:py-32 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         
         <div className="px-10 md:px-20 mb-12 md:mb-20">
