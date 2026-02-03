@@ -5,9 +5,12 @@ import Image from "next/image";
 import { ArrowRight, CheckCircle2, Clock, TrendingDown } from "lucide-react";
 import { useCTA } from "../CTAProvider";
 import { FEATURED_SOLUTIONS } from "../../industrial/industrialData";
+// IMPORTAR EL HOOK DEL MODAL
+import { useModal } from "./ModalProvider";
 
 export default function FeaturedSolutions() {
   const { openMeeting } = useCTA();
+  const { openModal } = useModal(); // Hook para abrir el modal
   const [isImageVisible, setIsImageVisible] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -30,20 +33,12 @@ export default function FeaturedSolutions() {
     return () => observer.disconnect();
   }, []);
 
-  const scrollToId = (id: string, offset = 120) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    }
-  };
-
   return (
-    <section id="solutions" className="bg-white px-4 md:px-6 py-16 md:py-14">
+    <section id="solutions" className="bg-white px-4 md:px-6 pt-16 pb-32 md:py-24">
       <div className="max-w-7xl mx-auto">
         <div className="relative bg-[#F4F4F5] rounded-[3rem] overflow-hidden pt-16 pb-32 px-6 md:px-16 flex flex-col items-center">
           
+          {/* Fondo Radial Sutil */}
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -52,7 +47,7 @@ export default function FeaturedSolutions() {
             }}
           />
 
-          <div className="relative z-10 text-center mb-0 max-w-2xl mx-auto md:py-14">
+          <div className="relative z-10 text-center mb-8 max-w-2xl mx-auto">
             <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
               Featured SOLUTIONS
             </span>
@@ -81,6 +76,21 @@ export default function FeaturedSolutions() {
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 w-full -mt-26 md:-mt-28">
             {FEATURED_SOLUTIONS.map((solution, idx) => {
               
+              // --- PREPARAR DATOS PARA EL MODAL ---
+              // Creamos specs dinámicos basados en la tarjeta para que el modal se vea rico
+              const modalData = {
+                title: solution.title,
+                description: solution.description,
+                image: solution.image,
+                tags: solution.tags,
+                specs: [
+                  { label: "Time to Result", value: "< 3 Hours" },
+                  { label: "Sensitivity", value: "1 CFU/sample" },
+                  { label: "Technology", value: "Real-Time PCR" },
+                  { label: "Validation", value: "AOAC / AFNOR Pending" }
+                ]
+              };
+
               // --- CARD TIPO 1: HERO GRANDE (Index 0) ---
               if (idx === 0) {
                 return (
@@ -91,6 +101,7 @@ export default function FeaturedSolutions() {
                       </div>
 
                       <div className="order-2 relative w-full h-auto min-h-[340px] md:min-h-[400px] flex flex-col items-center pt-8 pb-8 md:pt-8 md:pb-8 px-8 md:px-6 mb-6 md:mb-0">
+                         {/* Animación de barras (sin cambios) */}
                          <style dangerouslySetInnerHTML={{__html: `
                           @keyframes grow-up-slow { from { height: 0%; } to { height: 85%; } }
                           @keyframes grow-up-fast { from { height: 0%; } to { height: 15%; } }
@@ -155,8 +166,9 @@ export default function FeaturedSolutions() {
                            Contact <ArrowRight className="w-3 h-3" />
                            </button>
                            
+                            {/* BOTÓN DETAILS ACTUALIZADO */}
                             <button 
-                              onClick={() => scrollToId('solutions', 120)}
+                              onClick={() => openModal(modalData)}
                               className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm flex items-center justify-center"
                             >
                               Details
@@ -188,6 +200,8 @@ export default function FeaturedSolutions() {
                             <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-sm">{solution.title}</h3>
                             <p className="text-gray-200 text-sm font-medium leading-relaxed drop-shadow-sm">{solution.description}</p>
                         </div>
+                        
+                        {/* Gráfico SVG TxA (sin cambios) */}
                         <div className="absolute left-[380px] top-1/2 -translate-y-1/2 hidden md:block z-20 select-none">
                            <div className="relative w-40 h-40 scale-90">
                               <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full" fill="none" strokeWidth="1.5" strokeLinecap="round" style={{filter: 'drop-shadow(0px 2px 4px rgba(0,0,0,0.3))'}}>
@@ -206,8 +220,13 @@ export default function FeaturedSolutions() {
                               </div>
                            </div>
                         </div>
+
                         <div className="relative mt-6 z-30 opacity-100 translate-y-0 md:absolute md:bottom-6 md:right-10 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
-                           <button onClick={openMeeting} className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
+                           {/* BOTÓN LEARN MORE ACTUALIZADO A MODAL */}
+                           <button 
+                             onClick={() => openModal(modalData)}
+                             className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md"
+                           >
                              Learn More <ArrowRight className="w-3 h-3" />
                            </button>
                         </div>
@@ -216,11 +235,11 @@ export default function FeaturedSolutions() {
                 );
               }
 
-              // --- CARD TIPO 3: STANDARD (TARJETAS CENTRALES) ---
+              // --- CARD TIPO 3: STANDARD ---
               return (
                 <div key={solution.id} className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[520px] md:h-[480px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center">
                    <div className="relative z-10 w-full max-w-[400px] flex flex-col items-center">
-                      <h3 className="text-2xl font-bold text-[#111111] mb-10 leading-tight">{solution.title}</h3>
+                      <h3 className="text-2xl font-bold text-[#111111] mb-4 leading-tight">{solution.title}</h3>
                       <p className="text-gray-500 text-sm leading-relaxed">{solution.description}</p>
                     </div>
 
@@ -238,7 +257,14 @@ export default function FeaturedSolutions() {
                       <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111]/90 backdrop-blur text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-xl">
                         Contact <ArrowRight className="w-3 h-3" />
                       </button>
-                      <button className="flex-1 py-3 bg-white/90 backdrop-blur border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors shadow-xl">Details</button>
+                      
+                      {/* BOTÓN DETAILS ACTUALIZADO */}
+                      <button 
+                        onClick={() => openModal(modalData)}
+                        className="flex-1 py-3 bg-white/90 backdrop-blur border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors shadow-xl"
+                      >
+                        Details
+                      </button>
                     </div>
                 </div>
               );

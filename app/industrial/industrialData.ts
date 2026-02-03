@@ -241,7 +241,7 @@ export const SUCCESS_STORIES = [
   {
     id: "hero-case",
     client: "Environmental Testing",
-    title: ">$200k savings per facility",
+    title: ">$200k savings/year per facility",
     metric: "In-house EMP testing powered by AiGOR technology",
     image: "/lab.png", // Imagen impactante para la tarjeta ancha
     tags: ["Dairy", "Safety"],
