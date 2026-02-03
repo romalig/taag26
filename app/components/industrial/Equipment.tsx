@@ -55,7 +55,7 @@ export default function EquipmentSection() {
                     : "text-gray-500 hover:text-[#111111]"
                 }`}
               >
-                Environmental & Easy
+                Environmental & Food Samples
               </button>
               <button
                 onClick={() => setActiveTab("complex")}
@@ -65,7 +65,7 @@ export default function EquipmentSection() {
                     : "text-gray-500 hover:text-[#111111]"
                 }`}
               >
-                Complex Samples
+                Complex Food Samples
               </button>
            </div>
         </div>

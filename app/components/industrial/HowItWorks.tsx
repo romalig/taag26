@@ -263,7 +263,7 @@ export default function HowItWorks() {
                          onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('XPRESS'); }} 
                          className={`text-xs font-bold tracking-widest uppercase transition-colors flex items-center gap-2 px-3 py-2 rounded-lg ${pcrVariant === 'XPRESS' ? 'bg-[#FF270A]/10 text-[#FF270A]' : 'text-white/50 hover:bg-white/5'}`}
                        >
-                         XPRESS <Zap className="w-3 h-3" />
+                         XPRESS
                        </button>
                      </div>
                    )}
@@ -319,7 +319,7 @@ export default function HowItWorks() {
                                  <span className="h-0.5 w-full bg-[#FF270A] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left" style={{ transform: pcrVariant === 'ZERO' ? 'scaleX(1)' : undefined }} />
                                </button>
                                <button onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('XPRESS'); }} className={`group/btn flex flex-col items-start gap-1 transition-all ${pcrVariant === 'XPRESS' ? 'opacity-100' : 'opacity-50 hover:opacity-100'}`}>
-                                 <span className={`text-xs font-bold tracking-widest uppercase transition-colors flex items-center gap-1 ${pcrVariant === 'XPRESS' ? 'text-[#FF270A]' : 'text-white'}`}>XPRESS <Zap className="w-3 h-3" /></span>
+                                 <span className={`text-xs font-bold tracking-widest uppercase transition-colors flex items-center gap-1 ${pcrVariant === 'XPRESS' ? 'text-[#FF270A]' : 'text-white'}`}>XPRESS </span>
                                  <span className="h-0.5 w-full bg-[#FF270A] transform scale-x-0 group-hover/btn:scale-x-100 transition-transform origin-left" style={{ transform: pcrVariant === 'XPRESS' ? 'scaleX(1)' : undefined }} />
                                </button>
                              </div>

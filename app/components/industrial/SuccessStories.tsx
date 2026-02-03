@@ -56,12 +56,12 @@ export default function SuccessStories() {
             </span>
             <h2 className="text-4xl md:text-6xl font-extrabold text-[#111111] leading-[1.1] tracking-tight">
               Real problems. <br />
-              <span className="text-gray-400">Solved by science.</span>
+              <span className="text-gray-400">Real solutions.</span>
             </h2>
           </div>
           <div className="max-w-md md:text-right pb-1">
             <p className="text-gray-500 text-lg font-medium leading-relaxed">
-              From reducing warehouse costs to preventing recalls. See how industry leaders are leveraging our ecosystem.
+              From improve productivity, reducing warehouse costs to preventing recalls. See how industry leaders are leveraging our ecosystem.
             </p>
           </div>
         </div>
@@ -98,7 +98,6 @@ export default function SuccessStories() {
                 className={`
                   relative flex-shrink-0 
                   ${isHero ? 'w-[85vw] md:w-[800px]' : 'w-[85vw] md:w-[420px]'}
-                  /* CAMBIO: Altura reducida en móvil (460px), normal en desktop (580px) */
                   h-[460px] md:h-[580px] 
                   rounded-[2.5rem] 
                   flex flex-col justify-between 
@@ -106,42 +105,46 @@ export default function SuccessStories() {
                   overflow-hidden
                   ${isHero 
                     ? 'border-0 bg-black' 
-                    : 'bg-[#F4F4F5] text-[#111111] p-8 md:p-10 border border-transparent'
+                    // CAMBIO: Fondo negro y texto blanco para las no-hero
+                    : 'bg-black text-white p-8 md:p-10 border border-white/10'
                   }
                 `}
               >
                 {/* --- CONTENIDO HERO --- */}
                 {isHero ? (
                   <>
-                    <div className="absolute inset-0 z-0 opacity-60">
+                    {/* IMAGEN DE FONDO HERO */}
+                    <div className="absolute inset-0 z-0">
                       <Image 
                         src={story.image} 
                         alt={story.title} 
                         fill 
-                        className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-10" />
+
+                    {/* CAPAS DE GRADIENTE HERO */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent z-10" />
 
                     <div className="relative z-20 h-full flex flex-col justify-between p-8 md:p-12 max-w-2xl">
                        <div className="flex justify-between items-start">
-                         <span className="px-4 py-1.5 rounded-full bg-[#FF270A] text-white text-xs font-bold uppercase tracking-widest shadow-lg">
-                           Featured Case
+                         <span className="px-4 py-1.5 rounded-full bg-[#FF270A] text-white text-xs font-bold uppercase tracking-widest shadow-lg backdrop-blur-sm">
+                           Featured Business Case
                          </span>
                        </div>
 
                        <div>
                          <div className="flex items-center gap-3 mb-4">
-                            <Award className="w-8 h-8 text-[#FF270A]" />
-                            <span className="text-white/80 font-bold uppercase tracking-widest text-sm">{story.client}</span>
+                            <span className="text-white/90 font-bold uppercase tracking-widest text-sm drop-shadow-md">{story.client}</span>
                          </div>
-                         <h3 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+                         <h3 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
                            {story.metric}
                          </h3>
-                         <p className="text-lg md:text-xl font-bold text-white/90 mb-4">
+                         <p className="text-lg md:text-xl font-bold text-white/95 mb-4 drop-shadow-md">
                            {story.title}
                          </p>
-                         <p className="text-sm md:text-base font-medium leading-relaxed text-gray-300 mb-6 md:mb-8 line-clamp-3">
+                         <p className="text-sm md:text-base font-medium leading-relaxed text-gray-200 mb-6 md:mb-8 line-clamp-3 drop-shadow-sm">
                            {story.description}
                          </p>
                          
@@ -154,45 +157,64 @@ export default function SuccessStories() {
                     </div>
                   </>
                 ) : (
-                  /* --- CONTENIDO NORMAL --- */
+                  /* --- CONTENIDO NORMAL (AHORA CON IMAGEN DE FONDO) --- */
                   <>
-                    <div className="relative z-10 flex justify-between items-start mb-6">
-                      <div className="flex flex-col">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#FF270A] mb-1">
-                          {story.client}
-                        </span>
-                        <div className="flex gap-2">
-                           {story.tags.map(tag => (
-                             <span key={tag} className="text-[10px] font-bold text-gray-400 uppercase tracking-wider border border-gray-200 px-2 py-0.5 rounded-full">
-                               {tag}
-                             </span>
-                           ))}
+                    {/* CAMBIO: IMAGEN DE FONDO PARA NO-HERO */}
+                    <div className="absolute inset-0 z-0">
+                      <Image 
+                        src={story.image} // Asumimos que todas las historias tienen imagen
+                        alt={story.title} 
+                        fill 
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </div>
+
+                    {/* CAMBIO: CAPA OSCURA SUAVE UNIFORME */}
+                    <div className="absolute inset-0 bg-black/60 z-10" />
+
+                    {/* Contenedor para el texto (z-20 para estar sobre la capa oscura) */}
+                    <div className="relative z-20 flex flex-col justify-between h-full">
+                        
+                        {/* Header: Cliente y Tag (Colores actualizados a claros) */}
+                        <div className="flex justify-between items-start mb-6">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-[#FF270A] mb-1">
+                              {story.client}
+                            </span>
+                            <div className="flex gap-2">
+                              {story.tags.map(tag => (
+                                <span key={tag} className="text-[10px] font-bold text-gray-300 uppercase tracking-wider border border-white/20 px-2 py-0.5 rounded-full">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <TrendingUp className="w-6 h-6 text-gray-300" />
-                    </div>
 
-                    <div className="relative z-10 flex-1 flex flex-col justify-center mb-4">
-                       <span className="text-5xl md:text-6xl font-black text-[#111111] tracking-tighter mb-2">
-                         {story.metric.split(" ")[0]}
-                       </span>
-                       <span className="text-lg md:text-xl font-medium text-gray-500">
-                         {story.metric.split(" ").slice(1).join(" ")}
-                       </span>
-                    </div>
+                        {/* Métrica Central (Colores actualizados a claros) */}
+                        <div className="flex-1 flex flex-col justify-center mb-4">
+                          <span className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-2 drop-shadow-md">
+                            {story.metric.split(" ")[0]}
+                          </span>
+                          <span className="text-lg md:text-xl font-medium text-gray-300">
+                            {story.metric.split(" ").slice(1).join(" ")}
+                          </span>
+                        </div>
 
-                    <div className="relative z-10">
-                       <h4 className="text-xl font-bold text-[#111111] mb-3 leading-tight">
-                         {story.title}
-                       </h4>
-                       <p className="text-sm font-medium leading-relaxed text-gray-500 mb-6 md:mb-8 line-clamp-3">
-                         {story.description}
-                       </p>
-                       <div className="pt-6 border-t border-black/10">
-                          <button className="text-xs font-bold uppercase tracking-widest flex items-center gap-2 text-[#111111] hover:text-[#FF270A] transition-colors group">
-                             Read full story <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                          </button>
-                       </div>
+                        {/* Footer (Colores actualizados a claros) */}
+                        <div>
+                          <h4 className="text-3xl font-bold text-white mb-3 leading-tight drop-shadow-sm">
+                            {story.title}
+                          </h4>
+                          <p className="text-sm font-medium leading-relaxed text-gray-300 mb-6 md:mb-8 line-clamp-3">
+                            {story.description}
+                          </p>
+                          <div className="pt-6 border-t border-white/20">
+                              <button className="text-xs font-bold uppercase tracking-widest flex items-center gap-2 text-white hover:text-[#FF270A] transition-colors group">
+                                Read success story <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                              </button>
+                          </div>
+                        </div>
                     </div>
                   </>
                 )}
