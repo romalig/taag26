@@ -17,7 +17,7 @@ export default function SolutionModal() {
       return () => clearTimeout(timer);
     } else {
       setIsAnimating(false);
-      const timer = setTimeout(() => setIsRendered(false), 1000); // 1000ms para coincidir con la nueva duración
+      const timer = setTimeout(() => setIsRendered(false), 1000); // 1s para cerrar
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
@@ -25,57 +25,61 @@ export default function SolutionModal() {
   if (!isRendered) return null;
 
   return (
-    <div 
-      className={`
-        fixed inset-0 z-[100] flex items-end md:items-center justify-center 
-        /* ANIMACIÓN MÁS LENTA (1000ms) */
-        transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)]
-        ${isAnimating ? 'backdrop-blur-xl bg-black/40' : 'backdrop-blur-none bg-transparent'}
-      `}
-    >
+    <div className="fixed inset-0 z-[100] flex justify-center">
       
-      {/* Overlay para cerrar */}
-      <div className="absolute inset-0 block cursor-default" onClick={closeModal} />
-
-      {/* TARJETA MODAL */}
+      {/* 1. BACKDROP (Fondo borroso fijo) */}
       <div 
         className={`
-          relative 
-          /* MÓVIL: Más angosto (95%) y separado del fondo (mb-4) para ver atrás */
-          w-[95%] md:w-full max-w-5xl 
-          mb-0 md:mb-0
-          
-          /* ALTURA: Fija para permitir scroll interno */
-          h-[85vh] md:h-[85vh]
-          
-          /* Estilos visuales */
-          bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-2xl overflow-hidden
-          
-          /* ANIMACIÓN */
-          transform transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)]
-          will-change-transform
-          
-          ${isAnimating 
-            ? 'translate-y-0 opacity-100 scale-100' 
-            : 'translate-y-[100%] md:translate-y-32 opacity-0 md:scale-95' 
-          }
+          fixed inset-0 bg-black/40 transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)]
+          ${isAnimating ? 'backdrop-blur-xl opacity-100' : 'backdrop-blur-none opacity-0'}
         `}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Botón Cerrar Flotante */}
-        <button 
-          onClick={closeModal}
-          className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-gray-100/80 hover:bg-gray-200 backdrop-blur-md flex items-center justify-center transition-all active:scale-90"
-        >
-          <X className="w-5 h-5 text-gray-500" />
-        </button>
+        onClick={closeModal} // Click en fondo cierra
+      />
 
-        {/* CONTENEDOR DE CONTENIDO */}
-        {/* h-full es crítico para que el scroll ocurra aquí dentro */}
-        <div className="w-full h-full">
-           {modalContent}
-        </div>
+      {/* 2. WRAPPER SCROLLEABLE (Maneja el scroll de la página modal) */}
+      <div 
+        className="absolute inset-0 overflow-y-auto overflow-x-hidden scroll-smooth py-12 md:py-20 px-4 flex items-start justify-center"
+        onClick={closeModal} // Click en áreas vacías cierra
+      >
         
+        {/* 3. TARJETA MODAL (Crece con el contenido) */}
+        <div 
+          className={`
+            relative 
+            /* Ancho controlado: 95% en móvil para ver fondo, ancho fijo en desktop */
+            w-[95%] md:w-full max-w-5xl 
+            
+            /* Altura automática: La tarjeta crece lo que necesite */
+            h-auto
+            
+            /* Estilos */
+            bg-white rounded-[2.5rem] shadow-2xl
+            
+            /* ANIMACIÓN (Desde abajo hacia su posición natural) */
+            transform transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)]
+            
+            ${isAnimating 
+              ? 'translate-y-0 opacity-100 scale-100' 
+              : 'translate-y-24 opacity-0 scale-95' 
+            }
+          `}
+          // Evitar que clicks dentro de la tarjeta cierren el modal
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Botón Cerrar Flotante */}
+          <button 
+            onClick={closeModal}
+            className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-gray-100/80 hover:bg-gray-200 backdrop-blur-md flex items-center justify-center transition-all active:scale-90"
+          >
+            <X className="w-5 h-5 text-gray-500" />
+          </button>
+
+          {/* CONTENIDO (Sin scroll interno forzado) */}
+          <div className="w-full">
+             {modalContent}
+          </div>
+          
+        </div>
       </div>
     </div>
   );

@@ -1,18 +1,15 @@
 "use client";
 
-import { CheckCircle2, FlaskConical, ArrowRight, Download, Mail } from "lucide-react";
-import { useCTA } from "../../CTAProvider"; // Asumiendo que quieres usar la acción de contacto global
+import { CheckCircle2, FlaskConical, Download, Mail } from "lucide-react";
 
 export default function Modal1() {
-  // Opcional: Si quieres usar la función de abrir reunión del contexto global
-  // const { openMeeting } = useCTA(); 
-
   return (
-    <div className="w-full h-full bg-white p-6 md:p-12 overflow-y-auto scroll-smooth">
+    // Quitamos h-full y overflow para que la tarjeta crezca con el contenido
+    <div className="w-full bg-white p-6 md:p-12 pb-16 rounded-[2.5rem]">
       
-      {/* --- SECCIÓN 1: HEADER --- */}
-      {/* pr-12 agregado para evitar que el texto choque con el botón cerrar en móvil */}
-      <div className="max-w-4xl pr-12 md:pr-0">
+      {/* --- HEADER --- */}
+      {/* pr-16 para evitar la X de cerrar en móvil */}
+      <div className="max-w-4xl pr-16 md:pr-0">
         <h2 className="text-3xl md:text-5xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
           Zero-Risk Internal EMP
         </h2>
@@ -26,7 +23,7 @@ export default function Modal1() {
         </div>
       </div>
 
-      {/* --- SECCIÓN 2: METRICS GRID --- */}
+      {/* --- METRICS GRID --- */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 border-b border-gray-100 pb-12">
          <div>
             <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
@@ -46,7 +43,7 @@ export default function Modal1() {
          </div>
       </div>
 
-      {/* --- SECCIÓN 3: DESCRIPTION & ADVANTAGES --- */}
+      {/* --- DESCRIPTION & ADVANTAGES --- */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
          <div className="md:col-span-2">
             <h3 className="text-xl font-bold text-[#111111] mb-4">Description</h3>
@@ -75,7 +72,7 @@ export default function Modal1() {
          </div>
       </div>
 
-      {/* --- SECCIÓN 4: TECHNICAL SPECIFICATIONS --- */}
+      {/* --- TECHNICAL SPECIFICATIONS --- */}
       <div className="mb-16">
          <h3 className="text-2xl font-bold text-[#111111] mb-6">Technical Specifications</h3>
          <div className="border-t border-gray-200">
@@ -94,13 +91,13 @@ export default function Modal1() {
          </div>
       </div>
 
-      {/* --- SECCIÓN 5: ORDER INFORMATION (PCR KITS) --- */}
+      {/* --- ORDER INFORMATION (PCR KITS) --- */}
       <div className="mb-12">
          <h3 className="text-2xl font-bold text-[#111111] mb-2">Order Information</h3>
          <p className="text-sm text-gray-500 mb-6">Select the appropriate kit size for your throughput needs.</p>
          
          <div className="overflow-x-auto">
-           <table className="w-full text-left border-collapse">
+           <table className="w-full text-left border-collapse min-w-[600px]">
               <thead>
                  <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
                     <th className="py-4 pr-4">Cat. Number</th>
@@ -128,7 +125,7 @@ export default function Modal1() {
          </div>
       </div>
 
-      {/* --- SECCIÓN 6: ORDER INFORMATION (ADDITIONAL SUPPLIES) --- */}
+      {/* --- ADDITIONAL SUPPLIES --- */}
       <div className="mb-16">
          <h4 className="text-lg font-bold text-[#111111] mb-6 flex items-center gap-2">
             <FlaskConical className="w-5 h-5 text-gray-400" />
@@ -136,7 +133,7 @@ export default function Modal1() {
          </h4>
          
          <div className="overflow-x-auto">
-           <table className="w-full text-left border-collapse">
+           <table className="w-full text-left border-collapse min-w-[600px]">
               <thead>
                  <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
                     <th className="py-4 pr-4">Cat. Number</th>
@@ -163,8 +160,8 @@ export default function Modal1() {
          </div>
       </div>
 
-      {/* --- NUEVA SECCIÓN: BOTONES FINALES --- */}
-      <div className="flex flex-col md:flex-row gap-4 pt-8 border-t border-gray-100">
+      {/* --- BOTONES FINALES --- */}
+      <div className="flex flex-col md:flex-row gap-4 pt-10 border-t border-gray-100">
          <button className="flex-1 py-4 px-6 bg-[#F4F4F5] hover:bg-[#E4E4E5] text-[#111111] rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 group">
             <Download className="w-4 h-4 text-gray-500 group-hover:text-[#111111] transition-colors" />
             Technical Datasheet
@@ -174,9 +171,6 @@ export default function Modal1() {
             Contact Sales Team
          </button>
       </div>
-      
-      {/* Footer Espaciador Final */}
-      <div className="h-8"></div>
       
     </div>
   );
