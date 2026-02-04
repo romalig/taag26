@@ -2,19 +2,11 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 
-type SolutionData = {
-  title: string;
-  description: string;
-  image?: string;
-  tags?: string[];
-  specs?: { label: string; value: string }[];
-  longDescription?: string;
-};
-
+// Definimos el tipo de contexto
 type ModalContextType = {
   isOpen: boolean;
-  activeSolution: SolutionData | null;
-  openModal: (data: SolutionData) => void;
+  modalContent: ReactNode | null; // Aceptamos componentes (archivos TSX)
+  openModal: (content: ReactNode) => void;
   closeModal: () => void;
 };
 
@@ -22,22 +14,23 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 export function ModalProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSolution, setActiveSolution] = useState<SolutionData | null>(null);
+  const [modalContent, setModalContent] = useState<ReactNode | null>(null);
 
-  const openModal = (data: SolutionData) => {
-    setActiveSolution(data);
+  const openModal = (content: ReactNode) => {
+    setModalContent(content);
     setIsOpen(true);
-    document.body.style.overflow = "hidden"; // Bloquear scroll de fondo
+    document.body.style.overflow = "hidden"; // Bloquear scroll
   };
 
   const closeModal = () => {
     setIsOpen(false);
-    setTimeout(() => setActiveSolution(null), 300); // Limpiar datos después de la animación
-    document.body.style.overflow = "unset"; // Restaurar scroll
+    // Esperar a la animación para limpiar
+    setTimeout(() => setModalContent(null), 700); 
+    document.body.style.overflow = "unset"; 
   };
 
   return (
-    <ModalContext.Provider value={{ isOpen, activeSolution, openModal, closeModal }}>
+    <ModalContext.Provider value={{ isOpen, modalContent, openModal, closeModal }}>
       {children}
     </ModalContext.Provider>
   );
