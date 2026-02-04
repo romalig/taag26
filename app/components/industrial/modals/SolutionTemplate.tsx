@@ -14,23 +14,16 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   const handleDownloadPDF = async () => {
     setIsGeneratingPdf(true);
     try {
+      // 1. Generamos el PDF
       const blob = await pdf(<DatasheetDocument data={data} />).toBlob();
       const url = URL.createObjectURL(blob);
       
-      // DETECCIÓN DE MÓVIL: En celular abrimos pestaña, en PC descargamos.
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-      if (isMobile) {
-         window.open(url, '_blank');
-      } else {
-         const link = document.createElement('a');
-         link.href = url;
-         link.download = `${data.title.replace(/\s+/g, "_")}_Datasheet.pdf`;
-         document.body.appendChild(link);
-         link.click();
-         document.body.removeChild(link);
-      }
+      // 2. ABRIR SIEMPRE EN PESTAÑA NUEVA (PC Y MÓVIL)
+      // Esto permite previsualizar el PDF en el navegador. 
+      // El usuario puede guardarlo desde ahí si lo desea.
+      window.open(url, '_blank');
       
+      // Limpieza de memoria
       setTimeout(() => URL.revokeObjectURL(url), 2000);
 
     } catch (error) {
@@ -100,7 +93,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           </div>
         </div>
 
-        {/* Specs Modal (Resumen) */}
+        {/* Specs Modal */}
         <div className="mb-16">
           <h3 className="text-2xl font-bold text-[#111111] mb-6">Technical Specifications</h3>
           <div className="border-t border-gray-200">
@@ -204,7 +197,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             ) : (
               <>
                 <Download className="w-4 h-4 text-gray-500 group-hover:text-[#111111] transition-colors" />
-                Download Datasheet (PDF)
+                View Datasheet (PDF)
               </>
             )}
          </button>

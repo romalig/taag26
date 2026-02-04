@@ -1,24 +1,46 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { ChevronRight, Search, X, Download, Cpu, Target } from "lucide-react";
+import { ChevronRight, Search, X, Download, Zap, Target } from "lucide-react";
 import { useCTA } from "../CTAProvider";
-// Importamos los datos de la "Lista" (Catálogo)
 import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
-
-// --- IMPORTACIONES DEL SISTEMA DE MODALES ---
 import { useModal } from "./ModalProvider";
 import SolutionTemplate from "./modals/SolutionTemplate";
 import { SOLUTIONS_DATA } from "../data/solutionsData";
 
 export default function SolutionsCatalog() {
   const { openMeeting } = useCTA();
-  const { openModal } = useModal(); // Hook para abrir modales
+  const { openModal } = useModal();
 
   const [activePanelTab, setActivePanelTab] = useState("Pathogens");
   const [searchQuery, setSearchQuery] = useState("");
   const panelRef = useRef<HTMLDivElement>(null);
+
+  // --- ESCUCHAR EVENTO EXTERNO (Desde HowItWorks) ---
+  useEffect(() => {
+    const handleSearchTrigger = (e: CustomEvent) => {
+        // 1. Establecemos la búsqueda
+        setSearchQuery(e.detail);
+        
+        // 2. SCROLL OPTIMIZADO
+        // Buscamos el contenedor 'panel-start' (donde empieza la barra de búsqueda)
+        // en lugar de la sección entera.
+        const element = document.getElementById("panel-start");
+        
+        if (element) {
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - 140; 
+            // -140px deja espacio suficiente para el Header de la web + un respiro visual
+            // para que los botones queden en la parte alta de la vista.
+            
+            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        }
+    };
+
+    window.addEventListener('trigger-catalog-search' as any, handleSearchTrigger as any);
+    return () => window.removeEventListener('trigger-catalog-search' as any, handleSearchTrigger as any);
+  }, []);
 
   const scrollToTarget = (element: HTMLElement, offset = 140) => {
     const elementPosition = element.getBoundingClientRect().top;
@@ -38,10 +60,8 @@ export default function SolutionsCatalog() {
   const categorySolutions = PANEL_SOLUTIONS[activePanelTab] || [];
   const sourceList = searchQuery ? allSolutions : categorySolutions;
 
-  // --- LÓGICA DE BÚSQUEDA ---
   const filteredSolutions = sourceList.filter((item) => {
     const searchTerms = searchQuery.toLowerCase().split(" ").filter(term => term.length > 0);
-    // Buscamos en título, descripción, targets y tecnología (si existe)
     const itemText = `
       ${item.title} 
       ${item.description} 
@@ -52,24 +72,19 @@ export default function SolutionsCatalog() {
     return searchTerms.every((term) => itemText.includes(term));
   });
 
-  // --- FUNCIÓN DE ENLACE (LINKING) ---
   const handleOpenDetails = (item: any) => {
-    // 1. Obtenemos la clave: Usamos el 'id' manual si existe, si no, convertimos el título a formato "slug"
-    // Ej: "Salmonella Kit" -> "salmonella-kit"
     const lookupKey = item.id || item.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
-    
-    // 2. Buscamos los datos en el archivo centralizado
     const data = SOLUTIONS_DATA[lookupKey];
 
     if (data) {
       openModal(<SolutionTemplate data={data} />);
     } else {
-      console.warn(`[SolutionsCatalog] No se encontraron datos en solutionsData.ts para la clave: "${lookupKey}". Asegúrate de crear la entrada.`);
+      console.warn(`[SolutionsCatalog] Faltan datos para la clave: "${lookupKey}".`);
     }
   };
 
   return (
-    <section className="bg-white px-4 md:px-6 py-24 md:py-42">
+    <section id="solutions-catalog" className="bg-white px-4 md:px-6 py-24 md:py-42">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-[3rem] border border-gray-200 shadow-sm">
           
@@ -88,6 +103,7 @@ export default function SolutionsCatalog() {
 
           {/* CONTENIDO DEL PANEL */}
           <div className="pb-12 pt-0 bg-white relative z-20 rounded-b-[3rem]">
+             {/* ID IMPORTANTE: Aquí es donde aterrizará el scroll */}
              <div className="w-full px-10 md:px-20" ref={panelRef} id="panel-start">
                 
                 {/* --- TOOLBAR --- */}
@@ -160,10 +176,9 @@ export default function SolutionsCatalog() {
                                       {item.targets}
                                    </span>
                                 )}
-                                {/* Mostramos la tecnología si la agregaron en industrialData.ts */}
                                 {(item as any).technology && (
                                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold text-gray-600 tracking-wider border border-gray-200">
-                                      <Cpu className="w-3 h-3 text-[#111111]" />
+                                      <Zap className="w-3 h-3 text-[#FF270A]" />
                                       {(item as any).technology}
                                    </span>
                                 )}
@@ -176,7 +191,6 @@ export default function SolutionsCatalog() {
                                  Contact
                               </button>
                               
-                              {/* AQUÍ ESTÁ EL BOTÓN CONECTADO */}
                               <button 
                                 onClick={() => handleOpenDetails(item)}
                                 className="px-5 py-3 bg-white border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors flex items-center gap-2 justify-center shadow-sm"

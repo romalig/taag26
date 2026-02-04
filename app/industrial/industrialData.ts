@@ -69,7 +69,7 @@ export const PANEL_SOLUTIONS: Record<string, { id?: string; title: string; descr
       title: "Salmonella spp. Rapid Kit",
       description: "Detect Salmonella in environmental sponges and raw materials with high sensitivity.",
       targets: "Target: invA gene",
-      technology: "Real-Time PCR",
+      technology: "AiGOR",
     },
     {
       id: "listeria-monocytogenes-pro",
@@ -92,7 +92,7 @@ export const PANEL_SOLUTIONS: Record<string, { id?: string; title: string; descr
       title: "Total Spoilage Organisms",
       description: "Broad spectrum detection of yeast and mold to predict shelf-life stability.",
       targets: "Targets: 18S rRNA, bacterial 16S",
-      technology: "Multiplex PCR",
+      technology: "AiGOR",
     },
     {
       id: "Salmonella-spp",
