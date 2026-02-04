@@ -1,4 +1,7 @@
-import { SolutionContent } from "../industrial/modals/SolutionTemplate";
+// data/solutionsData.ts
+
+// CORRECCIÓN: Agregamos "components" a la ruta
+import { SolutionContent } from "../industrial/modals/types";
 
 export const SOLUTIONS_DATA: Record<string, SolutionContent> = {
   

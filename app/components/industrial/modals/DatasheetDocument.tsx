@@ -1,15 +1,20 @@
 "use client";
 
-import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
-import { SolutionContent } from "./SolutionTemplate";
+import { Document, Page, Text, View, StyleSheet, Image, Font } from "@react-pdf/renderer";
+import { SolutionContent } from "./types";
 
-// NOTA: Usamos Helvetica por seguridad. 
-// Si deseas usar Sora, debes descargar los archivos .ttf y ponerlos en tu carpeta /public/fonts/
-// y luego registrarlos con Font.register({ family: 'Sora', src: '/fonts/Sora-Regular.ttf' })
+// 1. REGISTRO DE FUENTE SORA (Localmente para evitar errores)
+Font.register({
+  family: "Sora",
+  fonts: [
+    { src: "/fonts/Sora-Regular.ttf", fontWeight: 400 },
+    { src: "/fonts/Sora-Bold.ttf", fontWeight: 700 },
+  ],
+});
 
 const styles = StyleSheet.create({
-  // Usamos Helvetica para evitar el error "Unknown font format"
-  page: { padding: 40, paddingBottom: 60, paddingTop: 40, fontFamily: "Helvetica", fontSize: 9, color: "#374151" },
+  // Usamos Sora
+  page: { padding: 40, paddingBottom: 60, paddingTop: 40, fontFamily: "Sora", fontSize: 9, color: "#374151" },
   
   // Header
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 30, paddingBottom: 15, borderBottomWidth: 0.5, borderBottomColor: "#E5E7EB" },

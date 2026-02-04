@@ -4,33 +4,7 @@ import { useState } from "react";
 import { CheckCircle2, FlaskConical, Download, Mail, ArrowRightLeft, Loader2 } from "lucide-react";
 import { pdf } from "@react-pdf/renderer";
 import DatasheetDocument from "./DatasheetDocument";
-
-// 1. Estructura de datos (Igual)
-export interface SolutionContent {
-  title: string;
-  chips: string[];
-  description: string[];
-  mainIndustries: string[];
-  intendedUse: string[];
-  principle: string[];
-  limitations: string[];
-  techSpecs: {
-    targets: string;
-    lod: string;
-    matrices: string;
-    time: string;
-    technology: string;
-    chemistry: string;
-    channels: string;
-    thermocyclers: string;
-    storage: string;
-    shelfLife: string;
-    certifications: string;
-  };
-  advantages: string[];
-  pcrKits: { cat: string; name: string; size: string; format: string; desc: string }[];
-  supplies?: { cat: string; name: string; size: string; format: string; desc: string }[];
-}
+import { SolutionContent } from "./types";
 
 export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
@@ -42,13 +16,23 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
     try {
       const blob = await pdf(<DatasheetDocument data={data} />).toBlob();
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${data.title.replace(/\s+/g, "_")}_Datasheet.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      
+      // DETECCIÓN DE MÓVIL: En celular abrimos pestaña, en PC descargamos.
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      if (isMobile) {
+         window.open(url, '_blank');
+      } else {
+         const link = document.createElement('a');
+         link.href = url;
+         link.download = `${data.title.replace(/\s+/g, "_")}_Datasheet.pdf`;
+         document.body.appendChild(link);
+         link.click();
+         document.body.removeChild(link);
+      }
+      
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+
     } catch (error) {
       console.error("PDF Error:", error);
     } finally {
@@ -116,7 +100,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           </div>
         </div>
 
-        {/* Specs Modal */}
+        {/* Specs Modal (Resumen) */}
         <div className="mb-16">
           <h3 className="text-2xl font-bold text-[#111111] mb-6">Technical Specifications</h3>
           <div className="border-t border-gray-200">
@@ -135,13 +119,12 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           </div>
         </div>
 
-        {/* --- ORDER INFORMATION --- */}
+        {/* Order Info */}
         <div className="mb-12">
           <h3 className="text-2xl font-bold text-[#111111] mb-2">Order Information</h3>
           <p className="text-sm text-gray-500 mb-6">Select the appropriate kit size.</p>
           
           <div className="overflow-x-auto pb-2">
-            {/* AGREGADO: table-fixed y anchos explícitos */}
             <table className="w-full text-left border-collapse min-w-[700px] table-fixed">
                 <thead>
                   <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
@@ -170,14 +153,13 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           </p>
         </div>
 
-        {/* --- ADDITIONAL SUPPLIES --- */}
+        {/* Supplies */}
         {data.supplies && data.supplies.length > 0 && (
             <div className="mb-16">
               <h4 className="text-lg font-bold text-[#111111] mb-6 flex items-center gap-2">
                   <FlaskConical className="w-5 h-5 text-gray-400" /> Additional Supplies
               </h4>
               <div className="overflow-x-auto pb-2">
-                {/* AGREGADO: Exactamente los mismos anchos que la tabla anterior */}
                 <table className="w-full text-left border-collapse min-w-[700px] table-fixed">
                     <thead>
                       <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
