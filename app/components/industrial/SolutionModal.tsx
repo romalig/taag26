@@ -43,7 +43,7 @@ export default function SolutionModal() {
           relative 
           /* MÓVIL: Más angosto (95%) y separado del fondo (mb-4) para ver atrás */
           w-[95%] md:w-full max-w-5xl 
-          mb-4 md:mb-0
+          mb-0 md:mb-0
           
           /* ALTURA: Fija para permitir scroll interno */
           h-[85vh] md:h-[85vh]
