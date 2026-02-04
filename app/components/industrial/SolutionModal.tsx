@@ -7,77 +7,59 @@ import { useModal } from "./ModalProvider";
 export default function SolutionModal() {
   const { isOpen, modalContent, closeModal } = useModal();
   
-  // Estado 1: Controla si el componente existe en el DOM (Montaje)
   const [isRendered, setIsRendered] = useState(false);
-  
-  // Estado 2: Controla las clases CSS (Animación visual)
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      // 1. Montamos el componente en el DOM (aún invisible/desplazado)
       setIsRendered(true);
-      
-      // 2. Pequeño delay para permitir que el navegador "vea" el estado inicial antes de animar
-      const timer = setTimeout(() => {
-        setIsAnimating(true);
-      }, 10);
+      const timer = setTimeout(() => setIsAnimating(true), 10);
       return () => clearTimeout(timer);
     } else {
-      // 1. Iniciamos la animación de salida
       setIsAnimating(false);
-      
-      // 2. Esperamos a que termine la transición (700ms) para desmontar
-      const timer = setTimeout(() => {
-        setIsRendered(false);
-      }, 700);
+      const timer = setTimeout(() => setIsRendered(false), 1000); // 1000ms para coincidir con la nueva duración
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
-  // Si no debe renderizarse, devolvemos null
   if (!isRendered) return null;
 
   return (
     <div 
       className={`
         fixed inset-0 z-[100] flex items-end md:items-center justify-center 
-        transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]
+        /* ANIMACIÓN MÁS LENTA (1000ms) */
+        transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)]
         ${isAnimating ? 'backdrop-blur-xl bg-black/40' : 'backdrop-blur-none bg-transparent'}
       `}
     >
       
-      {/* Overlay Clickable para cerrar */}
-      {/* Usamos un div transparente para capturar el click fuera */}
+      {/* Overlay para cerrar */}
       <div className="absolute inset-0 block cursor-default" onClick={closeModal} />
 
       {/* TARJETA MODAL */}
       <div 
         className={`
-          relative w-full max-w-5xl 
-          /* Móvil: Pegado abajo, alto casi completo */
-          h-[92vh] md:h-auto md:max-h-[85vh]
+          relative 
+          /* MÓVIL: Más angosto (95%) y separado del fondo (mb-4) para ver atrás */
+          w-[95%] md:w-full max-w-5xl 
+          mb-4 md:mb-0
           
-          /* Estilos de Contenedor */
-          bg-white rounded-t-[2.5rem] md:rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row
+          /* ALTURA: Fija para permitir scroll interno */
+          h-[85vh] md:h-[85vh]
           
-          /* ANIMACIÓN APPLE */
-          transform transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]
+          /* Estilos visuales */
+          bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-2xl overflow-hidden
+          
+          /* ANIMACIÓN */
+          transform transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)]
           will-change-transform
           
-          /* AQUÍ ES LA CLAVE: Usamos 'isAnimating' en lugar de 'isOpen' */
           ${isAnimating 
-            /* Estado FINAL (Abierto): En su lugar (0px), opaco, tamaño normal */
             ? 'translate-y-0 opacity-100 scale-100' 
-            
-            /* Estado INICIAL (Cerrado/Montando): 
-               - Móvil: Totalmente abajo (100%)
-               - Desktop: Un poco abajo (32px) y más pequeño (95%)
-            */
             : 'translate-y-[100%] md:translate-y-32 opacity-0 md:scale-95' 
           }
         `}
-        // Detener la propagación del click para que no cierre al hacer click dentro del modal
         onClick={(e) => e.stopPropagation()}
       >
         {/* Botón Cerrar Flotante */}
@@ -88,8 +70,11 @@ export default function SolutionModal() {
           <X className="w-5 h-5 text-gray-500" />
         </button>
 
-        {/* CONTENIDO DEL MODAL */}
-        {modalContent}
+        {/* CONTENEDOR DE CONTENIDO */}
+        {/* h-full es crítico para que el scroll ocurra aquí dentro */}
+        <div className="w-full h-full">
+           {modalContent}
+        </div>
         
       </div>
     </div>
