@@ -7,13 +7,13 @@ import { useCTA } from "../CTAProvider";
 import { FEATURED_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
 
-// IMPORTA TUS MODALES AQUÍ
-// Importamos con mayúscula para usarlo como componente
-import Modal1 from "./modals/modal1"; 
+// IMPORTAMOS LA PLANTILLA MAESTRA Y LA BASE DE DATOS
+import SolutionTemplate from "./modals/SolutionTemplate";
+import { SOLUTIONS_DATA } from "../data/solutionsData"; // Ruta corregida para consistencia
 
 export default function FeaturedSolutions() {
   const { openMeeting } = useCTA();
-  const { openModal } = useModal(); // Hook para abrir el modal
+  const { openModal } = useModal(); 
   const [isImageVisible, setIsImageVisible] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -45,21 +45,17 @@ export default function FeaturedSolutions() {
     }
   };
 
-  // --- FUNCIÓN PRINCIPAL PARA ABRIR MODALES ---
+  // --- FUNCIÓN INTELIGENTE PARA ABRIR MODALES ---
   const handleOpenDetails = (id: string) => {
-    switch (id) {
-      case "pathogen-control": // ID de la primera tarjeta (Zero-Risk...)
-        openModal(<Modal1 />);
-        break;
-        
-      // A medida que crees más archivos, agrega los casos aquí:
-      // case "pathogen-control2":
-      //   openModal(<Modal2 />);
-      //   break;
-      
-      default:
-        console.log(`No existe un archivo modal asignado para el ID: ${id}`);
-        break;
+    // 1. Buscamos los datos en el archivo centralizado usando el ID
+    const data = SOLUTIONS_DATA[id];
+
+    if (data) {
+      // 2. Si existen datos, abrimos el modal inyectando la info en la Plantilla Maestra
+      openModal(<SolutionTemplate data={data} />);
+    } else {
+      // 3. Si no hay datos, mostramos advertencia en consola
+      console.warn(`[FeaturedSolutions] No se encontraron datos en solutionsData.ts para el ID: "${id}".`);
     }
   };
 
@@ -179,6 +175,7 @@ export default function FeaturedSolutions() {
                            Contact <ArrowRight className="w-3 h-3" />
                            </button>
                            
+                            {/* BOTÓN DETAILS CONECTADO AL SISTEMA DE DATOS */}
                             <button 
                               onClick={() => handleOpenDetails(solution.id)}
                               className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm flex items-center justify-center"
@@ -262,6 +259,8 @@ export default function FeaturedSolutions() {
                       <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111]/90 backdrop-blur text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-xl">
                         Contact <ArrowRight className="w-3 h-3" />
                       </button>
+                      
+                      {/* BOTÓN DETAILS CONECTADO AL SISTEMA DE DATOS */}
                       <button 
                         onClick={() => handleOpenDetails(solution.id)}
                         className="flex-1 py-3 bg-white/90 backdrop-blur border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors shadow-xl"

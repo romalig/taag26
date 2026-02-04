@@ -4,10 +4,18 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import { ChevronRight, Search, X, Download, Cpu, Target } from "lucide-react";
 import { useCTA } from "../CTAProvider";
+// Importamos los datos de la "Lista" (Catálogo)
 import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
+
+// --- IMPORTACIONES DEL SISTEMA DE MODALES ---
+import { useModal } from "./ModalProvider";
+import SolutionTemplate from "./modals/SolutionTemplate";
+import { SOLUTIONS_DATA } from "../data/solutionsData";
 
 export default function SolutionsCatalog() {
   const { openMeeting } = useCTA();
+  const { openModal } = useModal(); // Hook para abrir modales
+
   const [activePanelTab, setActivePanelTab] = useState("Pathogens");
   const [searchQuery, setSearchQuery] = useState("");
   const panelRef = useRef<HTMLDivElement>(null);
@@ -30,23 +38,35 @@ export default function SolutionsCatalog() {
   const categorySolutions = PANEL_SOLUTIONS[activePanelTab] || [];
   const sourceList = searchQuery ? allSolutions : categorySolutions;
 
-  // --- LÓGICA DE BÚSQUEDA MEJORADA (MULTI-PALABRA) ---
+  // --- LÓGICA DE BÚSQUEDA ---
   const filteredSolutions = sourceList.filter((item) => {
-    // 1. Convertimos la búsqueda a minúsculas y separamos por espacios para tener las palabras clave
     const searchTerms = searchQuery.toLowerCase().split(" ").filter(term => term.length > 0);
-    
-    // 2. Creamos un "super string" con todo el contenido del item para buscar ahí
+    // Buscamos en título, descripción, targets y tecnología (si existe)
     const itemText = `
       ${item.title} 
       ${item.description} 
       ${item.targets} 
-      ${item.technology}
+      ${(item as any).technology || ""} 
     `.toLowerCase();
 
-    // 3. Verificamos que TODAS las palabras escritas aparezcan en el item (AND logic)
-    // Si quieres que sea "al menos una" (OR logic), cambia .every por .some
     return searchTerms.every((term) => itemText.includes(term));
   });
+
+  // --- FUNCIÓN DE ENLACE (LINKING) ---
+  const handleOpenDetails = (item: any) => {
+    // 1. Obtenemos la clave: Usamos el 'id' manual si existe, si no, convertimos el título a formato "slug"
+    // Ej: "Salmonella Kit" -> "salmonella-kit"
+    const lookupKey = item.id || item.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+    
+    // 2. Buscamos los datos en el archivo centralizado
+    const data = SOLUTIONS_DATA[lookupKey];
+
+    if (data) {
+      openModal(<SolutionTemplate data={data} />);
+    } else {
+      console.warn(`[SolutionsCatalog] No se encontraron datos en solutionsData.ts para la clave: "${lookupKey}". Asegúrate de crear la entrada.`);
+    }
+  };
 
   return (
     <section className="bg-white px-4 md:px-6 py-24 md:py-42">
@@ -70,10 +90,8 @@ export default function SolutionsCatalog() {
           <div className="pb-12 pt-0 bg-white relative z-20 rounded-b-[3rem]">
              <div className="w-full px-10 md:px-20" ref={panelRef} id="panel-start">
                 
-                {/* --- 1. BUSCADOR Y DESCARGA (ARRIBA) --- */}
+                {/* --- TOOLBAR --- */}
                 <div className="pt-12 mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                   
-                   {/* Buscador Global */}
                    <div className="relative group w-full md:max-w-md">
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#FF270A] transition-colors" />
                       <input 
@@ -93,12 +111,7 @@ export default function SolutionsCatalog() {
                       )}
                    </div>
 
-                   {/* Link de Descarga */}
-                   <a 
-                     href="/catalogo.pdf" 
-                     download
-                     className="flex items-center gap-3 text-xs font-bold text-[#111111] hover:text-[#FF270A] transition-colors uppercase tracking-widest group cursor-pointer"
-                   >
+                   <a href="/catalogo.pdf" download className="flex items-center gap-3 text-xs font-bold text-[#111111] hover:text-[#FF270A] transition-colors uppercase tracking-widest group cursor-pointer">
                      <div className="p-2 bg-gray-100 rounded-full group-hover:bg-[#FF270A] group-hover:text-white transition-all shrink-0">
                         <Download className="w-4 h-4" />
                      </div>
@@ -108,7 +121,7 @@ export default function SolutionsCatalog() {
                    </a>
                 </div>
 
-                {/* --- 2. CONTENEDOR STICKY (TABS DE CATEGORÍAS) --- */}
+                {/* --- TABS --- */}
                 <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-xl py-4 -mx-10 md:-mx-20 px-10 md:px-20 transition-all border-b border-transparent">
                    <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-2 no-scrollbar items-center justify-start">
                       {PANEL_CATEGORIES.map((category) => (
@@ -130,34 +143,44 @@ export default function SolutionsCatalog() {
                    </div>
                 </div>
 
-                {/* --- LISTA DE SOLUCIONES --- */}
+                {/* --- RESULTADOS --- */}
                 <div className="flex flex-col mt-4 min-h-[300px]">
                    {filteredSolutions.length > 0 ? (
                      filteredSolutions.map((item, index) => (
                         <div key={index} className="flex flex-col md:flex-row justify-between items-start md:items-center py-8 px-4 -mx-4 rounded-2xl group hover:bg-gray-50/80 transition-all duration-300">
-                           {/* Info Izquierda */}
+                           {/* Info */}
                            <div className="flex-1 pr-0 md:pr-12 mb-6 md:mb-0">
                               <h4 className="text-lg font-bold text-[#111111] mb-2 group-hover:text-[#FF270A] transition-colors">{item.title}</h4>
                               <p className="text-gray-500 text-sm font-medium mb-3 max-w-2xl leading-relaxed">{item.description}</p>
                               
                               <div className="flex flex-wrap gap-2 mt-3">
-                                <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold text-gray-600 tracking-wider border border-gray-200">
-                                   <Target className="w-3 h-3 text-[#FF270A]" />
-                                   {item.targets}
-                                </span>
-                                <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold text-gray-600 tracking-wider border border-gray-200">
-                                   <Cpu className="w-3 h-3 text-[#111111]" />
-                                   {item.technology}
-                                </span>
+                                {item.targets && (
+                                   <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold text-gray-600 tracking-wider border border-gray-200">
+                                      <Target className="w-3 h-3 text-[#FF270A]" />
+                                      {item.targets}
+                                   </span>
+                                )}
+                                {/* Mostramos la tecnología si la agregaron en industrialData.ts */}
+                                {(item as any).technology && (
+                                   <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold text-gray-600 tracking-wider border border-gray-200">
+                                      <Cpu className="w-3 h-3 text-[#111111]" />
+                                      {(item as any).technology}
+                                   </span>
+                                )}
                               </div>
                            </div>
 
-                           {/* Botones Derecha */}
+                           {/* Botones */}
                            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 transition-all duration-300">
                               <button onClick={openMeeting} className="px-6 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors shadow-md min-w-[100px]">
                                  Contact
                               </button>
-                              <button className="px-5 py-3 bg-white border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors flex items-center gap-2 justify-center shadow-sm">
+                              
+                              {/* AQUÍ ESTÁ EL BOTÓN CONECTADO */}
+                              <button 
+                                onClick={() => handleOpenDetails(item)}
+                                className="px-5 py-3 bg-white border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors flex items-center gap-2 justify-center shadow-sm"
+                              >
                                  Details <ChevronRight className="w-3 h-3" />
                               </button>
                            </div>
@@ -167,35 +190,24 @@ export default function SolutionsCatalog() {
                      <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
                         <Search className="w-12 h-12 text-gray-300 mb-4" />
                         <p className="text-lg font-bold text-gray-400">No matching solutions found.</p>
-                        <p className="text-sm text-gray-400">Try searching for a target (e.g., "invA"), technology, or name.</p>
+                        <p className="text-sm text-gray-400">Try searching for a target, technology, or name.</p>
                      </div>
                    )}
 
-                   {/* --- SECCIÓN "DIDN'T FIND IT?" --- */}
+                   {/* DIDN'T FIND IT? */}
                    <div className="mt-6 mb-2 p-6 md:p-8 text-center flex flex-col items-center bg-gray-50 rounded-3xl border border-gray-100">
                        <div className="mb-4">
-                          <Image 
-                            src="/logo_mila.png" 
-                            alt="MILA Logo" 
-                            width={60} 
-                            height={60} 
-                            className="mx-auto opacity-80"
-                          />
+                          <Image src="/logo_mila.png" alt="MILA Logo" width={60} height={60} className="mx-auto opacity-80" />
                        </div>
                        <h4 className="text-xl font-extrabold text-[#111111] mb-2">Didn't find what you're looking for?</h4>
                        <p className="text-gray-500 text-sm font-medium mb-6 max-w-lg leading-relaxed">
-                          Powered by Mila, our R&D team turns unique challenges into custom solutions. If it’s not in our catalog, our AI-driven development engine can build it specifically for your needs.
+                          Powered by Mila, our R&D team turns unique challenges into custom solutions.
                        </p>
-                       <button 
-                          onClick={openMeeting} 
-                          className="px-6 py-2.5 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors shadow-lg"
-                       >
+                       <button onClick={openMeeting} className="px-6 py-2.5 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors shadow-lg">
                           Contact Us
                        </button>
                    </div>
-
                 </div>
-
              </div>
           </div>
         </div>

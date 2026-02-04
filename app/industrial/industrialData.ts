@@ -62,21 +62,24 @@ export const PANEL_CATEGORIES = [
 ];
 
 // ACTUALIZACIÓN: Se agregó la propiedad 'technology' a la definición y a los objetos
-export const PANEL_SOLUTIONS: Record<string, { title: string; description: string; targets: string; technology: string }[]> = {
+export const PANEL_SOLUTIONS: Record<string, { id?: string; title: string; description: string; targets: string; technology?: string }[]> = {  
   "Pathogens": [
     {
+      id: "salmonella-spp-rapid",
       title: "Salmonella spp. Rapid Kit",
       description: "Detect Salmonella in environmental sponges and raw materials with high sensitivity.",
       targets: "Target: invA gene",
       technology: "Real-Time PCR",
     },
     {
+      id: "listeria-monocytogenes-pro",
       title: "Listeria monocytogenes Pro",
       description: "Specific identification of L. mono to prevent outbreaks in RTE foods.",
       targets: "Target: hlyA gene",
       technology: "Real-Time PCR",
     },
     {
+      id: "ecoli-o157",
       title: "E. coli O157:H7 Screen",
       description: "Critical screening for pathogenic E. coli in meat and fresh produce.",
       targets: "Targets: stx1, stx2",
@@ -85,18 +88,21 @@ export const PANEL_SOLUTIONS: Record<string, { title: string; description: strin
   ],
   "Spoilage": [
     {
+      id: "total-spoilage",
       title: "Total Spoilage Organisms",
       description: "Broad spectrum detection of yeast and mold to predict shelf-life stability.",
       targets: "Targets: 18S rRNA, bacterial 16S",
       technology: "Multiplex PCR",
     },
     {
-      title: "Salmonella spp. Rapid Kit",
+      id: "Salmonella-spp",
+      title: "Salmonella spp. Rapid Kit2",
       description: "Detect Salmonella in environmental sponges and raw materials with high sensitivity.",
       targets: "Target: invA gene",
       technology: "Real-Time PCR",
     },
     {
+      id: "indicator-bacteria-count",
       title: "Indicator Bacteria Count",
       description: "Quantification of Total Aerobic Bacteria and Enterobacteriaceae.",
       targets: "Targets: TAB, Enteros",
@@ -104,46 +110,10 @@ export const PANEL_SOLUTIONS: Record<string, { title: string; description: strin
     },
   ],
   "Beverages": [
-    {
-      title: "Alicyclobacillus (TAB) Detect",
-      description: "Prevent 'medicinal' off-flavors in juices caused by thermo-acidophilic bacteria.",
-      targets: "Target: Guaiacol producers",
-      technology: "Real-Time PCR",
-    },
-    {
-      title: "Osmophilic Yeast Panel",
-      description: "Targeted detection of Zygosaccharomyces in high-sugar concentrates.",
-      targets: "Targets: Z. rouxii, Z. bailii",
-      technology: "Real-Time PCR",
-    },
   ],
   "Brewing": [
-    {
-      title: "Hop-Resistance Screen",
-      description: "Identify bacteria capable of growing in hopped beers and spoiling flavor.",
-      targets: "Targets: horA, horC genes",
-      technology: "Multiplex PCR",
-    },
-    {
-      title: "Strict Anaerobes Detect",
-      description: "Identification of obligate anaerobes detrimental to beer quality.",
-      targets: "Targets: Megasphaera, Pectinatus",
-      technology: "Real-Time PCR",
-    },
   ],
   "Wine": [
-    {
-      title: "Brettanomyces Guard",
-      description: "Early warning system for Brettanomyces contamination in aging barrels.",
-      targets: "Target: B. bruxellensis",
-      technology: "Real-Time PCR",
-    },
-    {
-      title: "Acetic Acid Bacteria Flow",
-      description: "Monitor volatile acidity producers during fermentation.",
-      targets: "Targets: Acetobacter, Gluconobacter",
-      technology: "Real-Time PCR",
-    },
   ],
 };
 
@@ -288,3 +258,5 @@ export const SUCCESS_STORIES = [
     isHero: false,
   },
 ];
+
+
