@@ -1,8 +1,8 @@
 "use client";
 
-import { CheckCircle2, FlaskConical, Download, Mail } from "lucide-react";
+import { CheckCircle2, FlaskConical, Download, Mail, MoveHorizontal } from "lucide-react";
 
-// Actualizamos la interfaz para incluir 'name'
+// Estructura de datos
 export interface SolutionContent {
   title: string;
   chips: string[];
@@ -15,9 +15,7 @@ export interface SolutionContent {
   description: string[];
   advantages: string[];
   specs: { label: string; value: string }[];
-  // Agregamos 'name' a los kits
   pcrKits: { cat: string; name: string; size: string; format: string; desc: string }[];
-  // Agregamos 'name' a los insumos
   supplies?: { cat: string; name: string; size: string; format: string; desc: string }[];
 }
 
@@ -100,34 +98,45 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
 
       {/* --- ORDER INFORMATION (PCR KITS) --- */}
       <div className="mb-12">
-         <h3 className="text-2xl font-bold text-[#111111] mb-2">Order Information</h3>
+         <div className="flex items-center gap-2 mb-2">
+            <h3 className="text-2xl font-bold text-[#111111]">Order Information</h3>
+         </div>
          <p className="text-sm text-gray-500 mb-6">Select the appropriate kit size for your throughput needs.</p>
          
-         <div className="overflow-x-auto">
-           <table className="w-full text-left border-collapse min-w-[700px]">
-              <thead>
-                 <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                    <th className="py-4 pr-4">Cat. Number</th>
-                    {/* NUEVA COLUMNA NAME */}
-                    <th className="py-4 px-4">Name</th>
-                    <th className="py-4 px-4">Size</th>
-                    <th className="py-4 px-4">Format</th>
-                    <th className="py-4 pl-4">Description</th>
-                 </tr>
-              </thead>
-              <tbody className="text-sm">
-                 {data.pcrKits.map((row, i) => (
-                    <tr key={i} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                       <td className="py-4 pr-4 font-mono text-[#FF270A] font-medium whitespace-nowrap">{row.cat}</td>
-                       {/* NUEVA CELDA NAME */}
-                       <td className="py-4 px-4 font-bold text-[#111111]">{row.name}</td>
-                       <td className="py-4 px-4 font-medium text-gray-600 whitespace-nowrap">{row.size}</td>
-                       <td className="py-4 px-4 text-gray-600">{row.format}</td>
-                       <td className="py-4 pl-4 text-gray-600">{row.desc}</td>
+         {/* WRAPPER RELATIVO PARA EL INDICADOR DE SCROLL */}
+         <div className="relative group">
+            
+            {/* INDICADOR DE SCROLL MÓVIL (Botoncito Flotante) */}
+            <div className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-20 pointer-events-none opacity-80 animate-pulse">
+               <div className="bg-black/80 p-2 rounded-full backdrop-blur-md shadow-lg border border-white/20">
+                  <MoveHorizontal className="w-5 h-5 text-white" />
+               </div>
+            </div>
+
+            <div className="overflow-x-auto pb-2">
+              <table className="w-full text-left border-collapse min-w-[700px]">
+                  <thead>
+                    <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                        <th className="py-4 pr-4">Cat. Number</th>
+                        <th className="py-4 px-4">Name</th>
+                        <th className="py-4 px-4">Size</th>
+                        <th className="py-4 px-4">Format</th>
+                        <th className="py-4 pl-4">Description</th>
                     </tr>
-                 ))}
-              </tbody>
-           </table>
+                  </thead>
+                  <tbody className="text-sm">
+                    {data.pcrKits.map((row, i) => (
+                        <tr key={i} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                          <td className="py-4 pr-4 font-mono text-[#FF270A] font-medium whitespace-nowrap">{row.cat}</td>
+                          <td className="py-4 px-4 font-bold text-[#111111]">{row.name}</td>
+                          <td className="py-4 px-4 font-medium text-gray-600 whitespace-nowrap">{row.size}</td>
+                          <td className="py-4 px-4 text-gray-600">{row.format}</td>
+                          <td className="py-4 pl-4 text-gray-600">{row.desc}</td>
+                        </tr>
+                    ))}
+                  </tbody>
+              </table>
+            </div>
          </div>
       </div>
 
@@ -139,31 +148,40 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
                 Additional Supplies
              </h4>
              
-             <div className="overflow-x-auto">
-               <table className="w-full text-left border-collapse min-w-[700px]">
-                  <thead>
-                     <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                        <th className="py-4 pr-4">Cat. Number</th>
-                        {/* NUEVA COLUMNA NAME */}
-                        <th className="py-4 px-4">Name</th>
-                        <th className="py-4 px-4">Size</th>
-                        <th className="py-4 px-4">Format</th>
-                        <th className="py-4 pl-4">Description</th>
-                     </tr>
-                  </thead>
-                  <tbody className="text-sm">
-                     {data.supplies.map((row, i) => (
-                        <tr key={i} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                           <td className="py-4 pr-4 font-mono text-[#FF270A] font-medium whitespace-nowrap">{row.cat}</td>
-                           {/* NUEVA CELDA NAME */}
-                           <td className="py-4 px-4 font-bold text-[#111111]">{row.name}</td>
-                           <td className="py-4 px-4 font-medium text-gray-600 whitespace-nowrap">{row.size}</td>
-                           <td className="py-4 px-4 text-gray-600">{row.format}</td>
-                           <td className="py-4 pl-4 text-gray-600">{row.desc}</td>
+             {/* WRAPPER RELATIVO PARA EL INDICADOR DE SCROLL */}
+             <div className="relative group">
+                
+                {/* INDICADOR DE SCROLL MÓVIL */}
+                <div className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-20 pointer-events-none opacity-80 animate-pulse">
+                   <div className="bg-black/80 p-2 rounded-full backdrop-blur-md shadow-lg border border-white/20">
+                      <MoveHorizontal className="w-5 h-5 text-white" />
+                   </div>
+                </div>
+
+                <div className="overflow-x-auto pb-2">
+                  <table className="w-full text-left border-collapse min-w-[700px]">
+                      <thead>
+                        <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                            <th className="py-4 pr-4">Cat. Number</th>
+                            <th className="py-4 px-4">Name</th>
+                            <th className="py-4 px-4">Size</th>
+                            <th className="py-4 px-4">Format</th>
+                            <th className="py-4 pl-4">Description</th>
                         </tr>
-                     ))}
-                  </tbody>
-               </table>
+                      </thead>
+                      <tbody className="text-sm">
+                        {data.supplies.map((row, i) => (
+                            <tr key={i} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                              <td className="py-4 pr-4 font-mono text-[#FF270A] font-medium whitespace-nowrap">{row.cat}</td>
+                              <td className="py-4 px-4 font-bold text-[#111111]">{row.name}</td>
+                              <td className="py-4 px-4 font-medium text-gray-600 whitespace-nowrap">{row.size}</td>
+                              <td className="py-4 px-4 text-gray-600">{row.format}</td>
+                              <td className="py-4 pl-4 text-gray-600">{row.desc}</td>
+                            </tr>
+                        ))}
+                      </tbody>
+                  </table>
+                </div>
              </div>
           </div>
       )}
