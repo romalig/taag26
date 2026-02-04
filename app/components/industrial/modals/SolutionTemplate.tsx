@@ -1,8 +1,8 @@
 "use client";
 
-import { CheckCircle2, FlaskConical, Download, Mail, MoveHorizontal } from "lucide-react";
+import { CheckCircle2, FlaskConical, Download, Mail, MoveHorizontal, ArrowRightLeft } from "lucide-react";
 
-// Estructura de datos
+// Estructura de datos (Sin cambios)
 export interface SolutionContent {
   title: string;
   chips: string[];
@@ -25,7 +25,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   return (
     <div className="w-full bg-white p-6 md:p-12 pb-16 rounded-[2.5rem]">
       
-      {/* --- HEADER --- */}
+      {/* --- HEADER (Sin cambios) --- */}
       <div className="max-w-4xl pr-16 md:pr-0">
         <h2 className="text-3xl md:text-5xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
           {data.title}
@@ -40,7 +40,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         </div>
       </div>
 
-      {/* --- METRICS GRID --- */}
+      {/* --- METRICS GRID (Sin cambios) --- */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 border-b border-gray-100 pb-12">
          <div>
             <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
@@ -60,7 +60,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
          </div>
       </div>
 
-      {/* --- DESCRIPTION & ADVANTAGES --- */}
+      {/* --- DESCRIPTION & ADVANTAGES (Sin cambios) --- */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
          <div className="md:col-span-2">
             <h3 className="text-xl font-bold text-[#111111] mb-4">Description</h3>
@@ -83,7 +83,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
          </div>
       </div>
 
-      {/* --- TECHNICAL SPECIFICATIONS --- */}
+      {/* --- TECHNICAL SPECIFICATIONS (Sin cambios) --- */}
       <div className="mb-16">
          <h3 className="text-2xl font-bold text-[#111111] mb-6">Technical Specifications</h3>
          <div className="border-t border-gray-200">
@@ -103,41 +103,37 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
          </div>
          <p className="text-sm text-gray-500 mb-6">Select the appropriate kit size for your throughput needs.</p>
          
-         {/* WRAPPER RELATIVO PARA EL INDICADOR DE SCROLL */}
-         <div className="relative group">
-            
-            {/* INDICADOR DE SCROLL MÓVIL (Botoncito Flotante) */}
-            <div className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-20 pointer-events-none opacity-80 animate-pulse">
-               <div className="bg-black/80 p-2 rounded-full backdrop-blur-md shadow-lg border border-white/20">
-                  <MoveHorizontal className="w-5 h-5 text-white" />
-               </div>
-            </div>
-
-            <div className="overflow-x-auto pb-2">
-              <table className="w-full text-left border-collapse min-w-[700px]">
-                  <thead>
-                    <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                        <th className="py-4 pr-4">Cat. Number</th>
-                        <th className="py-4 px-4">Name</th>
-                        <th className="py-4 px-4">Size</th>
-                        <th className="py-4 px-4">Format</th>
-                        <th className="py-4 pl-4">Description</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-sm">
-                    {data.pcrKits.map((row, i) => (
-                        <tr key={i} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                          <td className="py-4 pr-4 font-mono text-[#FF270A] font-medium whitespace-nowrap">{row.cat}</td>
-                          <td className="py-4 px-4 font-bold text-[#111111]">{row.name}</td>
-                          <td className="py-4 px-4 font-medium text-gray-600 whitespace-nowrap">{row.size}</td>
-                          <td className="py-4 px-4 text-gray-600">{row.format}</td>
-                          <td className="py-4 pl-4 text-gray-600">{row.desc}</td>
-                        </tr>
-                    ))}
-                  </tbody>
-              </table>
-            </div>
+         {/* SE ELIMINÓ EL WRAPPER RELATIVO Y EL BOTÓN PULSANTE */}
+         
+         <div className="overflow-x-auto pb-2">
+           <table className="w-full text-left border-collapse min-w-[700px]">
+               <thead>
+                 <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                     <th className="py-4 pr-4">Cat. Number</th>
+                     <th className="py-4 px-4">Name</th>
+                     <th className="py-4 px-4">Size</th>
+                     <th className="py-4 px-4">Format</th>
+                     <th className="py-4 pl-4">Description</th>
+                 </tr>
+               </thead>
+               <tbody className="text-sm">
+                 {data.pcrKits.map((row, i) => (
+                     <tr key={i} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                       <td className="py-4 pr-4 font-mono text-[#FF270A] font-medium whitespace-nowrap">{row.cat}</td>
+                       <td className="py-4 px-4 font-bold text-[#111111]">{row.name}</td>
+                       <td className="py-4 px-4 font-medium text-gray-600 whitespace-nowrap">{row.size}</td>
+                       <td className="py-4 px-4 text-gray-600">{row.format}</td>
+                       <td className="py-4 pl-4 text-gray-600">{row.desc}</td>
+                     </tr>
+                 ))}
+               </tbody>
+           </table>
          </div>
+         
+         {/* INDICADOR MINIMALISTA (Solo móvil) */}
+         <p className="md:hidden text-xs text-gray-400 flex items-center gap-1.5 mt-2 pl-1">
+            <ArrowRightLeft className="w-3 h-3" /> Swipe left to view all columns
+         </p>
       </div>
 
       {/* --- ADDITIONAL SUPPLIES --- */}
@@ -148,45 +144,41 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
                 Additional Supplies
              </h4>
              
-             {/* WRAPPER RELATIVO PARA EL INDICADOR DE SCROLL */}
-             <div className="relative group">
-                
-                {/* INDICADOR DE SCROLL MÓVIL */}
-                <div className="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-20 pointer-events-none opacity-80 animate-pulse">
-                   <div className="bg-black/80 p-2 rounded-full backdrop-blur-md shadow-lg border border-white/20">
-                      <MoveHorizontal className="w-5 h-5 text-white" />
-                   </div>
-                </div>
+             {/* SE ELIMINÓ EL WRAPPER RELATIVO Y EL BOTÓN PULSANTE */}
 
-                <div className="overflow-x-auto pb-2">
-                  <table className="w-full text-left border-collapse min-w-[700px]">
-                      <thead>
-                        <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                            <th className="py-4 pr-4">Cat. Number</th>
-                            <th className="py-4 px-4">Name</th>
-                            <th className="py-4 px-4">Size</th>
-                            <th className="py-4 px-4">Format</th>
-                            <th className="py-4 pl-4">Description</th>
-                        </tr>
-                      </thead>
-                      <tbody className="text-sm">
-                        {data.supplies.map((row, i) => (
-                            <tr key={i} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                              <td className="py-4 pr-4 font-mono text-[#FF270A] font-medium whitespace-nowrap">{row.cat}</td>
-                              <td className="py-4 px-4 font-bold text-[#111111]">{row.name}</td>
-                              <td className="py-4 px-4 font-medium text-gray-600 whitespace-nowrap">{row.size}</td>
-                              <td className="py-4 px-4 text-gray-600">{row.format}</td>
-                              <td className="py-4 pl-4 text-gray-600">{row.desc}</td>
-                            </tr>
-                        ))}
-                      </tbody>
-                  </table>
-                </div>
+             <div className="overflow-x-auto pb-2">
+               <table className="w-full text-left border-collapse min-w-[700px]">
+                   <thead>
+                     <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                         <th className="py-4 pr-4">Cat. Number</th>
+                         <th className="py-4 px-4">Name</th>
+                         <th className="py-4 px-4">Size</th>
+                         <th className="py-4 px-4">Format</th>
+                         <th className="py-4 pl-4">Description</th>
+                     </tr>
+                   </thead>
+                   <tbody className="text-sm">
+                     {data.supplies.map((row, i) => (
+                         <tr key={i} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                           <td className="py-4 pr-4 font-mono text-[#FF270A] font-medium whitespace-nowrap">{row.cat}</td>
+                           <td className="py-4 px-4 font-bold text-[#111111]">{row.name}</td>
+                           <td className="py-4 px-4 font-medium text-gray-600 whitespace-nowrap">{row.size}</td>
+                           <td className="py-4 px-4 text-gray-600">{row.format}</td>
+                           <td className="py-4 pl-4 text-gray-600">{row.desc}</td>
+                         </tr>
+                     ))}
+                   </tbody>
+               </table>
              </div>
+
+             {/* INDICADOR MINIMALISTA (Solo móvil) */}
+             <p className="md:hidden text-xs text-gray-400 flex items-center gap-1.5 mt-2 pl-1">
+                <ArrowRightLeft className="w-3 h-3" /> Swipe left to view all columns
+             </p>
           </div>
       )}
 
-      {/* --- BOTONES FINALES --- */}
+      {/* --- BOTONES FINALES (Sin cambios) --- */}
       <div className="flex flex-col md:flex-row gap-4 pt-10 border-t border-gray-100">
          <button className="flex-1 py-4 px-6 bg-[#F4F4F5] hover:bg-[#E4E4E5] text-[#111111] rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 group">
             <Download className="w-4 h-4 text-gray-500 group-hover:text-[#111111] transition-colors" />
