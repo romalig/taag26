@@ -24,7 +24,7 @@ const SHORT_LABELS = [
 ];
 
 const IMAGE_CONFIG = {
-  0: { desktop: "/onebacteria4.png", mobile: "/onebacteria5-mobile.png" },
+  0: { desktop: "/onebacteria3.png", mobile: "/onebacteria4-mobile.png" },
   1: { desktop: "/food5.png", mobile: "/food5-mobile.png" },
   2: { desktop: "/swabs7.png", mobile: "/swabs8-mobile.png" },
   3: { // Multiplex PCR
@@ -58,11 +58,9 @@ export default function HowItWorks() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Disparamos la animación del fondo cuando el footer es visible
-        if (entry.isIntersecting) {
-          setIsGlowVisible(true);
-          observer.disconnect();
-        }
+        // ACTUALIZACIÓN: Ahora actualizamos el estado cada vez (true o false)
+        // para que la animación se repita al entrar y salir.
+        setIsGlowVisible(entry.isIntersecting);
       },
       { threshold: 0.3 } 
     );
@@ -131,12 +129,16 @@ export default function HowItWorks() {
   return (
     <section className="bg-[#151516] text-white py-24 md:py-32 px-4 md:px-6 overflow-hidden relative">
       
-      {/* --- GLOW DE FONDO (ANIMADO) --- */}
+      {/* --- GLOW DE FONDO (ANIMADO CON DELAY Y REPETICIÓN) --- */}
       <div className="absolute inset-x-0 bottom-0 h-[800px] flex justify-center items-end pointer-events-none z-0">
           <div 
-             className="w-full max-w-[1000px] h-[600px] transition-all duration-[2500ms] cubic-bezier(0.22, 1, 0.36, 1)"
+             className={`w-full max-w-[1000px] h-[600px] transition-all duration-[2500ms] cubic-bezier(0.22, 1, 0.36, 1) ${
+                // Aquí está la magia:
+                // delay-1000: Espera 1s antes de empezar a subir cuando es visible.
+                // delay-0: Se resetea instantáneamente al dejar de ser visible.
+                isGlowVisible ? "delay-1000" : "delay-0"
+             }`}
              style={{
-               // SOLO ANIMAMOS EL GLOW
                opacity: isGlowVisible ? 0.6 : 0,
                transform: isGlowVisible 
                   ? "translateY(20%) scale(1)"    
@@ -152,12 +154,13 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* HEADER SECTION */}
-        <div className="px-10 md:px-20 mb-12 md:mb-30">
+        <div className="px-10 md:px-20 mb-12 md:mb-20">
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-left leading-tight">
             Take a closer look into the future, discover{" "}
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-[#FF270A] bg-clip-text text-transparent"> 
-              AiGOR solutions.
+            <span className="bg-gradient-to-r from-blue-500 to-[#FF270A] bg-clip-text text-transparent">
+              AiGOR
             </span>
+              {" "}products.
           </h2>
         </div>
 
@@ -277,14 +280,13 @@ export default function HowItWorks() {
            ref={footerRef} 
            className="relative mt-32 w-full flex flex-col items-center justify-center text-center pb-32 z-20"
         >
-            {/* HEMOS QUITADO LAS CLASES DE ANIMACIÓN AQUÍ. TEXTO SIEMPRE VISIBLE */}
             <div className="relative z-10 max-w-2xl px-4">
                 <h3 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 drop-shadow-2xl">
                   Ready to explore the future?
                 </h3>
                 <p className="text-lg md:text-xl text-white/80 mb-10 leading-relaxed drop-shadow-md">
                    Experience the power of RNA-based detection. <br className="hidden md:block"/>
-                   Sensitivity amplified. Time to results redefined.
+                   Sensitivity redefined. 10,000x Amplified.
                 </p>
 
                 <button 
@@ -302,7 +304,6 @@ export default function HowItWorks() {
       </div>
 
       <style jsx global>{`
-        /* Animaciones del carrusel */
         @keyframes slideInRight {
           from { opacity: 0; transform: translateX(50px); filter: blur(5px); }
           to { opacity: 1; transform: translateX(0); filter: blur(0); }
