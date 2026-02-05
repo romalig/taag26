@@ -19,8 +19,6 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
       const url = URL.createObjectURL(blob);
       
       // 2. ABRIR SIEMPRE EN PESTAÑA NUEVA (PC Y MÓVIL)
-      // Esto permite previsualizar el PDF en el navegador. 
-      // El usuario puede guardarlo desde ahí si lo desea.
       window.open(url, '_blank');
       
       // Limpieza de memoria
@@ -185,10 +183,15 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
       </div>
 
       <div className="p-8 md:p-12 pt-0 flex flex-col md:flex-row gap-4">
+         {/* SOLUCIÓN MOBILE TAP:
+            1. Usamos 'md:hover:...' para que el hover solo ocurra en pantallas medianas/grandes.
+            2. Usamos 'active:...' para dar feedback táctil inmediato en móviles.
+            Esto evita que el primer tap se gaste en el hover.
+         */}
          <button 
            onClick={handleDownloadPDF}
            disabled={isGeneratingPdf}
-           className="flex-1 py-4 px-6 bg-[#F4F4F5] hover:bg-[#E4E4E5] text-[#111111] rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 group disabled:opacity-50"
+           className="flex-1 py-4 px-6 bg-[#F4F4F5] active:bg-[#E4E4E5] md:hover:bg-[#E4E4E5] text-[#111111] rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 group disabled:opacity-50"
          >
             {isGeneratingPdf ? (
               <>
@@ -196,12 +199,13 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
               </>
             ) : (
               <>
-                <Download className="w-4 h-4 text-gray-500 group-hover:text-[#111111] transition-colors" />
+                <Download className="w-4 h-4 text-gray-500 group-active:text-[#111111] md:group-hover:text-[#111111] transition-colors" />
                 View Datasheet (PDF)
               </>
             )}
          </button>
-         <button className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
+         
+         <button className="flex-1 py-4 px-6 bg-[#111111] active:bg-[#FF270A] md:hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
             <Mail className="w-4 h-4" />
             Contact Sales Team
          </button>
