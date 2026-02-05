@@ -40,8 +40,9 @@ export default function EquipmentSection() {
               <h2 className="text-3xl md:text-5xl font-bold text-[#111111] mb-4 md:mb-6 tracking-tight">
                 No specialized or complex equipment. Open platforms
               </h2>
-              <p className="text-base md:text-lg text-gray-500 leading-relaxed">
-                We believe in simplicity. Whether you need a simple manual setup or a fully automated robot, our kits adapt to your lab's reality.
+              <p className="text-base md:text-lg text-gray-500 leading-relaxed  mb-4 md:mb-6">
+                 {/* We believe in simplicity. A normal real-time PCR machine Whether you need a simple manual setup or a fully automated robot, our kits adapt to your lab's reality. */} 
+                We believe in simplicity. Eight square meters. One standard qPCR machine. <br className="hidden md:block"/> That’s all it takes.
               </p>
            </div>
 

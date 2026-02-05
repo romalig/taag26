@@ -136,7 +136,7 @@ export default function HowItWorks() {
                 // Aquí está la magia:
                 // delay-1000: Espera 1s antes de empezar a subir cuando es visible.
                 // delay-0: Se resetea instantáneamente al dejar de ser visible.
-                isGlowVisible ? "delay-1000" : "delay-0"
+                isGlowVisible ? "delay-100" : "delay-0"
              }`}
              style={{
                opacity: isGlowVisible ? 0.6 : 0,
@@ -144,7 +144,7 @@ export default function HowItWorks() {
                   ? "translateY(20%) scale(1)"    
                   : "translateY(50%) scale(0.8)", 
                
-               background: "radial-gradient(circle at center bottom, #FF270A 0%, rgba(147, 51, 234, 0.5) 30%, rgba(37, 99, 235, 0.15) 60%, transparent 80%)",
+               background: "radial-gradient(circle at center bottom, #FF270A 0%, rgba(147, 51, 234, 0.5) 40%, rgba(37, 99, 235, 0.15) 70%, transparent 80%)",
                filter: "blur(70px)",
                willChange: "transform, opacity"
              }}
@@ -154,10 +154,10 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* HEADER SECTION */}
-        <div className="px-10 md:px-20 mb-12 md:mb-20">
+        <div className="px-10 md:px-20 mb-12 md:mb-26">
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-left leading-tight">
             Take a closer look into the future, discover{" "}
-            <span className="bg-gradient-to-r from-blue-500 to-[#FF270A] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-[#FF270A] bg-clip-text text-transparent"> 
               AiGOR solutions.
             </span>
           </h2>
