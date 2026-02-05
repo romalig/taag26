@@ -24,7 +24,7 @@ const SHORT_LABELS = [
 ];
 
 const IMAGE_CONFIG = {
-  0: { desktop: "/onebacteria3.png", mobile: "/onebacteria4-mobile.png" },
+  0: { desktop: "/onebacteria4.png", mobile: "/onebacteria5-mobile.png" },
   1: { desktop: "/food5.png", mobile: "/food5-mobile.png" },
   2: { desktop: "/swabs7.png", mobile: "/swabs8-mobile.png" },
   3: { // Multiplex PCR
@@ -158,9 +158,8 @@ export default function HowItWorks() {
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-left leading-tight">
             Take a closer look into the future, discover{" "}
             <span className="bg-gradient-to-r from-blue-500 to-[#FF270A] bg-clip-text text-transparent">
-              AiGOR
+              AiGOR solutions.
             </span>
-              {" "}products.
           </h2>
         </div>
 
