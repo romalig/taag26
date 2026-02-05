@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { ChevronRight, Search, X, Download, Zap, Target } from "lucide-react";
+import { ChevronRight, Search, X, Download, Zap, Target, Filter } from "lucide-react";
 import { useCTA } from "../CTAProvider";
 import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
@@ -16,24 +16,35 @@ export default function SolutionsCatalog() {
   const [activePanelTab, setActivePanelTab] = useState("Pathogens");
   const [searchQuery, setSearchQuery] = useState("");
   const panelRef = useRef<HTMLDivElement>(null);
+  
+  // Ref para detectar visibilidad de la barra de búsqueda original
+  const toolbarRef = useRef<HTMLDivElement>(null);
+  const [isToolbarVisible, setIsToolbarVisible] = useState(true);
 
-  // --- ESCUCHAR EVENTO EXTERNO (Desde HowItWorks) ---
+  // --- DETECTOR DE SCROLL ---
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsToolbarVisible(entry.isIntersecting);
+      },
+      { threshold: 0, rootMargin: "-80px 0px 0px 0px" } 
+    );
+
+    if (toolbarRef.current) {
+      observer.observe(toolbarRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // --- ESCUCHAR EVENTO EXTERNO ---
   useEffect(() => {
     const handleSearchTrigger = (e: CustomEvent) => {
-        // 1. Establecemos la búsqueda
         setSearchQuery(e.detail);
-        
-        // 2. SCROLL OPTIMIZADO
-        // Buscamos el contenedor 'panel-start' (donde empieza la barra de búsqueda)
-        // en lugar de la sección entera.
         const element = document.getElementById("panel-start");
-        
         if (element) {
             const elementPosition = element.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - 140; 
-            // -140px deja espacio suficiente para el Header de la web + un respiro visual
-            // para que los botones queden en la parte alta de la vista.
-            
             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
         }
     };
@@ -103,11 +114,10 @@ export default function SolutionsCatalog() {
 
           {/* CONTENIDO DEL PANEL */}
           <div className="pb-12 pt-0 bg-white relative z-20 rounded-b-[3rem]">
-             {/* ID IMPORTANTE: Aquí es donde aterrizará el scroll */}
              <div className="w-full px-10 md:px-20" ref={panelRef} id="panel-start">
                 
-                {/* --- TOOLBAR --- */}
-                <div className="pt-12 mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                {/* --- TOOLBAR ORIGINAL (Referencia para el Observer) --- */}
+                <div ref={toolbarRef} className="pt-12 mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                    <div className="relative group w-full md:max-w-md">
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#FF270A] transition-colors" />
                       <input 
@@ -137,26 +147,53 @@ export default function SolutionsCatalog() {
                    </a>
                 </div>
 
-                {/* --- TABS --- */}
-                <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-xl py-4 -mx-10 md:-mx-20 px-10 md:px-20 transition-all border-b border-transparent">
-                   <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible pb-2 no-scrollbar items-center justify-start">
-                      {PANEL_CATEGORIES.map((category) => (
-                         <button
-                            key={category.id}
-                            onClick={() => handleTabClick(category.id)}
-                            disabled={!!searchQuery}
-                            className={`px-5 py-2.5 rounded-full text-xs font-medium tracking-wide transition-all duration-300 border whitespace-nowrap shrink-0 ${
-                               activePanelTab === category.id && !searchQuery
-                                  ? "bg-[#111111] text-white border-[#111111] shadow-lg scale-105"
-                                  : searchQuery 
-                                    ? "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed" 
-                                    : "bg-white text-gray-500 border-gray-200 hover:border-gray-400 hover:text-[#111111]"
-                            }`}
-                         >
-                            {category.label}
-                         </button>
-                      ))}
-                   </div>
+                {/* --- HEADER STICKY (TABS O INDICADOR DE BÚSQUEDA) --- */}
+                <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-xl py-4 -mx-10 md:-mx-20 px-10 md:px-20 transition-all border-b border-transparent min-h-[80px] flex items-center justify-center">
+                   
+                   {/* CASO 1: MOSTRAR INDICADOR DE BÚSQUEDA (Minimalista, Blanco, Centrado) */}
+                   {searchQuery && !isToolbarVisible ? (
+                      <div className="w-fit mx-auto animate-fadeIn flex items-center justify-between gap-6 bg-white border border-gray-200 text-[#111111] px-6 py-2.5 rounded-full shadow-lg">
+                          <div className="flex items-center gap-3">
+                             <Filter className="w-4 h-4 text-[#FF270A]" />
+                             <span className="text-xs md:text-sm font-medium text-gray-600">
+                               Filtering by: <span className="font-bold text-[#111111]">"{searchQuery}"</span>
+                             </span>
+                          </div>
+                          <button 
+                             onClick={() => {
+                               setSearchQuery("");
+                               const el = document.getElementById("panel-start");
+                               if(el) {
+                                 const pos = el.getBoundingClientRect().top + window.pageYOffset - 140;
+                                 window.scrollTo({ top: pos, behavior: "smooth" });
+                               }
+                             }}
+                             className="p-1.5 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors group"
+                          >
+                             <X className="w-3 h-3 text-gray-500 group-hover:text-[#FF270A]" />
+                          </button>
+                      </div>
+                   ) : (
+                      /* CASO 2: MOSTRAR TABS NORMALES */
+                      <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible p-2 no-scrollbar items-center justify-start w-full -ml-2">
+                          {PANEL_CATEGORIES.map((category) => (
+                             <button
+                                key={category.id}
+                                onClick={() => handleTabClick(category.id)}
+                                disabled={!!searchQuery}
+                                className={`px-5 py-2.5 rounded-full text-xs font-medium tracking-wide transition-all duration-300 border whitespace-nowrap shrink-0 ${
+                                   activePanelTab === category.id && !searchQuery
+                                      ? "bg-[#111111] text-white border-[#111111] shadow-lg scale-105"
+                                      : searchQuery 
+                                        ? "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed" 
+                                        : "bg-white text-gray-500 border-gray-200 hover:border-gray-400 hover:text-[#111111]"
+                                }`}
+                             >
+                                {category.label}
+                             </button>
+                          ))}
+                      </div>
+                   )}
                 </div>
 
                 {/* --- RESULTADOS --- */}
@@ -226,6 +263,16 @@ export default function SolutionsCatalog() {
           </div>
         </div>
       </div>
+      
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+      `}</style>
     </section>
   );
 }
