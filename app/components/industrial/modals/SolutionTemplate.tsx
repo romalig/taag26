@@ -12,20 +12,46 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   if (!data) return null;
 
   const handleDownloadPDF = async () => {
+    // 1. TRUCO PARA MÓVIL: Abrimos la ventana INMEDIATAMENTE (antes de cualquier await).
+    // Esto "reserva" la pestaña y evita que el bloqueador de popups la cierre.
+    const newWindow = window.open('', '_blank');
+    
+    // Comprobamos si el navegador la bloqueó de todas formas (raro, pero posible)
+    if (!newWindow) {
+        alert("Please allow popups for this website to view the PDF.");
+        return;
+    }
+
+    // Le ponemos un mensaje temporal mientras se genera el documento
+    newWindow.document.write(`
+      <html>
+        <head><title>Loading PDF...</title></head>
+        <body style="margin:0; display:flex; justify-content:center; align-items:center; height:100vh; background:#f4f4f5; font-family:sans-serif; color:#555;">
+           <div style="text-align:center;">
+             <div style="margin-bottom:10px; font-weight:bold;">Generating Datasheet...</div>
+             <div style="font-size:12px;">Please wait moment.</div>
+           </div>
+        </body>
+      </html>
+    `);
+
     setIsGeneratingPdf(true);
+
     try {
-      // 1. Generamos el PDF
+      // 2. Generamos el PDF (esto es lo que toma tiempo)
       const blob = await pdf(<DatasheetDocument data={data} />).toBlob();
       const url = URL.createObjectURL(blob);
       
-      // 2. ABRIR SIEMPRE EN PESTAÑA NUEVA (PC Y MÓVIL)
-      window.open(url, '_blank');
+      // 3. Una vez listo, redirigimos esa ventana que ya abrimos a la URL del PDF
+      newWindow.location.href = url;
       
-      // Limpieza de memoria
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      // Limpieza de memoria (un poco más de tiempo para asegurar carga en móvil)
+      setTimeout(() => URL.revokeObjectURL(url), 3000);
 
     } catch (error) {
       console.error("PDF Error:", error);
+      newWindow.close(); // Si falla, cerramos la ventana para no dejarla colgada
+      alert("Error generating PDF. Please try again.");
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -183,15 +209,10 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
       </div>
 
       <div className="p-8 md:p-12 pt-0 flex flex-col md:flex-row gap-4">
-         {/* SOLUCIÓN MOBILE TAP:
-            1. Usamos 'md:hover:...' para que el hover solo ocurra en pantallas medianas/grandes.
-            2. Usamos 'active:...' para dar feedback táctil inmediato en móviles.
-            Esto evita que el primer tap se gaste en el hover.
-         */}
          <button 
            onClick={handleDownloadPDF}
            disabled={isGeneratingPdf}
-           className="flex-1 py-4 px-6 bg-[#F4F4F5] active:bg-[#E4E4E5] md:hover:bg-[#E4E4E5] text-[#111111] rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 group disabled:opacity-50"
+           className="flex-1 py-4 px-6 bg-[#F4F4F5] hover:bg-[#E4E4E5] text-[#111111] rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 group disabled:opacity-50"
          >
             {isGeneratingPdf ? (
               <>
@@ -199,13 +220,12 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
               </>
             ) : (
               <>
-                <Download className="w-4 h-4 text-gray-500 group-active:text-[#111111] md:group-hover:text-[#111111] transition-colors" />
+                <Download className="w-4 h-4 text-gray-500 group-hover:text-[#111111] transition-colors" />
                 View Datasheet (PDF)
               </>
             )}
          </button>
-         
-         <button className="flex-1 py-4 px-6 bg-[#111111] active:bg-[#FF270A] md:hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
+         <button className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
             <Mail className="w-4 h-4" />
             Contact Sales Team
          </button>
