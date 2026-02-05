@@ -286,7 +286,7 @@ export default function HowItWorks() {
                 </h3>
                 <p className="text-lg md:text-xl text-white/80 mb-10 leading-relaxed drop-shadow-md">
                    Experience the power of RNA-based detection. <br className="hidden md:block"/>
-                   Sensitivity redefined. 10,000x Amplified.
+                   Sensitivity amplified. Time to results redefined.
                 </p>
 
                 <button 
