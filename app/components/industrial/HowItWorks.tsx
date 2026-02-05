@@ -24,7 +24,7 @@ const SHORT_LABELS = [
 ];
 
 const IMAGE_CONFIG = {
-  0: { desktop: "/onebacteria3.png", mobile: "/onebacteria4-mobile.png" },
+  0: { desktop: "/onebacteria4.png", mobile: "/onebacteria5-mobile.png" },
   1: { desktop: "/food5.png", mobile: "/food5-mobile.png" },
   2: { desktop: "/swabs7.png", mobile: "/swabs8-mobile.png" },
   3: { // Multiplex PCR
@@ -53,23 +53,22 @@ export default function HowItWorks() {
 
   // --- STATE ANIMACIÓN GLOW ---
   const [isGlowVisible, setIsGlowVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
 
-  // Observer: Detectar cuando toda la sección es visible
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Disparamos la animación cuando el 20% de la sección entra en pantalla
+        // Disparamos la animación del fondo cuando el footer es visible
         if (entry.isIntersecting) {
           setIsGlowVisible(true);
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.3 } 
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    if (footerRef.current) {
+      observer.observe(footerRef.current);
     }
 
     return () => observer.disconnect();
@@ -130,45 +129,35 @@ export default function HowItWorks() {
   const prevImgs = getStepImages(prevStep, prevPcrVariant);
 
   return (
-    <section 
-      ref={sectionRef}
-      className="bg-[#151516] text-white py-24 md:py-32 px-4 md:px-6 overflow-hidden relative"
-    >
+    <section className="bg-[#151516] text-white py-24 md:py-32 px-4 md:px-6 overflow-hidden relative">
       
-      {/* --- GLOW DE FONDO (ANIMADO DESDE ABAJO) --- */}
-      {/* Posicionado absolutamente al fondo de toda la sección */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-         <div 
-            className="absolute bottom-0 left-1/2 -translate-x-1/2 transition-all duration-[2500ms] cubic-bezier(0.25, 1, 0.5, 1)"
-            style={{
-               width: "140%", // Más ancho que la pantalla para curvar los bordes
-               height: "600px",
-               // Animación:
-               // 1. Opacidad: 0 -> 0.6
-               // 2. Transform Y: Baja 100% (oculto) -> Sube a 30% (visible)
+      {/* --- GLOW DE FONDO (ANIMADO) --- */}
+      <div className="absolute inset-x-0 bottom-0 h-[800px] flex justify-center items-end pointer-events-none z-0">
+          <div 
+             className="w-full max-w-[1000px] h-[600px] transition-all duration-[2500ms] cubic-bezier(0.22, 1, 0.36, 1)"
+             style={{
+               // SOLO ANIMAMOS EL GLOW
                opacity: isGlowVisible ? 0.6 : 0,
                transform: isGlowVisible 
-                  ? "translateX(-50%) translateY(30%) scale(1)" 
-                  : "translateX(-50%) translateY(100%) scale(0.8)",
+                  ? "translateY(20%) scale(1)"    
+                  : "translateY(50%) scale(0.8)", 
                
-               // Gradiente Radial Intenso
-               background: "radial-gradient(circle at center bottom, #FF270A 0%, rgba(147, 51, 234, 0.6) 30%, rgba(37, 99, 235, 0.3) 60%, transparent 80%)",
-               filter: "blur(80px)",
+               background: "radial-gradient(circle at center bottom, #FF270A 0%, rgba(147, 51, 234, 0.5) 30%, rgba(37, 99, 235, 0.15) 60%, transparent 80%)",
+               filter: "blur(70px)",
                willChange: "transform, opacity"
-            }}
-         />
+             }}
+          />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* HEADER SECTION */}
-        <div className="px-10 md:px-20 mb-12 md:mb-20">
+        <div className="px-10 md:px-20 mb-12 md:mb-30">
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-left leading-tight">
             Take a closer look into the future, discover{" "}
-            <span className="bg-gradient-to-r from-blue-500 to-[#FF270A] bg-clip-text text-transparent">
-              AiGOR
+            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-[#FF270A] bg-clip-text text-transparent"> 
+              AiGOR solutions.
             </span>
-              {" "}products.
           </h2>
         </div>
 
@@ -283,15 +272,19 @@ export default function HowItWorks() {
           </div>
         </div>
 
-        {/* --- FUTURE SECTION (TEXTO) --- */}
-        <div className="relative mt-32 w-full flex flex-col items-center justify-center text-center pb-32 z-20">
-            <div className={`relative z-10 max-w-2xl px-4 transition-all duration-1000 delay-300 ${isGlowVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
+        {/* --- FUTURE SECTION (TEXTO ESTÁTICO) --- */}
+        <div 
+           ref={footerRef} 
+           className="relative mt-32 w-full flex flex-col items-center justify-center text-center pb-32 z-20"
+        >
+            {/* HEMOS QUITADO LAS CLASES DE ANIMACIÓN AQUÍ. TEXTO SIEMPRE VISIBLE */}
+            <div className="relative z-10 max-w-2xl px-4">
                 <h3 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 drop-shadow-2xl">
                   Ready to explore the future?
                 </h3>
                 <p className="text-lg md:text-xl text-white/80 mb-10 leading-relaxed drop-shadow-md">
                    Experience the power of RNA-based detection. <br className="hidden md:block"/>
-                   Sensitivity redefined. 10,000x Amplified.
+                   Sensitivity amplified. Time to results redefined.
                 </p>
 
                 <button 
