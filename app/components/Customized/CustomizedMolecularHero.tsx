@@ -37,7 +37,7 @@ export default function CustomizedMolecularHero() {
             </defs>
             
             {/* TEXTO CURVO */}
-            <text className="text-[24px] md:text-[55px] lg:text-[65px] font-bold uppercase fill-white/90 font-sora tracking-widest drop-shadow-sm">
+            <text className="text-[24px] md:text-[55px] lg:text-[45px] font-bold uppercase fill-white/90 font-sora tracking-widest drop-shadow-sm">
               <textPath 
                 href="#perfectArc" 
                 startOffset="50%" 

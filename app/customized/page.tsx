@@ -1,6 +1,7 @@
 // app/customized/page.tsx
 import Header from "../components/Header";
 import CustomizedMolecularHero from "../components/Customized/CustomizedMolecularHero";
+import MilaSection from "../components/Customized/MilaSection";
 
 export default function CustomizedPage() {
   return (
@@ -9,6 +10,7 @@ export default function CustomizedPage() {
       <Header theme="dark" />
       
       <CustomizedMolecularHero />
+      <MilaSection />
       
       {/* Resto de secciones... */}
       <div className="py-20 text-center">
