@@ -13,7 +13,6 @@ export default function CustomizedMolecularHero() {
   };
 
   return (
-    // 'min-h-[100svh]' es clave para móviles: se adapta a la altura real visible (sin barras de navegador)
     <section className="relative w-full h-screen min-h-[100svh] md:min-h-[800px] overflow-hidden bg-white flex flex-col justify-end items-center">
       
       {/* ================= 1. FONDO VIBRANTE ================= */}
@@ -37,7 +36,7 @@ export default function CustomizedMolecularHero() {
                />
             </defs>
             
-            {/* TEXTO CURVO: Pequeño en móvil (24px) para no estorbar */}
+            {/* TEXTO CURVO */}
             <text className="text-[24px] md:text-[55px] lg:text-[65px] font-bold uppercase fill-white/90 font-sora tracking-widest drop-shadow-sm">
               <textPath 
                 href="#perfectArc" 
@@ -45,7 +44,7 @@ export default function CustomizedMolecularHero() {
                 textAnchor="middle" 
                 // @ts-ignore
                 side="right"              >
-                 Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays •
+                 Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays •
                  <animate 
                    attributeName="startOffset" 
                    from="50%" 
@@ -57,6 +56,7 @@ export default function CustomizedMolecularHero() {
               </textPath>
             </text>
 
+            {/* LA COLINA BLANCA */}
             <path
               d="M 720, 1400
                  m -1100, 0
@@ -68,23 +68,22 @@ export default function CustomizedMolecularHero() {
       </div>
 
       {/* ================= 3. TÍTULO Y CTA ================= */}
-      {/* FIX MOBILE: 
-         - 'pb-24' (antes pb-10): Esto levanta todo el contenido significativamente en el celular.
-         - 'justify-end': Mantiene el contenido anclado abajo, pero el padding lo sube.
-      */}
       <div className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-24 md:pb-12 px-6 text-center pointer-events-none">
           
           <div className="pointer-events-auto animate-fadeInUp max-w-5xl mx-auto">
             
             {/* Título Principal */}
-            {/* Compactamos margen (mb-5) para ganar espacio vertical */}
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-5 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
-                Imagine your dream molecular <br className="hidden md:block" />
-                <span className="text-gray-400 inline-block">microbiological assay.</span>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-5 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
+                Imagine your dream <br className="hidden md:block" />
+                {/* AQUÍ ESTÁ EL CAMBIO:
+                   Reemplazamos 'text-gray-400' por la nueva clase 'text-aurora-clip'
+                */}
+                <span className="inline-block text-aurora-clip">
+                  molecular microbiological assay.
+                </span>
             </h1>
 
             {/* Subtítulo */}
-            {/* Compactamos margen (mb-3) */}
             <span className="text-sm md:text-base text-[#111111]/70 font-bold uppercase tracking-[0.2em] mb-3 md:mb-6 block font-sora">
                 Now start using it.
             </span>
@@ -105,7 +104,8 @@ export default function CustomizedMolecularHero() {
 
       {/* ================= STYLES ================= */}
       <style jsx>{`
-        .bg-aurora-vibrant {
+        /* Define los colores del gradiente una vez para reusarlos */
+        .bg-aurora-vibrant, .text-aurora-clip {
           background: linear-gradient(
             115deg, 
             #D92408, /* Rojo TAAG */
@@ -117,8 +117,20 @@ export default function CustomizedMolecularHero() {
           background-size: 300% 300%;
         }
 
+        /* Animación del fondo principal */
         .animate-super-flow {
           animation: gradientPulse 12s ease infinite alternate;
+        }
+
+        /* NUEVA CLASE PARA EL TEXTO TRANSPARENTE */
+        .text-aurora-clip {
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          /* Aplica la misma animación para que se mueva sincronizado */
+          animation: gradientPulse 12s ease infinite alternate;
+          /* Un poco de sombra suave ayuda a definir los bordes sobre el blanco */
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
         @keyframes gradientPulse {
