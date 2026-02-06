@@ -13,9 +13,7 @@ export default function CustomizedMolecularHero() {
   };
 
   return (
-    // FIX MOBILE 1: 'min-h-[100svh]' asegura que en celular ocupe exactamente la pantalla real
-    // y no empuje el contenido hacia abajo (donde se pierde la flecha).
-    // Mantenemos 800px de mínimo solo para desktop.
+    // 'min-h-[100svh]' es clave para móviles: se adapta a la altura real visible (sin barras de navegador)
     <section className="relative w-full h-screen min-h-[100svh] md:min-h-[800px] overflow-hidden bg-white flex flex-col justify-end items-center">
       
       {/* ================= 1. FONDO VIBRANTE ================= */}
@@ -30,7 +28,6 @@ export default function CustomizedMolecularHero() {
             preserveAspectRatio="xMidYMax slice"
          >
             <defs>
-               {/* RUTA DEL TEXTO (Radio = 1180px, Centro Y = 1400) */}
                <path
                  id="perfectArc"
                  d="M 720, 1400
@@ -40,14 +37,13 @@ export default function CustomizedMolecularHero() {
                />
             </defs>
             
-            {/* TEXTO CURVO */}
-            {/* FIX MOBILE 2: Reducido a text-[24px] en móvil para que sea más sutil */}
+            {/* TEXTO CURVO: Pequeño en móvil (24px) para no estorbar */}
             <text className="text-[24px] md:text-[55px] lg:text-[65px] font-bold uppercase fill-white/90 font-sora tracking-widest drop-shadow-sm">
               <textPath 
                 href="#perfectArc" 
                 startOffset="50%" 
                 textAnchor="middle" 
-                // @ts-ignore: 'side' es válido en SVG pero TS a veces no lo reconoce
+                // @ts-ignore
                 side="right"              >
                  Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays •
                  <animate 
@@ -61,7 +57,6 @@ export default function CustomizedMolecularHero() {
               </textPath>
             </text>
 
-            {/* LA COLINA BLANCA (Radio = 1100px, Centro Y = 1400) */}
             <path
               d="M 720, 1400
                  m -1100, 0
@@ -72,21 +67,25 @@ export default function CustomizedMolecularHero() {
          </svg>
       </div>
 
-      {/* ================= 3. TÍTULO Y CTA (ESTILO INDUSTRIAL HERO) ================= */}
-      {/* FIX MOBILE 3: 'pb-10' en móvil levanta el contenido lo justo para verse bien, sin subirlo demasiado. */}
-      <div className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-10 md:pb-12 px-6 text-center pointer-events-none">
+      {/* ================= 3. TÍTULO Y CTA ================= */}
+      {/* FIX MOBILE: 
+         - 'pb-24' (antes pb-10): Esto levanta todo el contenido significativamente en el celular.
+         - 'justify-end': Mantiene el contenido anclado abajo, pero el padding lo sube.
+      */}
+      <div className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-24 md:pb-12 px-6 text-center pointer-events-none">
           
           <div className="pointer-events-auto animate-fadeInUp max-w-5xl mx-auto">
             
             {/* Título Principal */}
-            {/* FIX MOBILE 4: Márgenes reducidos (mb-6) en móvil para compactar el bloque */}
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-6 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
+            {/* Compactamos margen (mb-5) para ganar espacio vertical */}
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-5 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
                 Imagine your dream molecular <br className="hidden md:block" />
                 <span className="text-gray-400 inline-block">microbiological assay.</span>
             </h1>
 
             {/* Subtítulo */}
-            <span className="text-sm md:text-base text-[#111111]/70 font-bold uppercase tracking-[0.2em] mb-4 md:mb-6 block font-sora">
+            {/* Compactamos margen (mb-3) */}
+            <span className="text-sm md:text-base text-[#111111]/70 font-bold uppercase tracking-[0.2em] mb-3 md:mb-6 block font-sora">
                 Now start using it.
             </span>
 
