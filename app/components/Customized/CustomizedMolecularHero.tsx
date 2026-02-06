@@ -68,12 +68,12 @@ export default function CustomizedMolecularHero() {
       </div>
 
       {/* ================= 3. TÍTULO Y CTA ================= */}
-      <div className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-24 md:pb-12 px-6 text-center pointer-events-none">
+      <div className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-16 md:pb-12 px-6 text-center pointer-events-none">
           
           <div className="pointer-events-auto animate-fadeInUp max-w-5xl mx-auto">
             
             {/* Título Principal */}
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-5 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-4 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
                 Imagine your dream <br className="hidden md:block" />
                 {/* AQUÍ ESTÁ EL CAMBIO:
                    Reemplazamos 'text-gray-400' por la nueva clase 'text-aurora-clip'
