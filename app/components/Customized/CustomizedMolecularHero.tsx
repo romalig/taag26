@@ -68,16 +68,18 @@ export default function CustomizedMolecularHero() {
       </div>
 
       {/* ================= 3. TÍTULO Y CTA ================= */}
-      <div className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-16 md:pb-12 px-6 text-center pointer-events-none">
+      {/* FIX MOBILE: 
+          - Cambiado 'pb-16' a 'pb-28': Esto levanta mucho más el contenido en el celular,
+            evitando que la flecha quede tapada por la barra de navegación del navegador.
+      */}
+      <div className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-28 md:pb-12 px-6 text-center pointer-events-none">
           
           <div className="pointer-events-auto animate-fadeInUp max-w-5xl mx-auto">
             
             {/* Título Principal */}
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-4 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
+            {/* Compactamos el margen (mb-3) para mantener el bloque unido al subirlo */}
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-3 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
                 Imagine your dream <br className="hidden md:block" />
-                {/* AQUÍ ESTÁ EL CAMBIO:
-                   Reemplazamos 'text-gray-400' por la nueva clase 'text-aurora-clip'
-                */}
                 <span className="inline-block text-aurora-clip">
                   molecular microbiological assay.
                 </span>
