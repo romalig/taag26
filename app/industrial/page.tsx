@@ -18,11 +18,11 @@ export default function IndustrialPage() {
   return (
     <ModalProvider> {/* 1. Wrapper */}
     <main className="bg-white min-h-screen font-sans selection:bg-[#FF270A] selection:text-white">
-      <Header forceDark={true} />
+      <Header/>
+      <AigorImpactSection />
       <IndustrialHero />
       <FeaturedSolutions />
       <Equipment />
-      <AigorImpactSection />
       <HowItWorks />
       <SolutionsCatalog />
       <Success />

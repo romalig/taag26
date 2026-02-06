@@ -97,13 +97,13 @@ export default function AigorImpactSection() {
         {/* 1. HERO VISUAL (Título + Imagen) */}
         <div className="text-center flex flex-col items-center mb-40 pt-20">
           <p className="text-sm md:text-base font-bold tracking-[0.2em] text-white/60 mb-6 uppercase animate-fadeIn">
-            powered by AiGOR
+            Hyper-Fast EMP
           </p>
 
           <h2 className="text-5xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-16 drop-shadow-2xl">
-            The Next Generation <br />
-            of Microbiological <br />
-            Solutions.
+            A completely <br />
+            transformed <br />
+            workflow.
           </h2>
 
           {/* IMAGEN CENTRAL */}
