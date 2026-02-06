@@ -42,7 +42,7 @@ export default function EquipmentSection() {
               </h2>
               <p className="text-base md:text-lg text-gray-500 leading-relaxed  mb-4 md:mb-6">
                  {/* We believe in simplicity. A normal real-time PCR machine Whether you need a simple manual setup or a fully automated robot, our kits adapt to your lab's reality. */} 
-                We believe in simplicity. Eight square meters. One standard qPCR machine. <br className="hidden md:block"/> That’s all it takes.
+                We believe in simplicity. Six square meters. One standard qPCR machine. <br className="hidden md:block"/> That’s all it takes.
               </p>
            </div>
 
@@ -95,11 +95,11 @@ export default function EquipmentSection() {
                  
                  <div className="flex flex-wrap items-center gap-2 mb-4 md:mb-6">
                     <div className="px-3 py-1 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white text-[10px] md:text-xs font-bold uppercase tracking-wider">
-                       Recommended Setup
+                      qPCR machine
                     </div>
                     <div className="flex items-center gap-1.5 text-white/80 text-[10px] md:text-xs font-medium">
                        <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4 text-[#FF270A]" />
-                       <span>Analytik Jena Preferred</span>
+                       <span>Analytik Jena recommended</span>
                     </div>
                  </div>
 

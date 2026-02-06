@@ -10,6 +10,7 @@ import FinalCTA from "../components/FinalCTA";
 import Success from "../components/industrial/SuccessStories";
 import { ModalProvider } from "../components/industrial/ModalProvider"; 
 import SolutionModal from "../components/industrial/SolutionModal";
+import AigorImpactSection from '../components/industrial/AigorImpactSection'
 
 // import Footer from "../../components/Footer"; // Si tienes footer global
 
@@ -21,6 +22,7 @@ export default function IndustrialPage() {
       <IndustrialHero />
       <FeaturedSolutions />
       <Equipment />
+      <AigorImpactSection />
       <HowItWorks />
       <SolutionsCatalog />
       <Success />
