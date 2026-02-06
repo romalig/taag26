@@ -99,12 +99,12 @@ export default function AigorImpactSection() {
         
         {/* 1. HERO VISUAL */}
         <div className="text-center flex flex-col items-center mb-24 md:mb-40 pt-20">
-          <p className="text-xs md:text-base font-bold tracking-[0.2em] text-white/60 mb-4 md:mb-6 uppercase animate-fadeIn">
+          <p className="text-xs md:text-base font-bold tracking-[0.2em] text-white/60 mb-4 md:mb-6 uppercase">
             powered by AiGOR
           </p>
 
           {/* AJUSTE TIPOGRAFÍA: text-4xl en móvil, text-8xl en desktop */}
-          <h2 className="text-4xl md:text-8xl font-bold tracking-tighter leading-[1.1] md:leading-[0.9] mb-12 md:mb-16 drop-shadow-2xl">
+          <h2 className="text-4xl md:text-8xl font-bold tracking-tighter leading-[1.1] md:leading-[0.9] mb-6 md:mb-6 drop-shadow-2xl">
             The Next Generation <br />
             of Microbiological <br />
             Solutions.
@@ -113,9 +113,9 @@ export default function AigorImpactSection() {
 
         {/* 2. TEXTO DESCRIPTIVO */}
         <div className="text-center mb-16 md:mb-24 max-w-3xl">
-          <p className="text-xl md:text-3xl font-medium text-white leading-relaxed drop-shadow-lg p-4 md:p-6 rounded-3xl backdrop-blur-sm border border-white/5">
-            <span className="text-white">Speed and accuray like never before.</span>{" "}
-            <br className="hidden md:block" />
+          <p className="text-xl md:text-3xl font-medium text-white leading-relaxed drop-shadow-lg p-4 md:p-6 rounded-3xl backdrop-blur-sm">
+            <span className="text-white">Speed and accuray like never before.</span>{" "} 
+            <br/>
             <span className="text-white/70">AiGOR utilizes RNA-based detection to bypass biological limits,
             delivering actionable results in hours, not days.</span>
           </p>
