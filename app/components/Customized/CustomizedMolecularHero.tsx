@@ -48,8 +48,8 @@ export default function CustomizedMolecularHero() {
                 href="#perfectArc" 
                 startOffset="50%" 
                 textAnchor="middle" 
-                side="right" 
-              >
+                // @ts-ignore: 'side' es válido en SVG pero TS a veces no lo reconoce
+                side="right"              >
                  Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays •
                  <animate 
                    attributeName="startOffset" 
