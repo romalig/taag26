@@ -44,7 +44,7 @@ export default function CustomizedMolecularHero() {
                 textAnchor="middle" 
                 // @ts-ignore
                 side="right"              >
-                 Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays •
+                 Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays •
                  <animate 
                    attributeName="startOffset" 
                    from="50%" 
