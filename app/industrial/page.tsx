@@ -19,7 +19,6 @@ export default function IndustrialPage() {
     <ModalProvider> {/* 1. Wrapper */}
     <main className="bg-white min-h-screen font-sans selection:bg-[#FF270A] selection:text-white">
       <Header/>
-      <AigorImpactSection />
       <IndustrialHero />
       <FeaturedSolutions />
       <Equipment />

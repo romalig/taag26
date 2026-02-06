@@ -102,7 +102,6 @@ export default function SolutionsCatalog() {
           {/* HERO DEL CATALOGO */}
           <div className="relative h-[420px] md:h-[500px] rounded-t-[3rem] overflow-hidden">
             <Image src="/hero16.png" alt="TAAG Solutions Ecosystem" fill className="object-cover object-right md:object-center" priority />
-             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/10" />
              
              <div className="relative z-10 h-full flex items-start pt-20 md:pt-24">
                <div className="px-10 md:px-20 max-w-3xl">

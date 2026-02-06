@@ -58,8 +58,6 @@ export default function HowItWorks() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // ACTUALIZACIÓN: Ahora actualizamos el estado cada vez (true o false)
-        // para que la animación se repita al entrar y salir.
         setIsGlowVisible(entry.isIntersecting);
       },
       { threshold: 0.3 } 
@@ -77,7 +75,6 @@ export default function HowItWorks() {
     window.dispatchEvent(event);
   };
 
-  // ... (Funciones de carrusel idénticas)
   const getStepImages = (stepIndex: number, variant: PcrVariant) => {
     if (stepIndex === 3) return IMAGE_CONFIG[3][variant];
     // @ts-ignore
@@ -129,24 +126,32 @@ export default function HowItWorks() {
   return (
     <section className="bg-[#151516] text-white py-24 md:py-32 px-4 md:px-6 overflow-hidden relative">
       
-      {/* --- GLOW DE FONDO (ANIMADO CON DELAY Y REPETICIÓN) --- */}
+      {/* --- GLOW DE FONDO (PALETA DE COLORES ACTUALIZADA: AZUL OSCURO, MORADO, ROJO) --- */}
       <div className="absolute inset-x-0 bottom-0 h-[800px] flex justify-center items-end pointer-events-none z-0">
           <div 
              className={`w-full max-w-[1000px] h-[600px] transition-all duration-[2500ms] cubic-bezier(0.22, 1, 0.36, 1) ${
-                // Aquí está la magia:
-                // delay-1000: Espera 1s antes de empezar a subir cuando es visible.
-                // delay-0: Se resetea instantáneamente al dejar de ser visible.
                 isGlowVisible ? "delay-100" : "delay-0"
              }`}
              style={{
-               opacity: isGlowVisible ? 0.6 : 0,
+               // 1. CAMBIO: Opacidad al 1 (antes era 0.6).
+               opacity: isGlowVisible ? 1 : 0,
+               
                transform: isGlowVisible 
                   ? "translateY(20%) scale(1)"    
                   : "translateY(50%) scale(0.8)", 
                
-               background: "radial-gradient(circle at center bottom, #FF270A 0%, rgba(147, 51, 234, 0.5) 40%, rgba(37, 99, 235, 0.15) 70%, transparent 80%)",
-               filter: "blur(70px)",
-               willChange: "transform, opacity"
+               // 2. CAMBIO: Colores sólidos sin transparencia interna.
+               // - #FF270A (Rojo puro al centro)
+               // - #7e22ce (Morado intenso - purple-700)
+               // - #172554 (Azul profundo sólido - blue-950)
+               background: "radial-gradient(circle at center bottom, #FF270A 0%, #7e22ce 45%, #172554 70%, transparent 95%)",
+               
+               filter: "blur(60px)", // Reducimos un poco el blur para concentrar el color
+               willChange: "transform, opacity",
+               
+               // 3. CAMBIO: El secreto del brillo.
+               // 'screen' hace que los colores brillen sobre el fondo negro.
+               mixBlendMode: "screen" 
              }}
           />
       </div>
@@ -168,7 +173,7 @@ export default function HowItWorks() {
           className="relative w-full flex flex-col md:block md:h-[750px] bg-[#151516] rounded-[2rem] md:rounded-[3rem] overflow-hidden border border-white/5 z-20"
           onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
         >
-          {/* ... (IMÁGENES - Sin cambios) ... */}
+          {/* IMÁGENES */}
           <div className="relative w-full h-[500px] md:absolute md:inset-0 md:h-full z-0 shrink-0">
              {isAnimating && (
                <div key={`prev-${prevStep}-${prevPcrVariant}`} className="absolute inset-0 z-0 animate-slideOutLeft">
@@ -191,7 +196,7 @@ export default function HowItWorks() {
              </div>
           </div>
 
-          {/* ... (INTERFAZ MÓVIL/DESKTOP - Sin cambios) ... */}
+          {/* INTERFAZ MÓVIL */}
           <div className="relative z-20 bg-[#151516] px-6 pb-8 pt-6 md:hidden flex flex-col justify-between flex-1">
              <div className="flex items-center justify-between gap-3 w-full">
                 <button onClick={handlePrev} disabled={activeStep === 0} className={`w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0 transition-opacity ${activeStep === 0 ? 'opacity-30' : 'active:scale-95'}`}><ChevronLeft className="w-6 h-6 text-white" /></button>
@@ -224,6 +229,7 @@ export default function HowItWorks() {
              </div>
           </div>
 
+          {/* INTERFAZ DESKTOP */}
           <div className="hidden md:flex absolute top-0 bottom-0 left-0 z-20 w-full max-w-lg p-12 items-start gap-6 pointer-events-none">
              <div className="flex flex-col gap-3 mt-2 pointer-events-auto">
                <button onClick={handlePrev} disabled={activeStep === 0} className={`w-10 h-10 rounded-full bg-[#333336]/80 backdrop-blur-md flex items-center justify-center transition-all duration-300 border border-white/10 ${activeStep === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-[#454548]'}`}><ChevronUp className="w-5 h-5 text-white" /></button>
@@ -274,7 +280,7 @@ export default function HowItWorks() {
           </div>
         </div>
 
-        {/* --- FUTURE SECTION (TEXTO ESTÁTICO) --- */}
+        {/* --- FUTURE SECTION --- */}
         <div 
            ref={footerRef} 
            className="relative mt-32 w-full flex flex-col items-center justify-center text-center pb-32 z-20"
