@@ -7,9 +7,9 @@ import { CheckCircle2 } from "lucide-react";
 const EQUIPMENT_SCENARIOS = {
   simple: {
     id: "simple",
-    label: "Environmental & Easy Food",
+    label: "Environmental & Food Samples",
     image: "/termo6.png", 
-    title: "Manual & Rapid Workflow",
+    title: "Easy & Rapid Workflow",
     description: "Ideal for environmental and normal food matrices. Skip the complex machinery with our rapid extraction protocols that get you to PCR results in record time.",
   },
   complex: {

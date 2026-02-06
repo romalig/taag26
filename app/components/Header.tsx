@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, Globe, User, ChevronRight, MapPin } from "lucide-react"; 
+import { Menu, X, Globe, User, ChevronRight } from "lucide-react"; 
 import Link from "next/link";
 import Image from "next/image";
 import { Sora } from "next/font/google";
@@ -10,7 +10,7 @@ const sora = Sora({ subsets: ["latin"], weight: ["400", "500", "700", "800"] });
 
 const NAV_LINKS = [
   { name: "Industrial Microbiology", href: "/industrial" },
-  { name: "Customized Molecular", href: "#custom" },
+  { name: "Customized Molecular", href: "/customized" },
   { name: "Digital Transformation", href: "#digital" },
   { name: "Hubs", href: "#hubs" },
   { name: "Technologies", href: "#technologies" },
@@ -21,15 +21,16 @@ const NAV_LINKS = [
 const HUBS_LIST = ["USA", "Belgium", "Mexico", "Chile"];
 const PARTNERS_LIST = ["Peru", "Colombia", "Argentina", "Brazil", "Spain"];
 
-// AGREGAMOS LA PROP 'forceDark'
-export default function Header({ forceDark = false }: { forceDark?: boolean }) {
+// Prop 'theme': 'dark' para fondos oscuros (letras blancas), 'light' para fondos claros (letras negras).
+export default function Header({ theme = "light" }: { theme?: "light" | "dark" }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isGlobeOpen, setIsGlobeOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      // Cambia el estado al hacer un poco de scroll (simulando "salir del hero")
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -43,11 +44,32 @@ export default function Header({ forceDark = false }: { forceDark?: boolean }) {
     }
   }, [isMenuOpen, isGlobeOpen]);
 
-  // Lógica de colores: Si está scrolleado, menú abierto O forceDark es true -> Fondo blanco / Texto negro
-  const showDarkHeader = isScrolled || isMenuOpen || isGlobeOpen || forceDark;
+  // --- LÓGICA DE ESTADOS ---
 
-  const headerBg = showDarkHeader ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-black/5" : "bg-transparent border-transparent";
-  const textColor = showDarkHeader ? "text-[#111111]" : "text-white";
+  // 1. ¿Estoy en modo "Hero Oscuro" actualmente?
+  // Solo es verdad si el theme es 'dark' Y NO hemos scrolleado aún.
+  const isDarkHeroState = theme === "dark" && !isScrolled;
+
+  // 2. Fondo del Header
+  // - Scrolled: Blanco translúcido con blur (lo que pediste).
+  // - Top: Transparente absoluto.
+  const headerBg = isScrolled 
+    ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-black/5" 
+    : "bg-transparent border-transparent";
+
+  // 3. Color del Texto
+  // - Hero Oscuro (Top): Blanco.
+  // - Hero Blanco (Top) O Scrolled: Negro.
+  const textColor = (isDarkHeroState && !isMenuOpen && !isGlobeOpen) 
+    ? "text-white" 
+    : "text-[#111111]";
+
+  // 4. Estilo del Logo
+  // - Hero Oscuro (Top): Invertimos a BLANCO (brightness-0 invert).
+  // - Hero Blanco (Top) O Scrolled: Normal (Rojo original).
+  const logoClasses = (isDarkHeroState && !isMenuOpen && !isGlobeOpen)
+    ? "brightness-0 invert" 
+    : "";
 
   return (
     <div className={sora.className}>
@@ -60,17 +82,18 @@ export default function Header({ forceDark = false }: { forceDark?: boolean }) {
                  src="/logo-red1.png" 
                  alt="TAAG Logo"
                  fill
-                 // Si NO mostramos el header oscuro, invertimos el logo a blanco
-                 className={`object-contain object-left transition-all duration-500 ${!showDarkHeader ? "brightness-0 invert" : ""}`}
+                 // Aquí aplicamos la lógica del logo: Blanco solo si estamos en top + dark hero
+                 className={`object-contain object-left transition-all duration-500 ${logoClasses}`}
                  priority
                />
             </div>
           </Link>
 
-          <div className="flex items-center gap-4 md:gap-6 relative z-[102]">
+          {/* Menú de navegación */}
+          <div className={`flex items-center gap-4 md:gap-6 relative z-[102] transition-colors duration-500 ${textColor}`}>
             <Link
               href="/login"
-              className={`hidden md:flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest hover:opacity-70 transition-colors ${textColor}`}
+              className="hidden md:flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest hover:opacity-70 transition-opacity"
             >
               <User className="w-4 h-4" />
               <span>Log in</span>
@@ -78,14 +101,14 @@ export default function Header({ forceDark = false }: { forceDark?: boolean }) {
 
             <button 
                 onClick={() => {setIsGlobeOpen(!isGlobeOpen); setIsMenuOpen(false);}}
-                className={`flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest hover:opacity-70 transition-colors ${textColor}`}
+                className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest hover:opacity-70 transition-opacity"
             >
               <Globe className="w-4 h-4" />
               <span className="hidden md:inline">Locations</span>
             </button>
 
             <button
-              className={`p-1 transition-transform duration-300 hover:scale-110 ${textColor}`}
+              className="p-1 transition-transform duration-300 hover:scale-110"
               onClick={() => {setIsMenuOpen(!isMenuOpen); setIsGlobeOpen(false);}}
             >
               <Menu className="w-7 h-7" />
@@ -94,7 +117,7 @@ export default function Header({ forceDark = false }: { forceDark?: boolean }) {
         </div>
       </header>
 
-      {/* --- DRAWER MENU LATERAL --- */}
+      {/* --- DRAWER MENU LATERAL (Sin cambios de lógica, siempre fondo blanco/limpio) --- */}
       <div 
         className={`fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm transition-opacity duration-500 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
         onClick={() => setIsMenuOpen(false)}
@@ -171,11 +194,9 @@ export default function Header({ forceDark = false }: { forceDark?: boolean }) {
               <X className="w-6 h-6 text-black" />
             </button>
             <div className="max-w-5xl mx-auto mt-10 h-full overflow-y-auto pb-20">
-                {/* Contenido del globo igual que antes */}
                 <div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl font-bold text-[#111111] mb-4">Our Global Presence</h2>
                 </div>
-                {/* ... resto del mapa ... */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 relative">
                     <div className="flex flex-col items-center text-center">
                         <h3 className="text-xs font-bold text-black/40 uppercase tracking-[0.2em] mb-8">Direct Hubs</h3>

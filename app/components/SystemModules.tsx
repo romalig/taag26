@@ -30,7 +30,7 @@ const MODULES = [
     title: "Customized Molecular",
     description: "AI-designed molecular assays for your specific needs.",
     img: CARD_IMG3, 
-    link: "#custom",
+    link: "/customized",
   },
   {
     id: "digital",

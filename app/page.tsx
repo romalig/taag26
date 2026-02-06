@@ -12,6 +12,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       {/* 1. Hero Section (Imagen científica + CTA) */}
+      
       <Hero />
 
       {/* 4. Tarjetas de Productos (Estilo Hims/Lilly) */}

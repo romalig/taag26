@@ -44,7 +44,7 @@ export default function Footer() {
                 Industrial Microbiology
                 </Link>
               </li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Customized Molecular</Link></li>
+              <li><Link href="/customized" className="hover:text-[#FF270A] transition-colors">Customized Molecular</Link></li>
               <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Digital Transformation</Link></li>
               <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Resources</Link></li>
             </ul>

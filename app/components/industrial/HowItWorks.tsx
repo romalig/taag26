@@ -134,7 +134,7 @@ export default function HowItWorks() {
              }`}
              style={{
                // 1. CAMBIO: Opacidad al 1 (antes era 0.6).
-               opacity: isGlowVisible ? 1 : 0,
+               opacity: isGlowVisible ? 0.8 : 0,
                
                transform: isGlowVisible 
                   ? "translateY(20%) scale(1)"    
@@ -146,7 +146,7 @@ export default function HowItWorks() {
                // - #172554 (Azul profundo sólido - blue-950)
                background: "radial-gradient(circle at center bottom, #FF270A 0%, #7e22ce 45%, #172554 70%, transparent 95%)",
                
-               filter: "blur(60px)", // Reducimos un poco el blur para concentrar el color
+               filter: "blur(90px)", // Reducimos un poco el blur para concentrar el color
                willChange: "transform, opacity",
                
                // 3. CAMBIO: El secreto del brillo.
@@ -283,7 +283,7 @@ export default function HowItWorks() {
         {/* --- FUTURE SECTION --- */}
         <div 
            ref={footerRef} 
-           className="relative mt-32 w-full flex flex-col items-center justify-center text-center pb-32 z-20"
+           className="relative mt-32 w-full flex flex-col items-center justify-center text-center pb-22 z-20"
         >
             <div className="relative z-10 max-w-2xl px-4">
                 <h3 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 drop-shadow-2xl">

@@ -13,7 +13,7 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "TAAG Genetics",
+  title: "TAAG",
   description: "Advanced microbiological solutions.",
   icons: {
     icon: "/icon.png",
@@ -29,7 +29,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`${sora.className} antialiased`}>
         <CTAProvider>
-          <Header />
+          <Header theme="dark" />
           {children}
           <Footer />
           <BookMeetingModal />
