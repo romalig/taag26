@@ -13,7 +13,10 @@ export default function CustomizedMolecularHero() {
   };
 
   return (
-    <section className="relative w-full h-screen min-h-[800px] overflow-hidden bg-white flex flex-col justify-end items-center">
+    // FIX MOBILE 1: 'min-h-[100svh]' asegura que en celular ocupe exactamente la pantalla real
+    // y no empuje el contenido hacia abajo (donde se pierde la flecha).
+    // Mantenemos 800px de mínimo solo para desktop.
+    <section className="relative w-full h-screen min-h-[100svh] md:min-h-[800px] overflow-hidden bg-white flex flex-col justify-end items-center">
       
       {/* ================= 1. FONDO VIBRANTE ================= */}
       <div className="absolute inset-0 z-0 bg-aurora-vibrant animate-super-flow" />
@@ -27,11 +30,6 @@ export default function CustomizedMolecularHero() {
             preserveAspectRatio="xMidYMax slice"
          >
             <defs>
-               {/* AJUSTE DE POSICIÓN:
-                  Subimos el centro Y de 1550 a 1400. 
-                  Esto eleva el arco y el texto curvo, dando más aire abajo.
-               */}
-
                {/* RUTA DEL TEXTO (Radio = 1180px, Centro Y = 1400) */}
                <path
                  id="perfectArc"
@@ -43,7 +41,8 @@ export default function CustomizedMolecularHero() {
             </defs>
             
             {/* TEXTO CURVO */}
-            <text className="text-[40px] md:text-[55px] lg:text-[65px] font-bold uppercase fill-white/90 font-sora tracking-widest drop-shadow-sm">
+            {/* FIX MOBILE 2: Reducido a text-[24px] en móvil para que sea más sutil */}
+            <text className="text-[24px] md:text-[55px] lg:text-[65px] font-bold uppercase fill-white/90 font-sora tracking-widest drop-shadow-sm">
               <textPath 
                 href="#perfectArc" 
                 startOffset="50%" 
@@ -74,23 +73,23 @@ export default function CustomizedMolecularHero() {
       </div>
 
       {/* ================= 3. TÍTULO Y CTA (ESTILO INDUSTRIAL HERO) ================= */}
-      {/* - pb-20 md:pb-32: Aumentamos el padding inferior para centrar el texto en el nuevo espacio blanco más grande.
-         - pointer-events-none en el contenedor padre, pointer-events-auto en el hijo para que el botón funcione.
-      */}
-      <div className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-20 md:pb-12 px-6 text-center pointer-events-none">
+      {/* FIX MOBILE 3: 'pb-10' en móvil levanta el contenido lo justo para verse bien, sin subirlo demasiado. */}
+      <div className="absolute inset-0 z-30 flex flex-col items-center justify-end pb-10 md:pb-12 px-6 text-center pointer-events-none">
           
           <div className="pointer-events-auto animate-fadeInUp max-w-5xl mx-auto">
             
-            {/* Título Principal con Gradiente Oscuro (Estilo Industrial Hero) */}
-            {/* Usamos un gradiente sutil de negro a gris oscuro para dar textura */}
-      <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-12 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
-        Imagine your dream molecular <br className="hidden md:block" />
-        {/* El span mantiene el color gris pero fluye con el texto */}
-        <span className="text-gray-400 inline-block">microbiological assay.</span>
-      </h1>
-            <span className="text-sm md:text-base text-[#111111]/70 font-bold uppercase tracking-[0.2em] mb-6 block font-sora">
+            {/* Título Principal */}
+            {/* FIX MOBILE 4: Márgenes reducidos (mb-6) en móvil para compactar el bloque */}
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-6 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
+                Imagine your dream molecular <br className="hidden md:block" />
+                <span className="text-gray-400 inline-block">microbiological assay.</span>
+            </h1>
+
+            {/* Subtítulo */}
+            <span className="text-sm md:text-base text-[#111111]/70 font-bold uppercase tracking-[0.2em] mb-4 md:mb-6 block font-sora">
                 Now start using it.
             </span>
+
             {/* Flecha Clickeable */}
             <div className="flex justify-center">
                 <button 
@@ -98,7 +97,7 @@ export default function CustomizedMolecularHero() {
                     className="group p-2 hover:bg-black/5 rounded-full transition-all cursor-pointer"
                     aria-label="Scroll down"
                 >
-                    <ChevronDown className="w-10 h-10 md:w-12 md:h-12 animate-bounce text-[#111111] group-hover:text-black/70 transition-colors" />
+                    <ChevronDown className="w-8 h-8 md:w-10 md:h-10 animate-bounce text-[#111111] group-hover:text-black/70 transition-colors" />
                 </button>
             </div>
           </div>
