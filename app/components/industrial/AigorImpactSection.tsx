@@ -109,30 +109,15 @@ export default function AigorImpactSection() {
             of Microbiological <br />
             Solutions.
           </h2>
-
-          {/* IMAGEN CENTRAL: Más pequeña en móvil */}
-          <div className="relative w-[260px] h-[260px] md:w-[500px] md:h-[500px] flex items-center justify-center">
-            <div className="absolute inset-0 bg-black rounded-[2.5rem] md:rounded-[3rem] border border-white/10 shadow-2xl flex items-center justify-center z-20 overflow-hidden">
-              <div className="text-center relative z-10">
-                <span className="text-7xl md:text-9xl font-bold text-[#111] drop-shadow-md select-none">
-                  Ai
-                </span>
-              </div>
-              <div className="absolute inset-0 rounded-[2.5rem] md:rounded-[3rem] shadow-[inset_0_0_50px_rgba(255,255,255,0.15)] pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-            </div>
-
-            <div className="absolute -bottom-10 md:-bottom-12 w-[70%] h-[30px] bg-black/80 blur-2xl rounded-full" />
-          </div>
         </div>
 
         {/* 2. TEXTO DESCRIPTIVO */}
         <div className="text-center mb-16 md:mb-24 max-w-3xl">
           <p className="text-xl md:text-3xl font-medium text-white leading-relaxed drop-shadow-lg p-4 md:p-6 rounded-3xl backdrop-blur-sm border border-white/5">
-            <span className="text-white/50">Immersive speed like never before.</span>{" "}
+            <span className="text-white">Speed and accuray like never before.</span>{" "}
             <br className="hidden md:block" />
-            AiGOR utilizes RNA-based detection to bypass biological limits,
-            delivering actionable results in hours, not days.
+            <span className="text-white/70">AiGOR utilizes RNA-based detection to bypass biological limits,
+            delivering actionable results in hours, not days.</span>
           </p>
         </div>
 
