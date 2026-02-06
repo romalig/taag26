@@ -31,8 +31,8 @@ export default function CustomizedMolecularHero() {
                <path
                  id="perfectArc"
                  d="M 720, 1400
-                    m -1180, 0
-                    a 1180,1180 0 0,1 2360,0"
+                    m -1130, 0
+                    a 1130,1130 0 0,1 2260,0"
                  fill="none"
                />
             </defs>
@@ -45,7 +45,7 @@ export default function CustomizedMolecularHero() {
                 textAnchor="middle" 
                 // @ts-ignore
                 side="right"              >
-                 Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays •
+                 Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays •
                  <animate 
                    attributeName="startOffset" 
                    from="50%" 
