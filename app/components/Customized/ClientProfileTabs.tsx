@@ -26,8 +26,8 @@ const CARDS = [
     icon: Factory,
     color: "text-purple-600",
     bgIcon: "bg-purple-50",
-    hoverColor: "hover:text-purple-600", // Color al hacer hover en el botón
-    groupHoverColor: "group-hover:bg-purple-50", // Fondo flecha al hover
+    hoverColor: "hover:text-purple-600", 
+    groupHoverColor: "group-hover:bg-purple-50", 
     label: "Kit Manufacturer",
     title: "Expand your portfolio",
     description: "Support multiple models, from supplying primer mixes to delivering fully branded, validated finished kits globally."
@@ -117,16 +117,23 @@ export default function ClientProfileTabs() {
   const edgePadding = "max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem))";
 
   return (
-    <section className="bg-[#F5F5F7] py-24 relative overflow-hidden">
+    // CAMBIO CRÍTICO: 'pt-0' elimina el espacio superior, 'pb-16' mantiene el aire al final.
+    <section className="bg-[#F5F5F7] pt-0 pb-24 md:pb-20 relative overflow-hidden">
       
       {/* 1. ENCABEZADO DE SECCIÓN */}
-      <div className="max-w-[1280px] mx-auto px-6 md:px-10 mb-12">
-        <h2 className="text-3xl md:text-5xl font-extrabold text-[#111111] mb-6 font-sora tracking-tight">
-          Tailored solutions for <br />
-          every partner.
+      <div className="max-w-[1280px] mx-auto px-6 md:px-10 mb-20">
+        
+        {/* Título */}
+        <h2 className="text-3xl md:text-5xl font-extrabold text-[#111111] mb-6 font-sora tracking-tight leading-tight mb-10">
+          Custom Assay Development, <br className="hidden md:block" />
+          <span className="text-gray-400">Powered by MILA.</span>
         </h2>
-        <p className="text-lg text-gray-500 font-medium leading-relaxed max-w-2xl">
-          Find the perfect fit for your organization. We adapt our technology to your business model.
+        
+        {/* Bajada */}
+        <p className="text-lg text-gray-500 font-medium leading-relaxed max-w-3xl">
+          Leverage our proprietary AI to bypass the complexity of traditional R&D. 
+          From concept to commercialization, we design and validate bespoke molecular 
+          solutions tailored to your exact business model.
         </p>
       </div>
 
@@ -176,11 +183,10 @@ export default function ClientProfileTabs() {
                 style={{ height: '480px' }} 
               >
                 {isIntro ? (
-                  // === TARJETA 1: INTRO (Fondo Negro + Luces Superpuestas estilo Mila) ===
+                  // === TARJETA 1: INTRO (Fondo Negro + Luces Superpuestas MILA) ===
                   <>
-                     {/* 1. Fondo de Luces (Aurora Dark Mix Blend) */}
+                     {/* 1. Fondo de Luces (MILA Style) */}
                      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                        {/* Luces difusas moviéndose suavemente */}
                         <div className="absolute w-48 h-48 bg-blue-500/40 rounded-full blur-[60px] mix-blend-screen animate-pulse-slow" style={{ left: '10%', top: '20%' }}></div>
                         <div className="absolute w-48 h-48 bg-green-500/40 rounded-full blur-[60px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '1s', left: '40%', top: '10%' }}></div>
                         <div className="absolute w-48 h-48 bg-red-500/40 rounded-full blur-[60px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '2s', left: '30%', top: '50%' }}></div>
@@ -193,12 +199,10 @@ export default function ClientProfileTabs() {
                            Service Overview
                         </span>
                         
-                        {/* Título (Más aireado y pequeño) */}
                         <h3 className="text-2xl md:text-3xl font-bold mb-8 leading-snug font-sora text-white">
                           {card.title}
                         </h3>
                         
-                        {/* Descripción (Pequeña y sutil) */}
                         <p className="text-sm text-gray-400 font-medium leading-relaxed">
                           {card.description}
                         </p>
@@ -232,10 +236,8 @@ export default function ClientProfileTabs() {
 
                     {/* Botón Contacto (Neutro por defecto, color al hover) */}
                     <div className="mt-auto pt-6 border-t border-gray-50 relative z-10">
-                        {/* group/btn para manejar el hover del botón específicamente */}
                         <button className={`group/btn w-full flex items-center justify-between text-sm font-bold text-[#111111] transition-colors ${card.hoverColor}`}>
                             <span>Get Started</span>
-                            {/* Círculo gris por defecto, color al hover */}
                             <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center transition-colors group-hover/btn:bg-gray-200">
                                 <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
                             </div>
