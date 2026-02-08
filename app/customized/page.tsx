@@ -3,6 +3,8 @@ import Header from "../components/Header";
 import CustomizedMolecularHero from "../components/Customized/CustomizedMolecularHero";
 import MilaSection from "../components/Customized/MilaSection";
 import CustomDevSection from "../components/Customized/CustomDevSection";
+import ClientProfileTabs from "../components/Customized/ClientProfileTabs";
+
 
 export default function CustomizedPage() {
   return (
@@ -13,10 +15,10 @@ export default function CustomizedPage() {
       <CustomizedMolecularHero />
       <MilaSection />
       <CustomDevSection />
+      <ClientProfileTabs />
       
       {/* Resto de secciones... */}
       <div className="py-20 text-center">
-          <p>More content coming soon...</p>
       </div>
     </main>
   );
