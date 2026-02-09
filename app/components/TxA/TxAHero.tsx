@@ -11,8 +11,29 @@ export default function TxAHero() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    // Variables para el tamaño lógico
+    let width = 0;
+    let height = 0;
+
+    // --- FUNCIÓN DE REDIMENSIONAMIENTO ROBUSTA ---
+    const handleResize = () => {
+      // 1. Obtenemos el tamaño visual exacto del contenedor en pantalla
+      const rect = canvas.getBoundingClientRect();
+      
+      // 2. Ajustamos la resolución interna del canvas para que coincida con el visual
+      // Esto evita el estiramiento que causa los óvalos.
+      // (Opcional: Multiplicar por window.devicePixelRatio para pantallas Retina muy nítidas, 
+      // pero para evitar problemas de rendimiento/tamaño en este caso, 1:1 es seguro y geométricamente correcto)
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      // 3. Actualizamos las variables que usan las partículas
+      width = rect.width;
+      height = rect.height;
+    };
+
+    // Llamamos a resize al inicio para configurar
+    handleResize();
 
     // --- CONFIGURACIÓN ---
     const redColor = "rgba(220, 38, 38, 1)";
@@ -48,13 +69,16 @@ export default function TxAHero() {
         this.life = this.maxLife;
 
         if (isSeed) {
+          // FOCO ROJO
           this.x = Math.random() * (width * 0.9) + (width * 0.05);
           this.y = Math.random() * (height * 0.7) + (height * 0.15);
-          this.size = Math.random() * 2 + 4; 
+          // Tamaño
+          this.size = Math.random() * 2 + 4.5; 
           this.color = redColor;
           this.vx = (Math.random() - 0.5) * 0.2;
           this.vy = (Math.random() - 0.5) * 0.2;
         } else {
+          // RED
           const angle = Math.random() * Math.PI * 2;
           const distance = Math.random() * 60 + 20;
           this.x = (parentX || 0) + Math.cos(angle) * distance;
@@ -70,6 +94,7 @@ export default function TxAHero() {
         this.x += this.vx;
         this.y += this.vy;
 
+        // Rebote corregido
         if (this.x < 0 || this.x > width) this.vx *= -1;
         if (this.y < 0 || this.y > height) this.vy *= -1;
 
@@ -108,7 +133,10 @@ export default function TxAHero() {
         ctx.save();
         ctx.globalAlpha = this.alpha;
         ctx.beginPath();
+        
+        // Círculo perfecto
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+
         ctx.fillStyle = this.color;
         
         if (this.isSeed) {
@@ -122,7 +150,8 @@ export default function TxAHero() {
     }
 
     const animate = (timestamp: number) => {
-      ctx.clearRect(0, 0, width, height);
+      // Limpiar usando las dimensiones actuales correctas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const isMobile = width < 768;
       const currentMaxClusters = isMobile ? 1 : 3;
@@ -174,10 +203,7 @@ export default function TxAHero() {
 
     animate(0);
 
-    const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
+    // Escuchar el evento resize
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -186,7 +212,6 @@ export default function TxAHero() {
   }, []);
 
   return (
-    // CAMBIO AQUI: bg-white en lugar de bg-[#F5F5F7]
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center bg-white overflow-hidden pt-20 pb-10 px-4 md:px-6">
       
       <canvas 
@@ -197,7 +222,7 @@ export default function TxAHero() {
       <div className="relative z-10 max-w-7xl mx-auto text-center pointer-events-none select-none">
         
         <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-12 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto font-sora">
-          Smart microbiology.<br className="hidden md:block" />
+          Smart microbiology. <br className="hidden md:block" />
           <span className="text-gray-400 inline-block">Prevent the spread.</span>
         </h1>
 
