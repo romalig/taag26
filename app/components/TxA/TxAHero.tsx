@@ -53,7 +53,7 @@ export default function TxAHero() {
           this.x = Math.random() * (width * 0.9) + (width * 0.05);
           this.y = Math.random() * (height * 0.7) + (height * 0.15);
           
-          // CAMBIO 1: Tamaño reducido (4px a 6px)
+          // Tamaño pequeño (4px a 6px)
           this.size = Math.random() * 2 + 4; 
           
           this.color = redColor;
@@ -101,10 +101,9 @@ export default function TxAHero() {
       }
 
       propagate() {
-        // CAMBIO 4: Límite de puntos secundarios según dispositivo
         const isMobile = width < 768;
         
-        // En móvil: entre 4 y 10. En PC: entre 6 y 14.
+        // En móvil: Máximo 10 hijos. En PC: Máximo 14.
         const minChildren = 4;
         const maxChildren = isMobile ? 10 : 14; 
         
@@ -137,9 +136,11 @@ export default function TxAHero() {
     const animate = (timestamp: number) => {
       ctx.clearRect(0, 0, width, height);
 
-      // CAMBIO 2 y 3: Definir máximo de focos según ancho de pantalla
       const isMobile = width < 768;
-      const currentMaxClusters = isMobile ? 2 : 5;
+      
+      // CAMBIO CLAVE AQUÍ: 
+      // Si es móvil -> Máximo 1. Si es PC -> Máximo 4.
+      const currentMaxClusters = isMobile ? 1 : 4;
 
       const seedCount = particles.filter(p => p.isSeed).length;
       
