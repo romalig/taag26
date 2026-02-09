@@ -214,12 +214,12 @@ export default function TxAHero() {
       <div className="relative z-10 max-w-7xl mx-auto text-center pointer-events-none select-none">
         
         <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-12 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto font-sora">
-          Detect contamination. <br className="hidden md:block" />
-          <span className="text-gray-400 inline-block">Visualize the propagation.</span>
+          Smart microbiology.<br className="hidden md:block" />
+          <span className="text-gray-400 inline-block">Prevent the spread.</span>
         </h1>
 
         <p className="text-lg md:text-2xl text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed px-2 mb-10">
-          TxA transforms isolated microbiological results into a connected map of risks, revealing hidden correlation routes across your operations.
+          TxA transforms isolated results to predict risk, revealing hidden correlations before they become outbreaks.
         </p>
 
       </div>
