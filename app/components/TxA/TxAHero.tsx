@@ -17,8 +17,6 @@ export default function TxAHero() {
     // --- CONFIGURACIÓN ---
     const redColor = "rgba(220, 38, 38, 1)";
     const networkColors = ["#7e22ce", "#3b82f6", "#0ea5e9"];
-    
-    const maxClusters = 6;        // Máximo de focos simultáneos
     const connectionDistance = 130;
     
     let particles: Particle[] = [];
@@ -35,7 +33,7 @@ export default function TxAHero() {
       
       // Control de ciclo de vida
       alpha: number;
-      life: number;        // Vida útil en frames
+      life: number;
       maxLife: number;
       state: "spawning" | "living" | "dying";
       spawnedChildren: boolean;
@@ -46,21 +44,23 @@ export default function TxAHero() {
         this.state = "spawning";
         this.spawnedChildren = false;
 
-        // VIDA ÚTIL: Los focos rojos viven más tiempo para que se vea la red
+        // VIDA ÚTIL
         this.maxLife = isSeed ? 400 + Math.random() * 200 : 300 + Math.random() * 100;
         this.life = this.maxLife;
 
         if (isSeed) {
-          // FOCO ROJO: Posición aleatoria
+          // FOCO ROJO
           this.x = Math.random() * (width * 0.9) + (width * 0.05);
           this.y = Math.random() * (height * 0.7) + (height * 0.15);
-          // TAMAÑO: Intermedio (más pequeño que la versión anterior, más grande que la original)
-          this.size = Math.random() * 3 + 5; // Entre 5px y 8px
+          
+          // CAMBIO 1: Tamaño reducido (4px a 6px)
+          this.size = Math.random() * 2 + 4; 
+          
           this.color = redColor;
           this.vx = (Math.random() - 0.5) * 0.2;
           this.vy = (Math.random() - 0.5) * 0.2;
         } else {
-          // RED CONECTADA
+          // RED SECUNDARIA
           const angle = Math.random() * Math.PI * 2;
           const distance = Math.random() * 60 + 20;
           this.x = (parentX || 0) + Math.cos(angle) * distance;
@@ -73,43 +73,27 @@ export default function TxAHero() {
       }
 
       update() {
-        // MOVIMIENTO
         this.x += this.vx;
         this.y += this.vy;
 
-        // REBOTE SUAVE
         if (this.x < 0 || this.x > width) this.vx *= -1;
         if (this.y < 0 || this.y > height) this.vy *= -1;
 
-        // --- MÁQUINA DE ESTADOS (CICLO DE VIDA) ---
-        
-        // 1. SPAWNING (Aparecer)
+        // Máquina de estados
         if (this.state === "spawning") {
             this.alpha += 0.02;
             if (this.alpha >= 1) {
                 this.alpha = 1;
                 this.state = "living";
             }
-        }
-
-        // 2. LIVING (Vivir y moverse)
-        if (this.state === "living") {
+        } else if (this.state === "living") {
             this.life--;
-            if (this.life <= 0) {
-                this.state = "dying";
-            }
-        }
-
-        // 3. DYING (Desaparecer)
-        if (this.state === "dying") {
+            if (this.life <= 0) this.state = "dying";
+        } else if (this.state === "dying") {
             this.alpha -= 0.02;
-            if (this.alpha <= 0) {
-                this.alpha = 0;
-                // La partícula será eliminada por el filtro en animate()
-            }
         }
 
-        // PROPAGACIÓN: Solo si es semilla, está viva y no ha generado hijos
+        // Propagación
         if (this.isSeed && this.state === "living" && !this.spawnedChildren) {
             this.propagate();
             this.spawnedChildren = true;
@@ -117,9 +101,16 @@ export default function TxAHero() {
       }
 
       propagate() {
-        const childrenCount = Math.floor(Math.random() * 5) + 4; // 4 a 9 conexiones
+        // CAMBIO 4: Límite de puntos secundarios según dispositivo
+        const isMobile = width < 768;
+        
+        // En móvil: entre 4 y 10. En PC: entre 6 y 14.
+        const minChildren = 4;
+        const maxChildren = isMobile ? 10 : 14; 
+        
+        const childrenCount = Math.floor(Math.random() * (maxChildren - minChildren + 1)) + minChildren;
+
         for (let i = 0; i < childrenCount; i++) {
-            // Los hijos heredan una referencia de vida ligada (opcional, aquí independientes)
             particles.push(new Particle(false, this.x, this.y));
         }
       }
@@ -132,7 +123,6 @@ export default function TxAHero() {
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         
-        // Glow suave solo para seeds
         if (this.isSeed) {
             ctx.shadowColor = "rgba(220, 38, 38, 0.5)";
             ctx.shadowBlur = 10;
@@ -143,23 +133,25 @@ export default function TxAHero() {
       }
     }
 
-    // --- LOOP DE ANIMACIÓN ---
+    // --- LOOP ---
     const animate = (timestamp: number) => {
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Generar nuevos focos si hay espacio (menos de 6) y ha pasado tiempo
-      //    Esto asegura la rotación continua: unos mueren, otros nacen.
+      // CAMBIO 2 y 3: Definir máximo de focos según ancho de pantalla
+      const isMobile = width < 768;
+      const currentMaxClusters = isMobile ? 2 : 5;
+
       const seedCount = particles.filter(p => p.isSeed).length;
-      if (seedCount < maxClusters && (timestamp - lastSpawnTime > 1500 || seedCount === 0)) {
+      
+      // Spawn logic
+      if (seedCount < currentMaxClusters && (timestamp - lastSpawnTime > 1500 || seedCount === 0)) {
           particles.push(new Particle(true));
           lastSpawnTime = timestamp;
       }
 
-      // 2. Dibujar Conexiones
+      // Dibujar Conexiones
       for (let a = 0; a < particles.length; a++) {
         for (let b = a; b < particles.length; b++) {
-          // Optimización: No conectar seeds entre sí, ni partículas muy lejanas
-          // Tampoco dibujar líneas si alguna de las partículas se está muriendo (opcional, para limpieza)
           if (particles[a].isSeed && particles[b].isSeed) continue;
 
           const dx = particles[a].x - particles[b].x;
@@ -168,15 +160,14 @@ export default function TxAHero() {
 
           if (distance < connectionDistance) {
             const opacity = 1 - distance / connectionDistance;
-            // La opacidad de la línea depende de la vida de las partículas conectadas
             const lineAlpha = Math.min(particles[a].alpha, particles[b].alpha) * opacity * 0.3;
             
             if (lineAlpha > 0.01) {
                 ctx.beginPath();
                 if (particles[a].isSeed || particles[b].isSeed) {
-                    ctx.strokeStyle = `rgba(220, 50, 50, ${lineAlpha})`; // Línea roja
+                    ctx.strokeStyle = `rgba(220, 50, 50, ${lineAlpha})`;
                 } else {
-                    ctx.strokeStyle = `rgba(100, 116, 180, ${lineAlpha})`; // Línea azulada
+                    ctx.strokeStyle = `rgba(100, 116, 180, ${lineAlpha})`;
                 }
                 ctx.lineWidth = 1;
                 ctx.moveTo(particles[a].x, particles[a].y);
@@ -187,8 +178,7 @@ export default function TxAHero() {
         }
       }
 
-      // 3. Actualizar y Limpiar
-      // Filtramos las partículas que ya terminaron su proceso de "dying" (alpha <= 0)
+      // Limpieza y Update
       particles = particles.filter(p => !(p.state === "dying" && p.alpha <= 0));
 
       particles.forEach((particle) => {
@@ -215,13 +205,11 @@ export default function TxAHero() {
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center bg-[#F5F5F7] overflow-hidden pt-20 pb-10 px-4 md:px-6">
       
-      {/* CANVAS FONDO */}
       <canvas 
         ref={canvasRef} 
         className="absolute inset-0 w-full h-full z-0"
       />
 
-      {/* CONTENIDO TEXTO */}
       <div className="relative z-10 max-w-7xl mx-auto text-center pointer-events-none select-none">
         
         <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-12 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto font-sora">
