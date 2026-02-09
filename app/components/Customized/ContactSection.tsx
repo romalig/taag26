@@ -11,16 +11,14 @@ export default function ContactSection() {
         {/* CONTENEDOR DE LA TARJETA */}
         <div className="relative group">
             
-            {/* CORRECCIÓN FINAL:
-               1. inset-[1px]: Casi del mismo tamaño que la tarjeta blanca (apenas 1px más adentro).
-               2. blur-xl: Un desenfoque medio. No tan grande como para deformar las esquinas, 
-                  pero suficiente para que parezca luz y no un borde sólido.
-               3. opacity-50: Sutil.
-               4. rounded-[2.5rem]: Coincide perfectamente con la tarjeta blanca.
+            {/* CORRECCIÓN SOLO PARA MÓVIL:
+               - inset-4 (Móvil): Empujamos el fondo 16px hacia adentro. Esto esconde las esquinas
+                 cuadradas defectuosas DETRÁS de la tarjeta blanca. El brillo (blur) es lo único que asoma.
+               - md:inset-[1px] (Desktop): Mantiene el diseño original pegado al borde en pantallas grandes.
             */}
-            <div className="absolute inset-[1px] bg-aurora-vibrant rounded-[2.5rem] blur-xl opacity-40 transition-opacity duration-500 group-hover:opacity-60 -z-10"></div>
+            <div className="absolute inset-4 md:inset-[1px] bg-aurora-vibrant rounded-[2.5rem] blur-xl opacity-50 md:opacity-40 transition-opacity duration-500 group-hover:opacity-60 -z-10"></div>
 
-            {/* TARJETA BLANCA (Sin bordes, limpia) */}
+            {/* TARJETA BLANCA */}
             <div className="bg-white rounded-[2.5rem] px-8 py-10 md:px-16 md:py-14 flex flex-col md:flex-row items-center justify-between gap-8">
 
                 {/* TEXTO */}
@@ -35,7 +33,7 @@ export default function ContactSection() {
 
                 {/* BOTÓN */}
                 <div className="flex-shrink-0">
-                    <button className="group/btn bg-[#111111] text-white text-base font-bold px-8 py-4 rounded-full flex items-center gap-3 hover:bg-gray-900 transition-all active:scale-95">
+                    <button className="group/btn bg-[#111111] text-white text-base font-bold px-8 py-4 rounded-full flex items-center gap-3 hover:bg-gray-900 transition-all active:scale-95 shadow-lg shadow-black/10">
                         Contact Us
                         <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                     </button>

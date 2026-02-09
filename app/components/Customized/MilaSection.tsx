@@ -13,10 +13,9 @@ export default function MilaSection() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Si entra en pantalla, activa la barra. Si sale, la desactiva (reset).
         setIsBarActive(entry.isIntersecting);
       },
-      { threshold: 0.4 } // Se activa cuando el 40% de la tarjeta es visible
+      { threshold: 0.4 } 
     );
 
     if (barCardRef.current) {
@@ -31,27 +30,24 @@ export default function MilaSection() {
   }, []);
 
   return (
-    <section className="bg-white py-24 px-6 md:px-10 relative overflow-hidden">
+    // CAMBIO: Aumentado el padding inferior a pb-56 para dar MUCHO aire al final
+    <section className="bg-white pt-24 pb-56 px-6 md:px-10 relative overflow-hidden">
       
       {/* 1. ENCABEZADO */}
       <div className="max-w-4xl mx-auto text-center mb-24">
         
         {/* Título */}
-        <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-16 font-sora">
+        <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-10 font-sora">
           <span className="text-aurora-clip inline-block">
-            The full spectrum of possibilities.
+            Unlock the full spectrum of diagnostic potential.
           </span>
         </h2>
 
-        {/* Texto descriptivo */}
+        {/* Texto descriptivo: HOOK + TEXTO ORIGINAL */}
         <div className="space-y-6 text-lg md:text-xl text-[#111111]/70 font-medium leading-relaxed max-w-3xl mx-auto">
           <p>
-            MILA is an Ai-driven platform capable of designing and selecting the best 
-            possible primers/probe set through millions of potential combinations.
-          </p>
-          <p>
-            This means that using MILA, for any application you have, the best possible 
-            PCR kits are achieved fast and effortless.
+            MILA, our AI-driven platform navigates through millions of genomic combinations to design and select the precise primer and probe set for your targets.
+            For any application, MILA ensures the best PCR kits are achieved, fast and effortless.
           </p>
         </div>
       </div>
@@ -60,6 +56,7 @@ export default function MilaSection() {
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-16">
         
         {/* --- 1. AI DRIVEN INTELLIGENCE (LOGO MILA) --- */}
+        {/* Eliminado hover:scale */}
         <div className="group">
           <div className="relative w-full aspect-[3/4.5] bg-[#F5F5F7] rounded-[2.5rem] overflow-hidden mb-6 flex items-center justify-center">
              <div className="relative w-[50%] h-[50%]">
@@ -94,40 +91,53 @@ export default function MilaSection() {
           </div>
         </div>
 
-        {/* --- 3. HIGHLY MULTIPLEX DESIGN (CHAOS DOTS) --- */}
+        {/* --- 3. HIGHLY MULTIPLEX DESIGN (FONDO NEGRO + PUNTOS MULTICOLOR) --- */}
         <div className="group">
           <div className="relative w-full aspect-[3/4.5] bg-black rounded-[2.5rem] overflow-hidden mb-6 flex items-center justify-center">
-            {/* Visual: Canales superpuestos + Puntos dispersos */}
-            <div className="relative w-full h-full flex items-center justify-center">
-                 {/* Luces de colores de fondo */}
-                 <div className="absolute w-32 h-32 bg-blue-500/50 rounded-full blur-[50px] mix-blend-screen animate-pulse-slow" style={{ left: '10%', top: '20%' }}></div>
-                 <div className="absolute w-32 h-32 bg-green-500/50 rounded-full blur-[50px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '1s', left: '40%', top: '10%' }}></div>
-                 <div className="absolute w-32 h-32 bg-red-500/50 rounded-full blur-[50px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '2s', left: '30%', top: '50%' }}></div>
-                 <div className="absolute w-32 h-32 bg-purple-500/50 rounded-full blur-[50px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '3s', left: '60%', top: '40%' }}></div>
+            
+            <div className="relative w-full h-full">
+                 {/* PUNTOS FLOTANTES CON COLORES ÚNICOS */}
                  
-                 {/* PUNTOS CAÓTICOS: Tiempos independientes */}
-                 <div className="relative z-10 w-full h-full overflow-hidden opacity-90">
-                    {/* Azules */}
-                    <div className="absolute top-[20%] left-[15%] w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDuration: '2.1s', animationDelay: '0.1s' }}></div>
-                    <div className="absolute top-[45%] left-[25%] w-3 h-3 bg-blue-300 rounded-full animate-pulse" style={{ animationDuration: '3.5s', animationDelay: '1.2s' }}></div>
-                    <div className="absolute top-[70%] left-[10%] w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" style={{ animationDuration: '1.8s', animationDelay: '0.5s' }}></div>
+                 {/* 1. Cyan */}
+                 <div className="absolute top-[20%] left-[15%] w-2 h-2 bg-cyan-400 rounded-full animate-float" style={{ animationDelay: '0s' }}></div>
+                 
+                 {/* 2. Indigo */}
+                 <div className="absolute top-[45%] left-[25%] w-3 h-3 bg-indigo-500 rounded-full animate-float" style={{ animationDelay: '1.5s', animationDuration: '4s' }}></div>
+                 
+                 {/* 3. Blue */}
+                 <div className="absolute top-[70%] left-[10%] w-1.5 h-1.5 bg-blue-500 rounded-full animate-float" style={{ animationDelay: '0.5s', animationDuration: '3.5s' }}></div>
 
-                    {/* Verdes */}
-                    <div className="absolute top-[15%] left-[60%] w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse" style={{ animationDuration: '2.9s', animationDelay: '0.8s' }}></div>
-                    <div className="absolute top-[40%] left-[80%] w-2 h-2 bg-green-300 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationDelay: '1.5s' }}></div>
-                    <div className="absolute top-[65%] left-[55%] w-3 h-3 bg-green-500 rounded-full animate-pulse" style={{ animationDuration: '3.2s', animationDelay: '0.3s' }}></div>
+                 {/* 4. Lime */}
+                 <div className="absolute top-[15%] left-[60%] w-2.5 h-2.5 bg-lime-400 rounded-full animate-float" style={{ animationDelay: '0.8s', animationDuration: '4.5s' }}></div>
+                 
+                 {/* 5. Emerald */}
+                 <div className="absolute top-[40%] left-[80%] w-2 h-2 bg-emerald-400 rounded-full animate-float" style={{ animationDelay: '2s', animationDuration: '3.8s' }}></div>
+                 
+                 {/* 6. Green */}
+                 <div className="absolute top-[65%] left-[55%] w-3 h-3 bg-green-500 rounded-full animate-float" style={{ animationDelay: '1.2s', animationDuration: '4.2s' }}></div>
 
-                    {/* Rojos/Rosas */}
-                    <div className="absolute top-[30%] left-[45%] w-2 h-2 bg-red-400 rounded-full animate-pulse" style={{ animationDuration: '2.4s', animationDelay: '0.9s' }}></div>
-                    <div className="absolute top-[60%] left-[35%] w-2.5 h-2.5 bg-pink-500 rounded-full animate-pulse" style={{ animationDuration: '1.9s', animationDelay: '2.0s' }}></div>
-                    <div className="absolute top-[80%] left-[70%] w-2 h-2 bg-rose-400 rounded-full animate-pulse" style={{ animationDuration: '3.0s', animationDelay: '0.4s' }}></div>
+                 {/* 7. Red */}
+                 <div className="absolute top-[30%] left-[45%] w-2 h-2 bg-red-500 rounded-full animate-float" style={{ animationDelay: '0.9s', animationDuration: '3.7s' }}></div>
+                 
+                 {/* 8. Fuchsia */}
+                 <div className="absolute top-[60%] left-[35%] w-2.5 h-2.5 bg-fuchsia-500 rounded-full animate-float" style={{ animationDelay: '2.5s', animationDuration: '4.8s' }}></div>
+                 
+                 {/* 9. Rose */}
+                 <div className="absolute top-[80%] left-[70%] w-2 h-2 bg-rose-400 rounded-full animate-float" style={{ animationDelay: '1.1s', animationDuration: '3.2s' }}></div>
 
-                    {/* Otros */}
-                    <div className="absolute top-[25%] left-[85%] w-3 h-3 bg-purple-400 rounded-full animate-pulse" style={{ animationDuration: '2.7s', animationDelay: '1.1s' }}></div>
-                    <div className="absolute top-[10%] left-[35%] w-2 h-2 bg-yellow-300 rounded-full animate-pulse" style={{ animationDuration: '1.6s', animationDelay: '0.2s' }}></div>
-                    <div className="absolute top-[75%] left-[30%] w-2.5 h-2.5 bg-orange-300 rounded-full animate-pulse" style={{ animationDuration: '2.2s', animationDelay: '1.7s' }}></div>
-                 </div>
+                 {/* 10. Purple */}
+                 <div className="absolute top-[25%] left-[85%] w-3 h-3 bg-purple-500 rounded-full animate-float" style={{ animationDelay: '1.8s', animationDuration: '5s' }}></div>
+                 
+                 {/* 11. Yellow */}
+                 <div className="absolute top-[10%] left-[35%] w-2 h-2 bg-yellow-400 rounded-full animate-float" style={{ animationDelay: '0.2s', animationDuration: '3.6s' }}></div>
+                 
+                 {/* 12. Orange */}
+                 <div className="absolute top-[75%] left-[30%] w-2.5 h-2.5 bg-orange-400 rounded-full animate-float" style={{ animationDelay: '2.2s', animationDuration: '4.1s' }}></div>
+                 
+                 {/* Puntos de profundidad (Blancos translúcidos) */}
+                 <div className="absolute top-[50%] left-[50%] w-1 h-1 bg-white/50 rounded-full animate-float" style={{ animationDelay: '3s' }}></div>
             </div>
+
           </div>
           <div className="px-2">
             <h3 className="text-lg font-bold text-[#111111] mb-2 font-sora">Highly Multiplex Design.</h3>
@@ -137,7 +147,7 @@ export default function MilaSection() {
           </div>
         </div>
 
-        {/* --- 4. FAST & EFFORTLESS (SCROLL TRIGGER ANIMATION) --- */}
+        {/* --- 4. FAST & EFFORTLESS --- */}
         <div 
           ref={barCardRef} 
           className="group"
@@ -145,11 +155,6 @@ export default function MilaSection() {
           <div className="relative w-full aspect-[3/4.5] bg-[#111111] rounded-[2.5rem] overflow-hidden mb-6 flex flex-col items-center justify-center">
             <div className="relative w-48 h-32 bg-white/5 rounded-xl border border-white/10 p-4 backdrop-blur-sm">
                 <div className="w-full h-2 bg-white/10 rounded-full mb-3 overflow-hidden">
-                    {/* BARRA DE CARGA:
-                       - Depende del estado 'isBarActive'.
-                       - Si es true (visible en pantalla) -> w-full.
-                       - Si es false (fuera de pantalla) -> w-0 (se resetea).
-                    */}
                     <div 
                         className={`h-full bg-green-500 rounded-full transition-all duration-[1500ms] ease-out ${isBarActive ? 'w-full' : 'w-0'}`} 
                     />
@@ -176,19 +181,16 @@ export default function MilaSection() {
       </div>
 
       <style jsx>{`
-        .text-aurora-clip, .bg-aurora-vibrant {
+        .text-aurora-clip {
           background: linear-gradient(
             115deg, 
-            #D92408, /* Rojo TAAG */
-            #7e22ce, /* Morado */
-            #f59e0b, /* Naranja */
-            #db2777, /* Rosa */
+            #D92408, 
+            #7e22ce, 
+            #f59e0b, 
+            #db2777, 
             #D92408
           );
           background-size: 300% 300%;
-        }
-
-        .text-aurora-clip {
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
@@ -200,8 +202,16 @@ export default function MilaSection() {
           100% { background-position: 100% 50%; }
         }
 
-        .animate-pulse-slow {
-            animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        /* Animación Float para los puntos */
+        @keyframes float {
+          0%, 100% { transform: translate(0, 0); opacity: 0.8; }
+          25% { transform: translate(5px, -10px); opacity: 0.4; }
+          50% { transform: translate(0, -20px); opacity: 1; }
+          75% { transform: translate(-5px, -10px); opacity: 0.4; }
+        }
+
+        .animate-float {
+          animation: float 5s ease-in-out infinite;
         }
 
         .font-sora {
