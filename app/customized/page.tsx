@@ -5,6 +5,7 @@ import MilaSection from "../components/Customized/MilaSection";
 import CustomDevSection from "../components/Customized/CustomDevSection";
 import ClientProfileTabs from "../components/Customized/ClientProfileTabs";
 import FeaturedStory from "../components/Customized/FeaturedStory";
+import ContactSection from "../components/Customized/ContactSection";
 
 
 
@@ -19,6 +20,7 @@ export default function CustomizedPage() {
       <CustomDevSection />
       <ClientProfileTabs />
       <FeaturedStory />
+      <ContactSection />
       
       {/* Resto de secciones... */}
       <div className="py-20 text-center">
