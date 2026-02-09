@@ -44,23 +44,17 @@ export default function TxAHero() {
         this.state = "spawning";
         this.spawnedChildren = false;
 
-        // VIDA ÚTIL
         this.maxLife = isSeed ? 400 + Math.random() * 200 : 300 + Math.random() * 100;
         this.life = this.maxLife;
 
         if (isSeed) {
-          // FOCO ROJO
           this.x = Math.random() * (width * 0.9) + (width * 0.05);
           this.y = Math.random() * (height * 0.7) + (height * 0.15);
-          
-          // Tamaño pequeño (4px a 6px)
           this.size = Math.random() * 2 + 4; 
-          
           this.color = redColor;
           this.vx = (Math.random() - 0.5) * 0.2;
           this.vy = (Math.random() - 0.5) * 0.2;
         } else {
-          // RED SECUNDARIA
           const angle = Math.random() * Math.PI * 2;
           const distance = Math.random() * 60 + 20;
           this.x = (parentX || 0) + Math.cos(angle) * distance;
@@ -79,7 +73,6 @@ export default function TxAHero() {
         if (this.x < 0 || this.x > width) this.vx *= -1;
         if (this.y < 0 || this.y > height) this.vy *= -1;
 
-        // Máquina de estados
         if (this.state === "spawning") {
             this.alpha += 0.02;
             if (this.alpha >= 1) {
@@ -93,7 +86,6 @@ export default function TxAHero() {
             this.alpha -= 0.02;
         }
 
-        // Propagación
         if (this.isSeed && this.state === "living" && !this.spawnedChildren) {
             this.propagate();
             this.spawnedChildren = true;
@@ -102,11 +94,8 @@ export default function TxAHero() {
 
       propagate() {
         const isMobile = width < 768;
-        
-        // En móvil: Máximo 10 hijos. En PC: Máximo 14.
         const minChildren = 4;
         const maxChildren = isMobile ? 10 : 14; 
-        
         const childrenCount = Math.floor(Math.random() * (maxChildren - minChildren + 1)) + minChildren;
 
         for (let i = 0; i < childrenCount; i++) {
@@ -132,25 +121,19 @@ export default function TxAHero() {
       }
     }
 
-    // --- LOOP ---
     const animate = (timestamp: number) => {
       ctx.clearRect(0, 0, width, height);
 
       const isMobile = width < 768;
-      
-      // CAMBIO CLAVE AQUÍ: 
-      // Si es móvil -> Máximo 1. Si es PC -> Máximo 4.
-      const currentMaxClusters = isMobile ? 1 : 4;
+      const currentMaxClusters = isMobile ? 1 : 3;
 
       const seedCount = particles.filter(p => p.isSeed).length;
       
-      // Spawn logic
       if (seedCount < currentMaxClusters && (timestamp - lastSpawnTime > 1500 || seedCount === 0)) {
           particles.push(new Particle(true));
           lastSpawnTime = timestamp;
       }
 
-      // Dibujar Conexiones
       for (let a = 0; a < particles.length; a++) {
         for (let b = a; b < particles.length; b++) {
           if (particles[a].isSeed && particles[b].isSeed) continue;
@@ -179,7 +162,6 @@ export default function TxAHero() {
         }
       }
 
-      // Limpieza y Update
       particles = particles.filter(p => !(p.state === "dying" && p.alpha <= 0));
 
       particles.forEach((particle) => {
@@ -204,7 +186,8 @@ export default function TxAHero() {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center bg-[#F5F5F7] overflow-hidden pt-20 pb-10 px-4 md:px-6">
+    // CAMBIO AQUI: bg-white en lugar de bg-[#F5F5F7]
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center bg-white overflow-hidden pt-20 pb-10 px-4 md:px-6">
       
       <canvas 
         ref={canvasRef} 
