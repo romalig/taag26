@@ -11,7 +11,7 @@ const sora = Sora({ subsets: ["latin"], weight: ["400", "500", "700", "800"] });
 const NAV_LINKS = [
   { name: "Industrial Microbiology", href: "/industrial" },
   { name: "Customized Molecular", href: "/customized" },
-  { name: "Digital Transformation", href: "#digital" },
+  { name: "Digital Transformation", href: "/TxA" },
   { name: "Hubs", href: "#hubs" },
   { name: "Technologies", href: "#technologies" },
   { name: "Resources", href: "#resources" },

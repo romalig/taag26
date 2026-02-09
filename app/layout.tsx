@@ -3,7 +3,7 @@ import { Sora } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { CTAProvider } from "./components/CTAProvider"; // <--- FIXED: Changed to Named Import
+import { CTAProvider } from "./components/CTAProvider"; 
 import BookMeetingModal from "./components/BookMeetingModal";
 
 const sora = Sora({ 
