@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image"; 
 import { 
-  MessageSquareText, BarChart3, Map, Sparkles, MousePointerClick, MoreHorizontal
+  MessageSquareText, Map, Sparkles, MousePointerClick, MoreHorizontal, 
+  MapPin, CheckCircle2
 } from "lucide-react";
 
 // --- SUB-COMPONENTE: TARJETA INDIVIDUAL ---
@@ -11,45 +12,54 @@ const FeatureCard = ({ feature }: { feature: any }) => {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Estados para animación interna (Chat - Tarjeta 1)
+  // Estados Tarjeta 1 (AI Chat)
   const [showUserMessage, setShowUserMessage] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [showAiResponse, setShowAiResponse] = useState(false);
+
+  // Estados Tarjeta 3 (AI Prediction)
+  const [aiState, setAiState] = useState<'idle' | 'analyzing' | 'complete'>('idle');
+  const [showPins, setShowPins] = useState(false);
 
   const { id, hasCustomVisual, cardBgClass, textColorClass, description } = feature;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Actualizamos estado de visibilidad
         setIsVisible(entry.isIntersecting);
 
-        // RESET AUTOMÁTICO: Si sale de pantalla, apagamos todo para que se re-anime al volver
+        // RESET AUTOMÁTICO AL SALIR
         if (!entry.isIntersecting) {
             setShowUserMessage(false);
             setIsTyping(false);
             setShowAiResponse(false);
+            setAiState('idle');
+            setShowPins(false);
         }
       },
-      { 
-        // IMPORTANTE: Threshold alto (0.6). 
-        // La animación solo arranca cuando la tarjeta está al 60% en pantalla (centro).
-        threshold: 0.6 
-      } 
+      { threshold: 0.6 } 
     );
 
     if (cardRef.current) observer.observe(cardRef.current);
     return () => { if (cardRef.current) observer.unobserve(cardRef.current); };
   }, []);
 
-  // LÓGICA DE ANIMACIÓN DEL CHAT (Solo si es Tarjeta 1 y está visible)
+  // Animación Tarjeta 1
   useEffect(() => {
     if (isVisible && hasCustomVisual && id === 1) {
-      // Secuencia de tiempos para el chat
       const t1 = setTimeout(() => setShowUserMessage(true), 500);
       const t2 = setTimeout(() => setIsTyping(true), 1500);
       const t3 = setTimeout(() => { setIsTyping(false); setShowAiResponse(true); }, 3500);
-      
+      return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    }
+  }, [isVisible, hasCustomVisual, id]);
+
+  // Animación Tarjeta 3
+  useEffect(() => {
+    if (isVisible && hasCustomVisual && id === 3) {
+      const t1 = setTimeout(() => setAiState('analyzing'), 500);
+      const t2 = setTimeout(() => setAiState('complete'), 3000);
+      const t3 = setTimeout(() => setShowPins(true), 3500);
       return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
     }
   }, [isVisible, hasCustomVisual, id]);
@@ -66,7 +76,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shine pointer-events-none z-0" />
         )}
 
-        {/* Tarjeta 2 (3D Layout): Imagen de Fondo */}
+        {/* Tarjeta 2 (3D Layout): Imagen */}
         {id === 2 && (
             <>
                 <div className="absolute inset-0 z-0 bg-slate-900">
@@ -74,23 +84,36 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                         src="/layout3D.png" 
                         alt="3D Plant Layout"
                         fill
-                        unoptimized={true} 
+                        quality={100}
+                        sizes="(max-width: 768px) 100vw, 800px"
                         className="object-cover object-center transition-transform duration-[3000ms] group-hover:scale-105"
                         priority={true} 
                     />
                 </div>
-                {/* Overlay oscuro para lectura */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/40 z-0" /> 
             </>
         )}
 
-        {/* === A. TEXTO SUPERIOR (Ajustado: Más pequeño y angosto) === */}
+        {/* Tarjeta 3 (Planos): IMAGEN OPTIMIZADA */}
+        {id === 3 && (
+            <div className="absolute inset-0 z-0 bg-slate-50">
+                <Image 
+                    src="/planos.png" 
+                    alt="Architectural Plans"
+                    fill
+                    // Cambiamos unoptimized por quality={100} y sizes correcto para forzar alta definición
+                    quality={100}
+                    sizes="(max-width: 768px) 100vw, 1200px" 
+                    className="object-cover object-center"
+                    priority={true} 
+                />
+            </div>
+        )}
+
+        {/* === A. TEXTO SUPERIOR === */}
         <div className="absolute top-0 left-0 w-full p-8 md:p-12 z-20 pointer-events-none flex flex-col items-start">
             {isVisible && (
                 <p 
-                // CAMBIOS APLICADOS:
-                // text-sm md:text-base (Texto más pequeño)
-                // max-w-[80%] md:max-w-[240px] (Menos ancho para que quede compacto a la izquierda)
                 className={`text-sm md:text-base font-medium leading-relaxed animate-slide-in max-w-[80%] md:max-w-[240px] ${textColorClass}`}
                 style={{ animationDelay: '100ms' }}
                 >
@@ -108,21 +131,15 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                     {id === 1 && (
                         <div className="w-full h-full flex items-end justify-end p-4 md:p-10">
                             <div className="w-full max-w-[450px] flex flex-col gap-3 md:gap-4 transform scale-[0.85] origin-bottom-right md:scale-100">
-                                
-                                {/* Mensaje Usuario */}
                                 <div className={`self-end bg-white/10 backdrop-blur-md text-white px-5 py-3 rounded-2xl rounded-tr-sm max-w-[90%] border border-white/20 shadow-lg transition-all duration-500 transform ${showUserMessage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                                     <p className="text-xs md:text-sm font-medium">Any emerging trends in zone B?</p>
                                 </div>
-                                
-                                {/* Typing Indicator */}
                                 {isTyping && (
                                     <div className="self-start flex gap-3 animate-fade-in">
                                         <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0 shadow-sm border border-white/10"><Sparkles className="w-4 h-4 text-white" /></div>
                                         <div className="bg-white/10 backdrop-blur-sm p-3 rounded-2xl rounded-tl-sm border border-white/10"><MoreHorizontal className="w-5 h-5 text-white animate-pulse" /></div>
                                     </div>
                                 )}
-                                
-                                {/* Respuesta AI + CTA */}
                                 <div className={`self-start flex flex-col gap-3 max-w-[95%] transition-all duration-500 transform ${showAiResponse ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 hidden'}`}>
                                     <div className="flex gap-3">
                                         <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-indigo-900/20"><Sparkles className="w-4 h-4 text-indigo-600" /></div>
@@ -145,7 +162,60 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                             </div>
                         </div>
                     )}
-                    
+
+                    {/* --- TARJETA 3: AI PREDICTION --- */}
+                    {id === 3 && (
+                        <div className="w-full h-full relative">
+                            
+                            {/* 1. CUADRO DE AI (Sin icono, solo texto y barra) */}
+                            <div 
+                                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-500 ${aiState === 'analyzing' ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}
+                            >
+                                <div className="bg-white/95 backdrop-blur-xl border border-gray-200 shadow-xl rounded-2xl px-8 py-5 flex flex-col gap-3 min-w-[240px]">
+                                    <div className="text-center">
+                                        <span className="block text-sm font-bold text-slate-900 tracking-tight">TxA AI algorithms</span>
+                                    </div>
+                                    {/* Barra de carga animada */}
+                                    <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                        <div className="h-full bg-blue-600 w-[60%] animate-progress-load"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 2. CONFIRMACIÓN */}
+                            <div 
+                                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-500 ${aiState === 'complete' && !showPins ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}
+                            >
+                                <div className="bg-emerald-500 text-white shadow-lg rounded-full px-5 py-2 flex items-center gap-2">
+                                    <CheckCircle2 className="w-4 h-4" />
+                                    <span className="text-xs font-bold">Optimization Complete</span>
+                                </div>
+                            </div>
+
+                            {/* 3. PINES ROJOS (Color TAAG #D92408, Sin sombra) */}
+                            {showPins && (
+                                <>
+                                    {/* Pines distribuidos lejos del texto superior izquierdo */}
+                                    <div className="absolute top-[20%] right-[15%] animate-pop-in" style={{animationDelay:'0.1s'}}>
+                                        <MapPin className="w-8 h-8 text-[#D92408] -translate-y-full drop-shadow-none filter-none" />
+                                    </div>
+                                    <div className="absolute top-[50%] right-[30%] animate-pop-in" style={{animationDelay:'0.2s'}}>
+                                        <MapPin className="w-8 h-8 text-[#D92408] -translate-y-full drop-shadow-none filter-none" />
+                                    </div>
+                                    <div className="absolute bottom-[25%] right-[20%] animate-pop-in" style={{animationDelay:'0.3s'}}>
+                                        <MapPin className="w-8 h-8 text-[#D92408] -translate-y-full drop-shadow-none filter-none" />
+                                    </div>
+                                    <div className="absolute bottom-[15%] left-[50%] animate-pop-in" style={{animationDelay:'0.4s'}}>
+                                        <MapPin className="w-8 h-8 text-[#D92408] -translate-y-full drop-shadow-none filter-none" />
+                                    </div>
+                                    <div className="absolute bottom-[35%] left-[30%] animate-pop-in" style={{animationDelay:'0.5s'}}>
+                                        <MapPin className="w-8 h-8 text-[#D92408] -translate-y-full drop-shadow-none filter-none" />
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )}
+
                 </>
             ) : null}
         </div>
@@ -159,7 +229,7 @@ export default function TxAFeatures() {
   const features = [
     {
       id: 1,
-      // NUEVO ORDEN #1: AI CHAT
+      // #1: AI CHAT
       description: "Ask questions about your data. TxA identifies trends, anomalies, and emerging risks in plain language.",
       hasCustomVisual: true,
       cardBgClass: "bg-gradient-to-br from-indigo-600 to-blue-500", 
@@ -167,17 +237,17 @@ export default function TxAFeatures() {
     },
     {
       id: 2,
-      // NUEVO ORDEN #2: SPATIAL (Layout 3D)
+      // #2: SPATIAL (Layout 3D)
       description: "Spatial Intelligence. Navigate a high-fidelity 3D model of your plant to visualize risks where they actually happen.",
-      hasCustomVisual: false, // Solo fondo
+      hasCustomVisual: false, 
       cardBgClass: "bg-slate-900", 
       textColorClass: "text-white",
     },
     {
       id: 3,
-      // NUEVO ORDEN #3: HEATMAPS
-      description: "Visualize historical data on dynamic heatmaps to identify persistent hotspots and prevent outbreaks.",
-      hasCustomVisual: false,
+      // #3: AI PREDICTION (Planos)
+      description: "Predictive Sampling. AI algorithms analyze historical data to pinpoint the best sampling locations, preventing risks before they arise.",
+      hasCustomVisual: true,
       cardBgClass: "bg-[#F5F5F7]",
       textColorClass: "text-[#111111]",
     }
@@ -243,6 +313,24 @@ export default function TxAFeatures() {
         }
         .animate-shine {
             animation: shine 8s infinite linear;
+        }
+
+        @keyframes progressLoad {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+        .animate-progress-load {
+            animation: progressLoad 2s ease-in-out infinite;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0) translateY(10px); opacity: 0; }
+            70% { transform: scale(1.2) translateY(-5px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .animate-pop-in {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
         }
       `}</style>
     </section>
