@@ -76,7 +76,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shine pointer-events-none z-0" />
         )}
 
-        {/* Tarjeta 2 (3D Layout): Imagen */}
+        {/* Tarjeta 2 (3D Layout): Imagen + Capa Oscura */}
         {id === 2 && (
             <>
                 <div className="absolute inset-0 z-0 bg-slate-900">
@@ -84,8 +84,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                         src="/layout3D.png" 
                         alt="3D Plant Layout"
                         fill
-                        quality={100}
-                        sizes="(max-width: 768px) 100vw, 800px"
+                        unoptimized={true} 
                         className="object-cover object-center transition-transform duration-[3000ms] group-hover:scale-105"
                         priority={true} 
                     />
@@ -94,20 +93,26 @@ const FeatureCard = ({ feature }: { feature: any }) => {
             </>
         )}
 
-        {/* Tarjeta 3 (Planos): IMAGEN OPTIMIZADA */}
+        {/* Tarjeta 3 (Planos): Imagen + NUEVA CAPA OSCURA LOCALIZADA */}
         {id === 3 && (
-            <div className="absolute inset-0 z-0 bg-slate-50">
-                <Image 
-                    src="/planos.png" 
-                    alt="Architectural Plans"
-                    fill
-                    // Cambiamos unoptimized por quality={100} y sizes correcto para forzar alta definición
-                    quality={100}
-                    sizes="(max-width: 768px) 100vw, 1200px" 
-                    className="object-cover object-center"
-                    priority={true} 
-                />
-            </div>
+            <>
+                <div className="absolute inset-0 z-0 bg-slate-50">
+                    <Image 
+                        src="/planos.png" 
+                        alt="Architectural Plans"
+                        fill
+                        unoptimized={true} 
+                        className="object-cover object-center"
+                        priority={true} 
+                    />
+                </div>
+                
+                {/* CORRECCIÓN APLICADA: Gradiente responsivo.
+                    - Móvil (default): Oscuro arriba -> Transparente abajo.
+                    - Desktop (md:): Oscuro izquierda -> Transparente derecha. 
+                    Esto asegura que solo la zona del texto esté oscura. */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/40 md:via-black/20 md:to-transparent z-0" />
+            </>
         )}
 
         {/* === A. TEXTO SUPERIOR === */}
@@ -115,7 +120,9 @@ const FeatureCard = ({ feature }: { feature: any }) => {
             {isVisible && (
                 <p 
                 className={`text-sm md:text-base font-medium leading-relaxed animate-slide-in max-w-[80%] md:max-w-[240px] ${textColorClass}`}
-                style={{ animationDelay: '100ms' }}
+                style={{ 
+                    animationDelay: '100ms'
+                }}
                 >
                     {description}
                 </p>
@@ -167,7 +174,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                     {id === 3 && (
                         <div className="w-full h-full relative">
                             
-                            {/* 1. CUADRO DE AI (Sin icono, solo texto y barra) */}
+                            {/* 1. CUADRO DE AI (Simplificado) */}
                             <div 
                                 className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-500 ${aiState === 'analyzing' ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}
                             >
@@ -192,10 +199,9 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                                 </div>
                             </div>
 
-                            {/* 3. PINES ROJOS (Color TAAG #D92408, Sin sombra) */}
+                            {/* 3. PINES ROJOS (Sin sombra) */}
                             {showPins && (
                                 <>
-                                    {/* Pines distribuidos lejos del texto superior izquierdo */}
                                     <div className="absolute top-[20%] right-[15%] animate-pop-in" style={{animationDelay:'0.1s'}}>
                                         <MapPin className="w-8 h-8 text-[#D92408] -translate-y-full drop-shadow-none filter-none" />
                                     </div>
@@ -249,7 +255,7 @@ export default function TxAFeatures() {
       description: "Predictive Sampling. AI algorithms analyze historical data to pinpoint the best sampling locations, preventing risks before they arise.",
       hasCustomVisual: true,
       cardBgClass: "bg-[#F5F5F7]",
-      textColorClass: "text-[#111111]",
+      textColorClass: "text-white",
     }
   ];
 
