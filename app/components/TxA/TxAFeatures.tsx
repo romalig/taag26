@@ -17,7 +17,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [showAiResponse, setShowAiResponse] = useState(false);
 
-  // Estados Tarjeta 3 (AI Prediction)
+  // Estados Tarjeta 2 (AI Prediction)
   const [aiState, setAiState] = useState<'idle' | 'analyzing' | 'complete'>('idle');
   const [showPins, setShowPins] = useState(false);
 
@@ -33,19 +33,20 @@ const FeatureCard = ({ feature }: { feature: any }) => {
             setShowUserMessage(false);
             setIsTyping(false);
             setShowAiResponse(false);
-            // Reset Tarjeta 3
+            // Reset Tarjeta 2
             setAiState('idle');
             setShowPins(false);
+            // La tarjeta 4 se resetea sola por CSS
         }
       },
-      { threshold: 0.6 } 
+      { threshold: 1 } 
     );
 
     if (cardRef.current) observer.observe(cardRef.current);
     return () => { if (cardRef.current) observer.unobserve(cardRef.current); };
   }, []);
 
-  // Animación Tarjeta 1
+  // Animación Tarjeta 1 (Chat)
   useEffect(() => {
     if (isVisible && hasCustomVisual && id === 1) {
       const t1 = setTimeout(() => setShowUserMessage(true), 500);
@@ -55,9 +56,9 @@ const FeatureCard = ({ feature }: { feature: any }) => {
     }
   }, [isVisible, hasCustomVisual, id]);
 
-  // Animación Tarjeta 3
+  // Animación Tarjeta 2 (Prediction)
   useEffect(() => {
-    if (isVisible && hasCustomVisual && id === 3) {
+    if (isVisible && hasCustomVisual && id === 2) {
       const t1 = setTimeout(() => setAiState('analyzing'), 500);
       const t2 = setTimeout(() => setAiState('complete'), 3000);
       const t3 = setTimeout(() => setShowPins(true), 3500);
@@ -72,32 +73,13 @@ const FeatureCard = ({ feature }: { feature: any }) => {
     >
         {/* === FONDOS PERSONALIZADOS === */}
         
-        {/* Tarjeta 1 (AI Chat): Shine Effect */}
+        {/* Tarjeta 1: Shine */}
         {id === 1 && (
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shine pointer-events-none z-0" />
         )}
 
-        {/* Tarjeta 2 (TxA App): Imagen PNG Completa y Alineada Abajo */}
+        {/* Tarjeta 2 (Prediction): Planos + Capa Oscura */}
         {id === 2 && (
-            <div className="absolute inset-0 z-0 flex items-end justify-center">
-                {/* Contenedor relativo para controlar la posición */}
-                <div className="relative w-full h-[85%]"> 
-                    <Image 
-                        src="/TxA_app.png" // Asegúrate de que tu PNG tenga este nombre o cámbialo aquí
-                        alt="TxA App Interface"
-                        fill
-                        unoptimized={true}
-                        // CAMBIOS CLAVE: object-contain para que se vea entera, object-bottom para alinearla abajo
-                        className="object-contain object-bottom transition-transform duration-700 group-hover:scale-[1.02]"
-                        priority={true} 
-                    />
-                </div>
-                {/* Sin overlay oscuro porque el fondo es claro y el texto oscuro */}
-            </div>
-        )}
-
-        {/* Tarjeta 3 (Planos): Imagen + Capa Oscura */}
-        {id === 3 && (
             <>
                 <div className="absolute inset-0 z-0 bg-slate-50">
                     <Image 
@@ -109,15 +91,35 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                         priority={true} 
                     />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/50 md:via-black/10 md:to-transparent z-0" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/50 md:via-black/20 md:to-transparent z-0" />
             </>
         )}
 
+        {/* Tarjeta 3 (App): Imagen PNG movida a la derecha */}
+        {id === 3 && (
+            // CAMBIO: justify-center -> justify-end, padding derecho agregado (pr-8 md:pr-16)
+            <div className="absolute inset-0 z-0 flex items-end justify-end pr-8 md:pr-16 pb-0">
+                <div className="relative w-full h-[85%]"> 
+                    <Image 
+                        src="/TxA_app.png" 
+                        alt="TxA App Interface"
+                        fill
+                        unoptimized={true}
+                        // CAMBIO: object-bottom right para asegurar alineación
+                        className="object-contain object-bottom-right transition-transform duration-700 group-hover:scale-[1.02]"
+                        priority={true} 
+                    />
+                </div>
+            </div>
+        )}
+        
         {/* === A. TEXTO SUPERIOR === */}
         <div className="absolute top-0 left-0 w-full p-8 md:p-12 z-20 pointer-events-none flex flex-col items-start">
             {isVisible && (
                 <p 
-                className={`text-sm md:text-base font-medium leading-relaxed animate-slide-in max-w-[80%] md:max-w-[240px] ${textColorClass}`}
+                className={`text-sm md:text-base font-medium leading-relaxed animate-slide-in max-w-[85%] ${
+                    id === 4 ? 'md:max-w-[400px]' : 'md:max-w-[220px]'
+                } ${textColorClass}`}
                 style={{ 
                     animationDelay: '100ms'
                 }}
@@ -127,7 +129,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
             )}
         </div>
 
-        {/* === B. CONTENIDO VISUAL INFERIOR (Animaciones flotantes) === */}
+        {/* === B. CONTENIDO VISUAL INFERIOR === */}
         <div className="absolute bottom-0 left-0 w-full h-[70%] md:h-full z-10 pointer-events-none overflow-hidden flex items-end justify-end">
             
             {hasCustomVisual && isVisible ? (
@@ -135,9 +137,9 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                     {/* --- TARJETA 1: CHAT ANIMADO --- */}
                     {id === 1 && (
                         <div className="w-full h-full flex items-end justify-end p-4 md:p-10">
-                            <div className="w-full max-w-[450px] flex flex-col gap-3 md:gap-4 transform scale-[0.85] origin-bottom-right md:scale-100">
+                            <div className="w-full max-w-[450px] flex flex-col gap-3 md:gap-4 transform scale-[0.90] origin-bottom-right md:scale-100">
                                 <div className={`self-end bg-white/10 backdrop-blur-md text-white px-5 py-3 rounded-2xl rounded-tr-sm max-w-[90%] border border-white/20 shadow-lg transition-all duration-500 transform ${showUserMessage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                                    <p className="text-xs md:text-sm font-medium">Any emerging trends in zone B?</p>
+                                    <p className="text-sm font-medium">Any emerging trends in zone B?</p>
                                 </div>
                                 {isTyping && (
                                     <div className="self-start flex gap-3 animate-fade-in">
@@ -150,13 +152,13 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                                         <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-indigo-900/20"><Sparkles className="w-4 h-4 text-indigo-600" /></div>
                                         <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl">
                                             <div className="flex items-center gap-2 mb-1"><span className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-indigo-600">TxA Insight</span></div>
-                                            <p className="text-xs md:text-sm leading-relaxed font-medium">Detected a <span className="font-bold text-indigo-900">15% increase</span> in <span className="italic">Listeria spp.</span> positives near Line 4.</p>
+                                            <p className="text-sm leading-relaxed font-medium">Detected a <span className="font-bold text-indigo-900">15% increase</span> in <span className="italic">Listeria spp.</span> positives near Line 4.</p>
                                         </div>
                                     </div>
                                     <div className="flex gap-3">
                                         <div className="w-8 h-8 shrink-0" />
                                         <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl w-full">
-                                            <p className="text-xs md:text-sm leading-relaxed font-medium mb-3">Based on recent <span className="italic">Listeria spp.</span> trends, I've generated an optimized targeted sampling map.</p>
+                                            <p className="text-sm leading-relaxed font-medium mb-3">Based on recent <span className="italic">Listeria spp.</span> trends, I've generated an optimized targeted sampling map.</p>
                                             <div className="border border-indigo-100 rounded-xl p-3 bg-indigo-50/50 hover:bg-indigo-50 transition-colors cursor-pointer group/cta pointer-events-auto">
                                                 <div className="flex items-center justify-between mb-2"><span className="text-[9px] md:text-[10px] font-extrabold text-indigo-900 uppercase tracking-wider">BEST SAMPLING SCHEME</span><MousePointerClick className="w-4 h-4 text-indigo-500 group-hover/cta:scale-110 transition-transform" /></div>
                                                 <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0"><Map className="w-3 h-3 text-indigo-600" /></div><p className="text-[10px] font-bold text-indigo-700 leading-tight">Click here to see the proposed sampling scheme.</p></div>
@@ -168,8 +170,8 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                         </div>
                     )}
 
-                    {/* --- TARJETA 3: AI PREDICTION --- */}
-                    {id === 3 && (
+                    {/* --- TARJETA 2: AI PREDICTION --- */}
+                    {id === 2 && (
                         <div className="w-full h-full relative">
                             <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-500 ${aiState === 'analyzing' ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}>
                                 <div className="bg-white/95 backdrop-blur-xl border border-gray-200 shadow-xl rounded-2xl px-8 py-5 flex flex-col gap-3 min-w-[240px]">
@@ -191,6 +193,35 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                             )}
                         </div>
                     )}
+
+                    {/* --- TARJETA 4: DYNAMIC & PREVENTIVE (LETRAS SALTARINAS SINCRONIZADAS) --- */}
+                    {id === 4 && (
+                        <div className="w-full h-full flex flex-col items-center justify-center p-4 z-10">
+                            <div className="flex flex-row items-center gap-2 md:gap-4 flex-wrap justify-center">
+                                
+                                {/* 1. Dynamic (Letras saltarinas con color sólido) */}
+                                <h3 className={`text-3xl md:text-5xl font-extrabold text-indigo-600 tracking-tight ${isVisible ? 'is-visible' : ''}`}>
+                                    <span className="dynamic-letter let-1">D</span>
+                                    <span className="dynamic-letter let-2">y</span>
+                                    <span className="dynamic-letter let-3">n</span>
+                                    <span className="dynamic-letter let-4">a</span>
+                                    <span className="dynamic-letter let-5">m</span>
+                                    <span className="dynamic-letter let-6">i</span>
+                                    <span className="dynamic-letter let-7">c</span>
+                                </h3>
+                                
+                                {/* Conector & */}
+                                <span className="text-2xl md:text-4xl text-gray-400 font-light italic font-serif">&</span>
+
+                                {/* 2. Preventive (Flotación que termina sincronizada) */}
+                                {/* CAMBIO: animate-float-once que dura 2.5s y se detiene */}
+                                <h3 className={`text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 tracking-tight ${isVisible ? 'animate-float-once' : ''}`}>
+                                    Preventive
+                                </h3>
+
+                            </div>
+                        </div>
+                    )}
                 </>
             ) : null}
         </div>
@@ -204,7 +235,6 @@ export default function TxAFeatures() {
   const features = [
     {
       id: 1,
-      // #1: AI CHAT
       description: "Ask questions about your data. TxA identifies trends, anomalies, and emerging risks in plain language.",
       hasCustomVisual: true,
       cardBgClass: "bg-gradient-to-br from-indigo-600 to-blue-500", 
@@ -212,19 +242,24 @@ export default function TxAFeatures() {
     },
     {
       id: 2,
-      // #2: TxA APP (Dynamic Sampling)
-      description: "Power your fieldwork with the TxA App. Perform dynamic sampling with attached photos, detailed point information, and instant cloud syncing.",
-      hasCustomVisual: false, // Usamos la imagen de fondo estática definida en el componente
-      cardBgClass: "bg-[#F4F4F5]", // Gris claro
-      textColorClass: "text-[#111111]", // Texto oscuro
-    },
-    {
-      id: 3,
-      // #3: AI PREDICTION
       description: "Predictive Sampling. AI algorithms analyze historical data to pinpoint the best sampling locations, preventing risks before they arise.",
       hasCustomVisual: true,
       cardBgClass: "bg-[#F5F5F7]",
       textColorClass: "text-white",
+    },
+    {
+      id: 3,
+      description: "Power your fieldwork with the TxA App. Perform digital sampling with attached photos, detailed point information, and instant cloud syncing.",
+      hasCustomVisual: false, 
+      cardBgClass: "bg-[#F4F4F5]", 
+      textColorClass: "text-[#111111]", 
+    },
+    {
+      id: 4,
+      description: "TxA allows you to build dynamic, preventive programs that adapt in real-time to maximize food quality and safety.",
+      hasCustomVisual: true,
+      cardBgClass: "bg-[#F4F4F5]", 
+      textColorClass: "text-[#111111]", 
     }
   ];
 
@@ -266,11 +301,11 @@ export default function TxAFeatures() {
         .font-sora { font-family: var(--font-sora), sans-serif; }
 
         @keyframes slideIn {
-            0% { opacity: 0; transform: translateX(15px); }
+            0% { opacity: 0; transform: translateX(30px); }
             100% { opacity: 1; transform: translateX(0); }
         }
         .animate-slide-in {
-            animation: slideIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            animation: slideIn 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             opacity: 0;
         }
         
@@ -307,6 +342,30 @@ export default function TxAFeatures() {
             animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             opacity: 0;
         }
+
+        /* --- ANIMACIONES TARJETA 4 (Letras Saltarinas y Float Finito) --- */
+        
+        /* 1. Chaotic Jump para letras individuales */
+        @keyframes chaoticJump {
+            0% { transform: translateY(0); }
+            20% { transform: translateY(-15px); }
+            40% { transform: translateY(10px); }
+            60% { transform: translateY(-8px); }
+            80% { transform: translateY(4px); }
+            100% { transform: translateY(0); }
+        }
+        .dynamic-letter { display: inline-block; }
+        h3.is-visible .dynamic-letter {
+             animation-name: chaoticJump; animation-timing-function: ease-in-out;
+             animation-fill-mode: forwards; animation-iteration-count: 1; 
+        }
+        h3.is-visible .let-1 { animation-duration: 2.1s; animation-delay: 0.0s; }
+        h3.is-visible .let-2 { animation-duration: 2.3s; animation-delay: 0.1s; }
+        h3.is-visible .let-3 { animation-duration: 1.9s; animation-delay: 0.05s; }
+        h3.is-visible .let-4 { animation-duration: 2.4s; animation-delay: 0.15s; }
+        h3.is-visible .let-5 { animation-duration: 2.0s; animation-delay: 0.02s; }
+        h3.is-visible .let-6 { animation-duration: 2.2s; animation-delay: 0.08s; }
+        h3.is-visible .let-7 { animation-duration: 2.5s; animation-delay: 0.12s; }
       `}</style>
     </section>
   );
