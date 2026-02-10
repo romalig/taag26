@@ -20,7 +20,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
             setIsVisible(true);
         }
       },
-      { threshold: 0.5 } 
+      { threshold: 0.4 } 
     );
 
     if (cardRef.current) {
@@ -38,7 +38,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
   useEffect(() => {
     if (isVisible && feature.hasCustomVisual) {
       const t1 = setTimeout(() => setShowUserMessage(true), 500);
-      const t2 = setTimeout(() => setIsTyping(true), 1500); // Un poco más de tiempo para leer
+      const t2 = setTimeout(() => setIsTyping(true), 1500);
       const t3 = setTimeout(() => {
         setIsTyping(false);
         setShowAiResponse(true);
@@ -55,7 +55,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
   return (
     <div 
         ref={cardRef}
-        className={`snap-center shrink-0 w-[90vw] md:w-[800px] h-[500px] md:h-[450px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 ${feature.cardBgClass}`}
+        className={`snap-center shrink-0 w-[90vw] md:w-[800px] h-[520px] md:h-[450px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 ${feature.cardBgClass}`}
     >
         {/* Efecto Shine para la tarjeta 1 */}
         {feature.id === 1 && (
@@ -75,19 +75,21 @@ const FeatureCard = ({ feature }: { feature: any }) => {
         </div>
 
         {/* B. CONTENIDO VISUAL (Parte inferior) */}
-        {/* Ajustado: bottom-0 con altura suficiente para que no choque con el texto de arriba */}
-        <div className="absolute bottom-0 left-0 w-full h-[65%] md:h-full z-10 pointer-events-none overflow-hidden flex items-end justify-end">
+        <div className="absolute bottom-0 left-0 w-full h-[70%] md:h-full z-10 pointer-events-none overflow-hidden flex items-end justify-end">
             
             {feature.hasCustomVisual && isVisible ? (
                 // === ANIMACIÓN CHAT ===
-                <div className="w-full h-full flex items-end justify-end p-6 md:p-10">
-                    <div className="w-full max-w-[450px] flex flex-col gap-3 md:gap-4">
+                <div className="w-full h-full flex items-end justify-end p-4 md:p-10">
+                    {/* CAMBIO CLAVE: scale-[0.85] en móvil para que quepa todo. 
+                       origin-bottom-right asegura que se escale desde la esquina.
+                    */}
+                    <div className="w-full max-w-[450px] flex flex-col gap-3 md:gap-4 transform scale-[0.85] origin-bottom-right md:scale-100">
                         
                         {/* 1. Pregunta Usuario */}
                         <div 
-                        className={`self-end bg-white/10 backdrop-blur-md text-white px-5 py-3 rounded-2xl rounded-tr-sm max-w-[90%] border border-white/20 shadow-lg transition-all duration-500 transform ${showUserMessage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                        className={`self-end bg-white/10 backdrop-blur-md text-white px-4 py-3 md:px-5 md:py-3 rounded-2xl rounded-tr-sm max-w-[90%] border border-white/20 shadow-lg transition-all duration-500 transform ${showUserMessage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                         >
-                            <p className="text-sm font-medium">Any emerging trends in zone B?</p>
+                            <p className="text-xs md:text-sm font-medium">Any emerging trends in zone B?</p>
                         </div>
 
                         {/* 2. Escribiendo... */}
@@ -104,7 +106,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
 
                         {/* 3. Respuesta IA + CTA */}
                         <div 
-                            className={`self-start flex flex-col gap-3 max-w-[95%] transition-all duration-500 transform ${showAiResponse ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 hidden'}`}
+                            className={`self-start flex flex-col gap-3 max-w-[98%] md:max-w-[95%] transition-all duration-500 transform ${showAiResponse ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 hidden'}`}
                         >
                             {/* Insight Bubble */}
                             <div className="flex gap-3">
@@ -113,9 +115,9 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                                 </div>
                                 <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl">
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">TxA Insight</span>
+                                        <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-indigo-600">TxA Insight</span>
                                     </div>
-                                    <p className="text-sm leading-relaxed font-medium">
+                                    <p className="text-xs md:text-sm leading-relaxed font-medium">
                                         Detected a <span className="font-bold text-indigo-900">15% increase</span> in <span className="italic">Listeria spp.</span> positives near Line 4.
                                     </p>
                                 </div>
@@ -125,14 +127,14 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                             <div className="flex gap-3">
                                 <div className="w-8 h-8 shrink-0" /> {/* Espaciador */}
                                 <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl w-full">
-                                    <p className="text-sm leading-relaxed font-medium mb-3">
+                                    <p className="text-xs md:text-sm leading-relaxed font-medium mb-3">
                                         Based on recent <span className="italic">Listeria spp.</span> trends, I've generated an optimized targeted sampling map.
                                     </p>
                                     
                                     {/* Botón CTA */}
                                     <div className="border border-indigo-100 rounded-xl p-3 bg-indigo-50/50 hover:bg-indigo-50 transition-colors cursor-pointer group/cta pointer-events-auto">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-[10px] font-extrabold text-indigo-900 uppercase tracking-wider">BEST SAMPLING SCHEME</span>
+                                            <span className="text-[9px] md:text-[10px] font-extrabold text-indigo-900 uppercase tracking-wider">BEST SAMPLING SCHEME</span>
                                             <MousePointerClick className="w-4 h-4 text-indigo-500 group-hover/cta:scale-110 transition-transform" />
                                         </div>
                                         <div className="flex items-center gap-2">
