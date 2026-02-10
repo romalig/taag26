@@ -109,7 +109,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                         priority={true} 
                     />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/30 to-transparent md:bg-gradient-to-r md:from-black/80 md:via-black/30 md:to-transparent z-0" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/50 md:via-black/10 md:to-transparent z-0" />
             </>
         )}
 
