@@ -320,13 +320,13 @@ export default function TxAFeatures() {
   return (
     <section className="bg-white py-24 border-t border-gray-100 overflow-hidden relative">
       
-      {/* 1. ENCABEZADO */}
+      {/* 1. ENCABEZADO (Actualizado con tamaños de TxASystem) */}
       <div className="max-w-[1280px] mx-auto px-6 md:px-10 mb-16">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-[#111111] mb-6 font-sora tracking-tight leading-tight">
+        <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-[#111111] mb-6 font-sora tracking-tight leading-[1.1] md:leading-tight">
           Meet your new <br className="hidden md:block"/>
           microbiology expert.
         </h2>
-        <p className="text-lg text-gray-500 font-medium leading-relaxed max-w-3xl">
+        <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed max-w-3xl">
           TxA unifies digital sampling, testing, and analytics into a single intelligent nervous system. 
           By creating total visibility across sites and workflows, we turn isolated data into a coordinated defense strategy—faster, sharper, and fully controlled.
         </p>
