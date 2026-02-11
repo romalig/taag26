@@ -321,8 +321,8 @@ export default function TxAFeatures() {
     <section className="bg-white py-24 border-t border-gray-100 overflow-hidden relative">
       
       {/* 1. ENCABEZADO (Actualizado con tamaños de TxASystem) */}
-      <div className="max-w-[1280px] mx-auto px-6 md:px-10 mb-16">
-        <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-[#111111] mb-6 font-sora tracking-tight leading-[1.1] md:leading-tight">
+      <div className="max-w-[1280px] mx-auto px-6 md:px-10 mb-16"> 
+        <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-[#111111] mb-10 md:mb-16 font-sora tracking-tight leading-[1.1] md:leading-tight">
           Meet your new <br className="hidden md:block"/>
           microbiology expert.
         </h2>
