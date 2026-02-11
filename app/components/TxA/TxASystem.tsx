@@ -1,22 +1,44 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 
 export default function TxASystem() {
+  const [isVisible, setIsVisible] = useState(false);
+  const logoRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // isIntersecting es true cuando el logo entra en la pantalla
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        } else {
+          // Al ponerlo en false cuando sale, la animación se repite al volver a hacer scroll
+          setIsVisible(false);
+        }
+      },
+      { threshold: 0.1 } // Se activa cuando el 10% del elemento es visible
+    );
+
+    if (logoRef.current) observer.observe(logoRef.current);
+    return () => {
+      if (logoRef.current) observer.unobserve(logoRef.current);
+    };
+  }, []);
+
   return (
     <div className="relative w-full bg-[#f3f4f6] -mt-px py-32 md:py-48 flex flex-col items-center justify-center overflow-hidden">
       
       <div className="max-w-4xl mx-auto px-6 text-center flex flex-col items-center relative">
         
-        {/* 1. LOGO TxA ANIMADO */}
-        {/* initial={{ y: 200 }}: Lo tira al fondo, totalmente detrás del bloque de texto */}
-        <motion.div 
-          initial={{ y: 200 }} 
-          whileInView={{ y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} // Curva de animación muy elegante
-          viewport={{ once: false, amount: 0.1 }} // once: false repite la animación. amount: 0.1 la dispara rápido.
-          className="relative w-24 h-24 md:w-32 md:h-32 z-10"
+        {/* 1. LOGO TxA ANIMADO (Sin librerías externas) */}
+        {/* Usamos Tailwind transition-all y translate-y para animar basado en el estado isVisible */}
+        <div 
+          ref={logoRef}
+          className={`relative w-24 h-24 md:w-32 md:h-32 z-10 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[200px] opacity-0'
+          }`}
         >
           <Image
             src="/LogoTxANB.png"
@@ -25,11 +47,10 @@ export default function TxASystem() {
             className="object-contain drop-shadow-sm"
             priority
           />
-        </motion.div>
+        </div>
 
         {/* 2. CONTENEDOR DE TEXTO (LA MÁSCARA) */}
-        {/* pt-10 actúa como el espacio entre el logo y el texto, pero al ser parte de este div con bg-[#f3f4f6], 
-            se convierte en una pared sólida que oculta el logo hasta que sube. */}
+        {/* Sigue actuando como la pared frontal (z-20) que oculta el logo */}
         <div className="relative z-20 bg-[#f3f4f6] w-[120%] pt-10 flex flex-col items-center">
           
           <h2 className="text-4xl md:text-6xl font-extrabold text-[#111111] mb-16 font-sora tracking-tight leading-tight">
