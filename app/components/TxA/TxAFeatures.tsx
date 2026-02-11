@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image"; 
 import { 
   MessageSquareText, Map, Sparkles, MousePointerClick, MoreHorizontal, 
-  MapPin, CheckCircle2
+  MapPin, CheckCircle2, ChevronLeft, ChevronRight
 } from "lucide-react";
 
 // --- SUB-COMPONENTE: TARJETA INDIVIDUAL ---
@@ -24,6 +24,9 @@ const FeatureCard = ({ feature }: { feature: any }) => {
   const { id, hasCustomVisual, cardBgClass, textColorClass, description } = feature;
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    const currentThreshold = isMobile ? 0.2 : 1.0;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
@@ -36,10 +39,9 @@ const FeatureCard = ({ feature }: { feature: any }) => {
             // Reset Tarjeta 2
             setAiState('idle');
             setShowPins(false);
-            // La tarjeta 4 se resetea sola por CSS
         }
       },
-      { threshold: 1 } 
+      { threshold: currentThreshold } 
     );
 
     if (cardRef.current) observer.observe(cardRef.current);
@@ -97,7 +99,6 @@ const FeatureCard = ({ feature }: { feature: any }) => {
 
         {/* Tarjeta 3 (App): Imagen PNG movida a la derecha */}
         {id === 3 && (
-            // CAMBIO: justify-center -> justify-end, padding derecho agregado (pr-8 md:pr-16)
             <div className="absolute inset-0 z-0 flex items-end justify-end pr-8 md:pr-16 pb-0">
                 <div className="relative w-full h-[85%]"> 
                     <Image 
@@ -105,7 +106,6 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                         alt="TxA App Interface"
                         fill
                         unoptimized={true}
-                        // CAMBIO: object-bottom right para asegurar alineación
                         className="object-contain object-bottom-right transition-transform duration-700 group-hover:scale-[1.02]"
                         priority={true} 
                     />
@@ -194,13 +194,13 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                         </div>
                     )}
 
-                    {/* --- TARJETA 4: DYNAMIC & PREVENTIVE (LETRAS SALTARINAS SINCRONIZADAS) --- */}
+                    {/* --- TARJETA 4: DYNAMIC & PREVENTIVE --- */}
                     {id === 4 && (
-                        <div className="w-full h-full flex flex-col items-center justify-center p-4 z-10">
+                        <div className="w-full h-full flex flex-col items-center justify-center p-4 z-10 text-center">
                             <div className="flex flex-row items-center gap-2 md:gap-4 flex-wrap justify-center">
                                 
-                                {/* 1. Dynamic (Letras saltarinas con color sólido) */}
-                                <h3 className={`text-3xl md:text-5xl font-extrabold text-indigo-600 tracking-tight ${isVisible ? 'is-visible' : ''}`}>
+                                {/* 1. Dynamic */}
+                                <h3 className={`text-5xl md:text-6xl font-extrabold text-indigo-600 tracking-tight ${isVisible ? 'is-visible' : ''}`}>
                                     <span className="dynamic-letter let-1">D</span>
                                     <span className="dynamic-letter let-2">y</span>
                                     <span className="dynamic-letter let-3">n</span>
@@ -211,11 +211,10 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                                 </h3>
                                 
                                 {/* Conector & */}
-                                <span className="text-2xl md:text-4xl text-gray-400 font-light italic font-serif">&</span>
+                                <span className="text-4xl md:text-5xl text-gray-400 font-light italic font-serif">&</span>
 
-                                {/* 2. Preventive (Flotación que termina sincronizada) */}
-                                {/* CAMBIO: animate-float-once que dura 2.5s y se detiene */}
-                                <h3 className={`text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 tracking-tight ${isVisible ? 'animate-float-once' : ''}`}>
+                                {/* 2. Preventive */}
+                                <h3 className={`text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 tracking-tight ${isVisible ? 'animate-float-once' : ''}`}>
                                     Preventive
                                 </h3>
 
@@ -231,6 +230,40 @@ const FeatureCard = ({ feature }: { feature: any }) => {
 
 
 export default function TxAFeatures() {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  
+  // Estados para controlar la visibilidad de las flechas
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  // Función para evaluar si se puede hacer scroll a los lados
+  const checkScroll = () => {
+    if (carouselRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5); // 5px de margen
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener("resize", checkScroll);
+    return () => window.removeEventListener("resize", checkScroll);
+  }, []);
+
+  // Función para ejecutar el scroll
+  const scroll = (direction: 'left' | 'right') => {
+    if (carouselRef.current) {
+      const cardWidth = window.innerWidth < 768 ? window.innerWidth * 0.9 : 800;
+      const gap = 24; // gap-6 = 24px
+      const scrollAmount = cardWidth + gap;
+      
+      carouselRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
   
   const features = [
     {
@@ -266,7 +299,7 @@ export default function TxAFeatures() {
   const edgePadding = "max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem))";
 
   return (
-    <section className="bg-white py-24 border-t border-gray-100 overflow-hidden">
+    <section className="bg-white py-24 border-t border-gray-100 overflow-hidden relative">
       
       {/* 1. ENCABEZADO */}
       <div className="max-w-[1280px] mx-auto px-6 md:px-10 mb-16">
@@ -280,19 +313,57 @@ export default function TxAFeatures() {
         </p>
       </div>
 
-      {/* 2. CARRUSEL */}
-      <div 
-        className="flex overflow-x-auto snap-x snap-mandatory pb-10 gap-6 no-scrollbar"
-        style={{ 
-            paddingLeft: edgePadding, 
-            paddingRight: edgePadding 
-        }}
-      >
-        {features.map((feature) => (
-          <FeatureCard key={feature.id} feature={feature} />
-        ))}
+      {/* 2. CARRUSEL Y BOTONES DE NAVEGACIÓN */}
+      <div className="relative group">
         
-        <div className="shrink-0 w-[1px]" />
+        {/* Carrusel */}
+        <div 
+            ref={carouselRef}
+            onScroll={checkScroll}
+            className="flex overflow-x-auto snap-x snap-mandatory pb-24 md:pb-10 gap-6 no-scrollbar"
+            style={{ 
+                paddingLeft: edgePadding, 
+                paddingRight: edgePadding 
+            }}
+        >
+            {features.map((feature) => (
+            <FeatureCard key={feature.id} feature={feature} />
+            ))}
+            
+            <div className="shrink-0 w-[1px]" />
+        </div>
+
+        {/* --- BOTONES COMPUTADOR (Gris translúcido / Glassmorphism) --- */}
+        <button 
+            onClick={() => scroll('left')}
+            className={`hidden md:flex absolute left-4 xl:left-12 top-1/2 -translate-y-1/2 z-30 w-14 h-14 bg-gray-400/20 backdrop-blur-md border border-gray-400/20 shadow-sm rounded-full items-center justify-center text-gray-600 hover:bg-gray-400/40 hover:text-gray-900 hover:scale-110 transition-all duration-300 ${!canScrollLeft ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        >
+            <ChevronLeft className="w-6 h-6" />
+        </button>
+
+        <button 
+            onClick={() => scroll('right')}
+            className={`hidden md:flex absolute right-4 xl:right-12 top-1/2 -translate-y-1/2 z-30 w-14 h-14 bg-gray-400/20 backdrop-blur-md border border-gray-400/20 shadow-sm rounded-full items-center justify-center text-gray-600 hover:bg-gray-400/40 hover:text-gray-900 hover:scale-110 transition-all duration-300 ${!canScrollRight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        >
+            <ChevronRight className="w-6 h-6" />
+        </button>
+
+        {/* --- BOTONES CELULAR (Gris translúcido / Glassmorphism) --- */}
+        <div className="flex md:hidden absolute bottom-6 right-6 z-30 gap-3">
+            <button 
+                onClick={() => scroll('left')}
+                className={`w-12 h-12 bg-gray-400/20 backdrop-blur-md border border-gray-400/20 shadow-sm rounded-full flex items-center justify-center text-gray-600 active:scale-95 transition-all duration-300 ${!canScrollLeft ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+            >
+                <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button 
+                onClick={() => scroll('right')}
+                className={`w-12 h-12 bg-gray-400/20 backdrop-blur-md border border-gray-400/20 shadow-sm rounded-full flex items-center justify-center text-gray-600 active:scale-95 transition-all duration-300 ${!canScrollRight ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+            >
+                <ChevronRight className="w-6 h-6" />
+            </button>
+        </div>
+
       </div>
 
       <style jsx global>{`
@@ -345,7 +416,6 @@ export default function TxAFeatures() {
 
         /* --- ANIMACIONES TARJETA 4 (Letras Saltarinas y Float Finito) --- */
         
-        /* 1. Chaotic Jump para letras individuales */
         @keyframes chaoticJump {
             0% { transform: translateY(0); }
             20% { transform: translateY(-15px); }
@@ -366,6 +436,16 @@ export default function TxAFeatures() {
         h3.is-visible .let-5 { animation-duration: 2.0s; animation-delay: 0.02s; }
         h3.is-visible .let-6 { animation-duration: 2.2s; animation-delay: 0.08s; }
         h3.is-visible .let-7 { animation-duration: 2.5s; animation-delay: 0.12s; }
+
+        @keyframes floatOnce {
+            0% { transform: translateY(0); }
+            25% { transform: translateY(-10px); }
+            75% { transform: translateY(5px); }
+            100% { transform: translateY(0); }
+        }
+        .animate-float-once {
+            animation: floatOnce 2.5s ease-in-out forwards 1;
+        }
       `}</style>
     </section>
   );
