@@ -232,16 +232,17 @@ const FeatureCard = ({ feature }: { feature: any }) => {
 export default function TxAFeatures() {
   const carouselRef = useRef<HTMLDivElement>(null);
   
-  // Estados para controlar la visibilidad de las flechas
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  
+  // NUEVO: Referencia para bloquear clics múltiples rápidos
+  const isScrolling = useRef(false);
 
-  // Función para evaluar si se puede hacer scroll a los lados
   const checkScroll = () => {
     if (carouselRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5); // 5px de margen
+      setCanScrollLeft(scrollLeft > 2); // Pequeño margen
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 2); 
     }
   };
 
@@ -251,18 +252,36 @@ export default function TxAFeatures() {
     return () => window.removeEventListener("resize", checkScroll);
   }, []);
 
-  // Función para ejecutar el scroll
+  // --- SOLUCIÓN DEL BUG DE SCROLL ---
   const scroll = (direction: 'left' | 'right') => {
-    if (carouselRef.current) {
-      const cardWidth = window.innerWidth < 768 ? window.innerWidth * 0.9 : 800;
-      const gap = 24; // gap-6 = 24px
-      const scrollAmount = cardWidth + gap;
-      
-      carouselRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
+    // Si no hay referencia o ya se está desplazando, ignorar el clic
+    if (!carouselRef.current || isScrolling.current) return;
+    
+    // Bloquear el botón temporalmente
+    isScrolling.current = true;
+
+    const cardWidth = window.innerWidth < 768 ? window.innerWidth * 0.9 : 800;
+    const gap = 24; 
+    const scrollAmount = cardWidth + gap;
+    
+    const { scrollLeft } = carouselRef.current;
+
+    if (direction === 'left') {
+        // SI ESTÁ CERCA DEL PRINCIPIO, FORZAR AL EXACTO 0. EVITA EL OVERSCROLL NEGATIVO EN BLANCO.
+        if (scrollLeft - scrollAmount <= 10) {
+            carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            carouselRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        }
+    } else {
+        carouselRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
+
+    // Desbloquear tras 500ms (tiempo suficiente para que la animación fluida termine)
+    setTimeout(() => {
+      isScrolling.current = false;
+      checkScroll();
+    }, 500);
   };
   
   const features = [

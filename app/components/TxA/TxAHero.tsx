@@ -22,8 +22,6 @@ export default function TxAHero() {
       
       // 2. Ajustamos la resolución interna del canvas para que coincida con el visual
       // Esto evita el estiramiento que causa los óvalos.
-      // (Opcional: Multiplicar por window.devicePixelRatio para pantallas Retina muy nítidas, 
-      // pero para evitar problemas de rendimiento/tamaño en este caso, 1:1 es seguro y geométricamente correcto)
       canvas.width = rect.width;
       canvas.height = rect.height;
 
@@ -40,9 +38,7 @@ export default function TxAHero() {
     const networkColors = ["#7e22ce", "#3b82f6", "#0ea5e9"];
     const connectionDistance = 130;
     
-    let particles: Particle[] = [];
-    let lastSpawnTime = 0;
-
+    // Declaración correcta de la clase Particle antes de usarla
     class Particle {
       x: number;
       y: number;
@@ -90,7 +86,7 @@ export default function TxAHero() {
         }
       }
 
-      update() {
+      update(particlesArray: Particle[]) {
         this.x += this.vx;
         this.y += this.vy;
 
@@ -112,26 +108,25 @@ export default function TxAHero() {
         }
 
         if (this.isSeed && this.state === "living" && !this.spawnedChildren) {
-            this.propagate();
+            this.propagate(particlesArray);
             this.spawnedChildren = true;
         }
       }
 
-      propagate() {
+      propagate(particlesArray: Particle[]) {
         const isMobile = width < 768;
         const minChildren = 4;
         const maxChildren = isMobile ? 10 : 14; 
         const childrenCount = Math.floor(Math.random() * (maxChildren - minChildren + 1)) + minChildren;
 
         for (let i = 0; i < childrenCount; i++) {
-            particles.push(new Particle(false, this.x, this.y));
+            particlesArray.push(new Particle(false, this.x, this.y));
         }
       }
 
-      draw() {
-        if (!ctx) return;
+      draw(ctx: CanvasRenderingContext2D) {
         ctx.save();
-        ctx.globalAlpha = this.alpha;
+        ctx.globalAlpha = Math.max(0, this.alpha);
         ctx.beginPath();
         
         // Círculo perfecto
@@ -149,7 +144,13 @@ export default function TxAHero() {
       }
     }
 
+    let particles: Particle[] = [];
+    let lastSpawnTime = 0;
+    let animationFrameId: number;
+
     const animate = (timestamp: number) => {
+      if (!ctx || !canvas) return;
+      
       // Limpiar usando las dimensiones actuales correctas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -163,15 +164,18 @@ export default function TxAHero() {
           lastSpawnTime = timestamp;
       }
 
+      // Dibujar conexiones
+      ctx.lineWidth = 1;
       for (let a = 0; a < particles.length; a++) {
-        for (let b = a; b < particles.length; b++) {
+        for (let b = a + 1; b < particles.length; b++) { // Optimizado: b = a + 1
           if (particles[a].isSeed && particles[b].isSeed) continue;
 
           const dx = particles[a].x - particles[b].x;
           const dy = particles[a].y - particles[b].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distanceSq = dx * dx + dy * dy; // Optimizado: Evitar Math.sqrt donde sea posible
 
-          if (distance < connectionDistance) {
+          if (distanceSq < connectionDistance * connectionDistance) {
+            const distance = Math.sqrt(distanceSq);
             const opacity = 1 - distance / connectionDistance;
             const lineAlpha = Math.min(particles[a].alpha, particles[b].alpha) * opacity * 0.3;
             
@@ -182,7 +186,6 @@ export default function TxAHero() {
                 } else {
                     ctx.strokeStyle = `rgba(100, 116, 180, ${lineAlpha})`;
                 }
-                ctx.lineWidth = 1;
                 ctx.moveTo(particles[a].x, particles[a].y);
                 ctx.lineTo(particles[b].x, particles[b].y);
                 ctx.stroke();
@@ -191,23 +194,25 @@ export default function TxAHero() {
         }
       }
 
+      // Actualizar y limpiar partículas muertas
       particles = particles.filter(p => !(p.state === "dying" && p.alpha <= 0));
 
       particles.forEach((particle) => {
-        particle.update();
-        particle.draw();
+        particle.update(particles);
+        particle.draw(ctx);
       });
 
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     };
 
-    animate(0);
+    animationFrameId = requestAnimationFrame(animate);
 
     // Escuchar el evento resize
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationFrameId); // Limpieza importante al desmontar
     };
   }, []);
 
@@ -231,6 +236,14 @@ export default function TxAHero() {
         </p>
 
       </div>
+
+      {/* PUENTE VISUAL INVISIBLE PARA CONECTAR CON TxASystem.tsx */}
+      <div 
+        className="absolute bottom-0 left-0 w-full h-40 pointer-events-none z-10" 
+        style={{
+          background: "linear-gradient(to bottom, rgba(255,255,255,0) 0%, #f3f4f6 100%)"
+        }}
+      />
 
       <style jsx>{`
         .font-sora {
