@@ -64,61 +64,63 @@ export default function TxASystem() {
         {/* 3. GRILLA EXACTA */}
         <div className="w-full max-w-[1330px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
           
-          {/* --- TARJETA 1: TxA APP (Morado) --- */}
+          {/* --- TARJETA 1: TxA APP --- */}
           <div className="bg-white rounded-[32px] p-8 h-[280px] relative flex flex-col justify-center">
-            {/* Header: Top Left */}
             <div className="absolute top-8 left-8">
               <span className="text-sm font-bold tracking-widest text-purple-700 uppercase">TxA APP</span>
             </div>
-            
-            {/* Main Text: Vertically Centered */}
             <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
               Perform digital sampling with instant cloud syncing.
             </p>
-
-            {/* Footer: Bottom Left */}
             <button className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group">
                 learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
             </button>
           </div>
 
-          {/* --- TARJETA 2: TxA LAB (Azul) --- */}
+          {/* --- TARJETA 2: TxA LAB --- */}
           <div className="bg-white rounded-[32px] p-8 h-[280px] relative flex flex-col justify-center">
-            {/* Header: Top Left */}
             <div className="absolute top-8 left-8">
               <span className="text-sm font-bold tracking-widest text-blue-700 uppercase">TxA LAB</span>
             </div>
-            
             <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
               Automate workflows and eliminate human error.
             </p>
-
             <button className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group">
                 learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
             </button>
           </div>
 
-          {/* --- TARJETA 3: TxA QA (Celeste) --- */}
+          {/* --- TARJETA 3: TxA QA --- */}
           <div className="bg-white rounded-[32px] p-8 h-[280px] relative flex flex-col justify-center">
-            {/* Header: Top Left */}
             <div className="absolute top-8 left-8">
               <span className="text-sm font-bold tracking-widest text-cyan-500 uppercase">TxA QA</span>
             </div>
-            
             <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
               View trends and ensure quality control in your area.
             </p>
-
             <button className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group">
                 learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
             </button>
           </div>
 
           {/* --- TARJETA HORIZONTAL: Neural Core --- */}
-          <div className="md:col-span-3 bg-white rounded-[32px] h-[400px] relative flex items-center justify-center overflow-hidden">
+          {/* Mobile: h-[450px] (Para acomodar 4 iconos). Desktop: h-[400px]. */}
+          <div className="md:col-span-3 bg-white rounded-[32px] relative overflow-hidden h-[450px] md:h-[400px]">
             
-            {/* IMAGEN IZQUIERDA (Phone) */}
-            <div className="absolute left-0 bottom-0 w-[400px] h-full flex items-end">
+            {/* 1. SECCIÓN DE TEXTO */}
+            {/* Centrado absoluto tanto en móvil como desktop */}
+            <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-6 pointer-events-none">
+              <span className="text-sm font-bold tracking-[0.2em] bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-400 bg-clip-text text-transparent mb-3 uppercase">
+                TxA Neural Core
+              </span>
+              <p className="text-[24px] md:text-[32px] font-semibold text-[#1d1d1f] leading-[1.1] font-sora tracking-tight md:max-w-[500px]">
+                Proprietary AI algorithms connecting field data, lab results, and safety insights.
+              </p>
+            </div>
+
+            {/* 2. IMAGEN DEL CELULAR */}
+            {/* Mobile: HIDDEN. Desktop: BLOCK. */}
+            <div className="hidden md:flex absolute bottom-0 left-0 w-[400px] h-full items-end z-10">
                <div className="relative w-full h-[90%] -ml-10">
                  <Image 
                    src="/phone2.png" 
@@ -129,27 +131,19 @@ export default function TxASystem() {
                </div>
             </div>
 
-            {/* TEXTO CENTRAL + ETIQUETA TxA */}
-            {/* Flex column justify-center para alineación vertical perfecta */}
-            <div className="z-10 max-w-[500px] h-full flex flex-col justify-center items-center text-center px-4">
-              
-              {/* Etiqueta Pequeña y Elegante */}
-              <span className="text-sm font-bold tracking-[0.2em] bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-400 bg-clip-text text-transparent mb-3 uppercase">
-                TxA Neural Core
-              </span>
-
-              <p className="text-[24px] md:text-[32px] font-semibold text-[#1d1d1f] leading-[1.1] font-sora tracking-tight">
-                Proprietary AI algorithms connecting field data, lab results, and safety insights.
-              </p>
-            </div>
-
-            {/* GRÁFICO DERECHA: Elementos flotantes */}
-            <div className="absolute right-0 bottom-0 w-[380px] h-[380px] flex items-center justify-center pointer-events-none overflow-hidden">
+            {/* 3. ICONOS FLOTANTES & FONDOS */}
+            {/* Mobile: Ocupan todo el espacio. Desktop: Solo a la derecha. */}
+            <div className="absolute inset-0 md:left-auto md:right-0 md:w-[380px] h-full flex items-center justify-center pointer-events-none z-0">
               
               <div className="relative w-full h-full animate-float-slow">
 
-                {/* 1. Risk Prediction - ARRIBA IZQUIERDA */}
-                <div className="absolute top-4 left-0 bg-white p-3 rounded-2xl shadow-sm border border-purple-50 z-20 flex items-center gap-2 transform -rotate-2">
+                {/* FONDOS DE LUZ DIFUSA */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 md:w-40 md:h-40 bg-[#00C7FD]/10 rounded-full blur-2xl -z-10"></div>
+                <div className="absolute bottom-0 right-10 md:right-0 w-32 h-32 bg-[#A13ECD]/10 rounded-full blur-2xl -z-10"></div>
+
+                {/* --- ICONO 1: Risk Prediction (ARRIBA IZQUIERDA en Móvil) --- */}
+                {/* Mobile: top-8 left-4. Desktop: top-4 left-0. */}
+                <div className="absolute top-8 left-4 md:top-4 md:left-0 bg-white p-3 rounded-2xl shadow-sm border border-purple-50 z-20 flex items-center gap-2 transform -rotate-2 scale-90 md:scale-100">
                    <div className="w-8 h-8 bg-purple-50 rounded-full flex items-center justify-center relative">
                      <Sparkles className="w-4 h-4 text-purple-600" />
                    </div>
@@ -159,8 +153,9 @@ export default function TxASystem() {
                    </div>
                 </div>
 
-                {/* 2. Warning Salmonella - ARRIBA DERECHA */}
-                <div className="absolute top-6 right-8 bg-white p-3 rounded-2xl shadow-sm border border-red-50 z-20 flex items-center gap-2 transform rotate-3">
+                {/* --- ICONO 2: Warning Salmonella (ARRIBA DERECHA en Móvil) --- */}
+                {/* Mobile: top-8 right-4. Desktop: top-6 right-8. */}
+                <div className="absolute top-8 right-4 md:top-6 md:right-8 bg-white p-3 rounded-2xl shadow-sm border border-red-50 z-20 flex items-center gap-2 transform rotate-3 scale-90 md:scale-100">
                    <div className="w-8 h-8 bg-red-50 rounded-full flex items-center justify-center">
                      <Sparkles className="w-4 h-4 text-red-500" />
                    </div>
@@ -170,8 +165,9 @@ export default function TxASystem() {
                    </div>
                 </div>
 
-                {/* 3. Tarjeta de Estadísticas - MEDIO DERECHA */}
-                <div className="absolute top-36 right-4 bg-white/70 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-white/40 z-10 w-[140px]">
+                {/* --- ICONO 3: Stats (ABAJO IZQUIERDA en Móvil) --- */}
+                {/* Mobile: bottom-8 left-4. Desktop: top-36 right-4. */}
+                <div className="absolute bottom-8 left-4 md:top-36 md:right-4 md:bottom-auto md:left-auto bg-white/70 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-white/40 z-10 w-[140px] scale-90 md:scale-100 origin-bottom-left md:origin-center">
                   <div className="flex gap-1.5 items-end h-12 mb-2">
                     <div className="w-1/3 h-[50%] bg-[#362482]/70 rounded-t-[4px]"></div>
                     <div className="w-1/3 h-[80%] bg-[#00C7FD]/70 rounded-t-[4px]"></div>
@@ -183,8 +179,9 @@ export default function TxASystem() {
                   </div>
                 </div>
 
-                {/* 4. Tarjeta de Reportes - ABAJO DERECHA */}
-                <div className="absolute bottom-12 right-12 bg-white p-3 rounded-2xl shadow-sm border border-gray-50 z-30 flex items-center gap-2 transform -rotate-1">
+                {/* --- ICONO 4: Reports (ABAJO DERECHA en Móvil) --- */}
+                {/* Mobile: bottom-8 right-4. Desktop: bottom-12 right-12. */}
+                <div className="absolute bottom-8 right-4 md:bottom-12 md:right-12 bg-white p-3 rounded-2xl shadow-sm border border-gray-50 z-30 flex items-center gap-2 transform -rotate-1 w-max scale-90 md:scale-100 origin-bottom-right md:origin-center">
                    <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center">
                      <FileCheck2 className="w-5 h-5 text-green-500" />
                    </div>
@@ -193,10 +190,6 @@ export default function TxASystem() {
                      <p className="text-[9px] text-gray-400">Auto-generated</p>
                    </div>
                 </div>
-
-                {/* Fondos de luz difusa */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[#00C7FD]/10 rounded-full blur-2xl -z-10"></div>
-                <div className="absolute bottom-0 right-0 w-32 h-32 bg-[#A13ECD]/10 rounded-full blur-2xl -z-10"></div>
 
               </div>
             </div>
