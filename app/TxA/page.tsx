@@ -9,7 +9,7 @@ export default function TxAPage() {
     <Header theme="light" />
       {/* Aquí importamos el Hero de TxA */}
       <TxAHero />
-      <TxASystem />
+       <TxASystem />
       <TxAFeatures />
       
       {/* Aquí irán las siguientes secciones de TxA que creemos... */}

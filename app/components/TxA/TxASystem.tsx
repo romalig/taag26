@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Smartphone, Microscope, ShieldCheck, BrainCircuit } from "lucide-react";
+import { 
+  BarChart3, 
+  FileCheck2,
+  Sparkles 
+} from "lucide-react";
 
 export default function TxASystem() {
   const [isVisible, setIsVisible] = useState(false);
@@ -23,125 +27,177 @@ export default function TxASystem() {
   }, []);
 
   return (
-    <div className="relative w-full bg-[#f3f4f6] -mt-px py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden">
+    <div className="relative w-full bg-[#f5f5f7] -mt-px py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden">
       
-      <div className="w-full max-w-6xl mx-auto flex flex-col items-center relative">
+      {/* 1. LOGO TxA ANIMADO */}
+      <div 
+        ref={logoRef}
+        className={`absolute top-24 md:top-32 w-24 h-24 md:w-32 md:h-32 z-10 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[150px] opacity-0'
+        }`}
+      >
+        <Image
+          src="/LogoTxANB.png"
+          alt="TAAG Xpert Assistant Logo"
+          fill
+          className="object-contain drop-shadow-sm"
+          priority
+        />
+      </div>
+
+      {/* 2. CONTENEDOR PRINCIPAL */}
+      <div className="relative z-20 bg-[#f5f5f7] w-full mt-24 md:mt-32 pt-10 flex flex-col items-center px-4">
         
-        {/* 1. LOGO TxA ANIMADO */}
-        <div 
-          ref={logoRef}
-          className={`absolute top-0 w-24 h-24 md:w-32 md:h-32 z-10 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[150px] opacity-0'
-          }`}
-        >
-          <Image
-            src="/LogoTxANB.png"
-            alt="TAAG Xpert Assistant Logo"
-            fill
-            className="object-contain drop-shadow-sm"
-            priority
-          />
+        {/* ENCABEZADO */}
+        <div className="text-center max-w-[800px] mx-auto mb-20">
+          <h2 className="text-3xl md:text-5xl font-bold text-[#1d1d1f] mb-6 font-sora tracking-tight leading-[1.05]">
+            TAAG Xpert Assistant. <br className="hidden md:block"/>
+            <span className="text-[#86868b]">Your AI-powered ecosystem.</span>
+          </h2>
+
+          <p className="text-[17px] leading-[1.4] text-[#86868b] font-medium max-w-2xl mx-auto">
+            TxA is a complete AI ecosystem built to manage your entire microbiology operation. 
+            From digital field sampling to real-time result analysis.
+          </p>
         </div>
 
-        {/* 2. CONTENEDOR DE TEXTO Y TARJETAS (LA MÁSCARA) */}
-        {/* Este contenedor completo tiene z-20 y bg gris, actuando como pared sólida sobre el logo */}
-        <div className="relative z-20 bg-[#f3f4f6] w-full mt-24 md:mt-32 pt-8 md:pt-10 flex flex-col items-center px-6">
+        {/* 3. GRILLA EXACTA */}
+        <div className="w-full max-w-[1330px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
           
-          {/* TÍTULO PRINCIPAL Y BAJADA */}
-          <div className="text-center max-w-4xl mx-auto mb-20 md:mb-32">
-            <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-[#111111] mb-8 md:mb-12 font-sora tracking-tight leading-[1.1] md:leading-tight px-4 md:px-0">
-              TAAG Xpert Assistant. <br className="hidden md:block"/>
-              <span className="text-gray-400 block md:inline mt-2 md:mt-0">Your AI-powered ecosystem.</span>
-            </h2>
-
-            <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed px-6 md:px-8">
-              TxA is a complete AI ecosystem built to manage your entire microbiology operation. 
-              From digital field sampling and predictive algorithms that optimize your operations, 
-              to automated, real-time result analysis, TxA connects every dot.
+          {/* --- TARJETA 1: TxA APP (Morado) --- */}
+          <div className="bg-white rounded-[32px] p-8 h-[280px] relative flex flex-col justify-center">
+            {/* Header: Top Left */}
+            <div className="absolute top-8 left-8">
+              <span className="text-sm font-bold tracking-widest text-purple-700 uppercase">TxA APP</span>
+            </div>
+            
+            {/* Main Text: Vertically Centered */}
+            <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
+              Perform digital sampling with instant cloud syncing.
             </p>
+
+            {/* Footer: Bottom Left */}
+            <button className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group">
+                learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
+            </button>
           </div>
 
-          {/* 3. GRILLA DE MÓDULOS (ESTILO MILA) */}
-          <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-y-16">
+          {/* --- TARJETA 2: TxA LAB (Azul) --- */}
+          <div className="bg-white rounded-[32px] p-8 h-[280px] relative flex flex-col justify-center">
+            {/* Header: Top Left */}
+            <div className="absolute top-8 left-8">
+              <span className="text-sm font-bold tracking-widest text-blue-700 uppercase">TxA LAB</span>
+            </div>
             
-            {/* FILA SUPERIOR: 3 TARJETAS VERTICALES */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-12">
-              
-              {/* --- TARJETA 1: TxA App --- */}
-              <div className="group cursor-default">
-                <div className="relative w-full aspect-[3/4.5] bg-gradient-to-br from-[#ffffff] to-[#e4e4e7] rounded-[2.5rem] overflow-hidden mb-6 flex items-center justify-center border border-gray-200/50 shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
-                  <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center shadow-xl border border-gray-100">
-                    <Smartphone className="w-10 h-10 text-[#FF270A]" />
-                  </div>
-                </div>
-                <div className="px-2">
-                  <h3 className="text-xl font-bold text-[#111111] mb-3 font-sora">TxA App</h3>
-                  <p className="text-sm md:text-base text-gray-500 leading-relaxed">
-                    Digitalize your field sampling. Attach photos, GPS coordinates, and sample details instantly from your mobile device directly to the cloud.
-                  </p>
-                </div>
-              </div>
+            <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
+              Automate workflows and eliminate human error.
+            </p>
 
-              {/* --- TARJETA 2: TxA Lab --- */}
-              <div className="group cursor-default">
-                <div className="relative w-full aspect-[3/4.5] bg-gradient-to-br from-indigo-50 to-blue-100 rounded-[2.5rem] overflow-hidden mb-6 flex items-center justify-center border border-indigo-100 shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
-                  <div className="w-24 h-24 bg-white/60 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg border border-white">
-                    <Microscope className="w-10 h-10 text-indigo-600" />
-                  </div>
-                </div>
-                <div className="px-2">
-                  <h3 className="text-xl font-bold text-[#111111] mb-3 font-sora">TxA Lab</h3>
-                  <p className="text-sm md:text-base text-gray-500 leading-relaxed">
-                    Streamline your laboratory workflow. Automate sample tracking, digitize real-time results, and eliminate human error from data entry.
-                  </p>
-                </div>
-              </div>
+            <button className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group">
+                learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
+            </button>
+          </div>
 
-              {/* --- TARJETA 3: TxA QA --- */}
-              <div className="group cursor-default">
-                <div className="relative w-full aspect-[3/4.5] bg-[#111111] rounded-[2.5rem] overflow-hidden mb-6 flex items-center justify-center shadow-sm transition-transform duration-500 group-hover:-translate-y-2">
-                  <div className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20">
-                    <ShieldCheck className="w-10 h-10 text-emerald-400" />
-                  </div>
-                </div>
-                <div className="px-2">
-                  <h3 className="text-xl font-bold text-[#111111] mb-3 font-sora">TxA QA</h3>
-                  <p className="text-sm md:text-base text-gray-500 leading-relaxed">
-                    Empower your Quality Assurance. Access centralized dashboards, perform deep trend analysis, and maintain effortless compliance tracking.
-                  </p>
-                </div>
-              </div>
+          {/* --- TARJETA 3: TxA QA (Celeste) --- */}
+          <div className="bg-white rounded-[32px] p-8 h-[280px] relative flex flex-col justify-center">
+            {/* Header: Top Left */}
+            <div className="absolute top-8 left-8">
+              <span className="text-sm font-bold tracking-widest text-cyan-500 uppercase">TxA QA</span>
+            </div>
+            
+            <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
+              View trends and ensure quality control in your area.
+            </p>
 
+            <button className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group">
+                learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
+            </button>
+          </div>
+
+          {/* --- TARJETA HORIZONTAL: Neural Core --- */}
+          <div className="md:col-span-3 bg-white rounded-[32px] h-[400px] relative flex items-center justify-center overflow-hidden">
+            
+            {/* IMAGEN IZQUIERDA (Phone) */}
+            <div className="absolute left-0 bottom-0 w-[400px] h-full flex items-end">
+               <div className="relative w-full h-[90%] -ml-10">
+                 <Image 
+                   src="/phone2.png" 
+                   alt="TxA App on Phone" 
+                   fill 
+                   className="object-contain object-bottom-left"
+                 />
+               </div>
             </div>
 
-            {/* FILA INFERIOR: TARJETA HORIZONTAL (ALGORITMOS) */}
-            <div className="group cursor-default w-full">
-              {/* aspect-video en móvil, h-64 a h-80 en desktop para garantizar formato apaisado */}
-              <div className="relative w-full aspect-square md:aspect-auto md:h-72 bg-black rounded-[2.5rem] overflow-hidden mb-6 flex flex-col items-center justify-center shadow-xl transition-transform duration-500 group-hover:-translate-y-2">
-                
-                {/* FONDO ANIMADO (Puntos flotantes tipo Mila) */}
-                <div className="absolute inset-0 z-0 opacity-80">
-                  <div className="absolute top-[20%] left-[15%] w-2 h-2 bg-blue-400 rounded-full animate-float" style={{ animationDelay: '0s' }}></div>
-                  <div className="absolute top-[60%] left-[25%] w-3 h-3 bg-indigo-500 rounded-full animate-float" style={{ animationDelay: '1.5s', animationDuration: '4s' }}></div>
-                  <div className="absolute top-[30%] left-[80%] w-2.5 h-2.5 bg-red-500 rounded-full animate-float" style={{ animationDelay: '0.8s', animationDuration: '4.5s' }}></div>
-                  <div className="absolute top-[70%] left-[75%] w-2 h-2 bg-[#FF270A] rounded-full animate-float" style={{ animationDelay: '2s', animationDuration: '3.8s' }}></div>
-                  <div className="absolute top-[40%] left-[50%] w-1.5 h-1.5 bg-white rounded-full animate-float" style={{ animationDelay: '0.5s', animationDuration: '3.5s' }}></div>
+            {/* TEXTO CENTRAL + ETIQUETA TxA */}
+            {/* Flex column justify-center para alineación vertical perfecta */}
+            <div className="z-10 max-w-[500px] h-full flex flex-col justify-center items-center text-center px-4">
+              
+              {/* Etiqueta Pequeña y Elegante */}
+              <span className="text-sm font-bold tracking-[0.2em] bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-400 bg-clip-text text-transparent mb-3 uppercase">
+                TxA Neural Core
+              </span>
+
+              <p className="text-[24px] md:text-[32px] font-semibold text-[#1d1d1f] leading-[1.1] font-sora tracking-tight">
+                Proprietary AI algorithms connecting field data, lab results, and safety insights.
+              </p>
+            </div>
+
+            {/* GRÁFICO DERECHA: Elementos flotantes */}
+            <div className="absolute right-0 bottom-0 w-[380px] h-[380px] flex items-center justify-center pointer-events-none overflow-hidden">
+              
+              <div className="relative w-full h-full animate-float-slow">
+
+                {/* 1. Risk Prediction - ARRIBA IZQUIERDA */}
+                <div className="absolute top-4 left-0 bg-white p-3 rounded-2xl shadow-sm border border-purple-50 z-20 flex items-center gap-2 transform -rotate-2">
+                   <div className="w-8 h-8 bg-purple-50 rounded-full flex items-center justify-center relative">
+                     <Sparkles className="w-4 h-4 text-purple-600" />
+                   </div>
+                   <div>
+                     <p className="text-[10px] font-bold text-gray-800 leading-tight">Risk Prediction</p>
+                     <p className="text-[9px] text-purple-600 font-bold">High Probability</p>
+                   </div>
                 </div>
 
-                <div className="relative z-10 w-20 h-20 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 flex items-center justify-center mb-4">
-                   <BrainCircuit className="w-10 h-10 text-white" />
+                {/* 2. Warning Salmonella - ARRIBA DERECHA */}
+                <div className="absolute top-6 right-8 bg-white p-3 rounded-2xl shadow-sm border border-red-50 z-20 flex items-center gap-2 transform rotate-3">
+                   <div className="w-8 h-8 bg-red-50 rounded-full flex items-center justify-center">
+                     <Sparkles className="w-4 h-4 text-red-500" />
+                   </div>
+                   <div>
+                     <p className="text-[10px] font-bold text-gray-800 leading-tight">Salmonella</p>
+                     <p className="text-[9px] text-red-500 font-medium">Ai Detected</p>
+                   </div>
                 </div>
-                
-                <h4 className="relative z-10 text-white font-sora font-bold tracking-widest uppercase text-sm opacity-50">
-                  Core Engine
-                </h4>
 
-              </div>
-              <div className="px-2 md:px-4 max-w-4xl">
-                <h3 className="text-xl font-bold text-[#111111] mb-3 font-sora">TxA AI Algorithms</h3>
-                <p className="text-sm md:text-base text-gray-500 leading-relaxed">
-                  The intelligent brain connecting the entire ecosystem. Our proprietary algorithms analyze data across the App, Lab, and QA modules to predict emerging risks, uncover hidden correlations, and optimize your sampling routes before outbreaks can occur.
-                </p>
+                {/* 3. Tarjeta de Estadísticas - MEDIO DERECHA */}
+                <div className="absolute top-36 right-4 bg-white/70 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-white/40 z-10 w-[140px]">
+                  <div className="flex gap-1.5 items-end h-12 mb-2">
+                    <div className="w-1/3 h-[50%] bg-[#362482]/70 rounded-t-[4px]"></div>
+                    <div className="w-1/3 h-[80%] bg-[#00C7FD]/70 rounded-t-[4px]"></div>
+                    <div className="w-1/3 h-[30%] bg-[#A13ECD]/70 rounded-t-[4px]"></div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <BarChart3 className="w-3 h-3 text-gray-400" />
+                    <p className="text-[10px] font-semibold text-gray-600">Live Trends</p>
+                  </div>
+                </div>
+
+                {/* 4. Tarjeta de Reportes - ABAJO DERECHA */}
+                <div className="absolute bottom-12 right-12 bg-white p-3 rounded-2xl shadow-sm border border-gray-50 z-30 flex items-center gap-2 transform -rotate-1">
+                   <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center">
+                     <FileCheck2 className="w-5 h-5 text-green-500" />
+                   </div>
+                   <div>
+                     <p className="text-xs font-bold text-gray-800 leading-tight">Verified Reports</p>
+                     <p className="text-[9px] text-gray-400">Auto-generated</p>
+                   </div>
+                </div>
+
+                {/* Fondos de luz difusa */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[#00C7FD]/10 rounded-full blur-2xl -z-10"></div>
+                <div className="absolute bottom-0 right-0 w-32 h-32 bg-[#A13ECD]/10 rounded-full blur-2xl -z-10"></div>
+
               </div>
             </div>
 
@@ -156,16 +212,12 @@ export default function TxASystem() {
           font-family: var(--font-sora), sans-serif; 
         }
 
-        /* Animación Float para los puntos de la tarjeta de Algoritmos */
-        @keyframes float {
-          0%, 100% { transform: translate(0, 0); opacity: 0.8; }
-          25% { transform: translate(10px, -15px); opacity: 0.4; }
-          50% { transform: translate(0, -30px); opacity: 1; }
-          75% { transform: translate(-10px, -15px); opacity: 0.4; }
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
         }
-
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
+        .animate-float-slow {
+          animation: float-slow 5s ease-in-out infinite;
         }
       `}</style>
     </div>
