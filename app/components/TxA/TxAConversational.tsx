@@ -24,7 +24,7 @@ export default function TxAConversational() {
             setShowAiResponse(false);
         }
       },
-      { threshold: 0.3 } 
+      { threshold: 1.0 } 
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
@@ -180,8 +180,8 @@ export default function TxAConversational() {
               Resultado: Desplazamiento perfecto y suave.
             */
             animation: 
-                expandLine 3s cubic-bezier(0.16, 1, 0.3, 1) forwards,
-                fadeLine 3s linear forwards;
+                expandLine 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+                fadeLine 1.5s linear forwards;
         }
 
         /* -------------------------------------------------------- */
