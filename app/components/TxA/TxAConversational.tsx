@@ -4,48 +4,69 @@ import { useState, useEffect, useRef } from "react";
 import { Sparkles, MoreHorizontal, MousePointerClick, Map } from "lucide-react";
 
 export default function TxAConversational() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  // 1. Estados independientes para la línea y para la tarjeta
+  const [isLineVisible, setIsLineVisible] = useState(false);
+  const [isCardVisible, setIsCardVisible] = useState(false);
+  
+  // 2. Referencias independientes
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   // Estados de la animación del chat
   const [showUserMessage, setShowUserMessage] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [showAiResponse, setShowAiResponse] = useState(false);
 
+  // ==========================================
+  // OBSERVER 1: LÍNEA EXPANSIVA APPLE
+  // ==========================================
   useEffect(() => {
-    // 1. SOLUCIÓN MÓVIL: Calculamos el umbral dinámicamente
-    // Si es celular (< 768px), dispara la animación al 30% de visibilidad.
-    // Si es PC, exige un 70% de visibilidad.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsLineVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 } // Se activa apenas la sección asoma (10%)
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // ==========================================
+  // OBSERVER 2: TARJETA Y CHAT ANIMADO
+  // ==========================================
+  useEffect(() => {
+    // Umbral dinámico: 30% en móvil, 70% en PC
     const isMobile = window.innerWidth < 768;
-    const currentThreshold = isMobile ? 0.5 : 0.9;
+    const cardThreshold = isMobile ? 0.5 : 0.9;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        setIsCardVisible(entry.isIntersecting);
 
         if (!entry.isIntersecting) {
-            // Reiniciar animación si sale de la pantalla
+            // Reiniciar animación del chat si sale de la pantalla
             setShowUserMessage(false);
             setIsTyping(false);
             setShowAiResponse(false);
         }
       },
-      { threshold: currentThreshold } 
+      { threshold: cardThreshold } 
     );
 
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => { if (sectionRef.current) observer.unobserve(sectionRef.current); };
+    if (cardRef.current) observer.observe(cardRef.current);
+    return () => observer.disconnect();
   }, []);
 
-  // Controladores de tiempo para simular la conversación
+  // Controladores de tiempo para simular la conversación (Atados a isCardVisible)
   useEffect(() => {
-    if (isVisible) {
+    if (isCardVisible) {
       const t1 = setTimeout(() => setShowUserMessage(true), 1000); 
       const t2 = setTimeout(() => setIsTyping(true), 2000);
       const t3 = setTimeout(() => { setIsTyping(false); setShowAiResponse(true); }, 4000);
       return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
     }
-  }, [isVisible]);
+  }, [isCardVisible]);
 
   return (
     <section className="bg-[#f5f5f7] py-24 md:py-32 overflow-hidden relative" ref={sectionRef}>
@@ -53,7 +74,7 @@ export default function TxAConversational() {
       {/* ========================================================= */}
       {/* ANIMACIÓN APPLE: LÍNEA DE LUZ HORIZONTAL EXPANSIVA        */}
       {/* ========================================================= */}
-      {isVisible && (
+      {isLineVisible && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1400px] h-[20px] pointer-events-none z-50">
             {/* Glow difuminado amplio */}
             <div className="absolute top-[-10px] left-0 w-full h-[30px] bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-400 blur-[20px] opacity-0 animate-line-glow origin-center" />
@@ -74,7 +95,7 @@ export default function TxAConversational() {
       </div>
 
       {/* 2. TARJETA ANIMADA CENTRADA */}
-      <div className="w-full flex justify-center px-4 md:px-6 relative z-10">
+      <div className="w-full flex justify-center px-4 md:px-6 relative z-10" ref={cardRef}>
         <div className="w-full max-w-[900px] h-[520px] md:h-[450px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 bg-gradient-to-br from-indigo-600 to-blue-500 shadow-2xl shadow-indigo-600/20">
             
             {/* Efecto de Brillo de la Tarjeta (Shine) */}
@@ -83,7 +104,7 @@ export default function TxAConversational() {
             {/* Texto descriptivo interno */}
             <div className="absolute top-0 left-0 w-full p-8 md:p-12 z-20 pointer-events-none flex flex-col items-start">
                 <p 
-                    className={`text-sm md:text-base font-medium leading-relaxed text-white max-w-[85%] md:max-w-[280px] transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+                    className={`text-sm md:text-base font-medium leading-relaxed text-white max-w-[85%] md:max-w-[280px] transition-all duration-1000 transform ${isCardVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
                     style={{ animationDelay: '100ms' }}
                 >
                     Ask questions about your data. TxA identifies trends, anomalies, and emerging risks in plain language.
