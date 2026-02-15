@@ -322,13 +322,12 @@ export default function TxAFeatures() {
       
       {/* 1. ENCABEZADO (Actualizado con tamaños de TxASystem) */}
       <div className="max-w-[1280px] mx-auto px-6 md:px-10 mb-16"> 
-        <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-[#111111] mb-10 md:mb-16 font-sora tracking-tight leading-[1.1] md:leading-tight">
-          Meet your new <br className="hidden md:block"/>
-          microbiology expert.
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#111111] mb-10 md:mb-16 font-sora tracking-tight leading-[1.1] md:leading-tight">
+          Ai for automated, smart and <br className="hidden md:block"/>
+          dynamic microbiologycal programs.
         </h2>
-        <p className="text-base md:text-xl text-gray-500 font-medium leading-relaxed max-w-3xl">
-          TxA unifies digital sampling, testing, and analytics into a single intelligent nervous system. 
-          By creating total visibility across sites and workflows, we turn isolated data into a coordinated defense strategy—faster, sharper, and fully controlled.
+        <p className="text-[17px] md:text-xl text-gray-500 font-medium leading-relaxed max-w-2xl">
+          An important feature of TxA is the digitalization of your food plant. This will allow TxA algorithms to determine contaminated points in your plant and, according to them, automatically define the best next sampling points to track down contamination sources.
         </p>
       </div>
 
