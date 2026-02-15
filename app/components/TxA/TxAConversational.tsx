@@ -25,7 +25,7 @@ export default function TxAConversational() {
       ([entry]) => {
         setIsLineVisible(entry.isIntersecting);
       },
-      { threshold: 0.1 } // Se activa apenas la sección asoma (10%)
+      { threshold: 0.2 } // Se activa apenas la sección asoma (10%)
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);

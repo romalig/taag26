@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image"; 
 import { 
-  MessageSquareText, Map, Sparkles, MousePointerClick, MoreHorizontal, 
   MapPin, CheckCircle2, ChevronLeft, ChevronRight
 } from "lucide-react";
 
@@ -12,10 +11,8 @@ const FeatureCard = ({ feature }: { feature: any }) => {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Estados Tarjeta 1 (AI Chat)
-  const [showUserMessage, setShowUserMessage] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const [showAiResponse, setShowAiResponse] = useState(false);
+  // Estados Tarjeta 1 (Layout Digitalization)
+  const [activeLayoutIndex, setActiveLayoutIndex] = useState(0);
 
   // Estados Tarjeta 2 (AI Prediction)
   const [aiState, setAiState] = useState<'idle' | 'analyzing' | 'complete'>('idle');
@@ -33,9 +30,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
 
         if (!entry.isIntersecting) {
             // Reset Tarjeta 1
-            setShowUserMessage(false);
-            setIsTyping(false);
-            setShowAiResponse(false);
+            setActiveLayoutIndex(0);
             // Reset Tarjeta 2
             setAiState('idle');
             setShowPins(false);
@@ -48,14 +43,23 @@ const FeatureCard = ({ feature }: { feature: any }) => {
     return () => { if (cardRef.current) observer.unobserve(cardRef.current); };
   }, []);
 
-  // Animación Tarjeta 1 (Chat)
+  // Animación Tarjeta 1 (Layout Crossfade con detención en la 3ra imagen)
   useEffect(() => {
+    let interval: NodeJS.Timeout;
     if (isVisible && hasCustomVisual && id === 1) {
-      const t1 = setTimeout(() => setShowUserMessage(true), 500);
-      const t2 = setTimeout(() => setIsTyping(true), 1500);
-      const t3 = setTimeout(() => { setIsTyping(false); setShowAiResponse(true); }, 3500);
-      return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+      interval = setInterval(() => {
+        setActiveLayoutIndex((prev) => {
+          // Si ya estamos en la imagen 3 (índice 2), detenemos el intervalo
+          if (prev >= 2) {
+            clearInterval(interval);
+            return 2;
+          }
+          // Si no, avanzamos a la siguiente
+          return prev + 1;
+        });
+      }, 2000); // 2 segundos por imagen
     }
+    return () => clearInterval(interval);
   }, [isVisible, hasCustomVisual, id]);
 
   // Animación Tarjeta 2 (Prediction)
@@ -71,19 +75,77 @@ const FeatureCard = ({ feature }: { feature: any }) => {
   return (
     <div 
         ref={cardRef}
+        // Wrapper limpio (sin los trucos de webkit que generaban el borde negro)
         className={`snap-center shrink-0 w-[90vw] md:w-[800px] h-[520px] md:h-[450px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 ${cardBgClass}`}
     >
         {/* === FONDOS PERSONALIZADOS === */}
         
-        {/* Tarjeta 1: Shine */}
+        {/* Tarjeta 1: Layout Digitalization (Crossfade de 3 imágenes) */}
         {id === 1 && (
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shine pointer-events-none z-0" />
+            <>
+                {/* TRUCO ANTI-BORDE: El scale-[1.02] empuja los bordes oscuros fuera de la vista garantizando un corte perimetral limpio. */}
+                <div className="absolute inset-0 z-0 bg-black scale-[1.02]">
+                    <Image 
+                        src="/Lay1.png" 
+                        alt="Plant Layout Base"
+                        fill
+                        unoptimized={true}
+                        className={`object-cover object-center transition-opacity duration-1000 ${activeLayoutIndex === 0 ? 'opacity-100' : 'opacity-0'}`}
+                        priority
+                    />
+                    <Image 
+                        src="/Lay2.png" 
+                        alt="Plant Layout Equipment"
+                        fill
+                        unoptimized={true}
+                        className={`object-cover object-center transition-opacity duration-1000 ${activeLayoutIndex === 1 ? 'opacity-100' : 'opacity-0'}`}
+                    />
+                    <Image 
+                        src="/Lay3.png" 
+                        alt="Plant Layout AI Zones"
+                        fill
+                        unoptimized={true}
+                        className={`object-cover object-center transition-opacity duration-1000 ${activeLayoutIndex === 2 ? 'opacity-100' : 'opacity-0'}`}
+                    />
+                </div>
+                
+                {/* Capa de degradado oscuro para que el texto siempre sea legible */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/50 md:via-black/20 md:to-transparent z-10" />
+                
+                {/* === NUEVO BOX DE ZOOM MUCHO MÁS EVIDENTE === */}
+                <div className="absolute bottom-6 md:bottom-8 right-6 md:right-10 z-30 pointer-events-none flex flex-col items-end gap-2">
+                    
+                    {/* Indicadores visuales (Dots estilo Apple) */}
+                    <div className="flex gap-1.5 mr-1 mb-0.5">
+                        {[0, 1, 2].map(idx => (
+                            <div 
+                                key={idx} 
+                                className={`h-1.5 rounded-full transition-all duration-500 ${activeLayoutIndex === idx ? 'w-5 bg-[#00C7FD] shadow-[0_0_8px_rgba(0,199,253,0.6)]' : 'w-1.5 bg-white/40'}`} 
+                            />
+                        ))}
+                    </div>
+
+                    {/* El 'key' obliga a React a re-animar este bloque cada vez que cambia el número */}
+                    <div 
+                        key={activeLayoutIndex} 
+                        className="bg-black/60 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl shadow-2xl animate-badge-pulse flex items-center gap-2.5"
+                    >
+                        {/* Punto parpadeante para dar efecto de "Escaneando" */}
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#00C7FD] animate-pulse" />
+                        
+                        <span className="text-white text-xs font-mono uppercase tracking-[0.2em] font-bold drop-shadow-md">
+                            zoom {activeLayoutIndex + 1}
+                        </span>
+                    </div>
+                </div>
+            </>
         )}
 
         {/* Tarjeta 2 (Prediction): Planos + Capa Oscura */}
         {id === 2 && (
             <>
-                <div className="absolute inset-0 z-0 bg-slate-50">
+                {/* Se aplicó scale-[1.02] también aquí para igualar la exactitud del borde */}
+                <div className="absolute inset-0 z-0 bg-slate-50 scale-[1.02]">
                     <Image 
                         src="/planos.png" 
                         alt="Architectural Plans"
@@ -93,7 +155,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                         priority={true} 
                     />
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/50 md:via-black/20 md:to-transparent z-0" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/50 md:via-black/20 md:to-transparent z-10" />
             </>
         )}
 
@@ -118,11 +180,9 @@ const FeatureCard = ({ feature }: { feature: any }) => {
             {isVisible && (
                 <p 
                 className={`text-sm md:text-base font-medium leading-relaxed animate-slide-in max-w-[85%] ${
-                    id === 4 ? 'md:max-w-[400px]' : 'md:max-w-[220px]'
+                    id === 4 ? 'md:max-w-[400px]' : 'md:max-w-[280px]'
                 } ${textColorClass}`}
-                style={{ 
-                    animationDelay: '100ms'
-                }}
+                style={{ animationDelay: '100ms' }}
                 >
                     {description}
                 </p>
@@ -134,42 +194,6 @@ const FeatureCard = ({ feature }: { feature: any }) => {
             
             {hasCustomVisual && isVisible ? (
                 <>
-                    {/* --- TARJETA 1: CHAT ANIMADO --- */}
-                    {id === 1 && (
-                        <div className="w-full h-full flex items-end justify-end p-4 md:p-10">
-                            <div className="w-full max-w-[450px] flex flex-col gap-3 md:gap-4 transform scale-[0.90] origin-bottom-right md:scale-100">
-                                <div className={`self-end bg-white/10 backdrop-blur-md text-white px-5 py-3 rounded-2xl rounded-tr-sm max-w-[90%] border border-white/20 shadow-lg transition-all duration-500 transform ${showUserMessage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                                    <p className="text-sm font-medium">Any emerging trends in zone B?</p>
-                                </div>
-                                {isTyping && (
-                                    <div className="self-start flex gap-3 animate-fade-in">
-                                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0 shadow-sm border border-white/10"><Sparkles className="w-4 h-4 text-white" /></div>
-                                        <div className="bg-white/10 backdrop-blur-sm p-3 rounded-2xl rounded-tl-sm border border-white/10"><MoreHorizontal className="w-5 h-5 text-white animate-pulse" /></div>
-                                    </div>
-                                )}
-                                <div className={`self-start flex flex-col gap-3 max-w-[95%] transition-all duration-500 transform ${showAiResponse ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 hidden'}`}>
-                                    <div className="flex gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-indigo-900/20"><Sparkles className="w-4 h-4 text-indigo-600" /></div>
-                                        <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl">
-                                            <div className="flex items-center gap-2 mb-1"><span className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-indigo-600">TxA Insight</span></div>
-                                            <p className="text-sm leading-relaxed font-medium">Detected a <span className="font-bold text-indigo-900">15% increase</span> in <span className="italic">Listeria spp.</span> positives near Line 4.</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex gap-3">
-                                        <div className="w-8 h-8 shrink-0" />
-                                        <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl w-full">
-                                            <p className="text-sm leading-relaxed font-medium mb-3">Based on recent <span className="italic">Listeria spp.</span> trends, I've generated an optimized targeted sampling map.</p>
-                                            <div className="border border-indigo-100 rounded-xl p-3 bg-indigo-50/50 hover:bg-indigo-50 transition-colors cursor-pointer group/cta pointer-events-auto">
-                                                <div className="flex items-center justify-between mb-2"><span className="text-[9px] md:text-[10px] font-extrabold text-indigo-900 uppercase tracking-wider">BEST SAMPLING SCHEME</span><MousePointerClick className="w-4 h-4 text-indigo-500 group-hover/cta:scale-110 transition-transform" /></div>
-                                                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0"><Map className="w-3 h-3 text-indigo-600" /></div><p className="text-[10px] font-bold text-indigo-700 leading-tight">Click here to see the proposed sampling scheme.</p></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
                     {/* --- TARJETA 2: AI PREDICTION --- */}
                     {id === 2 && (
                         <div className="w-full h-full relative">
@@ -235,13 +259,12 @@ export default function TxAFeatures() {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   
-  // NUEVO: Referencia para bloquear clics múltiples rápidos
   const isScrolling = useRef(false);
 
   const checkScroll = () => {
     if (carouselRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-      setCanScrollLeft(scrollLeft > 2); // Pequeño margen
+      setCanScrollLeft(scrollLeft > 2);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 2); 
     }
   };
@@ -252,12 +275,9 @@ export default function TxAFeatures() {
     return () => window.removeEventListener("resize", checkScroll);
   }, []);
 
-  // --- SOLUCIÓN DEL BUG DE SCROLL ---
   const scroll = (direction: 'left' | 'right') => {
-    // Si no hay referencia o ya se está desplazando, ignorar el clic
     if (!carouselRef.current || isScrolling.current) return;
     
-    // Bloquear el botón temporalmente
     isScrolling.current = true;
 
     const cardWidth = window.innerWidth < 768 ? window.innerWidth * 0.9 : 800;
@@ -267,7 +287,6 @@ export default function TxAFeatures() {
     const { scrollLeft } = carouselRef.current;
 
     if (direction === 'left') {
-        // SI ESTÁ CERCA DEL PRINCIPIO, FORZAR AL EXACTO 0. EVITA EL OVERSCROLL NEGATIVO EN BLANCO.
         if (scrollLeft - scrollAmount <= 10) {
             carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
@@ -277,7 +296,6 @@ export default function TxAFeatures() {
         carouselRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
 
-    // Desbloquear tras 500ms (tiempo suficiente para que la animación fluida termine)
     setTimeout(() => {
       isScrolling.current = false;
       checkScroll();
@@ -287,9 +305,9 @@ export default function TxAFeatures() {
   const features = [
     {
       id: 1,
-      description: "Ask questions about your data. TxA identifies trends, anomalies, and emerging risks in plain language.",
+      description: "TxA performs a true digitalization of your plant layout, accurately determining equipment, distances, and zones. This spatial awareness is key for our AI algorithms.",
       hasCustomVisual: true,
-      cardBgClass: "bg-gradient-to-br from-indigo-600 to-blue-500", 
+      cardBgClass: "bg-[#F5F5F7]", 
       textColorClass: "text-white",
     },
     {
@@ -297,7 +315,7 @@ export default function TxAFeatures() {
       description: "Predictive Sampling. AI algorithms analyze historical data to pinpoint the best sampling locations, preventing risks before they arise.",
       hasCustomVisual: true,
       cardBgClass: "bg-[#F5F5F7]",
-      textColorClass: "text-white",
+      textColorClass: "text-white", 
     },
     {
       id: 3,
@@ -320,7 +338,7 @@ export default function TxAFeatures() {
   return (
     <section className="bg-white py-24 border-t border-gray-100 overflow-hidden relative">
       
-      {/* 1. ENCABEZADO (Actualizado con tamaños de TxASystem) */}
+      {/* 1. ENCABEZADO */}
       <div className="max-w-[1280px] mx-auto px-6 md:px-10 mb-16"> 
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#111111] mb-10 md:mb-16 font-sora tracking-tight leading-[1.1] md:leading-tight">
           Ai for automated, smart and <br className="hidden md:block"/>
@@ -351,7 +369,7 @@ export default function TxAFeatures() {
             <div className="shrink-0 w-[1px]" />
         </div>
 
-        {/* --- BOTONES COMPUTADOR (Gris translúcido / Glassmorphism) --- */}
+        {/* --- BOTONES COMPUTADOR --- */}
         <button 
             onClick={() => scroll('left')}
             className={`hidden md:flex absolute left-4 xl:left-12 top-1/2 -translate-y-1/2 z-30 w-14 h-14 bg-gray-400/20 backdrop-blur-md border border-gray-400/20 shadow-sm rounded-full items-center justify-center text-gray-600 hover:bg-gray-400/40 hover:text-gray-900 hover:scale-110 transition-all duration-300 ${!canScrollLeft ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
@@ -366,7 +384,7 @@ export default function TxAFeatures() {
             <ChevronRight className="w-6 h-6" />
         </button>
 
-        {/* --- BOTONES CELULAR (Gris translúcido / Glassmorphism) --- */}
+        {/* --- BOTONES CELULAR --- */}
         <div className="flex md:hidden absolute bottom-6 right-6 z-30 gap-3">
             <button 
                 onClick={() => scroll('left')}
@@ -389,6 +407,16 @@ export default function TxAFeatures() {
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .font-sora { font-family: var(--font-sora), sans-serif; }
 
+        /* --- NUEVA ANIMACIÓN DE DESTELLO PARA EL ZOOM --- */
+        @keyframes badgePulse {
+            0% { transform: scale(0.85); background-color: rgba(0, 199, 253, 0.3); border-color: rgba(0, 199, 253, 0.8); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); background-color: rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.2); }
+        }
+        .animate-badge-pulse {
+            animation: badgePulse 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
         @keyframes slideIn {
             0% { opacity: 0; transform: translateX(30px); }
             100% { opacity: 1; transform: translateX(0); }
@@ -404,14 +432,6 @@ export default function TxAFeatures() {
         }
         .animate-fade-in {
             animation: fadeIn 0.3s ease-out forwards;
-        }
-
-        @keyframes shine {
-            from { transform: translateX(-100%) skewX(12deg); }
-            to { transform: translateX(200%) skewX(12deg); }
-        }
-        .animate-shine {
-            animation: shine 8s infinite linear;
         }
 
         @keyframes progressLoad {
@@ -432,8 +452,7 @@ export default function TxAFeatures() {
             opacity: 0;
         }
 
-        /* --- ANIMACIONES TARJETA 4 (Letras Saltarinas y Float Finito) --- */
-        
+        /* --- ANIMACIONES TARJETA 4 --- */
         @keyframes chaoticJump {
             0% { transform: translateY(0); }
             20% { transform: translateY(-15px); }
