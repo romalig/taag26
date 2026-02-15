@@ -13,6 +13,12 @@ export default function TxAConversational() {
   const [showAiResponse, setShowAiResponse] = useState(false);
 
   useEffect(() => {
+    // 1. SOLUCIÓN MÓVIL: Calculamos el umbral dinámicamente
+    // Si es celular (< 768px), dispara la animación al 30% de visibilidad.
+    // Si es PC, exige un 70% de visibilidad.
+    const isMobile = window.innerWidth < 768;
+    const currentThreshold = isMobile ? 0.5 : 0.9;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
@@ -24,7 +30,7 @@ export default function TxAConversational() {
             setShowAiResponse(false);
         }
       },
-      { threshold: 1.0 } 
+      { threshold: currentThreshold } 
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
