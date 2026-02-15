@@ -320,8 +320,8 @@ export default function TxASystem() {
                      <FileCheck2 className="w-5 h-5 text-green-500" />
                    </div>
                    <div>
-                     <p className="text-xs font-bold text-gray-800 leading-tight">Verified Reports</p>
-                     <p className="text-[9px] text-gray-400">Auto-generated</p>
+                     <p className="text-xs font-bold text-gray-800 leading-tight">Automated Reports</p>
+                     <p className="text-[9px] text-gray-400">Full customized</p>
                    </div>
                 </div>
 

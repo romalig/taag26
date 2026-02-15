@@ -163,7 +163,12 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" }
              <div className="bg-[#F5F5F7] p-6 mt-4 pb-12">
                 <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-4">Featured Technology</p>
                 
-                <div className="bg-white rounded-2xl p-4 shadow-sm border border-black/5 flex items-start gap-5 cursor-pointer hover:shadow-md transition-shadow group">
+                {/* Cambiamos el div por un Link hacia /aigor y cerramos el menú al hacer clic */}
+                <Link 
+                    href="/aigor" 
+                    onClick={() => setIsMenuOpen(false)}
+                    className="bg-white rounded-2xl p-4 shadow-sm border border-black/5 flex items-start gap-5 cursor-pointer hover:shadow-md transition-shadow group block"
+                >
                     <div className="w-24 h-24 relative flex items-center justify-center rounded-xl overflow-hidden shrink-0">
                         <div className="absolute inset-0 bg-gradient-to-br from-[#FF270A] via-purple-600 to-blue-600" />
                         <div className="absolute inset-[3px] bg-[#111111] rounded-[10px] flex flex-col items-center justify-center z-10 p-1 text-center">
@@ -176,10 +181,10 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" }
                         <div className="flex items-center gap-2 mb-2">
                              <span className="bg-[#E6F4EA] text-[#1E8E3E] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border border-[#1E8E3E]/20">New 2.0</span>
                         </div>
-                        <h4 className="text-lg font-bold text-[#111111] leading-tight mb-1">AiGOR™ Intelligence</h4>
-                        <p className="text-xs text-gray-500 line-clamp-3 leading-relaxed">Predictive sequencing logic for faster result interpretation.</p>
+                        <h4 className="text-lg font-bold text-[#111111] leading-tight mb-1">AiGOR™</h4>
+                        <p className="text-xs text-gray-500 line-clamp-3 leading-relaxed">Advanced RNA technology for ultra-fast results</p>
                     </div>
-                </div>
+                </Link>
              </div>
           </div>
       </div>
