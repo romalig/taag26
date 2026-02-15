@@ -49,15 +49,13 @@ const FeatureCard = ({ feature }: { feature: any }) => {
     if (isVisible && hasCustomVisual && id === 1) {
       interval = setInterval(() => {
         setActiveLayoutIndex((prev) => {
-          // Si ya estamos en la imagen 3 (índice 2), detenemos el intervalo
           if (prev >= 2) {
             clearInterval(interval);
             return 2;
           }
-          // Si no, avanzamos a la siguiente
           return prev + 1;
         });
-      }, 2000); // 2 segundos por imagen
+      }, 2000); 
     }
     return () => clearInterval(interval);
   }, [isVisible, hasCustomVisual, id]);
@@ -75,112 +73,80 @@ const FeatureCard = ({ feature }: { feature: any }) => {
   return (
     <div 
         ref={cardRef}
-        // Wrapper limpio (sin los trucos de webkit que generaban el borde negro)
-        className={`snap-center shrink-0 w-[90vw] md:w-[800px] h-[520px] md:h-[450px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 ${cardBgClass}`}
+        className={`snap-center shrink-0 w-[90vw] md:w-[800px] h-[520px] md:h-[450px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 border-none outline-none ring-0 transform-gpu ${cardBgClass}`}
     >
         {/* === FONDOS PERSONALIZADOS === */}
         
-        {/* Tarjeta 1: Layout Digitalization (Crossfade de 3 imágenes) */}
+        {/* Tarjeta 1: Layout Digitalization */}
         {id === 1 && (
             <>
-                {/* TRUCO ANTI-BORDE: El scale-[1.02] empuja los bordes oscuros fuera de la vista garantizando un corte perimetral limpio. */}
                 <div className="absolute inset-0 z-0 bg-black scale-[1.02]">
-                    <Image 
-                        src="/Lay1.png" 
-                        alt="Plant Layout Base"
-                        fill
-                        unoptimized={true}
-                        className={`object-cover object-center transition-opacity duration-1000 ${activeLayoutIndex === 0 ? 'opacity-100' : 'opacity-0'}`}
-                        priority
-                    />
-                    <Image 
-                        src="/Lay2.png" 
-                        alt="Plant Layout Equipment"
-                        fill
-                        unoptimized={true}
-                        className={`object-cover object-center transition-opacity duration-1000 ${activeLayoutIndex === 1 ? 'opacity-100' : 'opacity-0'}`}
-                    />
-                    <Image 
-                        src="/Lay3.png" 
-                        alt="Plant Layout AI Zones"
-                        fill
-                        unoptimized={true}
-                        className={`object-cover object-center transition-opacity duration-1000 ${activeLayoutIndex === 2 ? 'opacity-100' : 'opacity-0'}`}
-                    />
+                    <Image src="/Lay1.png" alt="Plant Layout Base" fill unoptimized={true} className={`object-cover object-center transition-opacity duration-1000 ${activeLayoutIndex === 0 ? 'opacity-100' : 'opacity-0'}`} priority />
+                    <Image src="/Lay2.png" alt="Plant Layout Equipment" fill unoptimized={true} className={`object-cover object-center transition-opacity duration-1000 ${activeLayoutIndex === 1 ? 'opacity-100' : 'opacity-0'}`} />
+                    <Image src="/Lay3.png" alt="Plant Layout AI Zones" fill unoptimized={true} className={`object-cover object-center transition-opacity duration-1000 ${activeLayoutIndex === 2 ? 'opacity-100' : 'opacity-0'}`} />
                 </div>
-                
-                {/* Capa de degradado oscuro para que el texto siempre sea legible */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/50 md:via-black/20 md:to-transparent z-10" />
                 
-                {/* === NUEVO BOX DE ZOOM MUCHO MÁS EVIDENTE === */}
                 <div className="absolute bottom-6 md:bottom-8 right-6 md:right-10 z-30 pointer-events-none flex flex-col items-end gap-2">
-                    
-                    {/* Indicadores visuales (Dots estilo Apple) */}
                     <div className="flex gap-1.5 mr-1 mb-0.5">
                         {[0, 1, 2].map(idx => (
-                            <div 
-                                key={idx} 
-                                className={`h-1.5 rounded-full transition-all duration-500 ${activeLayoutIndex === idx ? 'w-5 bg-[#00C7FD] shadow-[0_0_8px_rgba(0,199,253,0.6)]' : 'w-1.5 bg-white/40'}`} 
-                            />
+                            <div key={idx} className={`h-1.5 rounded-full transition-all duration-500 ${activeLayoutIndex === idx ? 'w-5 bg-[#00C7FD] shadow-[0_0_8px_rgba(0,199,253,0.6)]' : 'w-1.5 bg-white/40'}`} />
                         ))}
                     </div>
-
-                    {/* El 'key' obliga a React a re-animar este bloque cada vez que cambia el número */}
-                    <div 
-                        key={activeLayoutIndex} 
-                        className="bg-black/60 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl shadow-2xl animate-badge-pulse flex items-center gap-2.5"
-                    >
-                        {/* Punto parpadeante para dar efecto de "Escaneando" */}
+                    <div key={activeLayoutIndex} className="bg-black/60 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl shadow-2xl animate-badge-pulse flex items-center gap-2.5">
                         <div className="w-1.5 h-1.5 rounded-full bg-[#00C7FD] animate-pulse" />
-                        
-                        <span className="text-white text-xs font-mono uppercase tracking-[0.2em] font-bold drop-shadow-md">
-                            zoom {activeLayoutIndex + 1}
-                        </span>
+                        <span className="text-white text-xs font-mono uppercase tracking-[0.2em] font-bold drop-shadow-md">zoom {activeLayoutIndex + 1}</span>
                     </div>
                 </div>
             </>
         )}
 
-        {/* Tarjeta 2 (Prediction): Planos + Capa Oscura */}
+        {/* Tarjeta 2 (Prediction) */}
         {id === 2 && (
             <>
-                {/* Se aplicó scale-[1.02] también aquí para igualar la exactitud del borde */}
                 <div className="absolute inset-0 z-0 bg-slate-50 scale-[1.02]">
-                    <Image 
-                        src="/planos.png" 
-                        alt="Architectural Plans"
-                        fill
-                        unoptimized={true} 
-                        className="object-cover object-center"
-                        priority={true} 
-                    />
+                    <Image src="/planos.png" alt="Architectural Plans" fill unoptimized={true} className="object-cover object-center" priority={true} />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent md:bg-gradient-to-r md:from-black/50 md:via-black/20 md:to-transparent z-10" />
             </>
         )}
 
-        {/* Tarjeta 3 (App): Imagen PNG movida a la derecha */}
+        {/* Tarjeta 3 (App) */}
         {id === 3 && (
             <div className="absolute inset-0 z-0 flex items-end justify-end pr-8 md:pr-16 pb-0">
                 <div className="relative w-full h-[85%]"> 
-                    <Image 
-                        src="/TxA_app.png" 
-                        alt="TxA App Interface"
-                        fill
-                        unoptimized={true}
-                        className="object-contain object-bottom-right transition-transform duration-700 group-hover:scale-[1.02]"
-                        priority={true} 
-                    />
+                    <Image src="/TxA_app.png" alt="TxA App Interface" fill unoptimized={true} className="object-contain object-bottom-right transition-transform duration-700 group-hover:scale-[1.02]" priority={true} />
                 </div>
             </div>
         )}
+
+        {/* --- NUEVA TARJETA 4: RESULTADOS EN CONTEXTO (ESTÁTICA) --- */}
+        {id === 4 && (
+            <div className="absolute inset-0 z-0 bg-[#F5F5F7] scale-[1.02]">
+                <Image 
+                    src="/res4.png" 
+                    alt="Results in Context" 
+                    fill 
+                    unoptimized={true} 
+                    className="object-cover object-center" 
+                    priority={true} 
+                />
+            </div>
+            // Eliminamos la capa de "gradient" y mantenemos la imagen 100% visible y sin filtros.
+        )}
         
         {/* === A. TEXTO SUPERIOR === */}
-        <div className="absolute top-0 left-0 w-full p-8 md:p-12 z-20 pointer-events-none flex flex-col items-start">
+        {/* Aseguramos que todas las tarjetas se alineen a la izquierda */}
+        <div className="absolute top-0 left-0 w-full p-8 md:p-12 z-40 pointer-events-none flex flex-col items-start text-left">
             {isVisible && (
                 <p 
-                className={`text-sm md:text-base font-medium leading-relaxed animate-slide-in max-w-[85%] ${
-                    id === 4 ? 'md:max-w-[400px]' : 'md:max-w-[280px]'
+                className={`text-sm md:text-base font-medium leading-relaxed animate-slide-in ${
+                    // Si es la tarjeta 4, abarca el 75% (3/4) del ancho.
+                    id === 4 ? 'max-w-[90%] md:max-w-[75%]' : 
+                    // Si es la tarjeta 5, tiene un máximo de 400px.
+                    id === 5 ? 'max-w-[85%] md:max-w-[400px]' : 
+                    // Las demás tarjetas tienen un máximo de 280px para no tapar las imágenes a la derecha.
+                    'max-w-[85%] md:max-w-[280px]'
                 } ${textColorClass}`}
                 style={{ animationDelay: '100ms' }}
                 >
@@ -218,12 +184,11 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                         </div>
                     )}
 
-                    {/* --- TARJETA 4: DYNAMIC & PREVENTIVE --- */}
-                    {id === 4 && (
+                    {/* --- TARJETA 5: DYNAMIC & PREVENTIVE --- */}
+                    {id === 5 && (
                         <div className="w-full h-full flex flex-col items-center justify-center p-4 z-10 text-center">
                             <div className="flex flex-row items-center gap-2 md:gap-4 flex-wrap justify-center">
                                 
-                                {/* 1. Dynamic */}
                                 <h3 className={`text-5xl md:text-6xl font-extrabold text-indigo-600 tracking-tight ${isVisible ? 'is-visible' : ''}`}>
                                     <span className="dynamic-letter let-1">D</span>
                                     <span className="dynamic-letter let-2">y</span>
@@ -234,10 +199,8 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                                     <span className="dynamic-letter let-7">c</span>
                                 </h3>
                                 
-                                {/* Conector & */}
                                 <span className="text-4xl md:text-5xl text-gray-400 font-light italic font-serif">&</span>
 
-                                {/* 2. Preventive */}
                                 <h3 className={`text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 tracking-tight ${isVisible ? 'animate-float-once' : ''}`}>
                                     Preventive
                                 </h3>
@@ -325,7 +288,14 @@ export default function TxAFeatures() {
       textColorClass: "text-[#111111]", 
     },
     {
-      id: 4,
+      id: 4, // TARJETA 4 ACTUALIZADA
+      description: "TxA maps every data point directly into context of your plant, speeding up root-cause analysis and decision making.",
+      hasCustomVisual: true,
+      cardBgClass: "bg-[#F5F5F7]", // Fondo claro
+      textColorClass: "text-[#111111]", // Texto oscuro (asumiendo que res.png es claro, al no tener filtro oscuro)
+    },
+    {
+      id: 5, 
       description: "TxA allows you to build dynamic, preventive programs that adapt in real-time to maximize food quality and safety.",
       hasCustomVisual: true,
       cardBgClass: "bg-[#F4F4F5]", 
@@ -407,7 +377,6 @@ export default function TxAFeatures() {
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .font-sora { font-family: var(--font-sora), sans-serif; }
 
-        /* --- NUEVA ANIMACIÓN DE DESTELLO PARA EL ZOOM --- */
         @keyframes badgePulse {
             0% { transform: scale(0.85); background-color: rgba(0, 199, 253, 0.3); border-color: rgba(0, 199, 253, 0.8); }
             50% { transform: scale(1.05); }
@@ -452,7 +421,7 @@ export default function TxAFeatures() {
             opacity: 0;
         }
 
-        /* --- ANIMACIONES TARJETA 4 --- */
+        /* --- ANIMACIONES TARJETA 5 --- */
         @keyframes chaoticJump {
             0% { transform: translateY(0); }
             20% { transform: translateY(-15px); }

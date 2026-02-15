@@ -24,12 +24,12 @@ const TXA_MODAL_DATA = {
       {
         title: "All information in one click",
         text: "Once you select the sampling point, you can add important information such as a picture from the site, laboratory analyses, sanitization status, and more.",
-        image: "/TxA_app_2.png"
+        image: "/TxA_app_5.png"
       },
       {
         title: "A flawless tracking system",
         text: "If you use our TAAG S11 NeutroSampling kit to perform environmental swabbing, you can automatically link all digital information with the sample by scanning the QR code printed on TAAG S11 NeutroSampling swabs.",
-        image: "/TxA_app_3.png"
+        image: "/TxA_app_4.png"
       }
     ]
   },
@@ -301,8 +301,8 @@ export default function TxASystem() {
                    </div>
                 </div>
 
-                {/* --- ICONO 3: Stats (Desktop Only) --- */}
-                <div className="hidden md:block absolute top-36 right-4 bg-white/70 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-white/40 z-10 w-[140px]">
+                {/* --- ICONO 3: Stats --- */}
+                <div className="absolute bottom-8 left-4 md:bottom-auto md:left-auto md:top-36 md:right-4 bg-white/70 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-white/40 z-10 w-[140px] transform scale-90 md:scale-100 origin-bottom-left md:origin-center">
                   <div className="flex gap-1.5 items-end h-12 mb-2">
                     <div className="w-1/3 h-[50%] bg-[#362482]/70 rounded-t-[4px]"></div>
                     <div className="w-1/3 h-[80%] bg-[#00C7FD]/70 rounded-t-[4px]"></div>

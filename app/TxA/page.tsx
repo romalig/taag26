@@ -4,6 +4,7 @@ import TxASystem from "../components/TxA/TxASystem";
 import TxAFeatures from "../components/TxA/TxAFeatures";
 import TxAConversational from "../components/TxA/TxAConversational";
 import FeaturedStory from "../components/TxA/FeaturedStory";
+import FinalCTA from "../components/FinalCTA";
 import { ModalProvider } from "../components/industrial/ModalProvider"; 
 import SolutionModal from "../components/industrial/SolutionModal";
 
@@ -17,6 +18,7 @@ export default function TxAPage() {
       <TxAFeatures />
       <TxAConversational />
       <FeaturedStory />
+      <FinalCTA />
       <SolutionModal /> 
     </main>
   </ModalProvider>

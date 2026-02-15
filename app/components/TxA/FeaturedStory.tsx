@@ -25,8 +25,8 @@ export default function FeaturedStory() {
           {/* 1. COLUMNA IMAGEN */}
           <div className="relative w-full lg:w-1/2 min-h-[300px] lg:min-h-[450px]">
              <Image 
-               src="/danone.png" 
-               alt="Danone Case Study"
+               src="/coca.png" 
+               alt="Coca Case Study"
                fill
                className="object-cover"
              />
@@ -40,22 +40,19 @@ export default function FeaturedStory() {
                 {/* Eliminado: shadow-sm, border */}
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[#111111] text-[10px] font-bold uppercase tracking-wider">
                   <CheckCircle2 className="w-3 h-3 text-blue-600" />
-                  Top 3 Global Dairy Company
+                  Global Beverage Company
                 </span>
               </div>
 
               {/* Título */}
               <h3 className="text-2xl md:text-3xl font-bold text-[#111111] mb-5 font-sora leading-tight">
-                Simultaneous quantification of 3 probiotic strains.
+                Maximizing beverage quality at Arca Continental.
               </h3>
 
               {/* Texto Descriptivo */}
               <div className="space-y-4 text-gray-500 font-medium text-sm leading-relaxed mb-8">
                 <p>
-                  Using <span className="text-[#111111] font-semibold">MILA</span>, TAAG engineered a custom triplex qPCR assay capable of detecting and quantifying three distinct probiotic strains in a single reaction directly from finished products.
-                </p>
-                <p>
-                  This breakthrough allows Danone to validate probiotic counts with unprecedented speed and accuracy, streamlining Quality Assurance.
+                  Using <span className="text-[#111111] font-semibold">TxA</span>, Arca Continental, one of the world’s largest bottlers of Coca-Cola, is expanding the use of TxA as a core component of its microbiological control strategy. Following successful implementation, Arca Continental plans to deploy TxA across all 35 of its production plants, standardizing data, accelerating decision-making, and strengthening preventive control at scale.
                 </p>
               </div>
 
