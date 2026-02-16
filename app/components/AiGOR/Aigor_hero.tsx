@@ -28,6 +28,8 @@ export default function AigorImpactSection() {
   // 2. Manejo del Mouse
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
+      // Detección simple para reducir el efecto en dispositivos táctiles si es necesario,
+      // pero por ahora confiamos en la optimización CSS.
       const x = (e.clientX / window.innerWidth) * 2 - 1;
       const y = (e.clientY / window.innerHeight) * 2 - 1;
       setMousePos({ x, y });
@@ -40,7 +42,7 @@ export default function AigorImpactSection() {
   return (
     <section ref={sectionRef} className="relative bg-black text-white w-full min-h-screen">
       
-      {/* --- FONDO STICKY --- */}
+      {/* --- FONDO STICKY OPTIMIZADO --- */}
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden z-0">
         <div
           className="absolute inset-0 flex items-center justify-center"
@@ -48,17 +50,17 @@ export default function AigorImpactSection() {
             transform: `translate(${mousePos.x * -5}px, ${mousePos.y * -5}px)`, 
           }}
         >
-          {/* Círculos de fondo */}
+          {/* Círculos de fondo con optimización 'will-change-transform' y menor blur en móvil */}
           <div
-            className="absolute w-[150vw] h-[150vw] md:w-[100vw] md:h-[100vw] rounded-full bg-blue-950/30 blur-[80px] md:blur-[120px] transition-transform duration-75 ease-out origin-center"
+            className="absolute w-[150vw] h-[150vw] md:w-[100vw] md:h-[100vw] rounded-full bg-blue-950/40 blur-[60px] md:blur-[120px] transition-transform duration-75 ease-out origin-center will-change-transform"
             style={{ transform: `scale(${0.8 + scrollProgress * 1.2})` }}
           />
           <div
-            className="absolute w-[100vw] h-[100vw] md:w-[70vw] md:h-[70vw] rounded-full bg-purple-600/40 blur-[60px] md:blur-[100px] transition-transform duration-75 ease-out origin-center"
+            className="absolute w-[100vw] h-[100vw] md:w-[70vw] md:h-[70vw] rounded-full bg-purple-600/40 blur-[40px] md:blur-[100px] transition-transform duration-75 ease-out origin-center will-change-transform"
             style={{ transform: `scale(${0.6 + scrollProgress * 1.8})` }}
           />
           <div
-            className="absolute w-[60vw] h-[60vw] md:w-[35vw] md:h-[35vw] rounded-full bg-[#FF270A] blur-[90px] md:blur-[150px] mix-blend-normal transition-all duration-75 ease-out origin-center"
+            className="absolute w-[60vw] h-[60vw] md:w-[35vw] md:h-[35vw] rounded-full bg-[#FF270A] blur-[50px] md:blur-[150px] mix-blend-normal transition-all duration-75 ease-out origin-center will-change-transform"
             style={{
               transform: `scale(${scrollProgress > 0.75 ? 1.8 : 0.4 + scrollProgress * 2.2})`,
               opacity: scrollProgress < 0.6 ? 0.8 : scrollProgress > 0.75 ? 0 : 0.8 * (1 - (scrollProgress - 0.6) / (0.75 - 0.6)),
@@ -84,9 +86,9 @@ export default function AigorImpactSection() {
           </h2>
         </div>
 
-        {/* --- 2. EL "CHIP" AiGOR --- */}
+        {/* --- 2. EL "CHIP" AiGOR (LIMPIO) --- */}
         <div className="relative mb-8 md:mb-12">
-            <div className="absolute -inset-2 bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-[#FF270A]/30 rounded-[2.5rem] blur-xl opacity-70"></div>
+            {/* SE ELIMINÓ EL DIV DEL HALO DE LUZ QUE CAUSABA EL CUADRO SEMI-TRANSPARENTE */}
             
             <div className="relative w-40 h-40 md:w-52 md:h-52 bg-[#0a0a0a] rounded-[2rem] border border-white/10 flex flex-col items-center justify-center p-6 overflow-hidden">
                 <div className="relative z-30 flex flex-col items-center">
@@ -101,7 +103,6 @@ export default function AigorImpactSection() {
         </div>
 
         {/* 3. TEXTO DESCRIPTIVO */}
-        {/* Aumentamos el mb-16 a mb-24 en móvil y mb-24 a mb-32 en desktop para dar más espacio */}
         <div className="text-center mb-24 md:mb-32 max-w-2xl animate-fade-in-up" style={{ animationDelay: '400ms' }}>
           <p className="text-base md:text-xl font-medium text-white leading-relaxed drop-shadow-lg px-4">
             <span className="text-white">Speed and accuracy like never before.</span>{" "} 
@@ -138,10 +139,10 @@ export default function AigorImpactSection() {
             </p>
           </div>
 
-          {/* Concepto 4 (Modificado para mostrar texto "RNA" en lugar de icono) */}
+          {/* Concepto 4 */}
           <div className="flex flex-col items-center text-center">
             <div className="flex items-center justify-center h-6 md:h-8 mb-3 md:mb-4">
-              <span className="text-base md:text-lg text-white tracking-widest uppercase">RNA</span>
+              <span className="text-base md:text-lg font-black text-white tracking-widest uppercase">RNA</span>
             </div>
             <p className="text-xs md:text-sm text-white/60 leading-relaxed max-w-[200px]">
               <span className="font-bold text-white">RNA detection.</span> Targeting only active cells.
