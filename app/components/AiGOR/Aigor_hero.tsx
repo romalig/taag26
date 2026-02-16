@@ -24,7 +24,7 @@ export default function AigorImpactSection() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 2. Manejo del Mouse (Desactivado o sutil en móvil, activo en desktop)
+  // 2. Manejo del Mouse
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -37,166 +37,155 @@ export default function AigorImpactSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative bg-black text-white w-full">
+    <section ref={sectionRef} className="relative bg-black text-white w-full min-h-screen">
       
       {/* --- FONDO STICKY --- */}
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden z-0">
         <div
           className="absolute inset-0 flex items-center justify-center"
           style={{
-            // Reducimos el movimiento parallax en móvil para evitar mareos
-            transform: `translate(${mousePos.x * -10}px, ${mousePos.y * -10}px)`,
+            transform: `translate(${mousePos.x * -5}px, ${mousePos.y * -5}px)`, // Movimiento más sutil
           }}
         >
-          {/* AJUSTE MÓVIL:
-             Usamos 'w-[180vw]' en móvil para que el círculo sea enorme y cubra la altura de la pantalla.
-             En 'md:' (desktop) volvemos al tamaño normal 'w-[120vw]'.
-          */}
-          
-          {/* Círculo Exterior */}
+          {/* Círculos de fondo (ligeramente ajustados para no competir con el chip más pequeño) */}
           <div
-            className="absolute w-[180vw] h-[180vw] md:w-[120vw] md:h-[120vw] rounded-full bg-blue-950/40 blur-[80px] md:blur-[120px] transition-transform duration-75 ease-out origin-center"
-            style={{ transform: `scale(${0.8 + scrollProgress * 1.5})` }}
+            className="absolute w-[150vw] h-[150vw] md:w-[100vw] md:h-[100vw] rounded-full bg-blue-950/30 blur-[80px] md:blur-[120px] transition-transform duration-75 ease-out origin-center"
+            style={{ transform: `scale(${0.8 + scrollProgress * 1.2})` }}
           />
-
-          {/* Círculo Medio */}
           <div
-            className="absolute w-[120vw] h-[120vw] md:w-[80vw] md:h-[80vw] rounded-full bg-purple-600/50 blur-[60px] md:blur-[100px] transition-transform duration-75 ease-out origin-center"
-            style={{ transform: `scale(${0.6 + scrollProgress * 2})` }}
+            className="absolute w-[100vw] h-[100vw] md:w-[70vw] md:h-[70vw] rounded-full bg-purple-600/40 blur-[60px] md:blur-[100px] transition-transform duration-75 ease-out origin-center"
+            style={{ transform: `scale(${0.6 + scrollProgress * 1.8})` }}
           />
-
-          {/* Círculo Núcleo (Rojo) */}
           <div
-            className="absolute w-[80vw] h-[80vw] md:w-[45vw] md:h-[45vw] rounded-full bg-[#FF270A] blur-[100px] md:blur-[170px] mix-blend-normal transition-all duration-75 ease-out origin-center"
+            className="absolute w-[60vw] h-[60vw] md:w-[35vw] md:h-[35vw] rounded-full bg-[#FF270A] blur-[90px] md:blur-[150px] mix-blend-normal transition-all duration-75 ease-out origin-center"
             style={{
-              transform: `scale(${scrollProgress > 0.75 ? 1.8 : 0.4 + scrollProgress * 2.5})`,
-              opacity:
-                scrollProgress < 0.6
-                  ? 0.9
-                  : scrollProgress > 0.75
-                  ? 0
-                  : 0.9 * (1 - (scrollProgress - 0.6) / (0.75 - 0.6)),
+              transform: `scale(${scrollProgress > 0.75 ? 1.8 : 0.4 + scrollProgress * 2.2})`,
+              opacity: scrollProgress < 0.6 ? 0.8 : scrollProgress > 0.75 ? 0 : 0.8 * (1 - (scrollProgress - 0.6) / (0.75 - 0.6)),
             }}
           />
         </div>
-
-        {/* FADE TO BLACK OVERLAY */}
-        <div
-          className="absolute inset-0 bg-black pointer-events-none"
-          style={{
-            opacity:
-              scrollProgress < 0.25
-                ? 0
-                : scrollProgress > 0.75
-                ? 1
-                : (scrollProgress - 0.55) / (0.75 - 0.55),
-          }}
-        />
+        <div className="absolute inset-0 bg-black pointer-events-none" style={{ opacity: scrollProgress < 0.25 ? 0 : scrollProgress > 0.75 ? 1 : (scrollProgress - 0.55) / (0.75 - 0.55) }} />
       </div>
 
       {/* --- CONTENIDO PRINCIPAL --- */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-6 pb-24 -mt-[90vh] flex flex-col items-center">
+      {/* Ajustado el padding superior (pt-28 md:pt-36) para que todo el bloque suba y quede centrado en la primera pantalla */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-6 pb-24 -mt-[100vh] pt-28 md:pt-36 flex flex-col items-center">
         
-        {/* 1. HERO VISUAL */}
-        <div className="text-center flex flex-col items-center mb-24 md:mb-40 pt-20">
-          <p className="text-xs md:text-base font-bold tracking-[0.2em] text-white/60 mb-4 md:mb-6 uppercase">
+        {/* 1. HERO VISUAL (TÍTULO) - Tamaños reducidos */}
+        <div className="text-center flex flex-col items-center mb-8 md:mb-10 animate-fade-in-up">
+          <p className="text-[10px] md:text-xs font-bold tracking-[0.25em] text-white/60 mb-3 uppercase">
             powered by AiGOR
           </p>
 
-          {/* AJUSTE TIPOGRAFÍA: text-4xl en móvil, text-8xl en desktop */}
-          <h2 className="text-4xl md:text-8xl font-bold tracking-tighter leading-[1.1] md:leading-[0.9] mb-6 md:mb-6 drop-shadow-2xl">
+          {/* Texto reducido de 8xl a 6xl en desktop */}
+          <h2 className="text-3xl md:text-6xl font-bold tracking-tighter leading-[1.1] md:leading-[0.95] drop-shadow-2xl">
             The Next Generation <br />
             of Microbiological <br />
             Solutions.
           </h2>
         </div>
 
-        {/* 2. TEXTO DESCRIPTIVO */}
-        <div className="text-center mb-16 md:mb-24 max-w-3xl">
-          <p className="text-xl md:text-3xl font-medium text-white leading-relaxed drop-shadow-lg p-4 md:p-6 rounded-3xl backdrop-blur-sm">
+        {/* --- 2. EL "CHIP" AiGOR (SIMPLE Y PLANO) --- */}
+        {/* Margen inferior reducido (mb-8 md:mb-12) */}
+        <div className="relative mb-8 md:mb-12">
+            {/* Halo de luz trasero */}
+            <div className="absolute -inset-2 bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-[#FF270A]/30 rounded-[2.5rem] blur-xl opacity-70"></div>
+            
+            {/* El Chip Físico - Eliminados todos los efectos 3D y sombras internas */}
+            <div className="relative w-40 h-40 md:w-52 md:h-52 bg-[#0a0a0a] rounded-[2rem] border border-white/10 flex flex-col items-center justify-center p-6 overflow-hidden">
+                
+                {/* Contenido del logo (Tipografía y texto) */}
+                <div className="relative z-30 flex flex-col items-center">
+                  <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">
+                    AiGOR
+                  </h2>
+                  <span className="mt-1.5 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.35em] text-[#FF270A]">
+                    RNA Technology
+                  </span>
+                </div>
+            </div>
+        </div>
+
+        {/* 3. TEXTO DESCRIPTIVO - Tamaños reducidos */}
+        {/* Margen inferior reducido */}
+        <div className="text-center mb-16 md:mb-24 max-w-2xl animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+          {/* Texto reducido de 3xl a xl/2xl */}
+          <p className="text-base md:text-xl font-medium text-white leading-relaxed drop-shadow-lg px-4 py-2 rounded-3xl backdrop-blur-sm">
             <span className="text-white">Speed and accuracy like never before.</span>{" "} 
             <br/>
-            <span className="text-white/70">AiGOR utilizes RNA-based detection to bypass biological limits,
-            delivering actionable results in hours, not days.</span>
+            <span className="text-white/60 font-normal">AiGOR utilizes RNA-based detection to bypass biological limits,
+            delivering actionable results in hours.</span>
           </p>
         </div>
 
-        {/* 3. GRID DE TARJETAS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full">
+        {/* 4. GRID DE TARJETAS (Sin cambios mayores, solo el delay) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 w-full animate-fade-in-up" style={{ animationDelay: '700ms' }}>
           {/* Card 1 */}
-          <div className="bg-[#1c1c1e]/80 backdrop-blur-md rounded-[2rem] p-6 md:p-8 min-h-[280px] md:min-h-[320px] flex flex-col justify-between hover:scale-[1.02] transition-transform duration-300 border border-white/10 shadow-2xl">
-            <div className="mb-6">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-4">
-                <Activity className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
+          <div className="bg-[#1c1c1e]/80 backdrop-blur-md rounded-[2rem] p-6 min-h-[260px] md:min-h-[300px] flex flex-col justify-between hover:scale-[1.02] transition-transform duration-300 border border-white/10 shadow-xl">
+            <div className="mb-4">
+              <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mb-3">
+                <Activity className="w-5 h-5 text-blue-400" />
               </div>
-              <h3 className="text-lg md:text-xl font-bold text-white mb-2">RNA Sensitivity.</h3>
-              <p className="text-xs md:text-sm text-gray-400 font-medium">
-                Detects active cells only. No false positives.
-              </p>
+              <h3 className="text-lg font-bold text-white mb-1">RNA Sensitivity.</h3>
+              <p className="text-xs text-gray-400 font-medium">Detects active cells only.</p>
             </div>
             <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-              10k<span className="text-xl md:text-2xl text-gray-500">x</span>
+              10k<span className="text-xl text-gray-500">x</span>
             </div>
           </div>
 
           {/* Card 2 */}
-          <div className="bg-[#1c1c1e]/80 backdrop-blur-md rounded-[2rem] p-0 min-h-[280px] md:min-h-[320px] flex flex-col justify-between overflow-hidden relative group hover:scale-[1.02] transition-transform duration-300 border border-white/10 shadow-2xl">
-            <div className="p-6 md:p-8 relative z-10">
-              <h3 className="text-lg md:text-xl font-bold text-white mb-2">Zero Enrichment.</h3>
-              <p className="text-xs md:text-sm text-gray-400 font-medium">Skip the 24h growth step.</p>
+          <div className="bg-[#1c1c1e]/80 backdrop-blur-md rounded-[2rem] p-0 min-h-[260px] md:min-h-[300px] flex flex-col justify-between overflow-hidden relative group hover:scale-[1.02] transition-transform duration-300 border border-white/10 shadow-xl">
+            <div className="p-6 relative z-10">
+              <h3 className="text-lg font-bold text-white mb-1">Zero Enrichment.</h3>
+              <p className="text-xs text-gray-400 font-medium">Skip the growth step.</p>
             </div>
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#FF270A]/20" />
-            <div className="p-6 md:p-8 pt-0 relative z-10 mt-auto">
-              <Zap className="w-8 h-8 md:w-10 md:h-10 text-[#FF270A] mb-2" />
+            <div className="p-6 pt-0 relative z-10 mt-auto">
+              <Zap className="w-8 h-8 text-[#FF270A] mb-2" />
               <div className="text-2xl md:text-3xl font-bold text-white">Direct.</div>
             </div>
           </div>
 
           {/* Card 3 */}
-          <div className="bg-[#1c1c1e]/80 backdrop-blur-md rounded-[2rem] p-6 md:p-8 min-h-[280px] md:min-h-[320px] flex flex-col justify-between hover:scale-[1.02] transition-transform duration-300 border border-white/10 shadow-2xl">
+          <div className="bg-[#1c1c1e]/80 backdrop-blur-md rounded-[2rem] p-6 min-h-[260px] md:min-h-[300px] flex flex-col justify-between hover:scale-[1.02] transition-transform duration-300 border border-white/10 shadow-xl">
             <div>
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-purple-500/20 flex items-center justify-center mb-4">
-                <Timer className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
+              <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mb-3">
+                <Timer className="w-5 h-5 text-purple-400" />
               </div>
-              <h3 className="text-lg md:text-xl font-bold text-white mb-2">Speed redefined.</h3>
-              <p className="text-xs md:text-sm text-gray-400 font-medium">From sample to certificate.</p>
+              <h3 className="text-lg font-bold text-white mb-1">Speed redefined.</h3>
+              <p className="text-xs text-gray-400 font-medium">Sample to certificate.</p>
             </div>
             <div className="text-4xl md:text-5xl font-bold text-white">
-              3<span className="text-lg md:text-xl text-gray-500 ml-1">HOURS</span>
+              3<span className="text-lg text-gray-500 ml-1">HOURS</span>
             </div>
           </div>
 
           {/* Card 4 */}
-          <div className="bg-white/90 backdrop-blur-md rounded-[2rem] p-6 md:p-8 min-h-[280px] md:min-h-[320px] flex flex-col justify-between hover:scale-[1.02] transition-transform duration-300 text-black shadow-2xl">
+          <div className="bg-white/90 backdrop-blur-md rounded-[2rem] p-6 min-h-[260px] md:min-h-[300px] flex flex-col justify-between hover:scale-[1.02] transition-transform duration-300 text-black shadow-xl">
             <div>
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
-                <Layers className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
+              <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center mb-3">
+                <Layers className="w-5 h-5 text-green-600" />
               </div>
-              <h3 className="text-lg md:text-xl font-bold mb-2">Seamless Fit.</h3>
-              <p className="text-xs md:text-sm text-gray-600 font-medium">
-                Integrates with standard LIMS.
-              </p>
+              <h3 className="text-lg font-bold mb-1">Seamless Fit.</h3>
+              <p className="text-xs text-gray-600 font-medium">Integrates with LIMS.</p>
             </div>
             <div className="flex justify-end">
-              <ArrowRight className="w-6 h-6 md:w-8 md:h-8 text-black opacity-50" />
+              <ArrowRight className="w-6 h-6 text-black opacity-50" />
             </div>
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        /* Animación estándar de fade-in hacia arriba */
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fadeIn {
-          animation: fadeIn 20s ease-out forwards;
+        .animate-fade-in-up {
+          animation: fadeInUp 0.8s ease-out forwards;
+          opacity: 0;
         }
       `}</style>
     </section>
