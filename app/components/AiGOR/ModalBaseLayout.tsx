@@ -1,59 +1,78 @@
 "use client";
 
-import Image from "next/image";
-import { ReactNode } from "react";
-import { Cpu } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+import { ReactNode, useEffect } from "react";
 
-interface ModalBaseProps {
-  title: string;
-  description?: string;
-  image?: string;
-  tags?: string[];
-  children: ReactNode; // Aquí va el contenido específico de cada modal
+interface ModalBaseLayoutProps {
+  children: ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
-export default function ModalBaseLayout({ title, description, image, tags, children }: ModalBaseProps) {
+export default function ModalBaseLayout({
+  children,
+  isOpen,
+  onClose,
+}: ModalBaseLayoutProps) {
+  // Bloquear el scroll del body cuando el modal está abierto
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   return (
-    <>
-      {/* COLUMNA IZQUIERDA: VISUAL */}
-      <div className="w-full md:w-5/12 bg-[#F5F5F7] relative flex items-center justify-center p-10 md:p-12 min-h-[300px]">
-        {image ? (
-          <div className="relative w-full h-full min-h-[250px]">
-            <Image src={image} alt={title} fill className="object-contain drop-shadow-xl" />
-          </div>
-        ) : (
-          <div className="w-32 h-32 rounded-full border-4 border-gray-200 flex items-center justify-center">
-             <Cpu className="w-12 h-12 text-gray-300" />
-          </div>
-        )}
-      </div>
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* OVERLAY (Fondo oscuro) */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
+            onClick={onClose}
+            aria-hidden="true"
+          />
 
-      {/* COLUMNA DERECHA: CONTENIDO */}
-      <div className="w-full md:w-7/12 p-8 md:p-14 overflow-y-auto flex flex-col">
-        <div className="mb-8">
-          {tags && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              {tags.map(tag => (
-                <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-[#FF270A] bg-[#FF270A]/5 px-3 py-1.5 rounded-full border border-[#FF270A]/10">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#111111] leading-tight mb-4 tracking-tight">
-            {title}
-          </h2>
-          {description && (
-            <p className="text-lg text-gray-500 font-medium leading-relaxed">
-              {description}
-            </p>
-          )}
-        </div>
+          {/* MODAL CONTAINER */}
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 pointer-events-none">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              // CAMBIO AQUÍ: Se eliminó 'bg-white' para permitir que el contenido defina el fondo (oscuro en Elevia)
+              // 'rounded-2xl overflow-hidden' se encargarán de recortar el contenido oscuro con puntas redondas.
+              className="relative w-full max-w-4xl shadow-2xl rounded-2xl overflow-hidden flex flex-col max-h-[90vh] pointer-events-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* BOTÓN DE CIERRE FLOTANTE */}
+              <div className="absolute top-4 right-4 z-50">
+                <button
+                  onClick={onClose}
+                  className="w-10 h-10 bg-black/10 hover:bg-black/20 backdrop-blur-md rounded-full flex items-center justify-center transition-colors duration-200 group"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5 text-gray-700/70 group-hover:text-gray-900 transition-colors" />
+                </button>
+              </div>
 
-        {/* CONTENIDO ESPECÍFICO INYECTADO */}
-        {children}
-        
-      </div>
-    </>
+              {/* ÁREA DE CONTENIDO SCROLLABLE */}
+              <div className="flex-1 overflow-y-auto overscroll-contain">
+                {children}
+              </div>
+            </motion.div>
+          </div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }

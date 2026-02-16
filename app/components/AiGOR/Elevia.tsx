@@ -13,7 +13,7 @@ const ELEVIA_MODAL_DATA = {
       {
         title: "Zero-Enrichment Swabbing",
         text: "Swab and run. Our RNA technology allows you to detect 1 CFU per sample directly from the surface without a 24-hour growth phase.",
-        image: "/TxA_app_4.png" // Reemplazar con imagen real del kit
+        image: "/TxA_app_4.png" 
       },
       {
         title: "Live Cell Differentiation",
@@ -22,18 +22,20 @@ const ELEVIA_MODAL_DATA = {
       }
     ]
   },
-  // Mantenemos los demás datos por si en el futuro los activas
-  food: { title: "Elevia Food™", intro: "", features: [] },
-  water: { title: "Elevia Water™", intro: "", features: [] },
-  rapid: { title: "Elevia Rapid ID™", intro: "", features: [] }
+  // Datos placeholder para los otros productos
+  food: { title: "Elevia Food™", intro: "Placeholder intro for Food.", features: [] },
+  water: { title: "Elevia Water™", intro: "Placeholder intro for Water.", features: [] },
+  rapid: { title: "Elevia Rapid ID™", intro: "Placeholder intro for Rapid ID.", features: [] }
 };
 
 type EleviaModalKey = keyof typeof ELEVIA_MODAL_DATA;
 
-// --- COMPONENTE DE CONTENIDO DEL MODAL (AHORA EN MODO OSCURO) ---
+// --- COMPONENTE DE CONTENIDO DEL MODAL (MODO OSCURO) ---
 function EleviaModalContent({ data }: { data: typeof ELEVIA_MODAL_DATA['env'] }) {
   return (
-    <div className="w-full p-8 md:p-14 pb-12 bg-[#050505] text-white">
+    // CORRECCIÓN 1: Agregamos rounded-2xl md:rounded-[2rem] y overflow-hidden 
+    // para asegurar que el fondo negro respete las puntas redondas del modal padre.
+    <div className="w-full p-8 md:p-14 pb-12 bg-[#050505] text-white rounded-2xl md:rounded-[2rem] overflow-hidden">
       <div className="max-w-3xl mb-16">
         <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
           {data.title}
@@ -83,14 +85,17 @@ export default function Elevia() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          if (titleRef.current) observer.unobserve(titleRef.current);
+        }
       },
       { threshold: 0.1 }
     );
 
     if (titleRef.current) observer.observe(titleRef.current);
     return () => {
-      if (titleRef.current) observer.unobserve(titleRef.current);
+      if (titleRef.current) observer.disconnect();
     };
   }, []);
 
@@ -99,15 +104,15 @@ export default function Elevia() {
   };
 
   return (
-    // Fonde Negro absoluto, con borde superior sutil para separar de la Hero
     <div className="relative w-full bg-black py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden border-t border-white/5">
       
       <div className="relative z-20 w-full flex flex-col items-center px-4">
         
         {/* --- ENCABEZADO --- */}
         <div ref={titleRef} className={`text-center max-w-[800px] mx-auto mb-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          {/* Kicker Potente */}
-          <p className="text-[10px] md:text-xs font-bold tracking-[0.3em] text-transparent bg-clip-text bg-gradient-to-r from-[#007AFF] via-[#A13ECD] to-[#FF9500] mb-4 uppercase">
+          
+          {/* CORRECCIÓN 2: Gradiente ajustado de Morado a Rojo Hero (#FF270A) */}
+          <p className="text-[10px] md:text-xs font-bold tracking-[0.3em] text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-[#FF270A] mb-4 uppercase">
             POWERED BY AIGOR
           </p>
 
@@ -120,11 +125,10 @@ export default function Elevia() {
           </p>
         </div>
 
-        {/* --- GRILLA DE PRODUCTOS (1 Horizontal Arriba + 3 Abajo) --- */}
-        {/* Usamos grid-cols-1 en móvil, y grid-cols-3 en Desktop */}
+        {/* --- GRILLA DE PRODUCTOS --- */}
         <div className={`w-full max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-5 transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           
-          {/* 1. TARJETA HORIZONTAL PRINCIPAL (Ocupa las 3 columnas en desktop) */}
+          {/* 1. TARJETA HORIZONTAL PRINCIPAL */}
           <div className="md:col-span-3 bg-[#0a0a0a] rounded-[2rem] p-8 md:p-12 relative flex flex-col md:flex-row md:items-center justify-between hover:bg-[#111111] transition-colors duration-300 border border-white/10 group min-h-[250px]">
             <div className="max-w-2xl mb-8 md:mb-0">
               <span className="text-xs font-bold tracking-widest text-[#FF270A] uppercase mb-3 block">Environmental</span>
@@ -134,7 +138,6 @@ export default function Elevia() {
               </p>
             </div>
             
-            {/* Botón Learn More (Solo en esta tarjeta) */}
             <button 
               onClick={() => handleOpenModule('env')}
               className="bg-white text-black px-6 py-3 rounded-full text-sm font-bold hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group/btn shrink-0 w-full md:w-auto"
@@ -152,7 +155,6 @@ export default function Elevia() {
                 Flawless pathogen detection in complex foods. Release inventory faster with zero false positives.
               </p>
             </div>
-            {/* Etiqueta de Lanzamiento */}
             <div className="mt-auto">
               <span className="inline-block border border-white/20 bg-white/5 text-white/50 text-[10px] font-mono uppercase tracking-widest px-4 py-2 rounded-full">
                 Launch 2Q 2026
@@ -169,7 +171,6 @@ export default function Elevia() {
                 High-volume filtration coupled with extreme AiGOR amplification for instantaneous results.
               </p>
             </div>
-            {/* Etiqueta de Lanzamiento */}
             <div className="mt-auto">
               <span className="inline-block border border-white/20 bg-white/5 text-white/50 text-[10px] font-mono uppercase tracking-widest px-4 py-2 rounded-full">
                 Launch 2Q 2026
@@ -186,7 +187,6 @@ export default function Elevia() {
                 Exact species and serotype identification for fast and precise root-cause analysis.
               </p>
             </div>
-            {/* Etiqueta de Lanzamiento */}
             <div className="mt-auto">
               <span className="inline-block border border-white/20 bg-white/5 text-white/50 text-[10px] font-mono uppercase tracking-widest px-4 py-2 rounded-full">
                 Launch 2Q 2026
