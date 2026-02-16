@@ -107,7 +107,7 @@ export default function AigorImpactSection() {
           <p className="text-base md:text-xl font-medium text-white leading-relaxed drop-shadow-lg px-4">
             <span className="text-white">Speed and accuracy like never before.</span>{" "} 
             <br className="hidden md:block" />
-            <span className="text-white/60 font-normal">AiGOR utilizes RNA-based detection to bypass biological limits,
+            <span className="text-white/80 font-normal">AiGOR utilizes RNA-based detection to bypass biological limits,
             delivering actionable results in hours.</span>
           </p>
         </div>
@@ -118,7 +118,7 @@ export default function AigorImpactSection() {
           {/* Concepto 1 */}
           <div className="flex flex-col items-center text-center">
             <Timer className="w-6 h-6 md:w-8 md:h-8 text-white mb-3 md:mb-4" strokeWidth={1.5} />
-            <p className="text-xs md:text-sm text-white/60 leading-relaxed max-w-[200px]">
+            <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-[200px]">
               <span className="font-bold text-white">Results as fast as 3 hours.</span> Skip the long enrichment steps.
             </p>
           </div>
@@ -126,7 +126,7 @@ export default function AigorImpactSection() {
           {/* Concepto 2 */}
           <div className="flex flex-col items-center text-center">
             <Activity className="w-6 h-6 md:w-8 md:h-8 text-white mb-3 md:mb-4" strokeWidth={1.5} />
-            <p className="text-xs md:text-sm text-white/60 leading-relaxed max-w-[200px]">
+            <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-[200px]">
               <span className="font-bold text-white">1 CFU/sample sensitivity.</span> Maximum precision and reliability.
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function AigorImpactSection() {
           {/* Concepto 3 */}
           <div className="flex flex-col items-center text-center">
             <Zap className="w-6 h-6 md:w-8 md:h-8 text-white mb-3 md:mb-4" strokeWidth={1.5} />
-            <p className="text-xs md:text-sm text-white/60 leading-relaxed max-w-[200px]">
+            <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-[200px]">
               <span className="font-bold text-white">10,000x higher sensitivity.</span> Compared to traditional real-time PCR.
             </p>
           </div>
@@ -142,9 +142,9 @@ export default function AigorImpactSection() {
           {/* Concepto 4 */}
           <div className="flex flex-col items-center text-center">
             <div className="flex items-center justify-center h-6 md:h-8 mb-3 md:mb-4">
-              <span className="text-base md:text-lg font-black text-white tracking-widest uppercase">RNA</span>
+              <span className="text-base md:text-lg text-white tracking-widest uppercase">RNA</span>
             </div>
-            <p className="text-xs md:text-sm text-white/60 leading-relaxed max-w-[200px]">
+            <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-[200px]">
               <span className="font-bold text-white">RNA detection.</span> Targeting only active cells.
             </p>
           </div>
