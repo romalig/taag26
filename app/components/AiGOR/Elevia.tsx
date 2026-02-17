@@ -131,7 +131,7 @@ export default function Elevia() {
             Welcome to the future. <br /> Meet Elevia Products.
           </h2>
 
-          <p className="text-[17px] md:text-xl leading-[1.6] text-white/60 font-medium max-w-2xl mx-auto mb-6">
+          <p className="text-[17px] md:text-xl leading-[1.6] text-white/80 font-medium max-w-2xl mx-auto mb-6">
             Elevia is our premium suite of diagnostic products based on AiGOR technology. By targeting RNA, Elevia bypasses traditional biological limits to deliver extreme sensitivity and ultra-fast results across your testing matrices.
           </p>
         </div>
@@ -142,7 +142,7 @@ export default function Elevia() {
           {/* ============================================== */}
           {/* 1. TARJETA IMPORTANTE SUPERIOR 1: SALMONELLA */}
           {/* ============================================== */}
-          <div className="md:col-span-3 bg-[#121212] md:bg-[#0a0a0a] rounded-[2rem] relative flex flex-col overflow-hidden min-h-[450px] transition-colors">
+          <div className="md:col-span-3 bg-[#121212] rounded-[2rem] relative flex flex-col overflow-hidden min-h-[450px] transition-colors">
             
             {/* IMAGEN SUPERIOR */}
             <div className="relative w-full h-[220px] md:h-[260px] z-0 pointer-events-none shrink-0">
@@ -152,7 +152,7 @@ export default function Elevia() {
                 fill 
                 className="object-cover object-center opacity-100" 
               />
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#121212] md:from-[#0a0a0a] to-transparent transition-colors"></div>
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#121212] to-transparent transition-colors"></div>
             </div>
 
             {/* CONTENIDO TEXTUAL Y BOTÓN */}
@@ -177,7 +177,7 @@ export default function Elevia() {
           {/* ============================================== */}
           {/* 2. TARJETA IMPORTANTE SUPERIOR 2: SALMONELLA + EB */}
           {/* ============================================== */}
-          <div className="md:col-span-3 bg-[#121212] md:bg-[#0a0a0a] rounded-[2rem] relative flex flex-col overflow-hidden min-h-[450px] transition-colors">
+          <div className="md:col-span-3 bg-[#121212] rounded-[2rem] relative flex flex-col overflow-hidden min-h-[450px] transition-colors">
             
             {/* IMAGEN SUPERIOR */}
             <div className="relative w-full h-[220px] md:h-[260px] z-0 pointer-events-none shrink-0">
@@ -187,7 +187,7 @@ export default function Elevia() {
                 fill 
                 className="object-cover object-center opacity-100" 
               />
-              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#121212] md:from-[#0a0a0a] to-transparent transition-colors"></div>
+              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#121212] to-transparent transition-colors"></div>
             </div>
 
             {/* CONTENIDO TEXTUAL Y BOTÓN */}
@@ -214,7 +214,7 @@ export default function Elevia() {
           {/* ============================================== */}
           
           {/* INFERIOR 1: FOOD */}
-          <div className="md:col-span-2 bg-[#121212] md:bg-[#0a0a0a] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between transition-colors">
+          <div className="md:col-span-2 bg-[#121212] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between transition-colors">
             <div>
               <h3 className="text-xl font-bold text-white mb-3">Elevia Salmonella + Listeria spp.</h3>
               <p className="text-sm text-white/80 leading-relaxed">
@@ -229,7 +229,7 @@ export default function Elevia() {
           </div>
 
           {/* INFERIOR 2: WATER */}
-          <div className="md:col-span-2 bg-[#121212] md:bg-[#0a0a0a] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between transition-colors">
+          <div className="md:col-span-2 bg-[#121212] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between transition-colors">
             <div>
               <h3 className="text-xl font-bold text-white mb-3">Elevia Listeria spp + L. monocytogenes</h3>
               <p className="text-sm text-white/80 leading-relaxed">
@@ -244,7 +244,7 @@ export default function Elevia() {
           </div>
 
           {/* INFERIOR 3: RAPID ID */}
-          <div className="md:col-span-2 bg-[#121212] md:bg-[#0a0a0a] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between transition-colors">
+          <div className="md:col-span-2 bg-[#121212] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between transition-colors">
             <div>
               <h3 className="text-xl font-bold text-white mb-3">Elevia Salmonella + Listeria spp. + L. monocytogenes</h3>
               <p className="text-sm text-white/80 leading-relaxed">
