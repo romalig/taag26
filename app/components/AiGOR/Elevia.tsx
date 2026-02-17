@@ -182,7 +182,7 @@ export default function Elevia() {
             {/* IMAGEN SUPERIOR */}
             <div className="relative w-full h-[220px] md:h-[260px] z-0 pointer-events-none shrink-0">
               <Image 
-                src="/Sal11.png" 
+                src="/Sal_EB.png" 
                 alt="Salmonella + EB" 
                 fill 
                 className="object-cover object-center opacity-100" 
