@@ -156,11 +156,11 @@ export default function Elevia() {
             {/* AQUÍ ESTÁ EL CAMBIO: Se cambió pt-0 md:pt-4 por pt-8 md:pt-10 para separar el título de la imagen */}
             <div className="relative z-10 flex flex-col flex-1 p-8 pt-8 md:p-12 md:pt-10">
               <div className="relative inline-block mb-4 w-max">
-                <div className="absolute -inset-2 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-90 blur-xl rounded-full pointer-events-none"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-90 blur-xl rounded-full pointer-events-none"></div>
                 <h3 className="relative text-3xl font-bold text-white tracking-tight">Elevia Salmonella</h3>
               </div>
               
-              <p className="text-white/80 leading-relaxed font-medium mb-8">
+              <p className="text-white/90 leading-relaxed font-medium mb-8">
                 Ultra-fast Salmonella detection in as little as 3 hours, and 6 hours, for environmental and food samples, respectively.
               </p>
               
@@ -181,7 +181,7 @@ export default function Elevia() {
             {/* IMAGEN SUPERIOR (Reemplazar Sal11.png por la de Listeria) */}
             <div className="relative w-full h-[220px] md:h-[260px] z-0 pointer-events-none shrink-0">
               <Image 
-                src="/Sal11.png" 
+                src="/Sal_EB.png" 
                 alt="Listeria" 
                 fill 
                 className="object-cover object-center opacity-100" 
@@ -193,12 +193,12 @@ export default function Elevia() {
             {/* AQUÍ ESTÁ EL CAMBIO: Se cambió pt-0 md:pt-4 por pt-8 md:pt-10 para separar el título de la imagen */}
             <div className="relative z-10 flex flex-col flex-1 p-8 pt-8 md:p-12 md:pt-10">
               <div className="relative inline-block mb-4 w-max">
-                <div className="absolute -inset-2 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-90 blur-xl rounded-full pointer-events-none"></div>
-                <h3 className="relative text-3xl font-bold text-white tracking-tight">Elevia Listeria</h3>
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-90 blur-xl rounded-full pointer-events-none"></div>
+                <h3 className="relative text-3xl font-bold text-white tracking-tight">Elevia Salmonella + EB</h3>
               </div>
               
-              <p className="text-white/80 leading-relaxed font-medium mb-8">
-                Flawless Listeria detection with zero false positives. Ensure maximum safety and release your inventory faster.
+              <p className="text-white/90 leading-relaxed font-medium mb-8">
+                Detect Salmonella and Enterobacteria simultaneously in a single reaction, in just 3 hours.
               </p>
               
               <button 
