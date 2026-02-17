@@ -115,9 +115,13 @@ export default function Elevia() {
   return (
     <div className="relative w-full bg-black py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden border-t border-white/5">
       
-      {/* --- GLOW AMBIENTAL TENUE (AJUSTADO PARA MÓVIL) --- */}
-      {/* En móvil (w-[180%]) es mucho más ancho que la pantalla para que se vea a los costados. */}
-      <div className="absolute top-[25%] md:top-[30%] left-1/2 -translate-x-1/2 w-[180%] md:w-[70%] max-w-none md:max-w-[1000px] h-[600px] md:h-[500px] bg-gradient-to-r from-purple-600 to-[#FF270A] blur-[180px] md:blur-[140px] opacity-40 md:opacity-30 mix-blend-screen pointer-events-none z-0 rounded-full"></div>
+      {/* --- GLOW AMBIENTAL CORREGIDO PARA CELULAR REAL --- */}
+      {/* 1. Reducido a blur-[90px] en móvil para que no se "evapore" la luz.
+          2. Eliminado mix-blend-screen para máxima compatibilidad móvil.
+          3. Añadido transform-gpu para aceleración por hardware.
+          4. Aumentada la opacidad móvil a 50% para compensar la falta de mezcla. 
+      */}
+      <div className="absolute top-[25%] md:top-[30%] left-1/2 -translate-x-1/2 w-[160%] md:w-[70%] max-w-none md:max-w-[1000px] h-[550px] md:h-[500px] bg-gradient-to-r from-purple-600 to-[#FF270A] blur-[90px] md:blur-[140px] opacity-50 md:opacity-30 pointer-events-none z-0 rounded-full transform-gpu"></div>
 
       <div className="relative z-20 w-full flex flex-col items-center px-4">
         
@@ -137,7 +141,7 @@ export default function Elevia() {
           </p>
         </div>
 
-        {/* --- GRILLA DE PRODUCTOS BENTO BOX (2 Arriba, 3 Abajo) --- */}
+        {/* --- GRILLA DE PRODUCTOS BENTO BOX --- */}
         <div className={`w-full max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-6 gap-5 transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           
           {/* ============================================== */}
@@ -180,7 +184,7 @@ export default function Elevia() {
           {/* ============================================== */}
           <div className="md:col-span-3 bg-[#0a0a0a] rounded-[2rem] relative flex flex-col overflow-hidden min-h-[450px]">
             
-            {/* IMAGEN SUPERIOR (CAMBIADA A Sal_EB.png) */}
+            {/* IMAGEN SUPERIOR */}
             <div className="relative w-full h-[220px] md:h-[260px] z-0 pointer-events-none shrink-0">
               <Image 
                 src="/Sal_EB.png" 
