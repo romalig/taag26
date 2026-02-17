@@ -22,13 +22,13 @@ const ELEVIA_MODAL_DATA = {
       }
     ]
   },
-  listeria: {
-    title: "Elevia Listeria",
-    intro: "Ultra-fast and precise Listeria detection powered by AiGOR.",
+  salmonellaEB: {
+    title: "Elevia Salmonella + EB",
+    intro: "Simultaneous detection of Salmonella and Enterobacteria in a single reaction.",
     features: [
       {
-        title: "Maximum Precision",
-        text: "Target specific RNA sequences to ensure zero cross-reactivity.",
+        title: "Multiplex Efficiency",
+        text: "Identify two critical targets in one single 3-hour workflow.",
         image: "/TxA_app_4.png" 
       }
     ]
@@ -153,14 +153,15 @@ export default function Elevia() {
             </div>
 
             {/* CONTENIDO TEXTUAL Y BOTÓN */}
-            {/* AQUÍ ESTÁ EL CAMBIO: Se cambió pt-0 md:pt-4 por pt-8 md:pt-10 para separar el título de la imagen */}
             <div className="relative z-10 flex flex-col flex-1 p-8 pt-8 md:p-12 md:pt-10">
               <div className="relative inline-block mb-4 w-max">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-90 blur-xl rounded-full pointer-events-none"></div>
-                <h3 className="relative text-3xl font-bold text-white tracking-tight">Elevia Salmonella</h3>
+                {/* AJUSTE MÓVIL: Glow más suave y menos expandido en celular */}
+                <div className="absolute -inset-1 md:-inset-1 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-60 md:opacity-60 blur-lg md:blur-xl rounded-full pointer-events-none"></div>
+                {/* AJUSTE MÓVIL: Texto más pequeño (text-2xl) y leading-tight para que no toque bordes */}
+                <h3 className="relative text-2xl md:text-4xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella</h3>
               </div>
               
-              <p className="text-white/90 leading-relaxed font-medium mb-8">
+              <p className="text-white/80 leading-relaxed font-medium mb-8">
                 Ultra-fast Salmonella detection in as little as 3 hours, and 6 hours, for environmental and food samples, respectively.
               </p>
               
@@ -174,15 +175,15 @@ export default function Elevia() {
           </div>
 
           {/* ============================================== */}
-          {/* 2. TARJETA IMPORTANTE SUPERIOR 2: LISTERIA */}
+          {/* 2. TARJETA IMPORTANTE SUPERIOR 2: SALMONELLA + EB */}
           {/* ============================================== */}
           <div className="md:col-span-3 bg-[#0a0a0a] rounded-[2rem] relative flex flex-col overflow-hidden min-h-[450px]">
             
-            {/* IMAGEN SUPERIOR (Reemplazar Sal11.png por la de Listeria) */}
+            {/* IMAGEN SUPERIOR */}
             <div className="relative w-full h-[220px] md:h-[260px] z-0 pointer-events-none shrink-0">
               <Image 
-                src="/Sal_EB.png" 
-                alt="Listeria" 
+                src="/Sal11.png" 
+                alt="Salmonella + EB" 
                 fill 
                 className="object-cover object-center opacity-100" 
               />
@@ -190,19 +191,20 @@ export default function Elevia() {
             </div>
 
             {/* CONTENIDO TEXTUAL Y BOTÓN */}
-            {/* AQUÍ ESTÁ EL CAMBIO: Se cambió pt-0 md:pt-4 por pt-8 md:pt-10 para separar el título de la imagen */}
             <div className="relative z-10 flex flex-col flex-1 p-8 pt-8 md:p-12 md:pt-10">
               <div className="relative inline-block mb-4 w-max">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-90 blur-xl rounded-full pointer-events-none"></div>
-                <h3 className="relative text-3xl font-bold text-white tracking-tight">Elevia Salmonella + EB</h3>
+                 {/* AJUSTE MÓVIL: Glow más suave y menos expandido en celular */}
+                <div className="absolute -inset-1 md:-inset-1 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-60 md:opacity-60 blur-lg md:blur-xl rounded-full pointer-events-none"></div>
+                {/* AJUSTE MÓVIL: Texto más pequeño (text-2xl) y leading-tight para que no toque bordes y haga wrap */}
+                <h3 className="relative text-2xl md:text-4xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella + EB</h3>
               </div>
               
-              <p className="text-white/90 leading-relaxed font-medium mb-8">
-                Detect Salmonella and Enterobacteria simultaneously in a single reaction, in just 3 hours.
+              <p className="text-white/80 leading-relaxed font-medium mb-8">
+                Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours.
               </p>
               
               <button 
-                onClick={() => handleOpenModule('listeria')}
+                onClick={() => handleOpenModule('salmonellaEB')}
                 className="w-full md:w-max border border-white/20 bg-white/5 backdrop-blur-md text-white/90 px-8 py-3 rounded-full text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-auto"
               >
                   Learn more <span className="transition-transform group-hover/btn:translate-x-1 text-white/40 group-hover/btn:text-white">&gt;</span>
