@@ -115,9 +115,9 @@ export default function Elevia() {
   return (
     <div className="relative w-full bg-black py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden border-t border-white/5">
       
-      {/* --- GLOW AMBIENTAL TENUE --- */}
-      {/* Se hizo más visible usando mix-blend-screen y colores más puros */}
-      <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[90%] md:w-[70%] max-w-[1000px] h-[500px] bg-gradient-to-r from-purple-600 to-[#FF270A] blur-[140px] opacity-20 md:opacity-30 mix-blend-screen pointer-events-none z-0 rounded-full"></div>
+      {/* --- GLOW AMBIENTAL TENUE (AJUSTADO PARA MÓVIL) --- */}
+      {/* En móvil (w-[180%]) es mucho más ancho que la pantalla para que se vea a los costados. */}
+      <div className="absolute top-[25%] md:top-[30%] left-1/2 -translate-x-1/2 w-[180%] md:w-[70%] max-w-none md:max-w-[1000px] h-[600px] md:h-[500px] bg-gradient-to-r from-purple-600 to-[#FF270A] blur-[180px] md:blur-[140px] opacity-40 md:opacity-30 mix-blend-screen pointer-events-none z-0 rounded-full"></div>
 
       <div className="relative z-20 w-full flex flex-col items-center px-4">
         
@@ -159,7 +159,6 @@ export default function Elevia() {
             {/* CONTENIDO TEXTUAL Y BOTÓN */}
             <div className="relative z-10 flex flex-col flex-1 p-8 pt-8 md:p-12 md:pt-10">
               <div className="mb-4">
-                {/* 100% LIMPIO DE GLOW */}
                 <h3 className="text-2xl md:text-4xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella</h3>
               </div>
               
@@ -181,7 +180,7 @@ export default function Elevia() {
           {/* ============================================== */}
           <div className="md:col-span-3 bg-[#0a0a0a] rounded-[2rem] relative flex flex-col overflow-hidden min-h-[450px]">
             
-            {/* IMAGEN SUPERIOR */}
+            {/* IMAGEN SUPERIOR (CAMBIADA A Sal_EB.png) */}
             <div className="relative w-full h-[220px] md:h-[260px] z-0 pointer-events-none shrink-0">
               <Image 
                 src="/Sal_EB.png" 
@@ -195,7 +194,6 @@ export default function Elevia() {
             {/* CONTENIDO TEXTUAL Y BOTÓN */}
             <div className="relative z-10 flex flex-col flex-1 p-8 pt-8 md:p-12 md:pt-10">
               <div className="mb-4">
-                 {/* 100% LIMPIO DE GLOW */}
                 <h3 className="text-2xl md:text-4xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella + EB</h3>
               </div>
               
