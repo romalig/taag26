@@ -115,6 +115,10 @@ export default function Elevia() {
   return (
     <div className="relative w-full bg-black py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden border-t border-white/5">
       
+      {/* --- GLOW AMBIENTAL TENUE --- */}
+      {/* Se hizo más visible usando mix-blend-screen y colores más puros */}
+      <div className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[90%] md:w-[70%] max-w-[1000px] h-[500px] bg-gradient-to-r from-purple-600 to-[#FF270A] blur-[140px] opacity-20 md:opacity-30 mix-blend-screen pointer-events-none z-0 rounded-full"></div>
+
       <div className="relative z-20 w-full flex flex-col items-center px-4">
         
         {/* --- ENCABEZADO --- */}
@@ -154,11 +158,9 @@ export default function Elevia() {
 
             {/* CONTENIDO TEXTUAL Y BOTÓN */}
             <div className="relative z-10 flex flex-col flex-1 p-8 pt-8 md:p-12 md:pt-10">
-              <div className="relative inline-block mb-4 w-max">
-                {/* AJUSTE MÓVIL: Glow más suave y menos expandido en celular */}
-                <div className="absolute -inset-1 md:-inset-1 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-60 md:opacity-60 blur-lg md:blur-xl rounded-full pointer-events-none"></div>
-                {/* AJUSTE MÓVIL: Texto más pequeño (text-2xl) y leading-tight para que no toque bordes */}
-                <h3 className="relative text-2xl md:text-4xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella</h3>
+              <div className="mb-4">
+                {/* 100% LIMPIO DE GLOW */}
+                <h3 className="text-2xl md:text-4xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella</h3>
               </div>
               
               <p className="text-white/80 leading-relaxed font-medium mb-8">
@@ -192,11 +194,9 @@ export default function Elevia() {
 
             {/* CONTENIDO TEXTUAL Y BOTÓN */}
             <div className="relative z-10 flex flex-col flex-1 p-8 pt-8 md:p-12 md:pt-10">
-              <div className="relative inline-block mb-4 w-max">
-                 {/* AJUSTE MÓVIL: Glow más suave y menos expandido en celular */}
-                <div className="absolute -inset-1 md:-inset-1 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-60 md:opacity-60 blur-lg md:blur-xl rounded-full pointer-events-none"></div>
-                {/* AJUSTE MÓVIL: Texto más pequeño (text-2xl) y leading-tight para que no toque bordes y haga wrap */}
-                <h3 className="relative text-2xl md:text-4xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella + EB</h3>
+              <div className="mb-4">
+                 {/* 100% LIMPIO DE GLOW */}
+                <h3 className="text-2xl md:text-4xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella + EB</h3>
               </div>
               
               <p className="text-white/80 leading-relaxed font-medium mb-8">
