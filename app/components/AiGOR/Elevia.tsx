@@ -118,47 +118,57 @@ export default function Elevia() {
           </h2>
 
           <p className="text-[17px] md:text-xl leading-[1.6] text-white/60 font-medium max-w-2xl mx-auto">
-            Elevia is our premium suite of diagnostic products engineered on the AiGOR platform. By exclusively targeting RNA, Elevia bypasses traditional biological limits to deliver extreme sensitivity and ultra-fast results across all your testing matrices.
+            Elevia is our premium suite of diagnostic products based on AiGOR technology. By targeting RNA, Elevia bypasses traditional biological limits to deliver extreme sensitivity and ultra-fast results across your testing matrices.
           </p>
         </div>
 
         {/* --- GRILLA DE PRODUCTOS --- */}
         <div className={`w-full max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-5 transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           
-          {/* 1. TARJETA HORIZONTAL PRINCIPAL CON IMAGEN DE FONDO */}
-          <div className="md:col-span-3 bg-[#0a0a0a] rounded-[2rem] p-8 md:p-12 relative flex flex-col md:flex-row md:items-center justify-between border border-white/10 group min-h-[300px] overflow-hidden">
+          {/* 1. TARJETA HORIZONTAL PRINCIPAL (Responsive: Bloque superior en móvil, fondo en desktop) */}
+          <div className="md:col-span-3 bg-[#0a0a0a] rounded-[2rem] relative flex flex-col md:flex-row md:items-center justify-between min-h-[300px] overflow-hidden">
             
-            {/* IMAGEN DE FONDO (Sal.png) */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
+            {/* IMAGEN DE FONDO */}
+            <div className="relative w-full h-[250px] md:h-auto md:absolute md:inset-0 z-0 pointer-events-none">
               <Image 
-                src="/Sal2.png" 
+                src="/Sal11.png" 
                 alt="Salmonella" 
                 fill 
+                className="object-cover object-center opacity-100" 
               />
-              {/* Degradado para asegurar que el texto sea legible sobre la imagen */}
+              {/* Gradiente sutil solo en celular para que la imagen se funda con el fondo negro */}
+              <div className="md:hidden absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent"></div>
             </div>
 
-            {/* CONTENIDO TEXTUAL (Máximo 1/3 del ancho en desktop) */}
-            <div className="relative z-10 w-full md:w-1/3 mb-8 md:mb-0">
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">Elevia Salmonella</h3>
-              <p className="text-lg text-white/80 leading-relaxed font-medium">
-                Ultra-fast detection of Salmonella, at low as 3 hours and 6 hours for food samples.
+            {/* CONTENIDO TEXTUAL */}
+            {/* Los paddings (p-8 md:p-12) se movieron a los contenedores internos para que la imagen toque los bordes arriba en móvil */}
+            <div className="relative z-10 w-full md:w-1/3 p-8 pt-4 md:p-12 mb-4 md:mb-0">
+              {/* EFECTO DE HALO MÁS INTENSO Y CERRADO */}
+              <div className="relative inline-block mb-4">
+                <div className="absolute -inset-2 bg-gradient-to-r from-purple-600 to-[#FF270A] opacity-90 blur-xl rounded-full pointer-events-none"></div>
+                <h3 className="relative text-3xl md:text-3xl font-bold text-white tracking-tight">Elevia Salmonella</h3>
+              </div>
+              
+              <p className="text-g text-white leading-relaxed font-medium">
+                Ultra-fast Salmonella detection in as little as 3 hours, and 6 hours, for environmental and food samples, respectively.
               </p>
             </div>
             
             {/* BOTÓN */}
-            <button 
-              onClick={() => handleOpenModule('env')}
-              className="relative z-10 bg-white text-black px-6 py-3 rounded-full text-sm font-bold hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group/btn shrink-0 w-full md:w-auto mt-auto md:mt-0"
-            >
-                Learn more <span className="transition-transform group-hover/btn:translate-x-1">&gt;</span>
-            </button>
+            <div className="relative z-10 px-8 pb-8 md:p-12 w-full md:w-auto shrink-0 mt-auto md:mt-0">
+              <button 
+                onClick={() => handleOpenModule('env')}
+                className="w-full md:w-auto bg-white text-black px-6 py-3 rounded-full text-sm font-bold hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group/btn"
+              >
+                  Learn more <span className="transition-transform group-hover/btn:translate-x-1">&gt;</span>
+              </button>
+            </div>
           </div>
 
           {/* 2. TARJETA INFERIOR 1: FOOD */}
-          <div className="col-span-1 bg-[#0a0a0a] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between hover:bg-[#111111] transition-colors duration-300 border border-white/10 group">
+          <div className="col-span-1 bg-[#0a0a0a] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between">
             <div>
-              <h3 className="text-2xl font-bold text-white mb-3">Elevia Food™</h3>
+              <h3 className="text-2xl font-bold text-white mb-3">Elevia Listeria</h3>
               <p className="text-sm text-white/60 leading-relaxed">
                 Flawless pathogen detection in complex foods. Release inventory faster with zero false positives.
               </p>
@@ -171,9 +181,9 @@ export default function Elevia() {
           </div>
 
           {/* 3. TARJETA INFERIOR 2: WATER */}
-          <div className="col-span-1 bg-[#0a0a0a] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between hover:bg-[#111111] transition-colors duration-300 border border-white/10 group">
+          <div className="col-span-1 bg-[#0a0a0a] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between">
             <div>
-              <h3 className="text-2xl font-bold text-white mb-3">Elevia Water™</h3>
+              <h3 className="text-2xl font-bold text-white mb-3">Elevia E. coli</h3>
               <p className="text-sm text-white/60 leading-relaxed">
                 High-volume filtration coupled with extreme AiGOR amplification for instantaneous results.
               </p>
@@ -186,7 +196,7 @@ export default function Elevia() {
           </div>
 
           {/* 4. TARJETA INFERIOR 3: RAPID ID */}
-          <div className="col-span-1 bg-[#0a0a0a] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between hover:bg-[#111111] transition-colors duration-300 border border-white/10 group">
+          <div className="col-span-1 bg-[#0a0a0a] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between">
             <div>
               <h3 className="text-2xl font-bold text-white mb-3">Elevia Rapid ID™</h3>
               <p className="text-sm text-white/60 leading-relaxed">
