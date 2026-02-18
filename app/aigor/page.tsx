@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import Hero from "../components/AiGOR/Aigor_hero";
 import Elevia from "../components/AiGOR/Elevia";
+import EleviaEnvironmental from "../components/AiGOR/EleviaEnvironmental";
 import { ModalProvider } from "../components/industrial/ModalProvider"; 
 import SolutionModal from "../components/industrial/SolutionModal";
 
@@ -11,6 +12,7 @@ export default function TxAPage() {
     <Header theme="dark" />
       <Hero />
       <Elevia />
+      <EleviaEnvironmental />
       <SolutionModal /> 
     </main>
     </ModalProvider>
