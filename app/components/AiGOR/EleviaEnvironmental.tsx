@@ -24,35 +24,39 @@ export default function EleviaEnvironmental() {
             />
           </div>
 
-          {/* 2. CAPA INTELIGENTE DE OSCURECIMIENTO */}
-          {/* En móvil: Oscurece arriba y abajo. En desktop: Oscurece la izquierda. */}
-          <div className="absolute inset-0 z-10 bg-black/30 bg-gradient-to-b from-black/80 via-transparent to-black/90 md:bg-gradient-to-r md:from-black/90 md:via-black/30 md:to-transparent pointer-events-none"></div>
+          {/* 2. CAPA PARA HACER LA FOTO UN POCO MÁS NEGRA */}
+          <div className="absolute inset-0 z-10 bg-black/40 bg-gradient-to-bl from-black/80 via-black/20 to-transparent pointer-events-none"></div>
 
-          {/* 3. CONTENEDOR DE TEXTOS (Ocupa toda la tarjeta con absolute inset-0) */}
-          {/* justify-between separa los bloques en móvil, md:justify-start los une en desktop */}
-          <div className="absolute inset-0 z-20 w-full flex flex-col justify-between md:justify-start p-8 md:p-16">
+          {/* 3. TÍTULO Y TEXTO */}
+          {/* CAMBIO: Se usa 'absolute inset-0' para abarcar toda la foto y 'justify-between' para enviar el texto abajo en móvil */}
+          <div className="absolute inset-0 z-20 w-full flex flex-col justify-between md:justify-start items-end p-8 pr-16 md:p-16 md:pr-40">
             
-            {/* BLOQUE SUPERIOR: Kicker + Título */}
-            <div className="max-w-[400px] flex flex-col items-start">
+            {/* BLOQUE SUPERIOR (Kicker y Título) */}
+            <div className="w-full max-w-[380px] flex flex-col items-end">
               
+              {/* KICKER: Alineado a la izquierda dentro de su bloque */}
               <span className="text-left text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block w-full">
-                TAAG: Environmental Monitoring
+                Environmental Monitoring
               </span>
               
-              <h2 className="text-left text-2xl md:text-4xl font-bold text-white tracking-tight leading-tight w-full">
+              {/* TÍTULO: Alineado a la izquierda dentro de su bloque */}
+              <h2 className="text-left text-2xl md:text-4xl font-bold text-white mb-5 tracking-tight leading-tight w-full">
                 Zero blind spots. <br className="hidden md:block" /> Absolute facility control.
               </h2>
               
             </div>
-            
-            {/* BLOQUE INFERIOR (BAJADA) */}
-            {/* md:mt-6 asegura que en computadora tenga separación respecto al título de arriba */}
-            <div className="max-w-[400px] flex flex-col items-start md:mt-6">
+
+            {/* BLOQUE INFERIOR (Bajada) */}
+            {/* En celular se va para abajo por el justify-between. En PC se queda pegado arriba por md:justify-start */}
+            <div className="w-full max-w-[380px] flex flex-col items-end">
+              
+              {/* BAJADA: Alineado a la izquierda dentro de su bloque */}
               <p className="text-left text-sm md:text-base text-white/90 font-medium leading-relaxed w-full">
                 Bypass traditional enrichment. Elevia detects active pathogens directly from any surface in record time, transforming your environmental monitoring from reactive to predictive.
               </p>
+              
             </div>
-
+            
           </div>
 
         </div>
