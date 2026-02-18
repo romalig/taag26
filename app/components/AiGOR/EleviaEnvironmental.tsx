@@ -27,25 +27,25 @@ export default function EleviaEnvironmental() {
           {/* 2. CAPA PARA HACER LA FOTO UN POCO MÁS NEGRA */}
           <div className="absolute inset-0 z-10 bg-black/40 bg-gradient-to-bl from-black/80 via-black/20 to-transparent pointer-events-none"></div>
 
-          {/* 3. TÍTULO Y TEXTO (ARRIBA A LA DERECHA, MOVIDO UN POCO A LA IZQUIERDA) */}
-          {/* Añadimos pr-12 (móvil) y md:pr-28 (desktop) para empujar el texto hacia la izquierda */}
-          <div className="relative z-20 w-full flex justify-end p-8 pr-12 md:p-16 md:pr-28">
+          {/* 3. TÍTULO Y TEXTO */}
+          {/* AUMENTAMOS EL PADDING DERECHO (pr-16 en móvil, md:pr-40 en desktop) para empujarlo más a la izquierda */}
+          <div className="relative z-20 w-full flex justify-end p-8 pr-16 md:p-16 md:pr-40">
             
             {/* Bloque de texto angosto: max-w-[380px] */}
-            <div className="max-w-[380px] text-right flex flex-col items-end">
+            <div className="max-w-[380px] flex flex-col items-end">
               
-              {/* KICKER: Un poco más grande */}
-              <span className="text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block">
-                TAAG: Environmental Monitoring
+              {/* KICKER: Alineado a la derecha estrictamente */}
+              <span className="text-left text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block w-full">
+                Environmental Monitoring
               </span>
               
-              {/* TÍTULO: Un poco más grande */}
-              <h2 className="text-2xl md:text-4xl font-bold text-white mb-5 tracking-tight leading-tight">
+              {/* TÍTULO: Alineado a la derecha estrictamente */}
+              <h2 className="text-left text-2xl md:text-4xl font-bold text-white mb-5 tracking-tight leading-tight w-full">
                 Zero blind spots. <br className="hidden md:block" /> Absolute facility control.
               </h2>
               
-              {/* BAJADA: Un poco más grande y ligeramente más opaca (white/90) */}
-              <p className="text-sm md:text-base text-white/90 font-medium leading-relaxed">
+              {/* BAJADA: Alineado a la derecha estrictamente */}
+              <p className="text-left text-sm md:text-base text-white/90 font-medium leading-relaxed w-full">
                 Bypass traditional enrichment. Elevia detects active pathogens directly from any surface in record time, transforming your environmental monitoring from reactive to predictive.
               </p>
               
