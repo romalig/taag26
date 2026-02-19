@@ -139,7 +139,7 @@ export default function EleviaFood() {
                 
                 {/* TEXTO DESCRIPTIVO (Interlineado ajustado con leading-snug) */}
                 <p className="text-left text-sm md:text-base text-black/80 font-medium leading-snug w-full">
-                  Elevia Food dramatically reduces your hold times. By detecting pathogens directly from the matrix in record time, you can release products with confidence days earlier than traditional methods.
+                  Elevia dramatically reduces your hold times. By detecting pathogens directly from the matrix in record time, you can release products with confidence days earlier than traditional methods.
                 </p>
                 
               </div>
