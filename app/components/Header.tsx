@@ -26,52 +26,48 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isGlobeOpen, setIsGlobeOpen] = useState(false);
   
-  // NUEVO: Estado que cambiará dinámicamente al hacer scroll
+  // Estado dinámico para el color
   const [dynamicTheme, setDynamicTheme] = useState(theme);
 
-  // 1. Detectar Scroll y resetear al llegar arriba
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 50;
       setIsScrolled(scrolled);
       
-      // Si el usuario vuelve a la punta de arriba, reseteamos al tema original
+      // Si volvemos arriba de todo, vuelve siempre al tema original
       if (!scrolled) {
+        setDynamicTheme(theme);
+        return;
+      }
+
+      // 1. Buscamos TODAS las secciones que tengan data-header-theme
+      const sections = Array.from(document.querySelectorAll('[data-header-theme]'));
+      
+      // 2. Buscamos cuál de esas secciones está chocando con el Header
+      const activeSection = sections.find((section) => {
+        const rect = section.getBoundingClientRect();
+        return rect.top <= 100 && rect.bottom >= 100;
+      });
+
+      // 3. Si encontramos la sección, le copiamos el color
+      if (activeSection) {
+        const newTheme = activeSection.getAttribute('data-header-theme');
+        if (newTheme === 'dark' || newTheme === 'light' || newTheme === 'hybrid') {
+          setDynamicTheme(newTheme);
+        }
+      } else {
+        // --- LA SOLUCIÓN ---
+        // Si estamos sobre una sección que NO tiene etiqueta (ej: el Hero), 
+        // reseteamos el Header al tema original con el que cargó la página.
         setDynamicTheme(theme);
       }
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, [theme]);
-
-  // 2. NUEVO: El "Radar" que detecta en qué sección estamos
-  useEffect(() => {
-    // Buscamos todas las secciones que tengan la etiqueta data-header-theme
-    const sections = document.querySelectorAll('[data-header-theme]');
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          // Si la sección toca el área del Header (arriba)
-          if (entry.isIntersecting) {
-            const newTheme = entry.target.getAttribute('data-header-theme');
-            if (newTheme) {
-              setDynamicTheme(newTheme as "light" | "dark" | "hybrid");
-            }
-          }
-        });
-      },
-      {
-        // Esto define una "línea de escaneo" invisible justo donde está el Header (a 80px del tope)
-        rootMargin: "-80px 0px -80% 0px",
-      }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     if (isMenuOpen || isGlobeOpen) {
@@ -81,15 +77,13 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
     }
   }, [isMenuOpen, isGlobeOpen]);
 
-  // --- LÓGICA DE ESTADOS USANDO EL TEMA DINÁMICO ---
-
+  // --- ESTILOS VISUALES ---
   const headerBg = isScrolled 
     ? (dynamicTheme === "dark" 
-        ? "bg-black/70 backdrop-blur-lg border-b border-white/10" // Modo Apple Oscuro
-        : "bg-white/100 backdrop-blur-lg border-b border-black/10") // Modo Apple Claro
+        ? "bg-black/70 backdrop-blur-lg border-b border-white/10" 
+        : "bg-white/100 backdrop-blur-md border-b border-black/5") 
     : "bg-transparent border-transparent";
 
-  // Determinar si los textos deben ser blancos
   const useWhiteForeground = !isMenuOpen && !isGlobeOpen && (dynamicTheme === "dark" || (dynamicTheme === "hybrid" && !isScrolled));
 
   const textColor = useWhiteForeground ? "text-white" : "text-[#111111]";

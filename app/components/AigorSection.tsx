@@ -27,7 +27,7 @@ export default function AigorSection() {
   }, []);
 
   return (
-    <section 
+    <section data-header-theme="dark" 
       ref={sectionRef}
       className="relative bg-[#050505] py-24 lg:py-40 overflow-hidden text-white border-t border-white/5"
     >
