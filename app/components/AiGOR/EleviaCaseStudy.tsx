@@ -5,11 +5,11 @@ export default function EleviaCaseStudy() {
     // Ajustamos el padding superior para que respire un poco pero siga viéndose como la misma sección
     <section className="w-full bg-[#121212] pt-8 md:pt-16 pb-32 flex flex-col items-center relative overflow-hidden">
       
-      {/* Contenedor principal alineado EXACTAMENTE igual que el "Learn more" (px-4 md:px-8) */}
-      <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8">
+      {/* Contenedor principal alineado EXACTAMENTE a 1200px y px-4 para igualar Elevia.tsx */}
+      <div className="w-full max-w-[1200px] mx-auto px-4">
         
-        {/* Contenido alineado a la izquierda sin márgenes extra para lograr la línea vertical perfecta */}
-        <div className="max-w-[1000px] w-full flex flex-col items-start relative z-10">
+        {/* Contenido alineado a la izquierda. Se eliminó el límite de 1000px para que la grilla ocupe los 1200px */}
+        <div className="w-full flex flex-col items-start relative z-10">
           
           {/* TÍTULO REVOLUCIONARIO CON GLOW PEGADO AL TEXTO */}
           <div className="relative mb-14 w-full max-w-4xl">
@@ -36,7 +36,7 @@ export default function EleviaCaseStudy() {
             Elevia carries <strong className="text-white">zero risk of cross-contamination</strong> in your facility. Thanks to our zero (or ultra-short) enrichment technology and proprietary protocols that completely inactivate the sample before processing, you can confidently and securely bring your environmental monitoring in-house. You no longer need to wait 48-72 hours for third-party results—gain absolute control of your facility today.
           </p>
 
-          {/* CUADRÍCULA DE 6 VENTAJAS */}
+          {/* CUADRÍCULA DE 6 VENTAJAS (Ahora se expandirá libremente a lo ancho de los 1200px) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-16 w-full">
             
             {/* Dato 1: Tiempo de resultados */}

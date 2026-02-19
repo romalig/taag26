@@ -67,7 +67,8 @@ export default function EleviaROICalculator() {
         input[type=range]::-moz-range-thumb { background: #FFFFFF; border: none; height: 24px; width: 24px; border-radius: 50%; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
       `}} />
 
-      <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 relative z-10">
+      {/* CONTENEDOR PRINCIPAL: Alineado a max-w-[1200px] y estrictamente px-4 */}
+      <div className="w-full max-w-[1200px] mx-auto px-4 relative z-10">
         
         {/* ENCABEZADO MINIMALISTA */}
         <div className="max-w-3xl mb-12 md:mb-16">

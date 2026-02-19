@@ -197,14 +197,15 @@ export default function EleviaEnvironmental() {
       </div>
 
       {/* ========================================================= */}
-      {/* 2. CARRUSEL DE VENTAJAS (Sin corte a la derecha)          */}
+      {/* 2. CARRUSEL DE VENTAJAS (Alineado a max-w-[1200px])       */}
       {/* ========================================================= */}
       <div className="w-full relative">
         
+        {/* Aquí la magia: cambié 700px a 600px para que calce exacto con la cuadrícula de Elevia.tsx */}
         <div 
           ref={carouselRef}
           onScroll={checkScroll}
-          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory hide-scroll pb-6 pl-[max(1rem,calc(50vw_-_700px_+_1rem))] md:pl-[max(2rem,calc(50vw_-_700px_+_2rem))] scroll-pl-[max(1rem,calc(50vw_-_700px_+_1rem))] md:scroll-pl-[max(2rem,calc(50vw_-_700px_+_2rem))]"
+          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory hide-scroll pb-6 pl-[max(1rem,calc(50vw_-_600px_+_1rem))] scroll-pl-[max(1rem,calc(50vw_-_600px_+_1rem))]"
         >
           {ENVIRONMENTAL_ADVANTAGES.map((adv) => (
             <div key={adv.id} className="snap-start shrink-0 flex flex-col w-[220px] md:w-[260px]">
@@ -223,10 +224,11 @@ export default function EleviaEnvironmental() {
             </div>
           ))}
           
-          <div className="shrink-0 w-[max(1rem,calc(50vw_-_700px_+_1rem))] md:w-[max(2rem,calc(50vw_-_700px_+_2rem))]"></div>
+          <div className="shrink-0 w-[max(1rem,calc(50vw_-_600px_+_1rem))]"></div>
         </div>
         
-        <div className="flex items-center justify-between mt-4 px-4 md:px-8 max-w-[1400px] mx-auto w-full">
+        {/* Controles y Learn More limitados a max-w-[1200px] y px-4 */}
+        <div className="flex items-center justify-between mt-4 px-4 max-w-[1200px] mx-auto w-full">
           
           <a href="#" className="inline-flex items-center gap-1.5 text-sm md:text-base text-white hover:text-white/70 transition-colors font-medium group">
             Learn more
