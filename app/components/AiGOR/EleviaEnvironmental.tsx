@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Zap, Activity, ShieldCheck, TrendingDown } from "lucide-react";
 
@@ -126,6 +126,23 @@ const ENVIRONMENTAL_ADVANTAGES = [
 
 export default function EleviaEnvironmental() {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (carouselRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      // Damos un pequeño margen de 5px para evitar problemas de redondeo de pixeles en móviles
+      setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 5);
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener("resize", checkScroll);
+    return () => window.removeEventListener("resize", checkScroll);
+  }, []);
 
   const scroll = (direction: 'left' | 'right') => {
     if (carouselRef.current) {
@@ -134,6 +151,7 @@ export default function EleviaEnvironmental() {
         left: direction === 'left' ? -scrollAmount : scrollAmount, 
         behavior: 'smooth' 
       });
+      // El evento onScroll actualizará el estado automáticamente
     }
   };
 
@@ -181,12 +199,11 @@ export default function EleviaEnvironmental() {
       {/* ========================================================= */}
       {/* 2. CARRUSEL DE VENTAJAS (Sin corte a la derecha)          */}
       {/* ========================================================= */}
-      {/* El carrusel ya no está dentro del contenedor max-w-[1400px], lo que permite que fluya hasta el borde derecho infinito */}
       <div className="w-full relative">
         
-        {/* Usamos max() de CSS y variables de Tailwind para mantener la alineación izquierda perfecta con la tarjeta de arriba */}
         <div 
           ref={carouselRef}
+          onScroll={checkScroll}
           className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory hide-scroll pb-6 pl-[max(1rem,calc(50vw_-_700px_+_1rem))] md:pl-[max(2rem,calc(50vw_-_700px_+_2rem))] scroll-pl-[max(1rem,calc(50vw_-_700px_+_1rem))] md:scroll-pl-[max(2rem,calc(50vw_-_700px_+_2rem))]"
         >
           {ENVIRONMENTAL_ADVANTAGES.map((adv) => (
@@ -206,11 +223,9 @@ export default function EleviaEnvironmental() {
             </div>
           ))}
           
-          {/* Espaciador final que garantiza que la última tarjeta también pueda detenerse alineada con el margen derecho imaginario */}
           <div className="shrink-0 w-[max(1rem,calc(50vw_-_700px_+_1rem))] md:w-[max(2rem,calc(50vw_-_700px_+_2rem))]"></div>
         </div>
         
-        {/* Controles y Learn More (Estos SÍ van limitados a 1400px para quedar debajo de la tarjeta gigante) */}
         <div className="flex items-center justify-between mt-4 px-4 md:px-8 max-w-[1400px] mx-auto w-full">
           
           <a href="#" className="inline-flex items-center gap-1.5 text-sm md:text-base text-white hover:text-white/70 transition-colors font-medium group">
@@ -223,14 +238,24 @@ export default function EleviaEnvironmental() {
           <div className="flex gap-3">
             <button 
               onClick={() => scroll('left')}
-              className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors backdrop-blur-md"
+              disabled={!canScrollLeft}
+              className={`w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all backdrop-blur-md ${
+                canScrollLeft 
+                  ? "bg-white/5 hover:bg-white/10 text-white/70 hover:text-white cursor-pointer" 
+                  : "bg-white/5 text-white/30 opacity-50 cursor-not-allowed"
+              }`}
               aria-label="Previous slide"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </button>
             <button 
               onClick={() => scroll('right')}
-              className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors backdrop-blur-md"
+              disabled={!canScrollRight}
+              className={`w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center transition-all backdrop-blur-md ${
+                canScrollRight 
+                  ? "bg-white/5 hover:bg-white/10 text-white/70 hover:text-white cursor-pointer" 
+                  : "bg-white/5 text-white/30 opacity-50 cursor-not-allowed"
+              }`}
               aria-label="Next slide"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
