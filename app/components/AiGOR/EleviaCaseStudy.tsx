@@ -119,6 +119,22 @@ export default function EleviaCaseStudy() {
 
           </div>
 
+          {/* ENLACES CTA: Learn more / Contact us (Movidos debajo de las ventajas) */}
+          <div className="flex items-center gap-8 mt-20">
+            <a href="#" className="inline-flex items-center gap-1.5 text-base md:text-lg text-white hover:text-white/70 transition-colors font-medium group">
+              Learn more
+              <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+            <a href="#" className="inline-flex items-center gap-1.5 text-base md:text-lg text-white hover:text-white/70 transition-colors font-medium group">
+              Contact us
+              <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </div>
+
         </div>
       </div>
     </section>

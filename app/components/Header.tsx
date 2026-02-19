@@ -178,9 +178,6 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" }
                         <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity z-20" />
                     </div>
                     <div className="pt-1">
-                        <div className="flex items-center gap-2 mb-2">
-                             <span className="bg-[#E6F4EA] text-[#1E8E3E] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border border-[#1E8E3E]/20">New 2.0</span>
-                        </div>
                         <h4 className="text-lg font-bold text-[#111111] leading-tight mb-1">AiGOR™</h4>
                         <p className="text-xs text-gray-500 line-clamp-3 leading-relaxed">Advanced RNA technology for ultra-fast results</p>
                     </div>
