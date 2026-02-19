@@ -21,21 +21,56 @@ const NAV_LINKS = [
 const HUBS_LIST = ["USA", "Belgium", "Mexico", "Chile"];
 const PARTNERS_LIST = ["Peru", "Colombia", "Argentina", "Brazil", "Spain"];
 
-// Prop 'theme': 
-// - 'light': Blanco siempre.
-// - 'dark': Negro translúcido siempre.
-// - 'hybrid': Arranca oscuro/transparente, cambia a claro al hacer scroll.
 export default function Header({ theme = "light" }: { theme?: "light" | "dark" | "hybrid" }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isGlobeOpen, setIsGlobeOpen] = useState(false);
+  
+  // NUEVO: Estado que cambiará dinámicamente al hacer scroll
+  const [dynamicTheme, setDynamicTheme] = useState(theme);
 
+  // 1. Detectar Scroll y resetear al llegar arriba
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const scrolled = window.scrollY > 50;
+      setIsScrolled(scrolled);
+      
+      // Si el usuario vuelve a la punta de arriba, reseteamos al tema original
+      if (!scrolled) {
+        setDynamicTheme(theme);
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, [theme]);
+
+  // 2. NUEVO: El "Radar" que detecta en qué sección estamos
+  useEffect(() => {
+    // Buscamos todas las secciones que tengan la etiqueta data-header-theme
+    const sections = document.querySelectorAll('[data-header-theme]');
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Si la sección toca el área del Header (arriba)
+          if (entry.isIntersecting) {
+            const newTheme = entry.target.getAttribute('data-header-theme');
+            if (newTheme) {
+              setDynamicTheme(newTheme as "light" | "dark" | "hybrid");
+            }
+          }
+        });
+      },
+      {
+        // Esto define una "línea de escaneo" invisible justo donde está el Header (a 80px del tope)
+        rootMargin: "-80px 0px -80% 0px",
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -46,25 +81,18 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
     }
   }, [isMenuOpen, isGlobeOpen]);
 
-  // --- LÓGICA DE ESTADOS (LIGHT / DARK / HYBRID) ---
+  // --- LÓGICA DE ESTADOS USANDO EL TEMA DINÁMICO ---
 
-  // 1. Fondo del Header
   const headerBg = isScrolled 
-    ? (theme === "dark" 
-        ? "bg-black/70 backdrop-blur-lg border-b border-white/10" // Dark Scrolled
-        : "bg-white/100 backdrop-blur-md shadow-sm border-b border-black/0") // Light & Hybrid Scrolled
-    : "bg-transparent border-transparent"; // Top (Para todos)
+    ? (dynamicTheme === "dark" 
+        ? "bg-black/70 backdrop-blur-lg border-b border-white/10" // Modo Apple Oscuro
+        : "bg-white/100 backdrop-blur-lg border-b border-black/10") // Modo Apple Claro
+    : "bg-transparent border-transparent";
 
-  // Condición maestra para saber si los textos y logos deben ser BLANCOS
-  // - Es blanco si el menú NO está abierto Y:
-  //   a) El tema es "dark"
-  //   b) El tema es "hybrid" Y NO hemos hecho scroll
-  const useWhiteForeground = !isMenuOpen && !isGlobeOpen && (theme === "dark" || (theme === "hybrid" && !isScrolled));
+  // Determinar si los textos deben ser blancos
+  const useWhiteForeground = !isMenuOpen && !isGlobeOpen && (dynamicTheme === "dark" || (dynamicTheme === "hybrid" && !isScrolled));
 
-  // 2. Color del Texto
   const textColor = useWhiteForeground ? "text-white" : "text-[#111111]";
-
-  // 3. Estilo del Logo
   const logoClasses = useWhiteForeground ? "brightness-0 invert" : "";
 
   return (
@@ -84,7 +112,6 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
             </div>
           </Link>
 
-          {/* Menú de navegación */}
           <div className={`flex items-center gap-4 md:gap-6 relative z-[102] transition-colors duration-500 ${textColor}`}>
             <Link
               href="/login"
@@ -154,7 +181,6 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
                 </div>
              </nav>
 
-             {/* FEATURED SECTION (AiGOR) */}
              <div className="bg-[#F5F5F7] p-6 mt-4 pb-12">
                 <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-4">Featured Technology</p>
                 
