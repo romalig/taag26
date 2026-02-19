@@ -16,7 +16,7 @@ export default function EleviaCaseStudy() {
             
             {/* --- INICIO DEL NUEVO GLOW --- */}
             {/* Un solo contenedor muy bajito de altura para que no sobresalga mucho hacia arriba/abajo */}
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[90%] md:w-[75%] h-[90px] md:h-[120px] -z-10 pointer-events-none">
+            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[75%] md:w-[75%] h-[90px] md:h-[120px] -z-10 pointer-events-none">
                 {/* Gradiente lineal único que asegura una transición de color 100% sutil e integrada */}
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-purple-600 to-[#FF270A] blur-[20px] md:blur-[30px] opacity-90 mix-blend-screen rounded-full"></div>
             </div>

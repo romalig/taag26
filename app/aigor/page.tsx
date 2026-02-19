@@ -3,6 +3,7 @@ import Hero from "../components/AiGOR/Aigor_hero";
 import Elevia from "../components/AiGOR/Elevia";
 import EleviaEnvironmental from "../components/AiGOR/EleviaEnvironmental";
 import EleviaCaseStudy from "../components/AiGOR/EleviaCaseStudy";
+import EleviaFood from "../components/AiGOR/EleviaFood";
 import { ModalProvider } from "../components/industrial/ModalProvider"; 
 import SolutionModal from "../components/industrial/SolutionModal";
 
@@ -15,6 +16,7 @@ export default function TxAPage() {
       <Elevia />
       <EleviaEnvironmental />
       <EleviaCaseStudy />
+      <EleviaFood />
       <SolutionModal /> 
     </main>
     </ModalProvider>

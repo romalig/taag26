@@ -1,0 +1,213 @@
+"use client";
+
+import { useRef } from "react";
+import Image from "next/image";
+import { Clock, ShieldAlert, FlaskConical, Target, CheckCircle2 } from "lucide-react";
+
+// --- DATOS DEL CARRUSEL DE VENTAJAS (FOOD) ---
+const FOOD_ADVANTAGES = [
+  {
+    id: 1,
+    title: "Ultra-fast release.",
+    text: "Get actionable results in just 6 to 8 hours for most food matrices, allowing you to release products same-day.",
+    visual: (
+      <div className="absolute inset-0 bg-[#0a0a0a] flex flex-col items-center justify-center overflow-hidden px-6 border border-white/5">
+          <div className="w-full bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-sm relative z-10">
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden mb-3">
+                   <div className="h-full bg-green-500 rounded-full w-full shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
+              </div>
+              <div className="flex justify-between items-center">
+                   <Clock className="w-4 h-4 text-green-400" />
+                   <div className="flex items-baseline gap-1">
+                       <span className="text-xs text-white font-mono font-bold">06:00</span>
+                       <span className="text-[9px] text-green-300 font-bold tracking-wider">HRS</span>
+                   </div>
+              </div>
+          </div>
+      </div>
+    )
+  },
+  {
+    id: 2,
+    title: "Live cell focus.",
+    text: "Elevia's RNA technology exclusively targets living pathogens, eliminating false positives caused by dead cells from cooking or pasteurization.",
+    visual: (
+      <div className="absolute inset-0 bg-[#0a0a0a] flex items-center justify-center overflow-hidden border border-white/5">
+          <div className="relative w-24 h-24 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border border-cyan-500/30 animate-ping opacity-40"></div>
+              <Target className="w-10 h-10 text-cyan-400 relative z-10" strokeWidth={1.5} />
+          </div>
+      </div>
+    )
+  },
+  {
+    id: 3,
+    title: "Complex matrices.",
+    text: "Validated for highly inhibitory food types, including spices, cocoa, and high-fat products, without signal interference.",
+    visual: (
+      <div className="absolute inset-0 bg-[#0a0a0a] flex items-center justify-center overflow-hidden border border-white/5">
+          <FlaskConical className="w-12 h-12 text-amber-500/80 stroke-[1.5]" />
+          <div className="absolute bottom-0 w-full h-1/3 bg-amber-500/10 blur-xl"></div>
+      </div>
+    )
+  },
+  {
+    id: 4,
+    title: "Extended shelf life.",
+    text: "By cutting testing time by days, you add valuable days to your product's commercial shelf life, increasing profitability.",
+    visual: (
+      <div className="absolute inset-0 bg-[#0a0a0a] flex flex-col items-center justify-center overflow-hidden border border-white/5">
+         <span className="text-5xl font-black text-white mb-2">+3</span>
+         <span className="text-xs tracking-widest text-white/50 uppercase">Days</span>
+      </div>
+    )
+  },
+  {
+    id: 5,
+    title: "Brand protection.",
+    text: "Ensure absolute confidence in every batch before it leaves the facility, protecting your consumers and your reputation.",
+    visual: (
+      <div className="absolute inset-0 bg-[#0a0a0a] flex items-center justify-center overflow-hidden border border-white/5">
+          <ShieldAlert className="w-12 h-12 text-blue-500/80 stroke-[1.5]" />
+          <CheckCircle2 className="absolute top-1/2 left-1/2 translate-x-1 -translate-y-4 w-5 h-5 text-white bg-[#0a0a0a] rounded-full" />
+      </div>
+    )
+  }
+];
+
+export default function EleviaFood() {
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (carouselRef.current) {
+      const scrollAmount = 280; 
+      carouselRef.current.scrollBy({ 
+        left: direction === 'left' ? -scrollAmount : scrollAmount, 
+        behavior: 'smooth' 
+      });
+    }
+  };
+
+  return (
+    // SECCIÓN CON FONDO NEGRO PURO (bg-black)
+    <section className="relative w-full bg-black py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden border-t border-white/10">      
+      <style dangerouslySetInnerHTML={{__html: `
+        .hide-scroll::-webkit-scrollbar {
+          display: none !important;
+        }
+        .hide-scroll {
+          -ms-overflow-style: none !important;
+          scrollbar-width: none !important;
+        }
+      `}} />
+
+      {/* ========================================================= */}
+      {/* 1. TARJETA PRINCIPAL (Hero Food)                          */}
+      {/* ========================================================= */}
+      <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mb-20 md:mb-32">
+        <div className="relative w-full min-h-[700px] md:min-h-[900px] rounded-[2rem] overflow-hidden flex flex-col bg-neutral-900 border border-white/10">
+          
+          {/* Imagen Limpia sin capas blancas */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <Image 
+              src="/Elevia_food4.png" 
+              alt="Elevia Food Testing" 
+              fill 
+              className="object-cover object-center" 
+              priority 
+            />
+          </div>
+
+          {/* CONTENIDO TEXTUAL: Arriba y alineado para que termine en el centro de la imagen */}
+          <div className="absolute inset-0 z-20 w-full flex justify-start pt-8 md:pt-12">
+            
+            {/* Este contenedor ocupa exactamente la mitad izquierda de la pantalla.
+                Al usar "justify-end pr-8", el bloque de texto se empuja hacia la derecha 
+                terminando casi justo en la línea central imaginaria de la imagen */}
+            <div className="w-[90%] md:w-[55%] lg:w-[61%] flex justify-end pr-4 md:pr-4 lg:pr-4">              
+              {/* Bloque de texto con el mismo tamaño máximo que EleviaEnvironmental (max-w-[380px]) */}
+              <div className="w-full max-w-[380px] flex flex-col items-start">
+                
+                <span className="text-left text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block w-full">
+                  Finished Product Testing
+                </span>
+                
+                {/* TÍTULO EN COLOR NEGRO (Mismo tamaño que EleviaEnvironmental) */}
+                <h2 className="text-left text-2xl md:text-4xl font-bold text-black mb-5 tracking-tight leading-tight w-full">
+                  Release faster. <br className="hidden md:block" /> Hold less.
+                </h2>
+                
+                {/* TEXTO DESCRIPTIVO (Interlineado ajustado con leading-snug) */}
+                <p className="text-left text-sm md:text-base text-black/80 font-medium leading-snug w-full">
+                  Elevia Food dramatically reduces your hold times. By detecting pathogens directly from the matrix in record time, you can release products with confidence days earlier than traditional methods.
+                </p>
+                
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================= */}
+      {/* 2. CARRUSEL DE VENTAJAS (FOOD)                            */}
+      {/* ========================================================= */}
+      <div className="w-full relative">
+        
+        <div 
+          ref={carouselRef}
+          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory hide-scroll pb-6 pl-[max(1rem,calc(50vw_-_700px_+_1rem))] md:pl-[max(2rem,calc(50vw_-_700px_+_2rem))] scroll-pl-[max(1rem,calc(50vw_-_700px_+_1rem))] md:scroll-pl-[max(2rem,calc(50vw_-_700px_+_2rem))]"
+        >
+          {FOOD_ADVANTAGES.map((adv) => (
+            <div key={adv.id} className="snap-start shrink-0 flex flex-col w-[220px] md:w-[260px]">
+              
+              <div className="relative w-full aspect-[4/5] rounded-[1.5rem] bg-[#0a0a0a] overflow-hidden mb-5 border border-white/5">
+                {adv.visual}
+              </div>
+              
+              <div>
+                <p className="text-[13px] md:text-[15px] text-white/70 leading-relaxed font-medium">
+                  <strong className="text-white font-semibold mr-1">{adv.title}</strong>
+                  {adv.text}
+                </p>
+              </div>
+
+            </div>
+          ))}
+          
+          <div className="shrink-0 w-[max(1rem,calc(50vw_-_700px_+_1rem))] md:w-[max(2rem,calc(50vw_-_700px_+_2rem))]"></div>
+        </div>
+        
+        <div className="flex items-center justify-between mt-4 px-4 md:px-8 max-w-[1400px] mx-auto w-full">
+          
+          <a href="#" className="inline-flex items-center gap-1.5 text-sm md:text-base text-white hover:text-white/70 transition-colors font-medium group">
+            Learn more
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </a>
+
+          <div className="flex gap-3">
+            <button 
+              onClick={() => scroll('left')}
+              className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors backdrop-blur-md border border-white/10"
+              aria-label="Previous slide"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button 
+              onClick={() => scroll('right')}
+              className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-colors backdrop-blur-md border border-white/10"
+              aria-label="Next slide"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+      
+    </section>
+  );
+}
