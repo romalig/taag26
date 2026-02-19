@@ -13,7 +13,7 @@ export default function TxAPage() {
   return (
     <ModalProvider>
     <main className="bg-white"> 
-    <Header theme="dark" />
+      <Header/>
       <Hero />
       <Elevia />
       <EleviaEnvironmental />

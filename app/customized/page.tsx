@@ -13,7 +13,7 @@ export default function CustomizedPage() {
   return (
     <main className="bg-white">
       {/* Header en modo Light (Logo Rojo, Texto Negro) */}
-      <Header theme="dark" />
+      <Header theme="hybrid" />
       
       <CustomizedMolecularHero />
       <MilaSection />

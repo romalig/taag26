@@ -75,9 +75,6 @@ export default function AigorImpactSection() {
         
         {/* 1. HERO VISUAL (TÍTULO) */}
         <div className="text-center flex flex-col items-center mb-8 md:mb-10 animate-fade-in-up">
-          <p className="text-[10px] md:text-xs font-bold tracking-[0.25em] text-white/60 mb-3 uppercase">
-            powered by AiGOR
-          </p>
 
           <h2 className="text-3xl md:text-6xl font-bold tracking-tighter leading-[1.1] md:leading-[0.95] drop-shadow-2xl">
             The Next Generation <br />

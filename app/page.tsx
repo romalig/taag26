@@ -1,6 +1,6 @@
 // app/page.tsx
+import Header from "./components/Header";
 import Hero from "./components/Hero";
-import ProofStrip from "./components/ProofStrip";
 import AigorSection from "./components/AigorSection";
 import SystemModules from "./components/SystemModules";
 import SolutionFinder from "./components/SolutionFinder";
@@ -10,7 +10,8 @@ import Footer from "./components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="bg-white">
+      <Header theme="hybrid" />
       {/* 1. Hero Section (Imagen científica + CTA) */}
       
       <Hero />

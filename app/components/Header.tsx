@@ -21,15 +21,17 @@ const NAV_LINKS = [
 const HUBS_LIST = ["USA", "Belgium", "Mexico", "Chile"];
 const PARTNERS_LIST = ["Peru", "Colombia", "Argentina", "Brazil", "Spain"];
 
-// Prop 'theme': 'dark' para fondos oscuros (letras blancas), 'light' para fondos claros (letras negras).
-export default function Header({ theme = "light" }: { theme?: "light" | "dark" }) {
+// Prop 'theme': 
+// - 'light': Blanco siempre.
+// - 'dark': Negro translúcido siempre.
+// - 'hybrid': Arranca oscuro/transparente, cambia a claro al hacer scroll.
+export default function Header({ theme = "light" }: { theme?: "light" | "dark" | "hybrid" }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isGlobeOpen, setIsGlobeOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Cambia el estado al hacer un poco de scroll (simulando "salir del hero")
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
@@ -44,32 +46,26 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" }
     }
   }, [isMenuOpen, isGlobeOpen]);
 
-  // --- LÓGICA DE ESTADOS ---
+  // --- LÓGICA DE ESTADOS (LIGHT / DARK / HYBRID) ---
 
-  // 1. ¿Estoy en modo "Hero Oscuro" actualmente?
-  // Solo es verdad si el theme es 'dark' Y NO hemos scrolleado aún.
-  const isDarkHeroState = theme === "dark" && !isScrolled;
-
-  // 2. Fondo del Header
-  // - Scrolled: Blanco translúcido con blur (lo que pediste).
-  // - Top: Transparente absoluto.
+  // 1. Fondo del Header
   const headerBg = isScrolled 
-    ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-black/5" 
-    : "bg-transparent border-transparent";
+    ? (theme === "dark" 
+        ? "bg-black/70 backdrop-blur-lg border-b border-white/10" // Dark Scrolled
+        : "bg-white/100 backdrop-blur-md shadow-sm border-b border-black/0") // Light & Hybrid Scrolled
+    : "bg-transparent border-transparent"; // Top (Para todos)
 
-  // 3. Color del Texto
-  // - Hero Oscuro (Top): Blanco.
-  // - Hero Blanco (Top) O Scrolled: Negro.
-  const textColor = (isDarkHeroState && !isMenuOpen && !isGlobeOpen) 
-    ? "text-white" 
-    : "text-[#111111]";
+  // Condición maestra para saber si los textos y logos deben ser BLANCOS
+  // - Es blanco si el menú NO está abierto Y:
+  //   a) El tema es "dark"
+  //   b) El tema es "hybrid" Y NO hemos hecho scroll
+  const useWhiteForeground = !isMenuOpen && !isGlobeOpen && (theme === "dark" || (theme === "hybrid" && !isScrolled));
 
-  // 4. Estilo del Logo
-  // - Hero Oscuro (Top): Invertimos a BLANCO (brightness-0 invert).
-  // - Hero Blanco (Top) O Scrolled: Normal (Rojo original).
-  const logoClasses = (isDarkHeroState && !isMenuOpen && !isGlobeOpen)
-    ? "brightness-0 invert" 
-    : "";
+  // 2. Color del Texto
+  const textColor = useWhiteForeground ? "text-white" : "text-[#111111]";
+
+  // 3. Estilo del Logo
+  const logoClasses = useWhiteForeground ? "brightness-0 invert" : "";
 
   return (
     <div className={sora.className}>
@@ -82,7 +78,6 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" }
                  src="/logo-red1.png" 
                  alt="TAAG Logo"
                  fill
-                 // Aquí aplicamos la lógica del logo: Blanco solo si estamos en top + dark hero
                  className={`object-contain object-left transition-all duration-500 ${logoClasses}`}
                  priority
                />
@@ -117,7 +112,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" }
         </div>
       </header>
 
-      {/* --- DRAWER MENU LATERAL (Sin cambios de lógica, siempre fondo blanco/limpio) --- */}
+      {/* --- DRAWER MENU LATERAL --- */}
       <div 
         className={`fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm transition-opacity duration-500 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
         onClick={() => setIsMenuOpen(false)}
@@ -163,7 +158,6 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" }
              <div className="bg-[#F5F5F7] p-6 mt-4 pb-12">
                 <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-4">Featured Technology</p>
                 
-                {/* Cambiamos el div por un Link hacia /aigor y cerramos el menú al hacer clic */}
                 <Link 
                     href="/aigor" 
                     onClick={() => setIsMenuOpen(false)}
