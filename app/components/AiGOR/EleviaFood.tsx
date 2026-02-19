@@ -124,7 +124,7 @@ export default function EleviaFood() {
             {/* Este contenedor ocupa exactamente la mitad izquierda de la pantalla.
                 Al usar "justify-end pr-8", el bloque de texto se empuja hacia la derecha 
                 terminando casi justo en la línea central imaginaria de la imagen */}
-            <div className="w-[90%] md:w-[55%] lg:w-[61%] flex justify-end pr-4 md:pr-4 lg:pr-4">              
+            <div className="w-[90%] md:w-[60%] lg:w-[61%] flex justify-end pr-4 md:pr-4 lg:pr-4">              
               {/* Bloque de texto con el mismo tamaño máximo que EleviaEnvironmental (max-w-[380px]) */}
               <div className="w-full max-w-[380px] flex flex-col items-start">
                 
