@@ -11,13 +11,14 @@ export default function EleviaCaseStudy() {
         {/* Contenido alineado a la izquierda sin márgenes extra para lograr la línea vertical perfecta */}
         <div className="max-w-[1000px] w-full flex flex-col items-start relative z-10">
           
-          {/* TÍTULO REVOLUCIONARIO CON NUEVO GLOW TIPO "LENS FLARE" HORIZONTAL */}
-          <div className="relative mb-8 w-full max-w-4xl">
+          {/* TÍTULO REVOLUCIONARIO CON GLOW PEGADO AL TEXTO */}
+          <div className="relative mb-14 w-full max-w-4xl">
             
             {/* --- INICIO DEL NUEVO GLOW --- */}
-            {/* Glow tecnológico basado en la imagen adjunta: gradiente Azul -> Fucsia -> Naranja */}
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[100%] h-[120%] -z-10 pointer-events-none scale-x-110">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-fuchsia-500 to-orange-500 blur-[60px] md:blur-[80px] opacity-70 mix-blend-screen transform-gpu"></div>
+            {/* Un solo contenedor muy bajito de altura para que no sobresalga mucho hacia arriba/abajo */}
+            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[90%] md:w-[75%] h-[90px] md:h-[120px] -z-10 pointer-events-none">
+                {/* Gradiente lineal único que asegura una transición de color 100% sutil e integrada */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-purple-600 to-[#FF270A] blur-[20px] md:blur-[30px] opacity-90 mix-blend-screen rounded-full"></div>
             </div>
             {/* --- FIN DEL NUEVO GLOW --- */}
             
@@ -29,13 +30,10 @@ export default function EleviaCaseStudy() {
           </div>
           
           {/* MENSAJE CLAVE: Cero Riesgo */}
-          <p className="text-xl md:text-2xl text-white max-w-3xl leading-relaxed mb-4 font-semibold">
-            For the first time, in-house EMP analysis is completely safe.
-          </p>
           
           {/* Párrafo descriptivo con el dolor (48-72hrs) y la solución */}
           <p className="text-base md:text-lg text-[#a1a1a6] max-w-4xl leading-relaxed mb-20 font-medium">
-            Elevia carries <strong className="text-white">zero risk of cross-contamination</strong> in your facility. Thanks to our zero (or ultra-short) enrichment technology and proprietary protocols that completely inactivate the sample before processing, you can confidently and securely bring your environmental monitoring in-house. <strong className="text-white">You no longer need to wait 48-72 hours for third-party results—gain absolute control of your facility today.</strong>
+            Elevia carries <strong className="text-white">zero risk of cross-contamination</strong> in your facility. Thanks to our zero (or ultra-short) enrichment technology and proprietary protocols that completely inactivate the sample before processing, you can confidently and securely bring your environmental monitoring in-house. You no longer need to wait 48-72 hours for third-party results—gain absolute control of your facility today.
           </p>
 
           {/* CUADRÍCULA DE 6 VENTAJAS */}

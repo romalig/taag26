@@ -138,8 +138,7 @@ export default function EleviaEnvironmental() {
   };
 
   return (
-    <section className="relative w-full bg-[#121212] py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden">
-      
+    <section className="relative w-full bg-[#121212] pt-24 pb-8 md:pt-32 md:pb-16 flex flex-col items-center justify-center overflow-hidden">      
       <style dangerouslySetInnerHTML={{__html: `
         .hide-scroll::-webkit-scrollbar {
           display: none !important;
