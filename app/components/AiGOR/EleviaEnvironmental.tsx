@@ -47,26 +47,24 @@ const ENVIRONMENTAL_ADVANTAGES = [
     title: "Universal sampling.",
     text: "Fully validated for both swabs and sponges. Seamlessly adapt Elevia to your existing environmental monitoring protocols.",
     visual: (
-      <div className="absolute inset-0 bg-black flex flex-col items-center justify-center overflow-hidden">
-         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:16px_16px] [mask-image:radial-gradient(circle_at_center,black_10%,transparent_80%)]"></div>
-         <div className="relative z-10 flex flex-col items-center justify-center gap-1">
-             <span className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 uppercase tracking-[0.2em] ml-2 leading-none drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-                 ZERO
-             </span>
-             <span className="text-[10px] md:text-xs text-white/40 italic font-medium my-1">
-                 and
-             </span>
-             <span className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 uppercase tracking-[0.2em] ml-2 leading-none drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-                 XPRESS
-             </span>
-         </div>
+      // Cambiamos justify-end por justify-center
+      <div className="absolute inset-0 bg-black flex flex-col justify-center items-center overflow-hidden">
+           {/* Eliminamos mt-auto. Puedes ajustar el h-[50%] si quieres que la imagen sea más grande o chica */}
+           <div className="relative w-full h-[50%]"> 
+               <Image 
+                 src="/prot2.png" 
+                 alt="Powered by TxA" 
+                 fill 
+                 className="object-contain object-center" 
+               />
+           </div>
       </div>
     )
   },
   {
     id: 4,
     title: "Super simple workflow. ",
-    text: "Compatible with open-platform thermocyclers. Its streamlined protocol allows any analyst to run the kits effortlessly.",
+    text: "Work with common qPCR machines and no need of incubators. Its easy protocol allows any analyst to run the kits effortlessly.",
     visual: (
       <div className="absolute inset-0 bg-black flex items-center justify-center overflow-hidden">
         {/* Abstract PCR plate background */}
