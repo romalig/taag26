@@ -65,6 +65,29 @@ const ENVIRONMENTAL_ADVANTAGES = [
   },
   {
     id: 4,
+    title: "Super simple workflow. ",
+    text: "Compatible with open-platform thermocyclers. Its streamlined protocol allows any analyst to run the kits effortlessly.",
+    visual: (
+      <div className="absolute inset-0 bg-black flex items-center justify-center overflow-hidden">
+        {/* Abstract PCR plate background */}
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.3)_1px,transparent_1px)] bg-[size:14px_14px]"></div>
+        
+        {/* Glassmorphism open platform representation */}
+        <div className="relative z-10 flex items-center justify-center w-24 h-24 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.02)] backdrop-blur-md">
+           <div className="grid grid-cols-3 gap-2 p-1">
+             {[...Array(9)].map((_, i) => (
+               <div key={i} className={`w-3.5 h-3.5 rounded-full ${i === 4 ? 'bg-[#FF270A] shadow-[0_0_15px_rgba(255,39,10,0.9)]' : 'bg-white/20'}`}></div>
+             ))}
+           </div>
+        </div>
+        
+        {/* Ambient glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-[#FF270A]/10 blur-3xl rounded-full z-0"></div>
+      </div>
+    )
+  },
+  {
+    id: 5,
     title: "Operational agility.",
     text: "Keep your lines moving. Same-day corrective actions drastically reduce production downtime and optimize resource allocation.",
     visual: (
@@ -77,7 +100,7 @@ const ENVIRONMENTAL_ADVANTAGES = [
     )
   },
   {
-    id: 5,
+    id: 6,
     title: "Enhanced food safety.",
     text: "Stop threats before they spread. Early detection of contamination hotspots prevents large-scale holds and protects your brand.",
     visual: (
@@ -90,9 +113,9 @@ const ENVIRONMENTAL_ADVANTAGES = [
     )
   },
   {
-    id: 6,
+    id: 7,
     title: "Cost efficiency.",
-    text: "Maximize your operational savings. By eliminating enrichment media and reducing holding times, Elevia lowers your true cost per test.",
+    text: "Maximize your operational savings. Fast results mean reducing holding times and increasing operational efficiency in your plant.",
     visual: (
       <div className="absolute inset-0 bg-black flex items-end justify-center overflow-hidden pb-8 gap-5">
            <div className="w-12 h-48 bg-white/5 rounded-t-xl border-t border-white/10 relative">
@@ -106,7 +129,7 @@ const ENVIRONMENTAL_ADVANTAGES = [
     )
   },
   {
-    id: 7,
+    id: 8,
     title: "Powered by TxA.",
     text: "Map, track, and prevent contamination more efficiently. Seamlessly integrate with our AI-driven software for dynamic environmental sampling.",
     visual: (
@@ -156,7 +179,7 @@ export default function EleviaEnvironmental() {
   };
 
   return (
-    <section className="relative w-full bg-[#121212] pt-24 pb-8 md:pt-32 md:pb-16 flex flex-col items-center justify-center overflow-hidden">      
+    <section data-header-theme="dark" className="relative w-full bg-[#121212] pt-24 pb-8 md:pt-32 md:pb-16 flex flex-col items-center justify-center overflow-hidden">      
       <style dangerouslySetInnerHTML={{__html: `
         .hide-scroll::-webkit-scrollbar {
           display: none !important;
@@ -201,7 +224,7 @@ export default function EleviaEnvironmental() {
       {/* ========================================================= */}
       <div className="w-full relative">
         
-        {/* Aquí la magia: cambié 700px a 600px para que calce exacto con la cuadrícula de Elevia.tsx */}
+        {/* Padding pl ajustado a 600px para calzar exacto con la cuadrícula de Elevia.tsx */}
         <div 
           ref={carouselRef}
           onScroll={checkScroll}

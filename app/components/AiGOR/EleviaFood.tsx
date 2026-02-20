@@ -30,10 +30,32 @@ const FOOD_ADVANTAGES = [
   },
   {
     id: 2,
+    title: "Super simple workflow. ",
+    text: "Compatible with open-platform thermocyclers. Its streamlined protocol allows any analyst to run the kits effortlessly.",
+    visual: (
+      <div className="absolute inset-0 bg-[#0a0a0a] flex items-center justify-center overflow-hidden border border-white/5">
+        {/* Abstract PCR plate background */}
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.3)_1px,transparent_1px)] bg-[size:14px_14px]"></div>
+        
+        {/* Glassmorphism open platform representation */}
+        <div className="relative z-10 flex items-center justify-center w-24 h-24 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.02)] backdrop-blur-md">
+           <div className="grid grid-cols-3 gap-2 p-1">
+             {[...Array(9)].map((_, i) => (
+               <div key={i} className={`w-3.5 h-3.5 rounded-full ${i === 4 ? 'bg-[#FF270A] shadow-[0_0_15px_rgba(255,39,10,0.9)]' : 'bg-white/20'}`}></div>
+             ))}
+           </div>
+        </div>
+        
+        {/* Ambient glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-[#FF270A]/10 blur-3xl rounded-full z-0"></div>
+      </div>
+    )
+  },
+  {
+    id: 3,
     title: "Live cell focus.",
     text: "Elevia's RNA technology exclusively targets living pathogens, eliminating false positives caused by dead cells from cooking or pasteurization.",
     visual: (
-      // ELIMINADO EL "relative" DEL FINAL QUE ROMPÍA EL CONTENEDOR
       <div className="absolute inset-0 bg-[#0a0a0a] flex items-center justify-center overflow-hidden border border-white/5">
           {/* Animación inyectada para que los puntos vibren en su lugar */}
           <style dangerouslySetInnerHTML={{__html: `
@@ -66,7 +88,7 @@ const FOOD_ADVANTAGES = [
     )
   },
   {
-    id: 3,
+    id: 4,
     title: "Reduced holding costs.",
     text: "By releasing products days earlier, you significantly reduce warehousing space and tied-up capital from immobilized products, maximizing your cash flow.",
     visual: (
@@ -79,11 +101,10 @@ const FOOD_ADVANTAGES = [
     )
   },
   {
-    id: 4,
+    id: 5,
     title: "Complex matrices.",
     text: "Validated for highly inhibitory food types, including spices, cocoa, and high-fat products, without signal interference.",
     visual: (
-      // ELIMINADO EL "relative" DEL FINAL PARA QUE SE CENTRE VERTICALMENTE
       <div className="absolute inset-0 bg-[#0a0a0a] flex items-center justify-center overflow-hidden border border-white/5">
           {/* Fondo de matriz compleja (patrón de puntos de malla) */}
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.2)_1px,transparent_1px)] bg-[size:10px_10px]"></div>
@@ -104,7 +125,7 @@ const FOOD_ADVANTAGES = [
     )
   },
   {
-    id: 5,
+    id: 6,
     title: "Extended shelf life.",
     text: "By cutting testing time by days, you add valuable days to your product's commercial shelf life, increasing profitability.",
     visual: (
@@ -115,7 +136,7 @@ const FOOD_ADVANTAGES = [
     )
   },
   {
-    id: 6,
+    id: 7,
     title: "Brand protection.",
     text: "Ensure absolute confidence in every batch before it leaves the facility, protecting your consumers and your reputation.",
     visual: (
@@ -196,7 +217,7 @@ export default function EleviaFood() {
               {/* Bloque de texto con el mismo tamaño máximo que EleviaEnvironmental (max-w-[380px]) */}
               <div className="w-full max-w-[380px] flex flex-col items-start">
                 
-                <span className="text-left text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block w-full">
+                <span className="text-left text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-3 block w-full">
                   Finished Product Testing
                 </span>
                 
