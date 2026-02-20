@@ -116,7 +116,7 @@ export default function Elevia() {
     <div className="relative w-full bg-black py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden border-t border-white/5">
       
       {/* --- GLOW AMBIENTAL CORREGIDO PARA CELULAR REAL --- */}
-      <div className="absolute top-[25%] md:top-[30%] left-1/2 -translate-x-1/2 w-[160%] md:w-[70%] max-w-none md:max-w-[1000px] h-[550px] md:h-[500px] bg-gradient-to-r from-purple-600 to-[#FF270A] blur-[90px] md:blur-[140px] opacity-50 md:opacity-30 pointer-events-none z-0 rounded-full transform-gpu"></div>
+      <div className="absolute top-[25%] md:top-[30%] left-1/2 -translate-x-1/2 w-[160%] md:w-[70%] max-w-none md:max-w-[1000px] h-[600px] md:h-[600px] bg-gradient-to-r from-purple-600 to-[#FF270A] blur-[140px] md:blur-[140px] opacity-30 md:opacity-30 pointer-events-none z-0 rounded-full transform-gpu"></div>
 
       <div className="relative z-20 w-full flex flex-col items-center px-4">
         
@@ -158,10 +158,10 @@ export default function Elevia() {
             {/* CONTENIDO TEXTUAL Y BOTÓN */}
             <div className="relative z-10 flex flex-col flex-1 p-8 pt-8 md:p-12 md:pt-10">
               <div className="mb-4">
-                <h3 className="text-2xl md:text-4xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella</h3>
+                <h3 className="text-2xl md:text-2xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella</h3>
               </div>
               
-              <p className="text-white/80 leading-relaxed font-medium mb-8">
+              <p className="text-white/90 font-small mb-8">
                 Ultra-fast Salmonella detection in as little as 3 hours, and 6 hours, for environmental and food samples, respectively.
               </p>
               
@@ -193,10 +193,10 @@ export default function Elevia() {
             {/* CONTENIDO TEXTUAL Y BOTÓN */}
             <div className="relative z-10 flex flex-col flex-1 p-8 pt-8 md:p-12 md:pt-10">
               <div className="mb-4">
-                <h3 className="text-2xl md:text-4xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella + EB</h3>
+                <h3 className="text-2xl md:text-2xl leading-tight font-bold text-white tracking-tight">Elevia Salmonella + EB</h3>
               </div>
               
-              <p className="text-white/80 leading-relaxed font-medium mb-8">
+              <p className="text-white/90 font-small mb-8">
                 Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours.
               </p>
               
@@ -216,8 +216,8 @@ export default function Elevia() {
           {/* INFERIOR 1: FOOD */}
           <div className="md:col-span-2 bg-[#121212] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between transition-colors">
             <div>
-              <h3 className="text-xl font-bold text-white mb-3">Elevia Salmonella + Listeria spp.</h3>
-              <p className="text-sm text-white/80 leading-relaxed">
+              <h3 className="text-xl font-bold text-white mb-6">Elevia Salmonella + Listeria spp.</h3>
+              <p className="text-sm text-white/90">
                 Simultaneous identification of Salmonella and Listeria spp in a single reaction, in as little as 3 hours.
               </p>
             </div>
@@ -231,8 +231,8 @@ export default function Elevia() {
           {/* INFERIOR 2: WATER */}
           <div className="md:col-span-2 bg-[#121212] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between transition-colors">
             <div>
-              <h3 className="text-xl font-bold text-white mb-3">Elevia Listeria spp + L. monocytogenes</h3>
-              <p className="text-sm text-white/80 leading-relaxed">
+              <h3 className="text-xl font-bold text-white mb-6">Elevia Listeria spp + L. monocytogenes</h3>
+              <p className="text-sm text-white/90">
                 Simultaneous identification of Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.
               </p>
             </div>
@@ -246,8 +246,8 @@ export default function Elevia() {
           {/* INFERIOR 3: RAPID ID */}
           <div className="md:col-span-2 bg-[#121212] rounded-[2rem] p-8 h-[280px] md:h-[300px] relative flex flex-col justify-between transition-colors">
             <div>
-              <h3 className="text-xl font-bold text-white mb-3">Elevia Salmonella + Listeria spp. + L. monocytogenes</h3>
-              <p className="text-sm text-white/80 leading-relaxed">
+              <h3 className="text-xl font-bold text-white mb-6">Elevia Salmonella + Listeria spp. + L. monocytogenes</h3>
+              <p className="text-sm text-white/90">
                 Simultaneous identification of Salmonella + Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.
               </p>
             </div>

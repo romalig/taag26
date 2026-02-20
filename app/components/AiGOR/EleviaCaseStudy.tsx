@@ -3,7 +3,7 @@
 export default function EleviaCaseStudy() {
   return (
     // Ajustamos el padding superior para que respire un poco pero siga viéndose como la misma sección
-    <section className="w-full bg-[#121212] pt-8 md:pt-16 pb-32 flex flex-col items-center relative overflow-hidden">
+    <section className="w-full bg-[#121212] pt-16 md:pt-18 pb-32 flex flex-col items-center relative overflow-hidden">
       
       {/* Contenedor principal alineado EXACTAMENTE a 1200px y px-4 para igualar Elevia.tsx */}
       <div className="w-full max-w-[1200px] mx-auto px-4">

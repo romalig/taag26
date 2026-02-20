@@ -178,7 +178,7 @@ export default function EleviaFood() {
           {/* Imagen Limpia sin capas blancas */}
           <div className="absolute inset-0 z-0 pointer-events-none">
             <Image 
-              src="/Elevia_food4.png" 
+              src="/Elevia_food5.png" 
               alt="Elevia Food Testing" 
               fill 
               className="object-cover object-center" 
@@ -187,12 +187,12 @@ export default function EleviaFood() {
           </div>
 
           {/* CONTENIDO TEXTUAL: Arriba y alineado para que termine en el centro de la imagen */}
-          <div className="absolute inset-0 z-20 w-full flex justify-start pt-10 md:pt-12">
+          <div className="absolute inset-0 z-20 w-full flex justify-start pt-10 md:pt-11">
             
             {/* Este contenedor ocupa exactamente la mitad izquierda de la pantalla.
                 Al usar "justify-end pr-8", el bloque de texto se empuja hacia la derecha 
                 terminando casi justo en la línea central imaginaria de la imagen */}
-            <div className="w-[90%] md:w-[60%] lg:w-[61%] flex justify-end pl-6 md:pl-0 pr-4 md:pr-4 lg:pr-4">              
+            <div className="w-[90%] md:w-[55%] lg:w-[54%] flex justify-end pl-6 md:pl-0 pr-4 md:pr-4 lg:pr-4">              
               {/* Bloque de texto con el mismo tamaño máximo que EleviaEnvironmental (max-w-[380px]) */}
               <div className="w-full max-w-[380px] flex flex-col items-start">
                 
@@ -206,7 +206,7 @@ export default function EleviaFood() {
                 </h2>
                 
                 {/* TEXTO DESCRIPTIVO (Interlineado ajustado con leading-snug) */}
-                <p className="text-left text-sm md:text-base text-black/80 font-medium leading-snug w-full">
+                <p className="text-left text-sm md:text-base text-black/100 font-medium leading-snug w-full">
                   Elevia dramatically reduces your hold times. By detecting pathogens from finished products in record time, you can release products with confidence days earlier than traditional methods.
                 </p>
                 
