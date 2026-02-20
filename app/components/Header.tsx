@@ -12,7 +12,7 @@ const NAV_LINKS = [
   { name: "Industrial Microbiology", href: "/industrial" },
   { name: "Customized Molecular", href: "/customized" },
   { name: "Digital Transformation", href: "/TxA" },
-  { name: "Hubs", href: "#hubs" },
+  { name: "Lab partners", href: "/labs" },
   { name: "Technologies", href: "#technologies" },
   { name: "Resources", href: "#resources" },
   { name: "About", href: "/about" },
