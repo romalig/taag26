@@ -52,7 +52,7 @@ const ENVIRONMENTAL_ADVANTAGES = [
            {/* Eliminamos mt-auto. Puedes ajustar el h-[50%] si quieres que la imagen sea más grande o chica */}
            <div className="relative w-full h-[50%]"> 
                <Image 
-                 src="/prot2.png" 
+                 src="/prot4.png" 
                  alt="Powered by TxA" 
                  fill 
                  className="object-contain object-center" 
@@ -64,7 +64,7 @@ const ENVIRONMENTAL_ADVANTAGES = [
   {
     id: 4,
     title: "Super simple workflow. ",
-    text: "Work with common qPCR machines and no need of incubators. Its easy protocol allows any analyst to run the kits effortlessly.",
+    text: "It works with common qPCR machines and no need of incubators. Its easy protocol allows any analyst to run the kits effortlessly.",
     visual: (
       <div className="absolute inset-0 bg-black flex items-center justify-center overflow-hidden">
         {/* Abstract PCR plate background */}
