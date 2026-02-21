@@ -51,7 +51,7 @@ export default function IndustrialHero() {
          - El <br> ahora tiene 'hidden md:block' para que en celular el texto fluya solo.
          - Ajustado el leading (interlineado) para móvil.
       */}
-      <h1 className="text-5xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[4.5rem] font-extrabold text-[#111111] mb-12 md:mb-18 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
+      <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[4.5rem] font-extrabold text-[#111111] mb-12 md:mb-18 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
         Your lab <br className="hidden md:block" />
         {/* Aquí se aplica la clase con la nueva animación */}
         <span className="text-liquid-animate inline-block pt-2">Fully optimized.</span>
