@@ -13,7 +13,7 @@ import { SOLUTIONS_DATA } from "../data/solutionsData";
 const ECOSYSTEM_FEATURES = [
   {
     id: "intro",
-    title: "This is how we take it to the next level",
+    title: "This is how we will take it into the next level",
     description: "Transform your facility into a highly efficient molecular biology laboratory. Gain immediate access to our complete ecosystem of technologies, kits, software, and continuous TAAG support to scale your operations effortlessly.",
   },
   {
@@ -190,7 +190,6 @@ export default function PartnerEcosystem() {
                             
                             {/* MOBILE: Elementos Arriba (Flotando) */}
                             <div className="flex md:hidden w-full gap-3 flex-col sm:flex-row justify-start z-20 mb-8 mt-2">
-                                 {/* 1. Fastest Results */}
                                  <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full sm:w-auto animate-float-slow" style={{'--rot': '0deg'} as any}>
                                     <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
                                       <Clock className="w-5 h-5 text-purple-500" />
@@ -200,7 +199,6 @@ export default function PartnerEcosystem() {
                                       <p className="text-[10px] text-gray-500 font-normal">In just hours</p>
                                     </div>
                                  </div>
-                                 {/* 2. Efficient Operation */}
                                  <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full sm:w-auto animate-float-delayed" style={{'--rot': '0deg'} as any}>
                                     <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
                                       <Activity className="w-5 h-5 text-blue-500" />
@@ -225,7 +223,6 @@ export default function PartnerEcosystem() {
 
                             {/* MOBILE: Elementos Abajo (Flotando) */}
                             <div className="flex md:hidden w-full gap-3 flex-col sm:flex-row justify-start z-20 mt-8 mb-2">
-                                {/* 3. Higher Margins */}
                                  <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full sm:w-auto animate-float-fast" style={{'--rot': '0deg'} as any}>
                                     <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
                                       <TrendingUp className="w-5 h-5 text-green-500" />
@@ -235,7 +232,6 @@ export default function PartnerEcosystem() {
                                       <p className="text-[10px] text-gray-500 font-normal">Maximized ROI</p>
                                     </div>
                                  </div>
-                                 {/* 4. TxA Software */}
                                  <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full sm:w-auto animate-float-slow" style={{'--rot': '0deg'} as any}>
                                     <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
                                       <Sparkles className="w-5 h-5 text-red-500" />
@@ -252,8 +248,6 @@ export default function PartnerEcosystem() {
                                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl"></div>
 
                                  <div className="relative w-full h-full">
-                                     
-                                     {/* 1. Fastest Results (Arriba Izquierda) */}
                                      <div className="absolute top-[5%] left-[15%] lg:left-[25%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '-3deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
                                           <Clock className="w-4 h-4 md:w-5 md:h-5 text-purple-500" />
@@ -264,7 +258,6 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
-                                     {/* 2. Higher Margins (Arriba Derecha) */}
                                      <div className="absolute top-[18%] right-[0%] lg:right-[5%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '2deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
                                           <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
@@ -275,7 +268,6 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
-                                     {/* 3. TxA (Centro Izquierda) */}
                                      <div className="absolute top-[45%] left-[5%] lg:left-[15%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-40 flex items-center gap-3 animate-float-fast" style={{'--rot': '-1deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
                                           <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
@@ -286,7 +278,6 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
-                                     {/* 4. Efficient Operation (Empujado a la Derecha para no chocar) */}
                                      <div className="absolute top-[60%] right-[-5%] lg:right-[0%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '3deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
                                           <Activity className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
@@ -297,7 +288,6 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
-                                     {/* 5. Plug & Play (Abajo Centro) */}
                                      <div className="absolute bottom-[5%] left-[30%] lg:left-[40%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '-2deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-orange-50 rounded-full flex items-center justify-center shrink-0">
                                           <Zap className="w-4 h-4 md:w-5 md:h-5 text-orange-500" />
@@ -307,7 +297,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Ready to scale</p>
                                         </div>
                                      </div>
-
                                  </div>
                             </div>
                         </div>
@@ -315,27 +304,25 @@ export default function PartnerEcosystem() {
                   );
                 }
 
-                // --- CARD 5: SOPORTE Y PROTOCOLOS (Horizontal, Ancho Completo) ---
+                // --- CARD 5: SOPORTE Y PROTOCOLOS ---
                 if (idx === 5) {
-                  const IconComponent = solution.icon;
+                  // Solución al problema de Vercel/TypeScript
+                  const IconComponent = solution.icon as any;
                   return (
                     <div key={solution.id} className="md:col-span-2 bg-white rounded-[2.5rem] p-10 md:px-14 flex flex-col md:flex-row h-auto md:h-[240px] relative overflow-hidden text-center md:text-left items-center gap-8 md:gap-10">
                        <div className="flex-grow flex flex-col md:flex-row items-center gap-6 md:gap-10 w-full">
                            
-                           {/* Ícono grande a la izquierda */}
                            <div className={`relative z-10 w-24 h-24 shrink-0 bg-white rounded-3xl border border-gray-100 flex items-center justify-center ${solution.color}`}>
                              <div className={`absolute w-32 h-32 rounded-full blur-2xl ${solution.bgGlow} opacity-50`}></div>
-                             <IconComponent className="w-12 h-12 relative z-10" />
+                             {IconComponent && <IconComponent className="w-12 h-12 relative z-10" />}
                            </div>
                            
-                           {/* Textos */}
                            <div className="flex-1 max-w-2xl">
                               <h3 className="text-2xl md:text-3xl font-bold text-[#111111] mb-3 leading-tight">{solution.title}</h3>
                               <p className="text-gray-500 text-sm md:text-base leading-relaxed font-medium">{solution.description}</p>
                            </div>
                        </div>
 
-                       {/* Botones a la derecha */}
                        <div className="flex flex-col sm:flex-row md:flex-col gap-2 w-full md:w-40 shrink-0 mt-4 md:mt-0 z-30">
                           <button onClick={openMeeting} className="w-full py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center">
                             Contact
@@ -351,8 +338,9 @@ export default function PartnerEcosystem() {
                   );
                 }
 
-                // --- CARDS 1 A 4: ESTÁNDAR (Blancas, Planas, Cuadradas) ---
-                const IconComponent = solution.icon;
+                // --- CARDS 1 A 4: ESTÁNDAR ---
+                // Solución al problema de Vercel/TypeScript
+                const IconComponent = solution.icon as any;
                 return (
                   <div key={solution.id} className="md:col-span-1 bg-white rounded-[2.5rem] pt-12 px-8 flex flex-col h-[400px] md:h-[380px] relative overflow-hidden text-center items-center">
                      <div className="relative z-10 w-full max-w-[320px] flex flex-col items-center">
