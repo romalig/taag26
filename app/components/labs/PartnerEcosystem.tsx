@@ -49,27 +49,44 @@ export default function PartnerEcosystem() {
   const { openMeeting } = useCTA();
   const { openModal } = useModal(); 
   
-  // --- LÓGICA DE LA ANIMACIÓN DE LUZ (SOLO UNA VEZ) ---
+  // --- LÓGICA DE LA ANIMACIÓN DE LUZ (SOLO SCROLL DOWN Y REINICIABLE) ---
   const [isLineVisible, setIsLineVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  
+  const isScrollingDown = useRef(true);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
+    // 1. Rastreamos la dirección del scroll
+    const handleScroll = () => {
+      isScrollingDown.current = window.scrollY > lastScrollY.current;
+      lastScrollY.current = window.scrollY;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // 2. Observamos la tarjeta
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Se activa cuando el 25% de la tarjeta es visible
         if (entry.isIntersecting) {
-          setIsLineVisible(true);
-          // Desconecta el observador para que no se repita al hacer scroll up
-          if (cardRef.current) {
-            observer.unobserve(cardRef.current);
+          // Si está visible Y venimos haciendo scroll hacia abajo -> Dispara la luz
+          if (isScrollingDown.current) {
+            setIsLineVisible(true);
           }
+        } else {
+          // Si la tarjeta sale completamente de la pantalla, reiniciamos el estado
+          // para que vuelva a aparecer la luz la próxima vez que bajemos hacia ella.
+          setIsLineVisible(false);
         }
       },
       { threshold: 0.25 }
     );
 
     if (cardRef.current) observer.observe(cardRef.current);
-    return () => observer.disconnect();
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const handleOpenDetails = (id: string) => {
@@ -82,7 +99,8 @@ export default function PartnerEcosystem() {
   };
 
   return (
-    <section id="ecosystem" className="bg-white px-4 md:px-6 pt-16 pb-32 md:py-24 overflow-hidden relative">
+    // Se eliminó px-4 en móvil para que el contenedor gris toque los bordes
+    <section id="ecosystem" className="bg-white md:px-6 pt-16 pb-32 md:py-24 overflow-hidden relative">
       
       {/* ======================================================== */}
       {/* ESTILOS DE LA ANIMACIÓN DE LUZ                             */}
@@ -90,7 +108,7 @@ export default function PartnerEcosystem() {
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes expandLine {
             0% { transform: scaleX(0.01); }
-            /* Se expande a 1, respetando el 96% del contenedor padre */
+            /* Se expande al 100% de su contenedor padre (que ya mide 90%) */
             100% { transform: scaleX(1); } 
         }
         @keyframes fadeLine {
@@ -108,8 +126,8 @@ export default function PartnerEcosystem() {
 
       <div className="max-w-7xl mx-auto">
         
-        {/* CONTENEDOR PRINCIPAL GRIS (Espacios reducidos: pt-24 md:pt-32) */}
-        <div className="relative bg-[#F4F4F5] rounded-[3rem] overflow-hidden pt-24 md:pt-32 pb-32 px-6 md:px-16 flex flex-col items-center">
+        {/* CONTENEDOR PRINCIPAL GRIS (100% ancho en móvil, bordes redondos en PC) */}
+        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-24 md:pt-32 pb-32 flex flex-col items-center">
           
           {/* Patrón de puntos de fondo */}
           <div
@@ -120,21 +138,21 @@ export default function PartnerEcosystem() {
             }}
           />
 
-          {/* TÍTULO DE LA SECCIÓN (Espacios reducidos: mb-16) */}
-          <div className="relative z-20 text-center mb-16 max-w-3xl mx-auto">
-            <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
-              THE PARTNER ECOSYSTEM
-            </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] leading-tight tracking-tight">
-              The ultimate lab upgrade.
-            </h2>
-          </div>
+          {/* CONTENEDOR INTERNO (Ancho 95% en móvil, 100% con padding en PC) */}
+          <div className="relative z-20 w-[95%] md:w-full md:px-16 mx-auto">
 
-          {/* CONTENEDOR DEL GRID */}
-          <div className="relative z-20 w-full mt-0">
-            
-            {/* GRID DE TARJETAS */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 w-full">
+            {/* TÍTULO DE LA SECCIÓN */}
+            <div className="text-center mb-16 max-w-3xl mx-auto">
+              <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
+                THE PARTNER ECOSYSTEM
+              </span>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] leading-tight tracking-tight">
+                The ultimate lab upgrade.
+              </h2>
+            </div>
+
+            {/* GRID DE TARJETAS (Completamente blancas y planas) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative w-full">
               {ECOSYSTEM_FEATURES.map((solution, idx) => {
                 
                 // --- CARD 0: MILA (Tarjeta Grande) ---
@@ -142,9 +160,9 @@ export default function PartnerEcosystem() {
                   return (
                     <div className="md:col-span-2 relative" key={solution.id} ref={cardRef}>
                         
-                        {/* LÍNEA DE LUZ EXPANSIVA (Ancho al 96%) */}
+                        {/* LÍNEA DE LUZ EXPANSIVA (Ancho al 90%) */}
                         {isLineVisible && (
-                          <div className="absolute top-[-2px] left-1/2 -translate-x-1/2 w-[96%] h-[20px] pointer-events-none z-0">
+                          <div className="absolute top-[-2px] left-1/2 -translate-x-1/2 w-[90%] h-[20px] pointer-events-none z-0">
                               <div className="absolute top-[-10px] left-0 w-full h-[30px] bg-gradient-to-r from-[#FF270A] via-[#8b5cf6] to-[#3b82f6] blur-[20px] opacity-0 animate-line-glow origin-center" />
                               <div className="absolute top-[-2px] left-0 w-full h-[4px] bg-gradient-to-r from-[#FF270A] via-[#8b5cf6] to-[#3b82f6] blur-[4px] opacity-0 animate-line-glow origin-center" />
                           </div>
@@ -212,7 +230,7 @@ export default function PartnerEcosystem() {
                                  )}
                               </div>
                                <div className="flex gap-3 mt-auto md:mt-6">
-                                 <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-blue-600 transition-colors flex items-center justify-center gap-2">
+                                 <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2">
                                    Contact <ArrowRight className="w-3 h-3" />
                                  </button>
                                   <button 
@@ -228,7 +246,7 @@ export default function PartnerEcosystem() {
                   );
                 }
 
-                // --- CARD 3: TxA (Adaptada a Blanca) ---
+                // --- CARD 3: TxA (Blanca y Plana) ---
                 if (idx === 3) {
                   return (
                     <div key={solution.id} className="md:col-span-2 relative rounded-[2.5rem] overflow-hidden bg-white flex flex-col md:flex-row h-auto md:h-[200px]">
@@ -259,7 +277,6 @@ export default function PartnerEcosystem() {
                                 </div>
                              </div>
                           </div>
-                          {/* Botón siempre visible, sin depender de hover */}
                           <div className="relative mt-6 z-30 md:absolute md:bottom-8 md:right-12">
                              <button onClick={openMeeting} className="py-3 px-6 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center gap-2">
                                Learn More <ArrowRight className="w-3 h-3" />
@@ -280,7 +297,7 @@ export default function PartnerEcosystem() {
                       </div>
 
                       <div className="flex-grow flex items-center justify-center relative w-full mt-4">
-                         {/* Mantenemos el brillo sutil interno para que el ícono no se vea vacío */}
+                         {/* Brillo sutil interno para que el ícono no se vea flotando en la nada */}
                          <div className={`absolute w-32 h-32 rounded-full blur-3xl ${solution.bgGlow || 'bg-gray-100'} opacity-50`}></div>
                          {IconComponent && (
                            <div className={`relative z-10 w-20 h-20 bg-white rounded-2xl border border-gray-100 flex items-center justify-center ${solution.color}`}>
@@ -289,7 +306,6 @@ export default function PartnerEcosystem() {
                          )}
                       </div>
 
-                      {/* Botones siempre visibles */}
                       <div className="absolute bottom-6 left-10 right-10 flex gap-2 z-30">
                         <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2">
                           Contact
