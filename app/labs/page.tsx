@@ -2,15 +2,10 @@
 
 import Header from "../components/Header";
 import LabHero from "../components/labs/LabHero";
-import FeaturedSolutions from "../components/industrial/FeaturedSolutions";
-import Equipment from "../components/industrial/Equipment";
-import SolutionsCatalog from "../components/industrial/SolutionsCatalog";
-import HowItWorks from "../components/industrial/HowItWorks"; 
+import PartnerEcosystem from "../components/labs/PartnerEcosystem";
 import FinalCTA from "../components/FinalCTA";
-import Success from "../components/industrial/SuccessStories";
-import { ModalProvider } from "../components/industrial/ModalProvider"; 
-import SolutionModal from "../components/industrial/SolutionModal";
-import AigorImpactSection from '../components/industrial/AigorImpactSection'
+import { ModalProvider } from "../components/labs/ModalProvider"; 
+import SolutionModal from "../components/labs/SolutionModal";
 
 // import Footer from "../../components/Footer"; // Si tienes footer global
 
@@ -20,11 +15,7 @@ export default function IndustrialPage() {
     <main className="bg-white min-h-screen font-sans selection:bg-[#FF270A] selection:text-white">
       <Header/>
       <LabHero />
-      <FeaturedSolutions />
-      <Equipment />
-      <HowItWorks />
-      <SolutionsCatalog />
-      <Success />
+      <PartnerEcosystem />
       <FinalCTA />
       <SolutionModal /> {/* 2. Renderizar Modal */}
     </main>

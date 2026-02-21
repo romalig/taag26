@@ -124,7 +124,7 @@ export default function HowItWorks() {
   const prevImgs = getStepImages(prevStep, prevPcrVariant);
 
   return (
-    <section className="bg-[#151516] text-white py-24 md:py-32 px-4 md:px-6 overflow-hidden relative">
+    <section data-header-theme="dark" className="bg-[#151516] text-white py-24 md:py-32 px-4 md:px-6 overflow-hidden relative">
       
       {/* --- GLOW DE FONDO (PALETA DE COLORES ACTUALIZADA: AZUL OSCURO, MORADO, ROJO) --- */}
       <div className="absolute inset-x-0 bottom-0 h-[800px] flex justify-center items-end pointer-events-none z-0">
