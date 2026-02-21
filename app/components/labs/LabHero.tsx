@@ -4,32 +4,43 @@ export default function IndustrialHero() {
   return (
     <section className="pt-40 pb-10 px-4 md:px-6 max-w-7xl mx-auto text-center relative overflow-hidden">
       
-      {/* INYECCIÓN CSS: LLENADO VERTICAL CON RETRASO */}
+      {/* INYECCIÓN CSS: DOBLE CAPA (ESTÁTICA + ANIMADA) */}
       <style dangerouslySetInnerHTML={{__html: `
-        @keyframes fill-up {
-          0% { background-position: 0% 0%; }
-          100% { background-position: 0% 100%; }
+        @keyframes fill-up-reveal {
+          /* Movemos solo la capa 1 (colores) hacia arriba, la capa 2 (gris) se queda en 0% 0% */
+          0% { background-position: 0% 0%, 0% 0%; }
+          100% { background-position: 0% 100%, 0% 0%; }
         }
         .text-liquid-animate {
-          /* Arriba es gris, abajo están tus colores vibrantes */
-          background-image: linear-gradient(
-            to bottom,
-            #9ca3af 0%,
-            #9ca3af 45%,
-            #3b82f6 55%,
-            #8b5cf6 75%,
-            #FF270A 100%
-          );
-          background-size: 100% 300%;
+          background-image: 
+            /* Capa 1 (Movible): Mitad invisible, Mitad de color */
+            linear-gradient(
+              to bottom,
+              transparent 0%,
+              transparent 50%,
+              #3b82f6 50%,
+              #8b5cf6 75%,
+              #FF270A 100%
+            ),
+            /* Capa 2 (Estática): Mitad invisible, Mitad gris */
+            linear-gradient(
+              to bottom,
+              transparent 0%,
+              transparent 50%,
+              #9ca3af 50%,
+              #9ca3af 100%
+            );
           
-          /* Estado inicial: muestra solo la parte gris (arriba) */
-          background-position: 0% 0%; 
+          /* La capa de color mide el doble (200%) para poder subir, la gris mide lo normal (100%) */
+          background-size: 100% 200%, 100% 100%;
+          background-position: 0% 0%, 0% 0%;
+          background-repeat: no-repeat, no-repeat;
+          
           color: transparent;
           -webkit-background-clip: text;
           background-clip: text;
           
-          /* Animación: 4s de duración, suave, 2s de espera inicial, y se queda al final */
-          animation: fill-up 6s ease-out 1s forwards; 
+          animation: fill-up-reveal 4s ease-out 1s forwards;
         }
       `}} />
 
@@ -40,7 +51,7 @@ export default function IndustrialHero() {
          - El <br> ahora tiene 'hidden md:block' para que en celular el texto fluya solo.
          - Ajustado el leading (interlineado) para móvil.
       */}
-      <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[4.5rem] font-extrabold text-[#111111] mb-12 md:mb-18 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
+      <h1 className="text-5xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[4.5rem] font-extrabold text-[#111111] mb-12 md:mb-18 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
         Your lab <br className="hidden md:block" />
         {/* Aquí se aplica la clase con la nueva animación */}
         <span className="text-liquid-animate inline-block pt-2">Fully optimized.</span>
