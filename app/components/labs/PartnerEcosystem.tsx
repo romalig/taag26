@@ -13,7 +13,7 @@ import { SOLUTIONS_DATA } from "../data/solutionsData";
 const ECOSYSTEM_FEATURES = [
   {
     id: "intro",
-    title: "This is how we will take it into the next level",
+    title: "This is how we will take it to the next level",
     description: "Transform your facility into a highly efficient molecular biology laboratory. Gain immediate access to our complete ecosystem of technologies, kits, software, and continuous TAAG support to scale your operations effortlessly.",
   },
   {
@@ -147,8 +147,8 @@ export default function PartnerEcosystem() {
 
       <div className="max-w-7xl mx-auto">
         
-        {/* CONTENEDOR PRINCIPAL GRIS */}
-        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-24 md:pt-32 pb-32 flex flex-col items-center">
+        {/* CONTENEDOR PRINCIPAL GRIS (Se cambió pt-24 por pt-44 para dar el espacio en celular) */}
+        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-44 md:pt-32 pb-32 flex flex-col items-center">
           
           <div
             className="absolute inset-0 opacity-[0.03] z-0 mix-blend-overlay pointer-events-none"
@@ -318,14 +318,14 @@ export default function PartnerEcosystem() {
 
                 // --- CARD 5: SOPORTE Y PROTOCOLOS ---
                 if (idx === 5) {
-                  const IconComponent = solution.icon as any;
+                  const IconComponent = solution.icon;
                   return (
                     <div key={solution.id} className="md:col-span-2 bg-white rounded-[2.5rem] p-10 md:px-14 flex flex-col md:flex-row h-auto md:h-[240px] relative overflow-hidden text-center md:text-left items-center gap-8 md:gap-10">
                        <div className="flex-grow flex flex-col md:flex-row items-center gap-6 md:gap-10 w-full">
                            
                            <div className={`relative z-10 w-24 h-24 shrink-0 bg-white rounded-3xl border border-gray-100 flex items-center justify-center ${solution.color}`}>
                              <div className={`absolute w-32 h-32 rounded-full blur-2xl ${solution.bgGlow} opacity-50`}></div>
-                             {IconComponent && <IconComponent className="w-12 h-12 relative z-10" />}
+                             {IconComponent && <IconComponent className="w-10 h-10 relative z-10" />}
                            </div>
                            
                            <div className="flex-1 max-w-2xl">
@@ -350,7 +350,7 @@ export default function PartnerEcosystem() {
                 }
 
                 // --- CARDS 1 A 4: ESTÁNDAR ---
-                const IconComponent = solution.icon as any;
+                const IconComponent = solution.icon;
                 return (
                   <div key={solution.id} className="md:col-span-1 bg-white rounded-[2.5rem] pt-12 px-8 flex flex-col h-[400px] md:h-[380px] relative overflow-hidden text-center items-center">
                      <div className="relative z-10 w-full max-w-[320px] flex flex-col items-center">
