@@ -148,7 +148,7 @@ export default function PartnerEcosystem() {
       <div className="max-w-7xl mx-auto">
         
         {/* CONTENEDOR PRINCIPAL GRIS (Se cambió pt-24 por pt-44 para dar el espacio en celular) */}
-        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-44 md:pt-32 pb-32 flex flex-col items-center">
+        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-24 md:pt-32 pb-32 flex flex-col items-center">
           
           <div
             className="absolute inset-0 opacity-[0.03] z-0 mix-blend-overlay pointer-events-none"
@@ -186,7 +186,7 @@ export default function PartnerEcosystem() {
                         )}
 
                         {/* TARJETA BLANCA */}
-                        <div className="relative z-10 bg-white rounded-[2.5rem] p-8 md:p-14 lg:p-16 flex flex-col md:flex-row gap-0 md:gap-8 items-center overflow-hidden">
+                        <div className="relative pb-14 z-10 bg-white rounded-[2.5rem] pt-16 p-8 md:p-14 lg:p-16 flex flex-col md:flex-row gap-0 md:gap-8 items-center overflow-hidden">
                             
                             {/* IZQUIERDA: Texto -> Iconos Móviles Estáticos -> Botón */}
                             <div className="w-full md:w-[45%] lg:w-[40%] flex flex-col items-start text-left relative z-20 md:pl-4">
