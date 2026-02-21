@@ -129,7 +129,7 @@ export default function PartnerEcosystem() {
                 fadeLine 2s linear forwards;
         }
 
-        /* Animaciones para las insignias flotantes */
+        /* Animaciones para las insignias flotantes en PC */
         @keyframes float-slow {
           0%, 100% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
           50% { transform: translateY(-8px) rotate(calc(var(--rot, 0deg) + 2deg)); }
@@ -188,66 +188,73 @@ export default function PartnerEcosystem() {
                         {/* TARJETA BLANCA */}
                         <div className="relative z-10 bg-white rounded-[2.5rem] p-8 md:p-14 lg:p-16 flex flex-col md:flex-row gap-0 md:gap-8 items-center overflow-hidden">
                             
-                            {/* MOBILE: Elementos Arriba (Flotando) */}
-                            <div className="flex md:hidden w-full gap-3 flex-col sm:flex-row justify-start z-20 mb-8 mt-2">
-                                 <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full sm:w-auto animate-float-slow" style={{'--rot': '0deg'} as any}>
-                                    <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
-                                      <Clock className="w-5 h-5 text-purple-500" />
-                                    </div>
-                                    <div className="pr-2">
-                                      <p className="text-xs font-bold text-[#111111] leading-tight">Fastest Results</p>
-                                      <p className="text-[10px] text-gray-500 font-normal">In just hours</p>
-                                    </div>
-                                 </div>
-                                 <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full sm:w-auto animate-float-delayed" style={{'--rot': '0deg'} as any}>
-                                    <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
-                                      <Activity className="w-5 h-5 text-blue-500" />
-                                    </div>
-                                    <div className="pr-2">
-                                      <p className="text-xs font-bold text-[#111111] leading-tight">Efficient Operation</p>
-                                      <p className="text-[10px] text-gray-500 font-normal">Automated workflows</p>
-                                    </div>
-                                 </div>
-                            </div>
-
-                            {/* IZQUIERDA: Texto */}
+                            {/* IZQUIERDA: Texto -> Iconos Móviles Estáticos -> Botón */}
                             <div className="w-full md:w-[45%] lg:w-[40%] flex flex-col items-start text-left relative z-20 md:pl-4">
                                 <h3 className="text-3xl md:text-[32px] font-bold text-[#111111] mb-5 leading-tight tracking-tight max-w-sm">{solution.title}</h3>
                                 <p className="text-[#111111] text-sm md:text-base leading-relaxed font-normal mb-8 max-w-sm">
                                   {solution.description}
                                 </p>
-                                <button onClick={openMeeting} className="py-2.5 px-6 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2">
+
+                                {/* MOBILE ONLY: 4 Elementos estáticos en lista debajo del texto */}
+                                <div className="flex md:hidden flex-col w-full gap-3 mb-8">
+                                    
+                                    {/* 1. Fastest Results */}
+                                    <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
+                                        <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
+                                          <Clock className="w-5 h-5 text-purple-500" />
+                                        </div>
+                                        <div>
+                                          <p className="text-xs font-bold text-[#111111] leading-tight">Fastest Results</p>
+                                          <p className="text-[10px] text-gray-500 font-normal">In just hours</p>
+                                        </div>
+                                    </div>
+
+                                    {/* 2. Efficient Operation */}
+                                    <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
+                                        <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
+                                          <Activity className="w-5 h-5 text-blue-500" />
+                                        </div>
+                                        <div>
+                                          <p className="text-xs font-bold text-[#111111] leading-tight">Efficient Operation</p>
+                                          <p className="text-[10px] text-gray-500 font-normal">Automated workflows</p>
+                                        </div>
+                                    </div>
+
+                                    {/* 3. Higher Margins */}
+                                    <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
+                                        <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
+                                          <TrendingUp className="w-5 h-5 text-green-500" />
+                                        </div>
+                                        <div>
+                                          <p className="text-xs font-bold text-[#111111] leading-tight">Higher Margins</p>
+                                          <p className="text-[10px] text-gray-500 font-normal">Maximized ROI</p>
+                                        </div>
+                                    </div>
+
+                                    {/* 4. TxA Software */}
+                                    <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
+                                        <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
+                                          <Sparkles className="w-5 h-5 text-red-500" />
+                                        </div>
+                                        <div>
+                                          <p className="text-xs font-bold text-[#111111] leading-tight">TxA Software</p>
+                                          <p className="text-[10px] text-gray-500 font-normal">Predictive Ai</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button onClick={openMeeting} className="py-3 md:py-2.5 px-6 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 w-full md:w-auto">
                                   Become a Partner <ArrowRight className="w-3 h-3" />
                                 </button>
                             </div>
 
-                            {/* MOBILE: Elementos Abajo (Flotando) */}
-                            <div className="flex md:hidden w-full gap-3 flex-col sm:flex-row justify-start z-20 mt-8 mb-2">
-                                 <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full sm:w-auto animate-float-fast" style={{'--rot': '0deg'} as any}>
-                                    <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
-                                      <TrendingUp className="w-5 h-5 text-green-500" />
-                                    </div>
-                                    <div className="pr-2">
-                                      <p className="text-xs font-bold text-[#111111] leading-tight">Higher Margins</p>
-                                      <p className="text-[10px] text-gray-500 font-normal">Maximized ROI</p>
-                                    </div>
-                                 </div>
-                                 <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full sm:w-auto animate-float-slow" style={{'--rot': '0deg'} as any}>
-                                    <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
-                                      <Sparkles className="w-5 h-5 text-red-500" />
-                                    </div>
-                                    <div className="pr-2">
-                                      <p className="text-xs font-bold text-[#111111] leading-tight">TxA Software</p>
-                                      <p className="text-[10px] text-gray-500 font-normal">Predictive Ai</p>
-                                    </div>
-                                 </div>
-                            </div>
-
-                            {/* DERECHA: Elementos Flotantes (Ocultos en Celular, visibles en PC) */}
+                            {/* DERECHA: Elementos Flotantes (Ocultos en Celular, visibles solo en PC) */}
                             <div className="hidden md:flex w-full md:w-[55%] lg:w-[60%] h-[350px] md:h-[400px] relative z-10 items-center justify-center">
                                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl"></div>
 
                                  <div className="relative w-full h-full">
+                                     
+                                     {/* 1. Fastest Results (Arriba Izquierda) */}
                                      <div className="absolute top-[5%] left-[15%] lg:left-[25%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '-3deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
                                           <Clock className="w-4 h-4 md:w-5 md:h-5 text-purple-500" />
@@ -258,6 +265,7 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
+                                     {/* 2. Higher Margins (Arriba Derecha) */}
                                      <div className="absolute top-[18%] right-[0%] lg:right-[5%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '2deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
                                           <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
@@ -268,6 +276,7 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
+                                     {/* 3. TxA (Centro Izquierda) */}
                                      <div className="absolute top-[45%] left-[5%] lg:left-[15%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-40 flex items-center gap-3 animate-float-fast" style={{'--rot': '-1deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
                                           <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
@@ -278,6 +287,7 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
+                                     {/* 4. Efficient Operation (Empujado a la Derecha) */}
                                      <div className="absolute top-[60%] right-[-5%] lg:right-[0%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '3deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
                                           <Activity className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
@@ -288,6 +298,7 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
+                                     {/* 5. Plug & Play (Abajo Centro) */}
                                      <div className="absolute bottom-[5%] left-[30%] lg:left-[40%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '-2deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-orange-50 rounded-full flex items-center justify-center shrink-0">
                                           <Zap className="w-4 h-4 md:w-5 md:h-5 text-orange-500" />
@@ -297,6 +308,7 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Ready to scale</p>
                                         </div>
                                      </div>
+
                                  </div>
                             </div>
                         </div>
@@ -306,7 +318,6 @@ export default function PartnerEcosystem() {
 
                 // --- CARD 5: SOPORTE Y PROTOCOLOS ---
                 if (idx === 5) {
-                  // Solución al problema de Vercel/TypeScript
                   const IconComponent = solution.icon as any;
                   return (
                     <div key={solution.id} className="md:col-span-2 bg-white rounded-[2.5rem] p-10 md:px-14 flex flex-col md:flex-row h-auto md:h-[240px] relative overflow-hidden text-center md:text-left items-center gap-8 md:gap-10">
@@ -339,7 +350,6 @@ export default function PartnerEcosystem() {
                 }
 
                 // --- CARDS 1 A 4: ESTÁNDAR ---
-                // Solución al problema de Vercel/TypeScript
                 const IconComponent = solution.icon as any;
                 return (
                   <div key={solution.id} className="md:col-span-1 bg-white rounded-[2.5rem] pt-12 px-8 flex flex-col h-[400px] md:h-[380px] relative overflow-hidden text-center items-center">
