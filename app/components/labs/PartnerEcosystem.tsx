@@ -14,44 +14,52 @@ import { SOLUTIONS_DATA } from "../data/solutionsData";
 const ECOSYSTEM_FEATURES = [
   {
     id: "intro",
-    title: "This is how we will take it to the next level",
+    title: "Access the latest molecular technologies.",
     description: "Transform your facility into a highly efficient molecular biology laboratory. Gain immediate access to our complete ecosystem of technologies, kits, software, and continuous TAAG support to scale your operations effortlessly.",
   },
   {
     id: "pcr",
-    title: "Multiplex PCR Kits.",
-    description: "Access our complete portfolio of multiplex PCR kits. We guarantee the lowest price on the market without compromising on absolute precision and quality.",
+    badge: "Cost Efficiency",
+    badgeColor: "text-blue-600",
+    title: "Multiplex PCR Kits",
+    description: "Maximize your lab's profitability. Access our premium multiplex kits at the lowest market price, allowing you to increase margins and win more clients without compromising quality.",
     icon: Dna,
     color: "text-blue-500",
     bgGlow: "bg-blue-500/10"
   },
   {
     id: "elevia",
-    title: "Elevia Line.",
-    description: "Bypass traditional enrichment. Our Elevia line allows your laboratory partners to deliver highly accurate results in just a few hours.",
+    badge: "Competitive Edge",
+    badgeColor: "text-gray-800",
+    title: "Elevia Line",
+    description: "Stand out from the competition. Offer your clients same-day results by bypassing traditional enrichment, giving your lab a unique selling proposition in a crowded market.",
     icon: Zap,
     color: "text-orange-500",
     bgGlow: "bg-orange-500/10"
   },
   {
     id: "txa",
-    title: "TxA Ecosystem.",
-    description: "Make your laboratory super efficient. Automate workflows, predict risks, and deliver the safest, most reliable results to your clients.",
+    badge: "Maximum Efficiency",
+    badgeColor: "text-purple-600",
+    title: "TxA Ecosystem",
+    description: "Reduce overhead and eliminate human error. Automate your entire workflow to operate leaner, faster, and deliver a modern, digital experience to your customers.",
     icon: Activity,
     color: "text-purple-500",
     bgGlow: "bg-purple-500/10"
   },
   {
     id: "mila",
-    title: "MILA",
-    description: "Leverage our proprietary artificial intelligence for custom assay developments tailored specifically to the unique needs of your lab.",
+    badge: "Effortless R&D",
+    badgeColor: "text-[#FF270A]",
+    title: "MILA Ai",
+    description: "Expand your testing menu in days, not months. Use our AI to develop custom multiplex panels without the need for an expensive internal R&D department.",
     icon: BrainCircuit,
     color: "text-yellow-500",
     bgGlow: "bg-yellow-500/10"
   },
   {
     id: "support",
-    title: "Protocols & Support.",
+    title: "Protocols & Support",
     description: "Implement our standardized workflows and protocols. Count on TAAG's constant technical support to optimize your laboratory operations to the maximum.",
     icon: ShieldCheck,
     color: "text-emerald-500",
@@ -148,8 +156,8 @@ export default function PartnerEcosystem() {
 
       <div className="max-w-7xl mx-auto">
         
-        {/* CONTENEDOR PRINCIPAL GRIS (Se cambió pt-24 por pt-48 para dar un espacio más amplio en celular) */}
-        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-48 md:pt-32 pb-32 flex flex-col items-center">
+        {/* CONTENEDOR PRINCIPAL GRIS */}
+        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-48 md:pt-40 pb-32 flex flex-col items-center">
           
           <div
             className="absolute inset-0 opacity-[0.03] z-0 mix-blend-overlay pointer-events-none"
@@ -161,12 +169,12 @@ export default function PartnerEcosystem() {
 
           <div className="relative z-20 w-[95%] md:w-full md:px-16 mx-auto">
 
-            <div className="text-center mb-16 max-w-3xl mx-auto">
+            <div className="text-center mb-16 max-w-3xl mx-auto px-4 md:px-0">
               <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
                 THE PARTNER ECOSYSTEM
               </span>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] leading-tight tracking-tight">
-                The ultimate lab upgrade.
+                This is how we will take it to the next level.
               </h2>
             </div>
 
@@ -198,8 +206,6 @@ export default function PartnerEcosystem() {
 
                                 {/* MOBILE ONLY: 4 Elementos estáticos en lista debajo del texto */}
                                 <div className="flex md:hidden flex-col w-full gap-3 mb-8">
-                                    
-                                    {/* 1. Fastest Results */}
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
                                           <Clock className="w-5 h-5 text-purple-500" />
@@ -210,7 +216,6 @@ export default function PartnerEcosystem() {
                                         </div>
                                     </div>
 
-                                    {/* 2. Efficient Operation */}
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
                                           <Activity className="w-5 h-5 text-blue-500" />
@@ -221,7 +226,6 @@ export default function PartnerEcosystem() {
                                         </div>
                                     </div>
 
-                                    {/* 3. Higher Margins */}
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
                                           <TrendingUp className="w-5 h-5 text-green-500" />
@@ -232,7 +236,6 @@ export default function PartnerEcosystem() {
                                         </div>
                                     </div>
 
-                                    {/* 4. TxA Software */}
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
                                           <Sparkles className="w-5 h-5 text-red-500" />
@@ -255,7 +258,7 @@ export default function PartnerEcosystem() {
 
                                  <div className="relative w-full h-full">
                                      
-                                     {/* 1. Fastest Results (Arriba Izquierda) */}
+                                     {/* 1. Fastest Results */}
                                      <div className="absolute top-[5%] left-[15%] lg:left-[25%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '-3deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
                                           <Clock className="w-4 h-4 md:w-5 md:h-5 text-purple-500" />
@@ -266,7 +269,7 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
-                                     {/* 2. Higher Margins (Arriba Derecha) */}
+                                     {/* 2. Higher Margins */}
                                      <div className="absolute top-[18%] right-[0%] lg:right-[5%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '2deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
                                           <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
@@ -277,7 +280,7 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
-                                     {/* 3. TxA (Centro Izquierda) */}
+                                     {/* 3. TxA */}
                                      <div className="absolute top-[45%] left-[5%] lg:left-[15%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-40 flex items-center gap-3 animate-float-fast" style={{'--rot': '-1deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
                                           <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
@@ -288,7 +291,7 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
-                                     {/* 4. Efficient Operation (Empujado a la Derecha) */}
+                                     {/* 4. Efficient Operation */}
                                      <div className="absolute top-[60%] right-[-5%] lg:right-[0%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '3deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
                                           <Activity className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
@@ -299,7 +302,7 @@ export default function PartnerEcosystem() {
                                         </div>
                                      </div>
 
-                                     {/* 5. Plug & Play (Abajo Centro) */}
+                                     {/* 5. Plug & Play */}
                                      <div className="absolute bottom-[5%] left-[30%] lg:left-[40%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '-2deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-orange-50 rounded-full flex items-center justify-center shrink-0">
                                           <Zap className="w-4 h-4 md:w-5 md:h-5 text-orange-500" />
@@ -320,8 +323,15 @@ export default function PartnerEcosystem() {
                 // --- CARDS 1 A 4: ESTILO APPLE MINIMALISTA ---
                 if (idx >= 1 && idx <= 4) {
                   return (
-                    <div key={solution.id} className="md:col-span-1 bg-white rounded-[2.5rem] p-10 md:p-14 flex flex-col items-center justify-start text-center relative h-auto min-h-[380px]">
+                    <div key={solution.id} className="md:col-span-1 bg-white rounded-[2.5rem] p-10 md:p-14 flex flex-col items-center justify-start text-center relative h-auto min-h-[400px]">
                         
+                        {/* 0. INSIGNIA SUPERIOR (VENTAJA) */}
+                        {solution.badge && (
+                           <span className={`text-[10px] md:text-[11px] font-extrabold uppercase tracking-[0.15em] mb-5 ${solution.badgeColor}`}>
+                             {solution.badge}
+                           </span>
+                        )}
+
                         {/* 1. Imagen Central Pequeña */}
                         <div className="mb-6 flex items-center justify-center h-12">
                            
@@ -345,8 +355,8 @@ export default function PartnerEcosystem() {
                               <Image 
                                 src="/LogoTxANB.png" 
                                 alt="TxA Logo" 
-                                width={60} 
-                                height={60} 
+                                width={40} 
+                                height={40} 
                                 className="object-contain" 
                               />
                            )}
@@ -355,8 +365,8 @@ export default function PartnerEcosystem() {
                               <Image 
                                 src="/logo_mila.png" 
                                 alt="MILA Logo" 
-                                width={55} 
-                                height={55} 
+                                width={42} 
+                                height={42} 
                                 className="object-contain" 
                               />
                            )}
@@ -368,7 +378,7 @@ export default function PartnerEcosystem() {
                            {solution.title}
                         </h3>
 
-                        {/* 3. Texto de Bajada (Igual a la tarjeta principal) */}
+                        {/* 3. Texto de Bajada enfocado en el Beneficio */}
                         <p className="text-[#111111] text-sm md:text-base leading-relaxed font-normal mb-8 max-w-[320px]">
                            {solution.description}
                         </p>
