@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, CheckCircle2, Clock, Dna, GitMerge, Zap, Activity, BrainCircuit, ShieldCheck, TrendingUp, Sparkles } from "lucide-react";
+import Image from "next/image";
 import { useCTA } from "../CTAProvider";
 import { useModal } from "./ModalProvider";
 
@@ -42,7 +43,7 @@ const ECOSYSTEM_FEATURES = [
   },
   {
     id: "mila",
-    title: "MILA Ai.",
+    title: "MILA",
     description: "Leverage our proprietary artificial intelligence for custom assay developments tailored specifically to the unique needs of your lab.",
     icon: BrainCircuit,
     color: "text-yellow-500",
@@ -147,8 +148,8 @@ export default function PartnerEcosystem() {
 
       <div className="max-w-7xl mx-auto">
         
-        {/* CONTENEDOR PRINCIPAL GRIS (Se cambió pt-24 por pt-44 para dar el espacio en celular) */}
-        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-24 md:pt-32 pb-32 flex flex-col items-center">
+        {/* CONTENEDOR PRINCIPAL GRIS (Se cambió pt-24 por pt-48 para dar un espacio más amplio en celular) */}
+        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-48 md:pt-32 pb-32 flex flex-col items-center">
           
           <div
             className="absolute inset-0 opacity-[0.03] z-0 mix-blend-overlay pointer-events-none"
@@ -186,7 +187,7 @@ export default function PartnerEcosystem() {
                         )}
 
                         {/* TARJETA BLANCA */}
-                        <div className="relative pb-14 z-10 bg-white rounded-[2.5rem] pt-16 p-8 md:p-14 lg:p-16 flex flex-col md:flex-row gap-0 md:gap-8 items-center overflow-hidden">
+                        <div className="relative z-10 bg-white rounded-[2.5rem] p-8 md:p-14 lg:p-16 flex flex-col md:flex-row gap-0 md:gap-8 items-center overflow-hidden mb-6 md:mb-10">
                             
                             {/* IZQUIERDA: Texto -> Iconos Móviles Estáticos -> Botón */}
                             <div className="w-full md:w-[45%] lg:w-[40%] flex flex-col items-start text-left relative z-20 md:pl-4">
@@ -316,70 +317,106 @@ export default function PartnerEcosystem() {
                   );
                 }
 
-                // --- CARD 5: SOPORTE Y PROTOCOLOS ---
-                if (idx === 5) {
-                  const IconComponent = solution.icon;
+                // --- CARDS 1 A 4: ESTILO APPLE MINIMALISTA ---
+                if (idx >= 1 && idx <= 4) {
                   return (
-                    <div key={solution.id} className="md:col-span-2 bg-white rounded-[2.5rem] p-10 md:px-14 flex flex-col md:flex-row h-auto md:h-[240px] relative overflow-hidden text-center md:text-left items-center gap-8 md:gap-10">
-                       <div className="flex-grow flex flex-col md:flex-row items-center gap-6 md:gap-10 w-full">
+                    <div key={solution.id} className="md:col-span-1 bg-white rounded-[2.5rem] p-10 md:p-14 flex flex-col items-center justify-start text-center relative h-auto min-h-[380px]">
+                        
+                        {/* 1. Imagen Central Pequeña */}
+                        <div className="mb-6 flex items-center justify-center h-12">
                            
-                           <div className={`relative z-10 w-24 h-24 shrink-0 bg-white rounded-3xl border border-gray-100 flex items-center justify-center ${solution.color}`}>
-                             <div className={`absolute w-32 h-32 rounded-full blur-2xl ${solution.bgGlow} opacity-50`}></div>
-                             {IconComponent && <IconComponent className="w-10 h-10 relative z-10" />}
-                           </div>
-                           
-                           <div className="flex-1 max-w-2xl">
-                              <h3 className="text-2xl md:text-3xl font-bold text-[#111111] mb-3 leading-tight">{solution.title}</h3>
-                              <p className="text-gray-500 text-sm md:text-base leading-relaxed font-medium">{solution.description}</p>
-                           </div>
-                       </div>
+                           {solution.id === 'pcr' && (
+                              <div className="flex items-center justify-center -space-x-1.5 opacity-90">
+                                <div className="w-4 h-4 rounded-full bg-blue-500 mix-blend-multiply"></div>
+                                <div className="w-4 h-4 rounded-full bg-purple-500 mix-blend-multiply"></div>
+                                <div className="w-4 h-4 rounded-full bg-[#FF270A] mix-blend-multiply"></div>
+                              </div>
+                           )}
 
-                       <div className="flex flex-col sm:flex-row md:flex-col gap-2 w-full md:w-40 shrink-0 mt-4 md:mt-0 z-30">
-                          <button onClick={openMeeting} className="w-full py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center">
-                            Contact
-                          </button>
-                          <button 
-                            onClick={() => handleOpenDetails(solution.id)}
-                            className="w-full py-3 bg-gray-50 border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-100 transition-colors flex items-center justify-center"
-                          >
-                            Details
-                          </button>
-                       </div>
+                           {solution.id === 'elevia' && (
+                              <div className="flex items-center justify-center">
+                                <span className="text-xl md:text-2xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-gray-800 to-gray-400">
+                                  AiGOR
+                                </span>
+                              </div>
+                           )}
+
+                           {solution.id === 'txa' && (
+                              <Image 
+                                src="/LogoTxANB.png" 
+                                alt="TxA Logo" 
+                                width={60} 
+                                height={60} 
+                                className="object-contain" 
+                              />
+                           )}
+
+                           {solution.id === 'mila' && (
+                              <Image 
+                                src="/logo_mila.png" 
+                                alt="MILA Logo" 
+                                width={55} 
+                                height={55} 
+                                className="object-contain" 
+                              />
+                           )}
+
+                        </div>
+
+                        {/* 2. Título Centrado Más Pequeño */}
+                        <h3 className="text-[22px] md:text-2xl font-bold text-[#111111] mb-4 leading-tight tracking-tight">
+                           {solution.title}
+                        </h3>
+
+                        {/* 3. Texto de Bajada (Igual a la tarjeta principal) */}
+                        <p className="text-[#111111] text-sm md:text-base leading-relaxed font-normal mb-8 max-w-[320px]">
+                           {solution.description}
+                        </p>
+
+                        {/* 4. Link Estilo Apple */}
+                        <button 
+                          onClick={() => handleOpenDetails(solution.id)}
+                          className="mt-auto text-[14px] md:text-[15px] text-[#0066cc] hover:underline font-medium flex items-center justify-center transition-colors"
+                        >
+                          Learn more about {solution.title.replace('.', '')} <span className="text-[10px] ml-1 translate-y-[0.5px] font-bold">&gt;</span>
+                        </button>
                     </div>
                   );
                 }
 
-                // --- CARDS 1 A 4: ESTÁNDAR ---
-                const IconComponent = solution.icon;
-                return (
-                  <div key={solution.id} className="md:col-span-1 bg-white rounded-[2.5rem] pt-12 px-8 flex flex-col h-[400px] md:h-[380px] relative overflow-hidden text-center items-center">
-                     <div className="relative z-10 w-full max-w-[320px] flex flex-col items-center">
-                        <h3 className="text-2xl font-bold text-[#111111] mb-4 leading-tight">{solution.title}</h3>
-                        <p className="text-gray-500 text-sm md:text-base leading-relaxed font-medium">{solution.description}</p>
-                      </div>
-
-                      <div className="flex-grow flex items-center justify-center relative w-full mt-4">
-                         <div className={`absolute w-32 h-32 rounded-full blur-2xl ${solution.bgGlow || 'bg-gray-100'} opacity-50`}></div>
-                         {IconComponent && (
-                           <div className={`relative z-10 w-20 h-20 bg-white rounded-2xl border border-gray-100 flex items-center justify-center ${solution.color}`}>
-                             <IconComponent className="w-10 h-10" />
-                           </div>
-                         )}
-                      </div>
-
-                      <div className="absolute bottom-8 left-10 right-10 flex gap-2 z-30">
-                        <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center">
-                          Contact
-                        </button>
+                // --- CARD 5: SOPORTE Y PROTOCOLOS (Horizontal Minimalista) ---
+                if (idx === 5) {
+                  const IconComponent = solution.icon as any;
+                  return (
+                    <div key={solution.id} className="md:col-span-2 bg-white rounded-[2.5rem] p-10 md:p-14 flex flex-col md:flex-row items-center justify-between text-center md:text-left gap-8 mt-2 md:mt-6">
+                        <div className="flex flex-col md:flex-row items-center gap-6">
+                            {/* Icono discreto */}
+                            {IconComponent && (
+                                <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center shrink-0">
+                                    <IconComponent className="w-6 h-6 text-gray-800" />
+                                </div>
+                            )}
+                            <div className="max-w-xl">
+                                <h3 className="text-[22px] md:text-2xl font-bold text-[#111111] mb-2 leading-tight tracking-tight">
+                                   {solution.title}
+                                </h3>
+                                <p className="text-[#111111] text-sm md:text-base leading-relaxed font-normal">
+                                   {solution.description}
+                                </p>
+                            </div>
+                        </div>
+                        
                         <button 
                           onClick={() => handleOpenDetails(solution.id)}
-                          className="flex-1 py-3 bg-gray-50 border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-100 transition-colors flex items-center justify-center"
+                          className="text-[14px] md:text-[15px] text-[#0066cc] hover:underline font-medium flex items-center justify-center shrink-0"
                         >
-                          Details
+                          Learn more about our Support <span className="text-[10px] ml-1 translate-y-[0.5px] font-bold">&gt;</span>
                         </button>
-                      </div>
-                  </div>
-                );
+                    </div>
+                  );
+                }
+
+                return null;
               })}
             </div>
           </div>
