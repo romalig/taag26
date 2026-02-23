@@ -15,7 +15,7 @@ const ECOSYSTEM_FEATURES = [
   {
     id: "intro",
     title: "Instant scalability. Maximum profitability.",
-    description: "Upgrade your testing capabilities overnight with our integrated ecosystem. We provide the premium kits, AI software, and automated protocols you need to drastically reduce costs, accelerate turnaround times, and outpace the competition.",
+    description: "Upgrade your testing capabilities with our integrated ecosystem. We provide the advanced PCR kits, laboratory software, and efficient protocols you need to drastically reduce costs, accelerate turnaround times, and outpace the competition.",
   },
   {
     id: "pcr",
@@ -51,7 +51,7 @@ const ECOSYSTEM_FEATURES = [
     id: "mila",
     badge: "Effortless R&D",
     badgeColor: "text-[#FF270A]",
-    title: "MILA Ai",
+    title: "MILA",
     description: "Expand your testing menu in days, not months. Use our AI to develop custom multiplex panels without the need for an expensive internal R&D department.",
     icon: BrainCircuit,
     color: "text-yellow-500",
@@ -159,7 +159,7 @@ export default function PartnerEcosystem() {
 
       <div className="max-w-7xl mx-auto">
         
-        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-48 md:pt-40 pb-32 flex flex-col items-center">
+        <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-24 md:pt-40 pb-32 flex flex-col items-center">
           
           <div
             className="absolute inset-0 opacity-[0.03] z-0 mix-blend-overlay pointer-events-none"
@@ -175,7 +175,7 @@ export default function PartnerEcosystem() {
               <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
                 THE PARTNER ECOSYSTEM
               </span>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] leading-tight tracking-tight">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] leading-tight tracking-tight pb-8">
                 This is how we will take it to the next level.
               </h2>
             </div>
@@ -332,7 +332,7 @@ export default function PartnerEcosystem() {
                               </div>
                            )}
                            {solution.id === 'txa' && (
-                              <Image src="/LogoTxANB.png" alt="TxA Logo" width={40} height={40} className="object-contain" />
+                              <Image src="/LogoTxANB.png" alt="TxA Logo" width={45} height={45} className="object-contain" />
                            )}
                            {solution.id === 'mila' && (
                               <Image src="/logo_mila.png" alt="MILA Logo" width={42} height={42} className="object-contain" />
