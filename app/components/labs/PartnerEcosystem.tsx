@@ -59,11 +59,9 @@ const ECOSYSTEM_FEATURES = [
   },
   {
     id: "support",
-    // NUEVOS TEXTOS ENFOCADOS EN BENEFICIO
     title: "Technical support",
     description: "Don't just buy products; gain a partner. We provide standardized workflows and expert support to ensure your lab runs smoothly.",
     icon: ShieldCheck,
-    // Color base para los efectos
     color: "green", 
   }
 ];
@@ -149,7 +147,6 @@ export default function PartnerEcosystem() {
         .animate-float-fast {
           animation: float-slow 5s ease-in-out infinite 0.5s;
         }
-        /* Nueva animación para los anillos verdes */
         @keyframes pulse-ring {
             0% { transform: scale(0.8); opacity: 0.5; }
             50% { transform: scale(1); opacity: 0.3; }
@@ -191,7 +188,6 @@ export default function PartnerEcosystem() {
                   return (
                     <div className="md:col-span-2 relative" key={solution.id} ref={cardRef}>
                         
-                        {/* LÍNEA DE LUZ */}
                         {isLineVisible && (
                           <div className="absolute top-[-2px] left-1/2 -translate-x-1/2 w-[90%] h-[20px] pointer-events-none z-0">
                               <div className="absolute top-[-10px] left-0 w-full h-[30px] bg-gradient-to-r from-[#FF270A] via-[#8b5cf6] to-[#3b82f6] blur-[20px] opacity-0 animate-line-glow origin-center" />
@@ -199,21 +195,15 @@ export default function PartnerEcosystem() {
                           </div>
                         )}
 
-                        {/* TARJETA BLANCA */}
-                        {/* Eliminado mb-6 md:mb-10 para mantener el gap constante */}
                         <div className="relative z-10 bg-white rounded-[2.5rem] p-8 md:p-14 lg:p-16 flex flex-col md:flex-row gap-0 md:gap-8 items-center overflow-hidden">
                             
-                            {/* IZQUIERDA: Texto -> Iconos Móviles Estáticos -> Botón */}
                             <div className="w-full md:w-[45%] lg:w-[40%] flex flex-col items-start text-left relative z-20 md:pl-4">
                                 <h3 className="text-3xl md:text-[32px] font-bold text-[#111111] mb-5 leading-tight tracking-tight max-w-sm">{solution.title}</h3>
                                 <p className="text-[#111111] text-sm md:text-base leading-relaxed font-normal mb-8 max-w-sm">
                                   {solution.description}
                                 </p>
 
-                                {/* MOBILE ONLY: 4 Elementos estáticos en lista debajo del texto */}
                                 <div className="flex md:hidden flex-col w-full gap-3 mb-8">
-                                    
-                                    {/* 1. Fastest Results */}
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
                                           <Clock className="w-5 h-5 text-purple-500" />
@@ -223,8 +213,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[10px] text-gray-500 font-normal">In just hours</p>
                                         </div>
                                     </div>
-
-                                    {/* 2. Efficient Operation */}
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
                                           <Activity className="w-5 h-5 text-blue-500" />
@@ -234,8 +222,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[10px] text-gray-500 font-normal">Automated workflows</p>
                                         </div>
                                     </div>
-
-                                    {/* 3. Higher Margins */}
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
                                           <TrendingUp className="w-5 h-5 text-green-500" />
@@ -245,8 +231,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[10px] text-gray-500 font-normal">Maximized ROI</p>
                                         </div>
                                     </div>
-
-                                    {/* 4. TxA Software */}
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
                                           <Sparkles className="w-5 h-5 text-red-500" />
@@ -263,13 +247,10 @@ export default function PartnerEcosystem() {
                                 </button>
                             </div>
 
-                            {/* DERECHA: Elementos Flotantes (Ocultos en Celular, visibles solo en PC) */}
                             <div className="hidden md:flex w-full md:w-[55%] lg:w-[60%] h-[350px] md:h-[400px] relative z-10 items-center justify-center">
                                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl"></div>
 
                                  <div className="relative w-full h-full">
-                                     
-                                     {/* 1. Fastest Results (Arriba Izquierda) */}
                                      <div className="absolute top-[5%] left-[15%] lg:left-[25%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '-3deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
                                           <Clock className="w-4 h-4 md:w-5 md:h-5 text-purple-500" />
@@ -279,8 +260,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">In just hours</p>
                                         </div>
                                      </div>
-
-                                     {/* 2. Higher Margins (Arriba Derecha) */}
                                      <div className="absolute top-[18%] right-[0%] lg:right-[5%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '2deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
                                           <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
@@ -290,8 +269,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Maximized ROI</p>
                                         </div>
                                      </div>
-
-                                     {/* 3. TxA (Centro Izquierda) */}
                                      <div className="absolute top-[45%] left-[5%] lg:left-[15%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-40 flex items-center gap-3 animate-float-fast" style={{'--rot': '-1deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
                                           <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
@@ -301,8 +278,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Predictive Ai</p>
                                         </div>
                                      </div>
-
-                                     {/* 4. Efficient Operation (Empujado a la Derecha) */}
                                      <div className="absolute top-[60%] right-[-5%] lg:right-[0%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '3deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
                                           <Activity className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
@@ -312,8 +287,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Automated workflows</p>
                                         </div>
                                      </div>
-
-                                     {/* 5. Plug & Play (Abajo Centro) */}
                                      <div className="absolute bottom-[5%] left-[30%] lg:left-[40%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '-2deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-orange-50 rounded-full flex items-center justify-center shrink-0">
                                           <Zap className="w-4 h-4 md:w-5 md:h-5 text-orange-500" />
@@ -323,7 +296,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Ready to scale</p>
                                         </div>
                                      </div>
-
                                  </div>
                             </div>
                         </div>
@@ -392,18 +364,31 @@ export default function PartnerEcosystem() {
                 if (idx === 5) {
                   const IconComponent = solution.icon as any;
                   return (
-                    // Eliminado mt-2 md:mt-6 para mantener el gap constante
-                    <div key={solution.id} className="md:col-span-2 bg-white rounded-[2.5rem] p-10 md:px-10 flex flex-col md:flex-row items-center relative overflow-hidden min-h-[280px]">
+                    // Padding superior aumentado en celular (pt-[220px]) para dar espacio a la imagen de fondo superior.
+                    <div key={solution.id} className="md:col-span-2 bg-white rounded-[2.5rem] px-8 pb-10 pt-[220px] md:p-10 flex flex-col md:flex-row items-center relative overflow-hidden min-h-[280px]">
                         
-                        {/* IMAGEN DE FONDO FUNDIDA (Solo Desktop) */}
+                        {/* IMAGEN DE FONDO FUNDIDA (Solo Móvil - Arriba) */}
+                        <div className="absolute left-0 top-0 w-full h-[260px] z-0 pointer-events-none md:hidden rounded-t-[2.5rem] overflow-hidden">
+                            <Image
+                                src="/support3.png"
+                                alt="TAAG Support Team Mobile"
+                                fill
+                                className="object-cover object-top"
+                                style={{
+                                    /* El gradiente empieza sólido arriba y se vuelve transparente hacia abajo */
+                                    WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
+                                    maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)'
+                                }}
+                            />
+                        </div>
+
+                        {/* IMAGEN DE FONDO FUNDIDA (Solo Desktop - Derecha) */}
                         <div className="absolute right-0 top-0 bottom-0 w-[45%] h-full z-0 pointer-events-none hidden md:block rounded-r-[2.5rem] overflow-hidden">
                             <Image
                                 src="/support3.png"
                                 alt="TAAG Support Team"
                                 fill
-                                /* object-cover hace que llene la altura sin dejar huecos arriba/abajo */
                                 className="object-cover object-center"
-                                /* Esta máscara hace transparente SOLO el borde izquierdo y deja el resto intacto */
                                 style={{
                                     WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 45%)',
                                     maskImage: 'linear-gradient(to right, transparent 0%, black 45%)'
@@ -411,7 +396,7 @@ export default function PartnerEcosystem() {
                             />
                         </div>
 
-                        {/* CONTENIDO (Izquierda) */}
+                        {/* CONTENIDO (Texto y botón) */}
                         <div className="flex flex-col md:flex-row items-center gap-8 relative z-20 max-w-2xl text-center md:text-left">
                             
                             {/* ÍCONO CON ANILLOS CONCÉNTRICOS VERDES */}
@@ -437,7 +422,7 @@ export default function PartnerEcosystem() {
                                    {solution.description}
                                 </p>
                                 
-                                {/* LINK ESTILO APPLE (Centrado en móvil, alineado a la izquierda en desktop) */}
+                                {/* LINK ESTILO APPLE */}
                                 <button 
                                   onClick={() => handleOpenDetails(solution.id)}
                                   className="w-full md:w-auto text-[14px] md:text-[15px] text-[#0066cc] hover:underline font-medium flex items-center justify-center md:justify-start"
