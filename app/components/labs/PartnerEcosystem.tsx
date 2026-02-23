@@ -14,8 +14,8 @@ import { SOLUTIONS_DATA } from "../data/solutionsData";
 const ECOSYSTEM_FEATURES = [
   {
     id: "intro",
-    title: "Access the latest molecular technologies.",
-    description: "Transform your facility into a highly efficient molecular biology laboratory. Gain immediate access to our complete ecosystem of technologies, kits, software, and continuous TAAG support to scale your operations effortlessly.",
+    title: "Instant scalability. Maximum profitability.",
+    description: "Upgrade your testing capabilities overnight with our integrated ecosystem. We provide the premium kits, AI software, and automated protocols you need to drastically reduce costs, accelerate turnaround times, and outpace the competition.",
   },
   {
     id: "pcr",
@@ -59,11 +59,12 @@ const ECOSYSTEM_FEATURES = [
   },
   {
     id: "support",
-    title: "Protocols & Support",
-    description: "Implement our standardized workflows and protocols. Count on TAAG's constant technical support to optimize your laboratory operations to the maximum.",
+    // NUEVOS TEXTOS ENFOCADOS EN BENEFICIO
+    title: "Uninterrupted operations, guaranteed.",
+    description: "Don't just buy products; gain a partner. We provide standardized workflows, ongoing training, and 24/7 expert support to ensure your lab runs smoothly and without downtime.",
     icon: ShieldCheck,
-    color: "text-emerald-500",
-    bgGlow: "bg-emerald-500/10"
+    // Color base para los efectos
+    color: "green", 
   }
 ];
 
@@ -71,7 +72,6 @@ export default function PartnerEcosystem() {
   const { openMeeting } = useCTA();
   const { openModal } = useModal(); 
   
-  // --- LÓGICA DE LA ANIMACIÓN DE LUZ (SOLO SCROLL DOWN) ---
   const [isLineVisible, setIsLineVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
@@ -120,7 +120,6 @@ export default function PartnerEcosystem() {
   return (
     <section id="ecosystem" className="bg-white md:px-6 pt-16 pb-32 md:py-24 overflow-hidden relative">
       
-      {/* ESTILOS DE LA ANIMACIÓN DE LUZ Y ELEMENTOS FLOTANTES */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes expandLine {
             0% { transform: scaleX(0.01); }
@@ -137,8 +136,6 @@ export default function PartnerEcosystem() {
                 expandLine 2s cubic-bezier(0.16, 1, 0.3, 1) forwards,
                 fadeLine 2s linear forwards;
         }
-
-        /* Animaciones para las insignias flotantes en PC */
         @keyframes float-slow {
           0%, 100% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
           50% { transform: translateY(-8px) rotate(calc(var(--rot, 0deg) + 2deg)); }
@@ -152,11 +149,19 @@ export default function PartnerEcosystem() {
         .animate-float-fast {
           animation: float-slow 5s ease-in-out infinite 0.5s;
         }
+        /* Nueva animación para los anillos verdes */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+        .animate-pulse-ring {
+            animation: pulse-ring 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
       `}} />
 
       <div className="max-w-7xl mx-auto">
         
-        {/* CONTENEDOR PRINCIPAL GRIS */}
         <div className="relative bg-[#F4F4F5] rounded-none md:rounded-[3rem] overflow-hidden pt-48 md:pt-40 pb-32 flex flex-col items-center">
           
           <div
@@ -169,7 +174,7 @@ export default function PartnerEcosystem() {
 
           <div className="relative z-20 w-[95%] md:w-full md:px-16 mx-auto">
 
-            <div className="text-center mb-16 max-w-3xl mx-auto px-4 md:px-0">
+            <div className="text-center mb-16 max-w-3xl mx-auto px-4 md:px-0 mt-4 md:mt-0">
               <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
                 THE PARTNER ECOSYSTEM
               </span>
@@ -186,7 +191,6 @@ export default function PartnerEcosystem() {
                   return (
                     <div className="md:col-span-2 relative" key={solution.id} ref={cardRef}>
                         
-                        {/* LÍNEA DE LUZ */}
                         {isLineVisible && (
                           <div className="absolute top-[-2px] left-1/2 -translate-x-1/2 w-[90%] h-[20px] pointer-events-none z-0">
                               <div className="absolute top-[-10px] left-0 w-full h-[30px] bg-gradient-to-r from-[#FF270A] via-[#8b5cf6] to-[#3b82f6] blur-[20px] opacity-0 animate-line-glow origin-center" />
@@ -194,17 +198,14 @@ export default function PartnerEcosystem() {
                           </div>
                         )}
 
-                        {/* TARJETA BLANCA */}
                         <div className="relative z-10 bg-white rounded-[2.5rem] p-8 md:p-14 lg:p-16 flex flex-col md:flex-row gap-0 md:gap-8 items-center overflow-hidden mb-6 md:mb-10">
                             
-                            {/* IZQUIERDA: Texto -> Iconos Móviles Estáticos -> Botón */}
                             <div className="w-full md:w-[45%] lg:w-[40%] flex flex-col items-start text-left relative z-20 md:pl-4">
                                 <h3 className="text-3xl md:text-[32px] font-bold text-[#111111] mb-5 leading-tight tracking-tight max-w-sm">{solution.title}</h3>
                                 <p className="text-[#111111] text-sm md:text-base leading-relaxed font-normal mb-8 max-w-sm">
                                   {solution.description}
                                 </p>
 
-                                {/* MOBILE ONLY: 4 Elementos estáticos en lista debajo del texto */}
                                 <div className="flex md:hidden flex-col w-full gap-3 mb-8">
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
@@ -215,7 +216,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[10px] text-gray-500 font-normal">In just hours</p>
                                         </div>
                                     </div>
-
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
                                           <Activity className="w-5 h-5 text-blue-500" />
@@ -225,7 +225,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[10px] text-gray-500 font-normal">Automated workflows</p>
                                         </div>
                                     </div>
-
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
                                           <TrendingUp className="w-5 h-5 text-green-500" />
@@ -235,7 +234,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[10px] text-gray-500 font-normal">Maximized ROI</p>
                                         </div>
                                     </div>
-
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
                                         <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
                                           <Sparkles className="w-5 h-5 text-red-500" />
@@ -252,13 +250,10 @@ export default function PartnerEcosystem() {
                                 </button>
                             </div>
 
-                            {/* DERECHA: Elementos Flotantes (Ocultos en Celular, visibles solo en PC) */}
                             <div className="hidden md:flex w-full md:w-[55%] lg:w-[60%] h-[350px] md:h-[400px] relative z-10 items-center justify-center">
                                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl"></div>
 
                                  <div className="relative w-full h-full">
-                                     
-                                     {/* 1. Fastest Results */}
                                      <div className="absolute top-[5%] left-[15%] lg:left-[25%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '-3deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-purple-50 rounded-full flex items-center justify-center shrink-0">
                                           <Clock className="w-4 h-4 md:w-5 md:h-5 text-purple-500" />
@@ -268,8 +263,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">In just hours</p>
                                         </div>
                                      </div>
-
-                                     {/* 2. Higher Margins */}
                                      <div className="absolute top-[18%] right-[0%] lg:right-[5%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '2deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
                                           <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
@@ -279,8 +272,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Maximized ROI</p>
                                         </div>
                                      </div>
-
-                                     {/* 3. TxA */}
                                      <div className="absolute top-[45%] left-[5%] lg:left-[15%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-40 flex items-center gap-3 animate-float-fast" style={{'--rot': '-1deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-red-50 rounded-full flex items-center justify-center shrink-0">
                                           <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
@@ -290,8 +281,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Predictive Ai</p>
                                         </div>
                                      </div>
-
-                                     {/* 4. Efficient Operation */}
                                      <div className="absolute top-[60%] right-[-5%] lg:right-[0%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '3deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
                                           <Activity className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
@@ -301,8 +290,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Automated workflows</p>
                                         </div>
                                      </div>
-
-                                     {/* 5. Plug & Play */}
                                      <div className="absolute bottom-[5%] left-[30%] lg:left-[40%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '-2deg'} as any}>
                                         <div className="w-8 h-8 md:w-10 md:h-10 bg-orange-50 rounded-full flex items-center justify-center shrink-0">
                                           <Zap className="w-4 h-4 md:w-5 md:h-5 text-orange-500" />
@@ -312,7 +299,6 @@ export default function PartnerEcosystem() {
                                           <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Ready to scale</p>
                                         </div>
                                      </div>
-
                                  </div>
                             </div>
                         </div>
@@ -327,14 +313,13 @@ export default function PartnerEcosystem() {
                         
                         {/* 0. INSIGNIA SUPERIOR (VENTAJA) */}
                         {solution.badge && (
-                           <span className={`text-[10px] md:text-[11px] font-extrabold uppercase tracking-[0.15em] mb-5 ${solution.badgeColor}`}>
+                           <span className={`text-[10px] md:text-[11px] font-extrabold uppercase tracking-[0.15em] mb-2 ${solution.badgeColor}`}>
                              {solution.badge}
                            </span>
                         )}
 
                         {/* 1. Imagen Central Pequeña */}
                         <div className="mb-6 flex items-center justify-center h-12">
-                           
                            {solution.id === 'pcr' && (
                               <div className="flex items-center justify-center -space-x-1.5 opacity-90">
                                 <div className="w-4 h-4 rounded-full bg-blue-500 mix-blend-multiply"></div>
@@ -342,7 +327,6 @@ export default function PartnerEcosystem() {
                                 <div className="w-4 h-4 rounded-full bg-[#FF270A] mix-blend-multiply"></div>
                               </div>
                            )}
-
                            {solution.id === 'elevia' && (
                               <div className="flex items-center justify-center">
                                 <span className="text-xl md:text-2xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-gray-800 to-gray-400">
@@ -350,27 +334,12 @@ export default function PartnerEcosystem() {
                                 </span>
                               </div>
                            )}
-
                            {solution.id === 'txa' && (
-                              <Image 
-                                src="/LogoTxANB.png" 
-                                alt="TxA Logo" 
-                                width={40} 
-                                height={40} 
-                                className="object-contain" 
-                              />
+                              <Image src="/LogoTxANB.png" alt="TxA Logo" width={40} height={40} className="object-contain" />
                            )}
-
                            {solution.id === 'mila' && (
-                              <Image 
-                                src="/logo_mila.png" 
-                                alt="MILA Logo" 
-                                width={42} 
-                                height={42} 
-                                className="object-contain" 
-                              />
+                              <Image src="/logo_mila.png" alt="MILA Logo" width={42} height={42} className="object-contain" />
                            )}
-
                         </div>
 
                         {/* 2. Título Centrado Más Pequeño */}
@@ -394,34 +363,60 @@ export default function PartnerEcosystem() {
                   );
                 }
 
-                // --- CARD 5: SOPORTE Y PROTOCOLOS (Horizontal Minimalista) ---
+                // --- CARD 5: SOPORTE (Horizontal Minimalista con Imagen Fundida) ---
                 if (idx === 5) {
                   const IconComponent = solution.icon as any;
                   return (
-                    <div key={solution.id} className="md:col-span-2 bg-white rounded-[2.5rem] p-10 md:p-14 flex flex-col md:flex-row items-center justify-between text-center md:text-left gap-8 mt-2 md:mt-6">
-                        <div className="flex flex-col md:flex-row items-center gap-6">
-                            {/* Icono discreto */}
-                            {IconComponent && (
-                                <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center shrink-0">
-                                    <IconComponent className="w-6 h-6 text-gray-800" />
-                                </div>
-                            )}
-                            <div className="max-w-xl">
-                                <h3 className="text-[22px] md:text-2xl font-bold text-[#111111] mb-2 leading-tight tracking-tight">
+                    <div key={solution.id} className="md:col-span-2 bg-white rounded-[2.5rem] p-10 md:px-14 flex flex-col md:flex-row items-center relative overflow-hidden min-h-[280px] mt-2 md:mt-6">
+                        
+                        {/* IMAGEN DE FONDO FUNDIDA (Solo Desktop) */}
+{/* Redujimos el ancho a w-1/2 y agregamos p-6 para que tenga margen y no toque los bordes */}
+<div className="absolute right-0 top-0 bottom-0 w-1/2 h-full z-0 pointer-events-none hidden md:block p-6">
+<div className="absolute inset-y-0 left-0 w-2/5 z-10 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+    <Image
+        src="/support3.png"
+        alt="TAAG Support Team"
+        fill
+        /* Cambiamos a object-contain para que no haga zoom, y object-right para anclarla a la derecha */
+        className="object-contain object-right opacity-100 mix-blend-multiply"
+    />
+</div>
+
+                        {/* CONTENIDO (Izquierda) */}
+                        <div className="flex flex-col md:flex-row items-center gap-8 relative z-20 max-w-2xl text-center md:text-left">
+                            
+                            {/* ÍCONO CON ANILLOS CONCÉNTRICOS VERDES */}
+                            <div className="relative flex items-center justify-center shrink-0 w-24 h-24">
+                                {/* Anillos exteriores que se funden */}
+                                <div className="absolute border-[3px] border-green-100/40 w-full h-full rounded-full animate-pulse-ring"></div>
+                                <div className="absolute border-[3px] border-green-200/60 w-20 h-20 rounded-full"></div>
+                                <div className="absolute border-[3px] border-green-300/80 w-16 h-16 rounded-full"></div>
+                                
+                                {/* Centro intenso */}
+                                {IconComponent && (
+                                    <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center relative z-10 shadow-md shadow-green-600/30">
+                                        <IconComponent className="w-6 h-6 text-white" />
+                                    </div>
+                                )}
+                            </div>
+
+                            <div>
+                                <h3 className="text-[22px] md:text-2xl font-bold text-[#111111] mb-3 leading-tight tracking-tight">
                                    {solution.title}
                                 </h3>
-                                <p className="text-[#111111] text-sm md:text-base leading-relaxed font-normal">
+                                <p className="text-[#111111] text-sm md:text-base leading-relaxed font-normal mb-6">
                                    {solution.description}
                                 </p>
+                                
+                                {/* LINK ESTILO APPLE (Debajo del texto) */}
+                                <button 
+                                  onClick={() => handleOpenDetails(solution.id)}
+                                  className="text-[14px] md:text-[15px] text-[#0066cc] hover:underline font-medium flex items-center justify-center md:justify-start"
+                                >
+                                  Learn more about our Support <span className="text-[10px] ml-1 translate-y-[0.5px] font-bold">&gt;</span>
+                                </button>
                             </div>
                         </div>
-                        
-                        <button 
-                          onClick={() => handleOpenDetails(solution.id)}
-                          className="text-[14px] md:text-[15px] text-[#0066cc] hover:underline font-medium flex items-center justify-center shrink-0"
-                        >
-                          Learn more about our Support <span className="text-[10px] ml-1 translate-y-[0.5px] font-bold">&gt;</span>
-                        </button>
                     </div>
                   );
                 }
