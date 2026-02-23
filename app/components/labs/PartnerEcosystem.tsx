@@ -176,7 +176,7 @@ export default function PartnerEcosystem() {
                 THE PARTNER ECOSYSTEM
               </span>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] leading-tight tracking-tight pb-8">
-                This is how we will take it to the next level.
+                The ultimate lab upgrade.
               </h2>
             </div>
 
