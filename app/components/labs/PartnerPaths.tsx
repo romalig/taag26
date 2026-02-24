@@ -16,55 +16,55 @@ const MATRIX_DATA = [
   },
   { 
     feature: "Next-Gen Assays", 
-    description: "Upgrade to Multiplex PCR and rapid RNA enrichment.",
+    description: "Upgrade to Multiplex PCR and 3-6 hours Elevia results.",
     service: true, food: true, build: true 
   },
   { 
     feature: "Comprehensive Training", 
-    description: "Hands-on education for your team on all TAAG protocols.",
+    description: "Hands-on education for your team on all TAAG products and protocols.",
     service: true, food: true, build: true 
   },
   { 
     feature: "Custom Validations", 
-    description: "Tailored matrix verifications to ensure absolute accuracy.",
+    description: "Tailored matrix validations and verifications to ensure absolute accuracy and quality compliance.",
     service: true, food: true, build: true 
   },
   { 
     feature: "Software Integration", 
-    description: "Seamlessly connect our predictive AI to your existing operations.",
+    description: "Seamlessly connect our laboratory management and predictive AI software to your existing operations.",
     service: true, food: true, build: true 
   },
   { 
-    feature: "24/7 Expert Support", 
-    description: "Round-the-clock scientific and technical assistance.",
+    feature: "Continuous Expert Support", 
+    description: "Dedicated TAAG Expert for scientific and technical assistance.",
     service: true, food: true, build: true 
   },
   { 
     feature: "Commercial Enablement", 
-    description: "Strategic sales support to help you close more B2B deals.",
+    description: "Sales support related to TAAG products.",
     service: true, food: false, build: false 
   },
   { 
-    feature: "Marketing Collateral", 
-    description: "Premium white-label assets to position your lab in the market.",
+    feature: "Growth Partnership", 
+    description: "Co-branded campaigns fully designed and executed by TAAG to accelerate your growth.",
     service: true, food: false, build: false 
   },
   { 
     feature: "R&D on Demand", 
-    description: "We design proprietary multiplex panels exclusively for your lab.",
+    description: "Consider us your private R&D division. We design and validate proprietary multiplex panels exclusively for your lab's unique demands.",
     service: true, food: true, build: true 
   },
   { 
-    feature: "Lead Generation", 
-    description: "We route local testing demands directly to your facility.",
+    feature: "Authorized Processing Lab", 
+    description: "Join our lab network. Receive inflow of samples from our customer base.",
     service: true, food: false, build: false 
   },
 ];
 
 const MAIN_GOALS = {
   service: "Maximized Margins & Scale",
-  food: "Zero Recalls & Fast Release",
-  build: "Rapid Setup & Operation"
+  food: "Fast, Reliable Results with Low Costs",
+  build: "Rapid Setup & Efficient Operation"
 };
 
 export default function PartnerMatrix() {
