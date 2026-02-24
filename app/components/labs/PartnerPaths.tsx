@@ -63,7 +63,7 @@ const MATRIX_DATA = [
 
 const MAIN_GOALS = {
   service: "Maximized Margins & Scale",
-  food: "Fast, Reliable Results with Low Costs",
+  food: "Rapid, Reliable Results & Low Costs",
   build: "Rapid Setup & Efficient Operation"
 };
 
@@ -183,7 +183,7 @@ export default function PartnerMatrix() {
                  <span className="text-[10px] font-bold text-black leading-tight mb-2">Food &<br/>Bev</span>
                  <span className="text-[7px] sm:text-[8px] text-gray-400 font-bold uppercase tracking-widest mb-1">Business Outcome</span>
                  <div className="px-1.5 py-1 bg-[#8b5cf6]/10 text-[#8b5cf6] rounded-md text-[9px] font-bold w-full leading-tight flex items-center justify-center min-h-[32px]">
-                   Fast<br/>Release
+                   Fast & Accurate <br/>Release
                  </div>
               </div>
               <div className="flex flex-col items-center text-center">
@@ -191,7 +191,7 @@ export default function PartnerMatrix() {
                  <span className="text-[10px] font-bold text-black leading-tight mb-2">Turnkey<br/>Labs</span>
                  <span className="text-[7px] sm:text-[8px] text-gray-400 font-bold uppercase tracking-widest mb-1">Business Outcome</span>
                  <div className="px-1.5 py-1 bg-[#FF270A]/10 text-[#FF270A] rounded-md text-[9px] font-bold w-full leading-tight flex items-center justify-center min-h-[32px]">
-                   Rapid<br/>Setup
+                   Rapid & Cost <br/>Effective Setup
                  </div>
               </div>
            </div>
