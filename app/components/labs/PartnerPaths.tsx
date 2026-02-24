@@ -91,38 +91,41 @@ export default function PartnerMatrix() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr>
-              {/* Feature Header (Sticky) */}
-              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 pr-8 w-[40%] align-bottom border-b border-gray-200">
-                <span className="text-xl font-bold text-black">Ecosystem Capabilities</span>
+              {/* Feature Header (Sticky con parche invisible arriba) */}
+              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 pr-8 w-[40%] align-bottom border-b border-gray-200 before:content-[''] before:absolute before:-top-[100px] before:left-0 before:w-full before:h-[100px] before:bg-white">
+                <span className="text-xl font-bold text-black relative z-10">Ecosystem Capabilities</span>
               </th>
               
-              {/* COLUMNA 1: Service Labs (Sticky) - Color: #3b82f6 */}
-              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200">
-                <div className="flex flex-col items-center justify-end h-full text-center">
+              {/* COLUMNA 1: Service Labs */}
+              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200 before:content-[''] before:absolute before:-top-[100px] before:left-0 before:w-full before:h-[100px] before:bg-white">
+                <div className="flex flex-col items-center justify-end h-full text-center relative z-10">
                   <Microscope className="w-8 h-8 text-[#3b82f6] mb-4" strokeWidth={1.5} />
-                  <span className="text-base font-bold text-black leading-tight mb-3">Service<br/>Laboratories</span>
+                  <span className="text-base font-bold text-black leading-tight mb-4">Service<br/>Laboratories</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1.5">Business Outcome</span>
                   <div className="px-3 py-1.5 bg-[#3b82f6]/10 text-[#3b82f6] rounded-full text-[12px] font-bold w-full max-w-[160px] leading-tight">
                     {MAIN_GOALS.service}
                   </div>
                 </div>
               </th>
               
-              {/* COLUMNA 2: Food & Beverage (Sticky) - Color: #8b5cf6 */}
-              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200">
-                <div className="flex flex-col items-center justify-end h-full text-center">
+              {/* COLUMNA 2: Food & Beverage */}
+              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200 before:content-[''] before:absolute before:-top-[100px] before:left-0 before:w-full before:h-[100px] before:bg-white">
+                <div className="flex flex-col items-center justify-end h-full text-center relative z-10">
                   <Factory className="w-8 h-8 text-[#8b5cf6] mb-4" strokeWidth={1.5} />
-                  <span className="text-base font-bold text-black leading-tight mb-3">Food &<br/>Beverage</span>
+                  <span className="text-base font-bold text-black leading-tight mb-4">Food &<br/>Beverage</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1.5">Business Outcome</span>
                   <div className="px-3 py-1.5 bg-[#8b5cf6]/10 text-[#8b5cf6] rounded-full text-[12px] font-bold w-full max-w-[160px] leading-tight">
                     {MAIN_GOALS.food}
                   </div>
                 </div>
               </th>
               
-              {/* COLUMNA 3: Turnkey Labs (Sticky) - Color: #FF270A */}
-              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200">
-                <div className="flex flex-col items-center justify-end h-full text-center">
+              {/* COLUMNA 3: Turnkey Labs */}
+              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200 before:content-[''] before:absolute before:-top-[100px] before:left-0 before:w-full before:h-[100px] before:bg-white">
+                <div className="flex flex-col items-center justify-end h-full text-center relative z-10">
                   <Sparkles className="w-8 h-8 text-[#FF270A] mb-4" strokeWidth={1.5} />
-                  <span className="text-base font-bold text-black leading-tight mb-3">Turnkey<br/>Laboratories</span>
+                  <span className="text-base font-bold text-black leading-tight mb-4">Turnkey<br/>Laboratories</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1.5">Business Outcome</span>
                   <div className="px-3 py-1.5 bg-[#FF270A]/10 text-[#FF270A] rounded-full text-[12px] font-bold w-full max-w-[160px] leading-tight">
                     {MAIN_GOALS.build}
                   </div>
@@ -142,15 +145,14 @@ export default function PartnerMatrix() {
                     {row.description}
                   </p>
                 </td>
-                {/* Checks con el color TAAG #FF270A */}
                 <td className="py-6 px-4 text-center border-b border-gray-200">
-                  {row.service && <Check className="w-[22px] h-[22px] text-[#FF270A] mx-auto" strokeWidth={3} />}
+                  {row.service && <Check className="w-[22px] h-[22px] text-gray-700 mx-auto" strokeWidth={3} />}
                 </td>
                 <td className="py-6 px-4 text-center border-b border-gray-200">
-                  {row.food && <Check className="w-[22px] h-[22px] text-[#FF270A] mx-auto" strokeWidth={3} />}
+                  {row.food && <Check className="w-[22px] h-[22px] text-gray-700 mx-auto" strokeWidth={3} />}
                 </td>
                 <td className="py-6 px-4 text-center border-b border-gray-200">
-                  {row.build && <Check className="w-[22px] h-[22px] text-[#FF270A] mx-auto" strokeWidth={3} />}
+                  {row.build && <Check className="w-[22px] h-[22px] text-gray-700 mx-auto" strokeWidth={3} />}
                 </td>
               </tr>
             ))}
@@ -160,16 +162,17 @@ export default function PartnerMatrix() {
 
 
       {/* ============================================================== */}
-      {/* 2. VISTA MÓVIL (Lista Plana, sin cajas redondeadas)              */}
+      {/* 2. VISTA MÓVIL (Lista Plana)                                     */}
       {/* ============================================================== */}
       <div className="block md:hidden w-full px-4 relative">
         
-        {/* Cabecera Flotante (Sticky Header) */}
-        <div className="sticky top-[60px] z-30 bg-white/95 backdrop-blur-md pt-4 pb-4 border-b border-gray-200 mb-2 -mx-4 px-4 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)]">
-           <div className="grid grid-cols-3 gap-2">
+        {/* Cabecera Flotante (Sticky Header con parche invisible) */}
+        <div className="sticky top-[60px] z-30 bg-white/95 backdrop-blur-md pt-4 pb-4 border-b border-gray-200 mb-2 -mx-4 px-4 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] before:content-[''] before:absolute before:-top-[100px] before:left-0 before:w-full before:h-[100px] before:bg-white">
+           <div className="grid grid-cols-3 gap-2 relative z-10">
               <div className="flex flex-col items-center text-center">
                  <Microscope className="w-5 h-5 text-[#3b82f6] mb-2" strokeWidth={1.5} />
                  <span className="text-[10px] font-bold text-black leading-tight mb-2">Service<br/>Labs</span>
+                 <span className="text-[7px] sm:text-[8px] text-gray-400 font-bold uppercase tracking-widest mb-1">Business Outcome</span>
                  <div className="px-1.5 py-1 bg-[#3b82f6]/10 text-[#3b82f6] rounded-md text-[9px] font-bold w-full leading-tight flex items-center justify-center min-h-[32px]">
                    Maximized<br/>Margins
                  </div>
@@ -177,6 +180,7 @@ export default function PartnerMatrix() {
               <div className="flex flex-col items-center text-center">
                  <Factory className="w-5 h-5 text-[#8b5cf6] mb-2" strokeWidth={1.5} />
                  <span className="text-[10px] font-bold text-black leading-tight mb-2">Food &<br/>Bev</span>
+                 <span className="text-[7px] sm:text-[8px] text-gray-400 font-bold uppercase tracking-widest mb-1">Business Outcome</span>
                  <div className="px-1.5 py-1 bg-[#8b5cf6]/10 text-[#8b5cf6] rounded-md text-[9px] font-bold w-full leading-tight flex items-center justify-center min-h-[32px]">
                    Fast<br/>Release
                  </div>
@@ -184,6 +188,7 @@ export default function PartnerMatrix() {
               <div className="flex flex-col items-center text-center">
                  <Sparkles className="w-5 h-5 text-[#FF270A] mb-2" strokeWidth={1.5} />
                  <span className="text-[10px] font-bold text-black leading-tight mb-2">Turnkey<br/>Labs</span>
+                 <span className="text-[7px] sm:text-[8px] text-gray-400 font-bold uppercase tracking-widest mb-1">Business Outcome</span>
                  <div className="px-1.5 py-1 bg-[#FF270A]/10 text-[#FF270A] rounded-md text-[9px] font-bold w-full leading-tight flex items-center justify-center min-h-[32px]">
                    Rapid<br/>Setup
                  </div>
@@ -201,16 +206,15 @@ export default function PartnerMatrix() {
                     <p className="text-[14px] text-black leading-snug">{row.description}</p>
                  </div>
                  
-                 {/* Checks con el color TAAG #FF270A */}
                  <div className="grid grid-cols-3 pt-2">
                     <div className="flex items-center justify-center">
-                       {row.service && <Check className="w-[20px] h-[20px] text-[#FF270A]" strokeWidth={3} />}
+                       {row.service && <Check className="w-[20px] h-[20px] text-gray-700" strokeWidth={3} />}
                     </div>
                     <div className="flex items-center justify-center">
-                       {row.food && <Check className="w-[20px] h-[20px] text-[#FF270A]" strokeWidth={3} />}
+                       {row.food && <Check className="w-[20px] h-[20px] text-gray-700" strokeWidth={3} />}
                     </div>
                     <div className="flex items-center justify-center">
-                       {row.build && <Check className="w-[20px] h-[20px] text-[#FF270A]" strokeWidth={3} />}
+                       {row.build && <Check className="w-[20px] h-[20px] text-gray-700" strokeWidth={3} />}
                     </div>
                  </div>
 
