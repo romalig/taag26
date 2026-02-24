@@ -72,7 +72,8 @@ export default function PartnerMatrix() {
     <section className="relative w-full bg-white pt-8 pb-24 md:pt-12 md:pb-32 flex flex-col items-center justify-center">
       
       {/* CABECERA GENERAL */}
-      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-8 mb-12 md:mb-16 text-center">
+      {/* Aumentamos el margen inferior (mb-16 md:mb-24) para dar espacio real al parche invisible */}
+      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-8 mb-16 md:mb-24 text-center">
         <span className="text-xs font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block">
           Tailored for your operation
         </span>
@@ -91,13 +92,13 @@ export default function PartnerMatrix() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr>
-              {/* Feature Header (Sticky con parche invisible arriba) */}
-              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 pr-8 w-[40%] align-bottom border-b border-gray-200 before:content-[''] before:absolute before:-top-[100px] before:left-0 before:w-full before:h-[100px] before:bg-white">
+              {/* Feature Header (Sticky con parche invisible ajustado al offset exacto) */}
+              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 pr-8 w-[40%] align-bottom border-b border-gray-200 before:content-[''] before:absolute before:-top-[60px] lg:before:-top-[80px] before:left-0 before:w-full before:h-[60px] lg:before:h-[80px] before:bg-white">
                 <span className="text-xl font-bold text-black relative z-10">Ecosystem Capabilities</span>
               </th>
               
               {/* COLUMNA 1: Service Labs */}
-              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200 before:content-[''] before:absolute before:-top-[100px] before:left-0 before:w-full before:h-[100px] before:bg-white">
+              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200 before:content-[''] before:absolute before:-top-[60px] lg:before:-top-[80px] before:left-0 before:w-full before:h-[60px] lg:before:h-[80px] before:bg-white">
                 <div className="flex flex-col items-center justify-end h-full text-center relative z-10">
                   <Microscope className="w-8 h-8 text-[#3b82f6] mb-4" strokeWidth={1.5} />
                   <span className="text-base font-bold text-black leading-tight mb-4">Service<br/>Laboratories</span>
@@ -109,7 +110,7 @@ export default function PartnerMatrix() {
               </th>
               
               {/* COLUMNA 2: Food & Beverage */}
-              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200 before:content-[''] before:absolute before:-top-[100px] before:left-0 before:w-full before:h-[100px] before:bg-white">
+              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200 before:content-[''] before:absolute before:-top-[60px] lg:before:-top-[80px] before:left-0 before:w-full before:h-[60px] lg:before:h-[80px] before:bg-white">
                 <div className="flex flex-col items-center justify-end h-full text-center relative z-10">
                   <Factory className="w-8 h-8 text-[#8b5cf6] mb-4" strokeWidth={1.5} />
                   <span className="text-base font-bold text-black leading-tight mb-4">Food &<br/>Beverage</span>
@@ -121,7 +122,7 @@ export default function PartnerMatrix() {
               </th>
               
               {/* COLUMNA 3: Turnkey Labs */}
-              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200 before:content-[''] before:absolute before:-top-[100px] before:left-0 before:w-full before:h-[100px] before:bg-white">
+              <th className="sticky top-[60px] lg:top-[80px] z-20 bg-white/95 backdrop-blur-md pt-6 pb-6 px-4 w-[20%] border-b border-gray-200 before:content-[''] before:absolute before:-top-[60px] lg:before:-top-[80px] before:left-0 before:w-full before:h-[60px] lg:before:h-[80px] before:bg-white">
                 <div className="flex flex-col items-center justify-end h-full text-center relative z-10">
                   <Sparkles className="w-8 h-8 text-[#FF270A] mb-4" strokeWidth={1.5} />
                   <span className="text-base font-bold text-black leading-tight mb-4">Turnkey<br/>Laboratories</span>
@@ -166,8 +167,8 @@ export default function PartnerMatrix() {
       {/* ============================================================== */}
       <div className="block md:hidden w-full px-4 relative">
         
-        {/* Cabecera Flotante (Sticky Header con parche invisible) */}
-        <div className="sticky top-[60px] z-30 bg-white/95 backdrop-blur-md pt-4 pb-4 border-b border-gray-200 mb-2 -mx-4 px-4 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] before:content-[''] before:absolute before:-top-[100px] before:left-0 before:w-full before:h-[100px] before:bg-white">
+        {/* Cabecera Flotante (Sticky Header con parche invisible ajustado) */}
+        <div className="sticky top-[60px] z-30 bg-white/95 backdrop-blur-md pt-4 pb-4 border-b border-gray-200 mb-2 -mx-4 px-4 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] before:content-[''] before:absolute before:-top-[60px] before:left-0 before:w-full before:h-[60px] before:bg-white">
            <div className="grid grid-cols-3 gap-2 relative z-10">
               <div className="flex flex-col items-center text-center">
                  <Microscope className="w-5 h-5 text-[#3b82f6] mb-2" strokeWidth={1.5} />
