@@ -138,7 +138,7 @@ export default function ModularDX() {
         <div className="relative w-full min-h-[550px] md:min-h-[700px] rounded-[2rem] overflow-hidden flex flex-col shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]">
           
           <div className="absolute inset-0 z-0 pointer-events-none">
-            <Image src="/modularDX.png" alt="ModularDX Laboratory" fill className="object-cover object-center" priority />
+            <Image src="/modularDX1.png" alt="ModularDX Laboratory" fill className="object-cover object-center" priority />
           </div>
 
           <div className="absolute inset-0 z-10 bg-black/30 bg-gradient-to-l from-black/90 via-black/40 to-transparent pointer-events-none"></div>
