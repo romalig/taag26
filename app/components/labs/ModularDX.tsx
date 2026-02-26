@@ -2,7 +2,73 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { Zap, ShieldCheck, Activity, Layers, Clock, Lock } from "lucide-react";
+import { Plug, Users, ShieldCheck } from "lucide-react";
+
+// =========================================================
+// COMPONENTE INTERNO: Animación Inteligente de Scalable
+// Lógica reforzada para evitar que se active antes de tiempo
+// =========================================================
+const ScalableVisual = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let timeoutId: NodeJS.Timeout;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Siempre limpiamos el timeout anterior para evitar animaciones fantasma
+        clearTimeout(timeoutId);
+
+        // Usamos un umbral del 70% (0.7) para asegurar que funcione en pantallas pequeñas
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.7) {
+          timeoutId = setTimeout(() => {
+            setInView(true);
+          }, 1200); // 1.2 segundos de delay
+        } else {
+          setInView(false);
+        }
+      },
+      { 
+        // Observamos en dos puntos: cuando asoma (0) y cuando llega al 70% (0.7)
+        threshold: [0, 0.7] 
+      }
+    );
+    
+    observer.observe(el);
+    
+    return () => {
+      observer.unobserve(el);
+      observer.disconnect();
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="absolute inset-0 bg-white flex items-center justify-center overflow-hidden gap-1.5">
+       {/* Bloque Izquierdo (Entra desde fuera) */}
+       <div 
+          className={`w-6 h-12 border-2 border-orange-200 rounded-md bg-[#F4F4F5] ${inView ? 'animate-merge-left' : 'opacity-0'}`}
+          style={!inView ? { transform: 'translateX(-40px)' } : {}}
+       ></div>
+       
+       {/* Bloque Central (Fijo) */}
+       <div className="w-6 h-12 border-2 border-orange-400 rounded-md bg-white shadow-sm flex items-center justify-center relative z-10">
+          <span className="text-orange-500 font-bold text-[10px]">+</span>
+       </div>
+       
+       {/* Bloque Derecho (Entra desde fuera) */}
+       <div 
+          className={`w-6 h-12 border-2 border-orange-500 rounded-md bg-orange-50 ${inView ? 'animate-merge-right' : 'opacity-0'}`}
+          style={!inView ? { transform: 'translateX(40px)' } : {}}
+       ></div>
+    </div>
+  );
+};
+
 
 // --- DATOS DEL CARRUSEL DE MODULAR DX ---
 const MODULAR_ADVANTAGES = [
@@ -12,7 +78,6 @@ const MODULAR_ADVANTAGES = [
     title: "Plug & Play.",
     text: "Arrives fully equipped and ready to operate. Skip the months of construction and start running molecular diagnostics from day one.",
     visual: (
-      // Aplicamos object-contain y scale para dejar el margen blanco deseado
       <Image 
         src="/modularDX2.png" 
         alt="ModularDX Interior" 
@@ -24,14 +89,15 @@ const MODULAR_ADVANTAGES = [
   },
   {
     id: 2,
-    title: "ISO Compliant.",
-    text: "Built to meet the most stringent international molecular biology standards, ensuring absolute reliability and quality control.",
+    title: "Implement anywhere.",
+    text: "Requires only a standard electrical connection. Set up your molecular lab in remote locations or within existing facilities effortlessly.",
     visual: (
       <div className="absolute inset-0 bg-white flex items-center justify-center overflow-hidden">
-          <div className="relative w-24 h-24 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border border-emerald-500/30 border-dashed animate-[spin_10s_linear_infinite]"></div>
-              <div className="absolute inset-2 rounded-full border border-emerald-500/15 animate-[spin_8s_linear_infinite_reverse]"></div>
-              <ShieldCheck className="w-10 h-10 text-emerald-600 relative z-10" strokeWidth={1.5} />
+          <div className="absolute w-36 h-36 bg-emerald-500/25 blur-2xl rounded-full"></div>
+          <div className="absolute w-20 h-20 bg-emerald-400/30 blur-xl rounded-full"></div>
+          
+          <div className="w-16 h-16 rounded-2xl bg-white/80 backdrop-blur-sm border border-emerald-100 flex items-center justify-center relative z-10 shadow-sm">
+              <Plug className="w-8 h-8 text-emerald-600" />
           </div>
       </div>
     )
@@ -44,9 +110,14 @@ const MODULAR_ADVANTAGES = [
       <div className="absolute inset-0 bg-white flex items-center justify-center overflow-hidden">
           <div className="absolute w-32 h-32 bg-purple-500/10 blur-3xl rounded-full"></div>
           <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.1)_1px,transparent_1px)] bg-[size:16px_16px]"></div>
-          <div className="w-16 h-16 bg-[#F4F4F5] rounded-xl border border-purple-100 flex items-center justify-center relative z-10">
-             <Activity className="w-8 h-8 text-purple-600" />
-          </div>
+          
+          <Image 
+             src="/LogoTxANB.png" 
+             alt="TxA Logo" 
+             width={200} 
+             height={80} 
+             className="object-contain w-[50%] relative z-10 drop-shadow-sm" 
+          />
       </div>
     )
   },
@@ -54,37 +125,34 @@ const MODULAR_ADVANTAGES = [
     id: 4,
     title: "Scalable footprint.",
     text: "Start with the exact capacity you need today. ModularDX allows you to seamlessly add new modules as your testing volume grows.",
-    visual: (
-      <div className="absolute inset-0 bg-white flex items-center justify-center overflow-hidden gap-2">
-         <div className="w-10 h-10 border-2 border-orange-200 rounded-lg transform -translate-y-4 translate-x-4 opacity-50 bg-[#F4F4F5]"></div>
-         <div className="w-12 h-12 border-2 border-orange-400 rounded-lg absolute z-10 bg-white flex items-center justify-center">
-            <Layers className="w-6 h-6 text-orange-500" />
-         </div>
-         <div className="w-14 h-14 border-2 border-orange-500 rounded-lg transform translate-y-4 -translate-x-4 bg-orange-50"></div>
-      </div>
-    )
+    visual: <ScalableVisual /> // Usamos el componente animado independiente
   },
   {
     id: 5,
-    title: "Rapid Deployment.",
-    text: "From finalized order to a fully operational laboratory in a fraction of the time it takes to build a traditional brick-and-mortar facility.",
+    title: "Massive productivity.",
+    text: "Achieve maximum efficiency with minimal staff. A compact two-person team can comfortably process over 300 PCR samples per day.",
     visual: (
       <div className="absolute inset-0 bg-white flex flex-col items-center justify-center overflow-hidden">
-          <div className="absolute w-40 h-1 bg-gradient-to-r from-transparent via-[#FF270A] to-transparent rotate-45 opacity-30"></div>
-          <Clock className="w-10 h-10 text-[#FF270A] relative z-10 mb-2" strokeWidth={1.5} />
-          <div className="text-[#111111] font-mono font-bold text-xs tracking-[0.2em] relative z-10">WEEKS, NOT MONTHS</div>
+          <div className="flex items-center gap-2 relative z-10 mb-2">
+             <Users className="w-7 h-7 text-[#FF270A]" />
+             <span className="text-xl font-bold text-gray-800">x 2</span>
+          </div>
+          <div className="px-3 py-1 bg-red-50 border border-red-100 text-[#FF270A] font-bold rounded-full text-[11px] tracking-wide relative z-10">
+             300+ SAMPLES / DAY
+          </div>
       </div>
     )
   },
   {
     id: 6,
-    title: "Maximum Biosecurity.",
-    text: "Engineered with unidirectional workflows, HEPA filtration, and strict climate control to guarantee optimal PCR performance.",
+    title: "ISO Compliant.",
+    text: "Built to meet the most stringent international molecular biology standards, ensuring absolute reliability and quality control.",
     visual: (
       <div className="absolute inset-0 bg-white flex items-center justify-center overflow-hidden">
-          <div className="w-20 h-20 rounded-full bg-[#F4F4F5] border border-gray-200 flex items-center justify-center relative">
-              <div className="absolute inset-0 rounded-full border-t-2 border-blue-500 animate-spin" style={{ animationDuration: '2s' }}></div>
-              <Lock className="w-8 h-8 text-blue-600" strokeWidth={1.5} />
+          <div className="relative w-28 h-28 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border-2 border-emerald-500/60 border-dashed animate-[spin_10s_linear_infinite] shadow-[0_0_15px_rgba(16,185,129,0.2)]"></div>
+              <div className="absolute inset-2 rounded-full border-2 border-emerald-500/40 animate-[spin_8s_linear_infinite_reverse]"></div>
+              <ShieldCheck className="w-12 h-12 text-emerald-600 relative z-10" strokeWidth={1.5} />
           </div>
       </div>
     )
@@ -130,18 +198,31 @@ export default function ModularDX() {
           -ms-overflow-style: none !important;
           scrollbar-width: none !important;
         }
+        
+        /* Animaciones para Scalable */
+        @keyframes slideBlockLeft {
+          from { transform: translateX(-40px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideBlockRight {
+          from { transform: translateX(40px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        .animate-merge-left {
+          animation: slideBlockLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .animate-merge-right {
+          animation: slideBlockRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
       `}} />
 
       {/* ========================================================= */}
       {/* 1. TARJETA PRINCIPAL (Hero ModularDX Responsivo)          */}
       {/* ========================================================= */}
       <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mb-16 md:mb-20">
-        {/* Cambié la altura mínima en móvil a 600px para que el formato vertical respire mejor */}
         <div className="relative w-full min-h-[600px] md:min-h-[700px] rounded-[2rem] overflow-hidden flex flex-col shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]">
           
-          {/* Imágenes de Fondo (Desktop vs Mobile) */}
           <div className="absolute inset-0 z-0 pointer-events-none">
-            {/* Imagen Desktop */}
             <Image 
               src="/modularDX1.png" 
               alt="ModularDX Laboratory" 
@@ -149,7 +230,6 @@ export default function ModularDX() {
               className="hidden md:block object-cover object-center" 
               priority 
             />
-            {/* Imagen Mobile (Abarca toda la tarjeta) */}
             <Image 
               src="/modularDX_phone.png" 
               alt="ModularDX Laboratory" 
@@ -159,25 +239,19 @@ export default function ModularDX() {
             />
           </div>
 
-          {/* Gradientes Responsivos */}
-          {/* Móvil: Oscurece arriba y abajo | Desktop: Oscurece de derecha a izquierda */}
-          <div className="absolute inset-0 z-10 bg-black/10 md:bg-black/30 bg-gradient-to-b from-black/80 via-transparent to-black/90 md:bg-none md:bg-gradient-to-l md:from-black/90 md:via-black/40 md:to-transparent pointer-events-none"></div>
-
-          {/* Contenedor de Textos: justify-between en móvil, justify-center en escritorio */}
-          <div className="absolute inset-0 z-20 w-full flex flex-col justify-between md:justify-center items-start md:items-end p-8 md:p-16 md:pr-24 lg:pr-32">
+        <div className="absolute inset-0 z-10 bg-transparent bg-gradient-to-b from-black/50 via-transparent to-black/60 md:bg-gradient-to-l md:from-black/70 md:from-[0%] md:via-black/50 md:via-[35%] md:to-transparent md:to-[100%] pointer-events-none"></div>
+          <div className="absolute inset-0 z-20 w-full flex flex-col justify-start md:justify-start items-start md:items-end p-8 pt-12 md:p-16 md:pt-20 md:pr-24 lg:pr-32 gap-6 md:gap-4">
             
-            {/* Bloque Superior (Título) */}
             <div className="w-full max-w-[380px] flex flex-col items-start mt-2 md:mt-0">
               <span className="text-left text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block w-full drop-shadow-md">
                 Turnkey Laboratory
               </span>
-              <h2 className="text-left text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 tracking-tight leading-tight w-full drop-shadow-lg">
+              <h2 className="text-left text-3xl md:text-3xl lg:text-4xl font-bold text-white mb-2 md:mb-5 tracking-tight leading-tight w-full drop-shadow-lg">
                 Your lab. <br className="hidden md:block" /> Anywhere. Instantly.
               </h2>
             </div>
 
-            {/* Bloque Inferior (Descripción) */}
-            <div className="w-full max-w-[380px] flex flex-col items-start mb-4 md:mb-0 md:mt-4">
+            <div className="w-full max-w-[380px] flex flex-col items-start">
               <p className="text-left text-sm md:text-base text-white/90 font-medium leading-relaxed w-full drop-shadow-md">
                 ModularDX is a fully equipped, plug-and-play molecular diagnostics laboratory. Designed to deploy rapidly and scale effortlessly, bringing the entire TAAG ecosystem to any location.
               </p>
@@ -189,7 +263,7 @@ export default function ModularDX() {
       </div>
 
       {/* ========================================================= */}
-      {/* 2. CARRUSEL DE VENTAJAS (Sin sombras ni bordes)           */}
+      {/* 2. CARRUSEL DE VENTAJAS                                   */}
       {/* ========================================================= */}
       <div className="w-full relative">
         
@@ -199,7 +273,6 @@ export default function ModularDX() {
           className="flex gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory hide-scroll pb-6 pl-[max(1rem,calc(50vw_-_600px_+_2rem))] scroll-pl-[max(1rem,calc(50vw_-_600px_+_2rem))]"
         >
           {MODULAR_ADVANTAGES.map((adv) => (
-            // Aplicamos ancho "2x" (584px) para la tarjeta Wide
             <div 
               key={adv.id} 
               className={`snap-start shrink-0 flex flex-col ${
@@ -233,12 +306,7 @@ export default function ModularDX() {
         {/* Controles para Light Mode */}
         <div className="flex items-center justify-between mt-4 px-4 max-w-[1200px] mx-auto w-full">
           
-          <a href="#" className="inline-flex items-center gap-1.5 text-sm md:text-base text-[#111111] hover:text-[#FF270A] transition-colors font-bold group">
-            Learn more
-            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </a>
+          <div></div> 
 
           <div className="flex gap-3">
             <button 
