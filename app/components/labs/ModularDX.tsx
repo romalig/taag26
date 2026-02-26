@@ -8,15 +8,17 @@ import { Zap, ShieldCheck, Activity, Layers, Clock, Lock } from "lucide-react";
 const MODULAR_ADVANTAGES = [
   {
     id: 1,
-    isWide: true, // Propiedad especial para hacerla 3 veces más ancha
+    isWide: true,
     title: "Plug & Play.",
     text: "Arrives fully equipped and ready to operate. Skip the months of construction and start running molecular diagnostics from day one.",
     visual: (
+      // Aplicamos object-contain y scale para dejar el margen blanco deseado
       <Image 
         src="/modularDX2.png" 
         alt="ModularDX Interior" 
         fill 
-        className="object-contain object-center scale-[90%]" // <-- Ajusta el 80% al porcentaje que prefieras        priority
+        className="object-contain object-center scale-[85%]" 
+        priority
       />
     )
   },
@@ -110,7 +112,6 @@ export default function ModularDX() {
 
   const scroll = (direction: 'left' | 'right') => {
     if (carouselRef.current) {
-      // Avanzamos 300px o el ancho de la tarjeta grande si es el primer scroll
       const scrollAmount = 300; 
       carouselRef.current.scrollBy({ 
         left: direction === 'left' ? -scrollAmount : scrollAmount, 
@@ -132,38 +133,63 @@ export default function ModularDX() {
       `}} />
 
       {/* ========================================================= */}
-      {/* 1. TARJETA PRINCIPAL (Hero ModularDX)                     */}
+      {/* 1. TARJETA PRINCIPAL (Hero ModularDX Responsivo)          */}
       {/* ========================================================= */}
       <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mb-16 md:mb-20">
-        <div className="relative w-full min-h-[550px] md:min-h-[700px] rounded-[2rem] overflow-hidden flex flex-col shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]">
+        {/* Cambié la altura mínima en móvil a 600px para que el formato vertical respire mejor */}
+        <div className="relative w-full min-h-[600px] md:min-h-[700px] rounded-[2rem] overflow-hidden flex flex-col shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]">
           
+          {/* Imágenes de Fondo (Desktop vs Mobile) */}
           <div className="absolute inset-0 z-0 pointer-events-none">
-            <Image src="/modularDX1.png" alt="ModularDX Laboratory" fill className="object-cover object-center" priority />
+            {/* Imagen Desktop */}
+            <Image 
+              src="/modularDX1.png" 
+              alt="ModularDX Laboratory" 
+              fill 
+              className="hidden md:block object-cover object-center" 
+              priority 
+            />
+            {/* Imagen Mobile (Abarca toda la tarjeta) */}
+            <Image 
+              src="/modularDX_phone.png" 
+              alt="ModularDX Laboratory" 
+              fill 
+              className="block md:hidden object-cover object-center" 
+              priority 
+            />
           </div>
 
-          <div className="absolute inset-0 z-10 bg-black/30 bg-gradient-to-l from-black/90 via-black/40 to-transparent pointer-events-none"></div>
+          {/* Gradientes Responsivos */}
+          {/* Móvil: Oscurece arriba y abajo | Desktop: Oscurece de derecha a izquierda */}
+          <div className="absolute inset-0 z-10 bg-black/10 md:bg-black/30 bg-gradient-to-b from-black/80 via-transparent to-black/90 md:bg-none md:bg-gradient-to-l md:from-black/90 md:via-black/40 md:to-transparent pointer-events-none"></div>
 
-          <div className="absolute inset-0 z-20 w-full flex flex-col justify-center items-end p-8 pr-8 md:p-16 md:pr-24 lg:pr-32">
-            <div className="w-full max-w-[380px] flex flex-col items-start">
-              <span className="text-left text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block w-full">
+          {/* Contenedor de Textos: justify-between en móvil, justify-center en escritorio */}
+          <div className="absolute inset-0 z-20 w-full flex flex-col justify-between md:justify-center items-start md:items-end p-8 md:p-16 md:pr-24 lg:pr-32">
+            
+            {/* Bloque Superior (Título) */}
+            <div className="w-full max-w-[380px] flex flex-col items-start mt-2 md:mt-0">
+              <span className="text-left text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block w-full drop-shadow-md">
                 Turnkey Laboratory
               </span>
-              <h2 className="text-left text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-5 tracking-tight leading-tight w-full">
+              <h2 className="text-left text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 tracking-tight leading-tight w-full drop-shadow-lg">
                 Your lab. <br className="hidden md:block" /> Anywhere. Instantly.
               </h2>
             </div>
-            <div className="w-full max-w-[380px] flex flex-col items-start md:mt-4">
-              <p className="text-left text-sm md:text-base text-white/90 font-medium leading-relaxed w-full">
+
+            {/* Bloque Inferior (Descripción) */}
+            <div className="w-full max-w-[380px] flex flex-col items-start mb-4 md:mb-0 md:mt-4">
+              <p className="text-left text-sm md:text-base text-white/90 font-medium leading-relaxed w-full drop-shadow-md">
                 ModularDX is a fully equipped, plug-and-play molecular diagnostics laboratory. Designed to deploy rapidly and scale effortlessly, bringing the entire TAAG ecosystem to any location.
               </p>
             </div>
+
           </div>
           
         </div>
       </div>
 
       {/* ========================================================= */}
-      {/* 2. CARRUSEL DE VENTAJAS (Con tarjeta inicial panorámica)  */}
+      {/* 2. CARRUSEL DE VENTAJAS (Sin sombras ni bordes)           */}
       {/* ========================================================= */}
       <div className="w-full relative">
         
@@ -173,28 +199,24 @@ export default function ModularDX() {
           className="flex gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory hide-scroll pb-6 pl-[max(1rem,calc(50vw_-_600px_+_2rem))] scroll-pl-[max(1rem,calc(50vw_-_600px_+_2rem))]"
         >
           {MODULAR_ADVANTAGES.map((adv) => (
-            // Lógica para aplicar el ancho 3x (840px) si es la tarjeta "isWide"
+            // Aplicamos ancho "2x" (584px) para la tarjeta Wide
             <div 
               key={adv.id} 
               className={`snap-start shrink-0 flex flex-col ${
-  adv.isWide 
-    ? 'w-[85vw] md:w-[584px] max-w-[584px]' // <-- Ancho ajustado a 2x
-    : 'w-[260px] md:w-[280px]'             
-}`}
+                adv.isWide 
+                  ? 'w-[85vw] md:w-[584px] max-w-[584px]' 
+                  : 'w-[260px] md:w-[280px]'             
+              }`}
             >
               
-              {/* CAJA DE LA IMAGEN (Manteniendo la misma altura que las normales) */}
               <div 
                 className={`relative w-full rounded-[2rem] bg-white overflow-hidden mb-6 flex items-center justify-center ${
-                  adv.isWide 
-                    ? 'h-[325px] md:h-[350px]' // Altura fija idéntica a las normales (280px * 5/4 = 350px)
-                    : 'aspect-[4/5]'           // Proporción original para las demás
+                  adv.isWide ? 'h-[325px] md:h-[350px]' : 'aspect-[4/5]'
                 }`}
               >
                 {adv.visual}
               </div>
               
-              {/* TEXTO DESCRIPTIVO */}
               <div className="pr-4">
                 <p className="text-[14px] md:text-[15px] text-gray-600 leading-relaxed font-medium">
                   <strong className="text-[#111111] font-semibold mr-1">{adv.title}</strong>
