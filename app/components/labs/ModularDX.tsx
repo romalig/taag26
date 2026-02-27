@@ -125,7 +125,7 @@ const MODULAR_ADVANTAGES = [
     id: 4,
     title: "Scalable footprint.",
     text: "Start with the exact capacity you need today. ModularDX allows you to seamlessly add new modules as your testing volume grows.",
-    visual: <ScalableVisual /> // Usamos el componente animado independiente
+    visual: <ScalableVisual /> 
   },
   {
     id: 5,
@@ -239,8 +239,11 @@ export default function ModularDX() {
             />
           </div>
 
-        <div className="absolute inset-0 z-10 bg-transparent bg-gradient-to-b from-black/50 via-transparent to-black/60 md:bg-gradient-to-l md:from-black/70 md:from-[0%] md:via-black/50 md:via-[35%] md:to-transparent md:to-[100%] pointer-events-none"></div>
-          <div className="absolute inset-0 z-20 w-full flex flex-col justify-start md:justify-start items-start md:items-end p-8 pt-12 md:p-16 md:pt-20 md:pr-24 lg:pr-32 gap-6 md:gap-4">
+          {/* Gradiente más ligero */}
+          <div className="absolute inset-0 z-10 bg-transparent bg-gradient-to-b from-black/50 via-transparent to-black/60 md:bg-gradient-to-l md:from-black/70 md:from-[0%] md:via-black/50 md:via-[35%] md:to-transparent md:to-[100%] pointer-events-none"></div>
+
+          {/* Textos: justify-between en móvil (arriba/abajo) y md:justify-start en escritorio (todo arriba) */}
+          <div className="absolute inset-0 z-20 w-full flex flex-col justify-between md:justify-start items-start md:items-end p-8 pt-12 pb-12 md:p-16 md:pt-20 md:pr-24 lg:pr-32 gap-6 md:gap-4">
             
             <div className="w-full max-w-[380px] flex flex-col items-start mt-2 md:mt-0">
               <span className="text-left text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block w-full drop-shadow-md">
@@ -251,7 +254,7 @@ export default function ModularDX() {
               </h2>
             </div>
 
-            <div className="w-full max-w-[380px] flex flex-col items-start">
+            <div className="w-full max-w-[380px] flex flex-col items-start mb-2 md:mb-0">
               <p className="text-left text-sm md:text-base text-white/90 font-medium leading-relaxed w-full drop-shadow-md">
                 ModularDX is a fully equipped, plug-and-play molecular diagnostics laboratory. Designed to deploy rapidly and scale effortlessly, bringing the entire TAAG ecosystem to any location.
               </p>
