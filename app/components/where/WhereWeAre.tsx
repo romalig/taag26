@@ -89,31 +89,31 @@ export default function WhereWeAre() {
         </button>
       </div>
 
-      {/* 3. CONTENEDOR DE LA TARJETA (Ancho ajustado similar a PartnerEcosystem px-4 md:px-8) */}
-      <div className="w-full max-w-[1000px] mx-auto px-4 md:px-8 relative">
+      {/* 3. CONTENEDOR DE LA TARJETA (Ancho como la tarjeta gris de PartnerEcosystem) */}
+      <div className="relative z-20 w-full max-w-7xl mx-auto md:px-6">
         
-        {/* TARJETA BLANCA */}
-        <div className="relative z-10 w-full bg-white rounded-[2rem] border border-gray-100 overflow-hidden min-h-[500px]">
+        {/* TARJETA BLANCA (Ocupa todo el ancho en móvil, redondeada en escritorio) */}
+        <div className="relative w-full bg-white rounded-none md:rounded-[3rem] border-y md:border border-gray-100 overflow-hidden min-h-[500px] shadow-sm">
           
-          {/* GLOW SUTIL Y CONTENIDO (Solo asoma por debajo de la línea superior) */}
-          <div className="absolute top-0 left-0 right-0 z-0 pointer-events-none">
-              {/* Resplandor súper sutil y pegado arriba */}
-              <div className={`w-full h-[25px] bg-gradient-to-r ${currentData.flagColors} blur-[15px] opacity-40 transition-colors duration-1000 ease-in-out`} />
+          {/* GLOW SUTIL Y CONTENIDO CON REACT KEY */}
+          <div key={selectedCountry} className="absolute top-0 left-0 right-0 z-0 pointer-events-none animate-in fade-in duration-500">
+              {/* Resplandor más corto (h-8px) y menos invasivo (blur-6px) pegado estrictamente arriba */}
+              <div className={`absolute top-1 left-0 right-0 h-[8px] bg-gradient-to-r ${currentData.flagColors} blur-[6px] opacity-60`} />
               {/* Línea sólida superior */}
-              <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${currentData.flagColors} opacity-100 transition-colors duration-1000 ease-in-out`} />
+              <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${currentData.flagColors} opacity-100`} />
           </div>
 
-          <div className="relative z-10 p-6 pt-12 md:p-16 md:pt-16">
+          <div className="relative z-10 p-6 pt-16 md:p-16 md:pt-20">
             
             <div className="flex flex-col items-center mb-16 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#111111] mb-3 transition-all">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#111111] mb-3">
                 TAAG {currentData.name}
               </h2>
               <p className="text-gray-500 font-medium">How can we help your facility today?</p>
             </div>
 
             {/* SECCIONES APILADAS (Kits y Servicios) */}
-            <div className="flex flex-col gap-12 md:gap-16 max-w-3xl mx-auto">
+            <div className="flex flex-col gap-12 md:gap-16 max-w-4xl mx-auto">
               
               {/* SECCIÓN: KITS */}
               <div className="flex flex-col gap-6">
@@ -123,7 +123,7 @@ export default function WhereWeAre() {
                 </div>
                 {/* Contenedor temporal para el flujo */}
                 <div className="bg-[#F9FAFB] rounded-2xl p-8 text-center min-h-[150px] flex items-center justify-center border border-dashed border-gray-200">
-                   <p className="text-gray-400 font-medium">
+                   <p className="text-gray-400 font-medium max-w-md mx-auto">
                      [ Aquí irá el flujo dinámico de KITS para {currentData.name} en {selectedLanguage} ]
                    </p>
                 </div>
@@ -137,7 +137,7 @@ export default function WhereWeAre() {
                 </div>
                 {/* Contenedor temporal para el flujo */}
                 <div className="bg-[#F9FAFB] rounded-2xl p-8 text-center min-h-[150px] flex items-center justify-center border border-dashed border-gray-200">
-                   <p className="text-gray-400 font-medium">
+                   <p className="text-gray-400 font-medium max-w-md mx-auto">
                      [ Aquí irá el flujo dinámico de SERVICIOS para {currentData.name} en {selectedLanguage} ]
                    </p>
                 </div>
