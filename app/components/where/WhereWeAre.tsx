@@ -7,8 +7,8 @@ import { Globe, X, ChevronDown, Box, Microscope } from "lucide-react";
 const COUNTRY_DATA: Record<string, { name: string; languages: string[]; flagColors: string }> = {
   // HUBS
   USA: { name: "United States", languages: ["English", "Español"], flagColors: "from-blue-600 via-purple-500 to-red-600" },
-  Mexico: { name: "México", languages: ["Español"], flagColors: "from-emerald-600 via-white to-red-600" },
-  Chile: { name: "Chile", languages: ["Español"], flagColors: "from-blue-600 via-white to-red-600" },
+  Mexico: { name: "México", languages: ["Español"], flagColors: "from-emerald-600 via-white to-red-600" }, // Actualizado
+  Chile: { name: "Chile", languages: ["Español"], flagColors: "from-blue-600 via-white to-red-600" }, // Actualizado
   Belgium: { name: "Belgium", languages: ["English", "Français", "Nederlands"], flagColors: "from-gray-800 via-yellow-400 to-red-600" },
   
   // AMERICAS
@@ -50,7 +50,7 @@ export default function WhereWeAre() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("USA");
   const [selectedLanguage, setSelectedLanguage] = useState("English");
-
+  
   const handleSelect = (countryKey: string, lang: string) => {
     setSelectedCountry(countryKey);
     setSelectedLanguage(lang);
@@ -73,6 +73,7 @@ export default function WhereWeAre() {
       </div>
 
       {/* 2. BOTÓN SELECTOR */}
+      {/* He aumentado el margen inferior a mb-24 / md:mb-32 para dar más aire */}
       <div className="flex flex-col items-center justify-center mb-24 md:mb-32 relative z-20">
         <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-3">
           Select your region
@@ -89,22 +90,25 @@ export default function WhereWeAre() {
         </button>
       </div>
 
-      {/* 3. TARJETA DE RESULTADO DINÁMICA (95% ancho en móvil) */}
+      {/* 3. TARJETA DE RESULTADO DINÁMICA CON GLOW CONSTANTE */}
+      {/* Ajustar contenedor para ancho móvil del 95% y max-w-[1000px] */}
       <div className="relative w-[95%] md:w-full max-w-[1000px] mx-auto">
         
-        {/* TARJETA BLANCA */}
+        {/* TARJETA BLANCA (Flat Design Puro) */}
         <div className="relative z-10 w-full bg-white rounded-[2rem] overflow-hidden min-h-[500px]">
           
           {/* GLOW INTERNO (Ahora está dentro de la tarjeta, en la parte superior) */}
+          {/* He ajustado los valores para que sea más sutil y controlado, 'glow hacia dentro' */}
           <div className="absolute top-0 left-0 right-0 h-40 pointer-events-none z-0">
               {/* Resplandor difuso hacia adentro */}
-              <div className={`absolute top-[-40px] left-[-10%] right-[-10%] h-[120px] bg-gradient-to-r ${currentData.flagColors} blur-[40px] opacity-30 transition-colors duration-1000 ease-in-out`} />
+              <div className={`absolute top-[-40px] left-[-10%] right-[-10%] h-[60px] bg-gradient-to-r ${currentData.flagColors} blur-[30px] opacity-30 transition-colors duration-1000 ease-in-out`} />
               {/* Línea sólida superior */}
               <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${currentData.flagColors} opacity-90 transition-colors duration-1000 ease-in-out`} />
           </div>
 
           <div className="relative z-10 p-6 pt-12 md:p-16 md:pt-16">
             
+            {/* Cabecera de la Tarjeta: Títulos más grandes y centrados */}
             <div className="flex flex-col items-center mb-16 text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-[#111111] mb-3 transition-all">
                 TAAG {currentData.name}
@@ -112,16 +116,17 @@ export default function WhereWeAre() {
               <p className="text-gray-500 font-medium">How can we help your facility today?</p>
             </div>
 
-            {/* SECCIONES APILADAS (Kits y Servicios) */}
+            {/* SECCIONES APILADAS (Kits y Servicios) - Eliminados los botones y el estado 'activeTab' */}
             <div className="flex flex-col gap-12 md:gap-16">
               
               {/* SECCIÓN: KITS */}
               <div className="flex flex-col gap-6">
+                {/* Cabezal de Sección con Icono, replicando el diseño de la captura image_1.png */}
                 <div className="flex items-center gap-3 border-b border-gray-100 pb-4">
                   <Box className="w-6 h-6 text-[#111111]" />
                   <h3 className="text-xl md:text-2xl font-bold text-[#111111]">In-house Kits</h3>
                 </div>
-                {/* Contenedor temporal para el flujo */}
+                {/* Contenedor temporal para el flujo, replicando el bloque de image_1.png */}
                 <div className="bg-[#F9FAFB] rounded-2xl p-8 text-center min-h-[150px] flex items-center justify-center">
                    <p className="text-gray-400 font-medium">
                      [ Aquí irá el flujo dinámico de KITS para {currentData.name} en {selectedLanguage} ]
@@ -131,6 +136,7 @@ export default function WhereWeAre() {
 
               {/* SECCIÓN: LAB SERVICES */}
               <div className="flex flex-col gap-6">
+                {/* Cabezal de Sección con Icono */}
                 <div className="flex items-center gap-3 border-b border-gray-100 pb-4">
                   <Microscope className="w-6 h-6 text-[#111111]" />
                   <h3 className="text-xl md:text-2xl font-bold text-[#111111]">Lab Services</h3>
