@@ -12,8 +12,8 @@ const NAV_LINKS = [
   { name: "Industrial Microbiology", href: "/industrial" },
   { name: "Customized Molecular", href: "/customized" },
   { name: "Digital Transformation", href: "/TxA" },
-  { name: "Lab partners", href: "/labs" },
-  { name: "Technologies", href: "#technologies" },
+  { name: "Lab Partners", href: "/labs" },
+  { name: "Where We Are", href: "/where" },
   { name: "Resources", href: "#resources" },
   { name: "About", href: "/about" },
 ];
@@ -158,6 +158,32 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
           </div>
 
           <div className="flex-1 overflow-y-auto">
+             
+             {/* --- AIGOR DESTACADO (Moviendo esta sección arriba) --- */}
+             <div className="bg-[#F5F5F7] p-6 pb-8 border-b border-black/5">
+                <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-4">Featured Technology</p>
+                
+                <Link 
+                    href="/aigor" 
+                    onClick={() => setIsMenuOpen(false)}
+                    className="bg-white rounded-2xl p-4 shadow-sm border border-black/5 flex items-start gap-5 cursor-pointer hover:shadow-md transition-shadow group block"
+                >
+                    <div className="w-24 h-24 relative flex items-center justify-center rounded-xl overflow-hidden shrink-0">
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#FF270A] via-purple-600 to-blue-600" />
+                        <div className="absolute inset-[3px] bg-[#111111] rounded-[10px] flex flex-col items-center justify-center z-10 p-1 text-center">
+                            <span className="text-xl font-extrabold text-white tracking-tight leading-none mb-1">AiGOR</span>
+                            <span className="text-[7px] font-bold text-[#FF270A] uppercase tracking-widest leading-tight">RNA Technology</span>
+                        </div>
+                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity z-20" />
+                    </div>
+                    <div className="flex flex-col justify-center pt-1">
+                        <h4 className="text-lg font-bold text-[#111111] leading-tight mb-1">AiGOR™</h4>
+                        <p className="text-xs text-gray-500 line-clamp-3 leading-relaxed">Advanced RNA technology for ultra-fast results</p>
+                    </div>
+                </Link>
+             </div>
+
+             {/* --- LINKS DE NAVEGACIÓN (Movidos abajo) --- */}
              <nav className="p-6">
                 <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-4">Explore</p>
                 <div className="flex flex-col">
@@ -174,29 +200,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
                   ))}
                 </div>
              </nav>
-
-             <div className="bg-[#F5F5F7] p-6 mt-4 pb-12">
-                <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-4">Featured Technology</p>
-                
-                <Link 
-                    href="/aigor" 
-                    onClick={() => setIsMenuOpen(false)}
-                    className="bg-white rounded-2xl p-4 shadow-sm border border-black/5 flex items-start gap-5 cursor-pointer hover:shadow-md transition-shadow group block"
-                >
-                    <div className="w-24 h-24 relative flex items-center justify-center rounded-xl overflow-hidden shrink-0">
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#FF270A] via-purple-600 to-blue-600" />
-                        <div className="absolute inset-[3px] bg-[#111111] rounded-[10px] flex flex-col items-center justify-center z-10 p-1 text-center">
-                            <span className="text-xl font-extrabold text-white tracking-tight leading-none mb-1">AiGOR</span>
-                            <span className="text-[7px] font-bold text-[#FF270A] uppercase tracking-widest leading-tight">RNA Technology</span>
-                        </div>
-                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity z-20" />
-                    </div>
-                    <div className="pt-1">
-                        <h4 className="text-lg font-bold text-[#111111] leading-tight mb-1">AiGOR™</h4>
-                        <p className="text-xs text-gray-500 line-clamp-3 leading-relaxed">Advanced RNA technology for ultra-fast results</p>
-                    </div>
-                </Link>
-             </div>
+             
           </div>
       </div>
 
