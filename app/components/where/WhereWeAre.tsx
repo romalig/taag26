@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Globe, X, ChevronDown, Box, Microscope, Activity } from "lucide-react";
+import { Globe, X, ChevronDown, Box, Microscope } from "lucide-react";
 
 // --- BASE DE DATOS DE PAÍSES E IDIOMAS ---
 const COUNTRY_DATA: Record<string, { name: string; languages: string[]; flagColors: string }> = {
@@ -50,8 +50,6 @@ export default function WhereWeAre() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("USA");
   const [selectedLanguage, setSelectedLanguage] = useState("English");
-  
-  const [activeTab, setActiveTab] = useState<"kits" | "services" | "software">("kits");
 
   const handleSelect = (countryKey: string, lang: string) => {
     setSelectedCountry(countryKey);
@@ -74,7 +72,7 @@ export default function WhereWeAre() {
         </p>
       </div>
 
-      {/* 2. BOTÓN SELECTOR (Aumentado el margen inferior a mb-24 / md:mb-32 para dar más aire) */}
+      {/* 2. BOTÓN SELECTOR */}
       <div className="flex flex-col items-center justify-center mb-24 md:mb-32 relative z-20">
         <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-3">
           Select your region
@@ -91,68 +89,60 @@ export default function WhereWeAre() {
         </button>
       </div>
 
-      {/* 3. TARJETA DE RESULTADO DINÁMICA CON GLOW CONSTANTE */}
-      <div className="relative max-w-[1200px] mx-auto px-6 mt-8">
+      {/* 3. TARJETA DE RESULTADO DINÁMICA (95% ancho en móvil) */}
+      <div className="relative w-[95%] md:w-full max-w-[1000px] mx-auto">
         
-        {/* LA LÍNEA DE ENERGÍA (GLOW) SIEMPRE VISIBLE */}
-        <div className="absolute top-[-2px] left-1/2 -translate-x-1/2 w-[85%] md:w-[90%] h-[20px] pointer-events-none z-0">
-            {/* Glow amplio y difuso */}
-            <div className={`absolute top-[-10px] left-0 w-full h-[30px] bg-gradient-to-r ${currentData.flagColors} blur-[20px] opacity-70 transition-colors duration-1000 ease-in-out`} />
-            {/* Línea intensa y concentrada */}
-            <div className={`absolute top-[-2px] left-0 w-full h-[4px] bg-gradient-to-r ${currentData.flagColors} blur-[4px] opacity-90 transition-colors duration-1000 ease-in-out`} />
-        </div>
-
-        {/* LA TARJETA BLANCA (Flat Design Puro) */}
+        {/* TARJETA BLANCA */}
         <div className="relative z-10 w-full bg-white rounded-[2rem] overflow-hidden min-h-[500px]">
           
-          <div className="relative z-10 p-8 md:p-12">
+          {/* GLOW INTERNO (Ahora está dentro de la tarjeta, en la parte superior) */}
+          <div className="absolute top-0 left-0 right-0 h-40 pointer-events-none z-0">
+              {/* Resplandor difuso hacia adentro */}
+              <div className={`absolute top-[-40px] left-[-10%] right-[-10%] h-[120px] bg-gradient-to-r ${currentData.flagColors} blur-[40px] opacity-30 transition-colors duration-1000 ease-in-out`} />
+              {/* Línea sólida superior */}
+              <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${currentData.flagColors} opacity-90 transition-colors duration-1000 ease-in-out`} />
+          </div>
+
+          <div className="relative z-10 p-6 pt-12 md:p-16 md:pt-16">
             
-            <div className="flex flex-col items-center mb-12">
-              <h2 className="text-2xl md:text-3xl font-bold text-[#111111] mb-2 transition-all">
+            <div className="flex flex-col items-center mb-16 text-center">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#111111] mb-3 transition-all">
                 TAAG {currentData.name}
               </h2>
               <p className="text-gray-500 font-medium">How can we help your facility today?</p>
             </div>
 
-            {/* Los 3 Selectores (Completamente Flat) */}
-            <div className="flex flex-col md:flex-row justify-center gap-4 mb-12 max-w-3xl mx-auto">
-              <button 
-                onClick={() => setActiveTab("kits")}
-                className={`flex-1 flex items-center justify-center gap-2 py-4 px-6 rounded-xl font-bold transition-colors ${
-                  activeTab === "kits" 
-                    ? "bg-[#111111] text-white" 
-                    : "bg-gray-100/50 text-gray-500 hover:bg-gray-100"
-                }`}
-              >
-                <Box className="w-5 h-5" /> In-house Kits
-              </button>
-              <button 
-                onClick={() => setActiveTab("services")}
-                className={`flex-1 flex items-center justify-center gap-2 py-4 px-6 rounded-xl font-bold transition-colors ${
-                  activeTab === "services" 
-                    ? "bg-[#111111] text-white" 
-                    : "bg-gray-100/50 text-gray-500 hover:bg-gray-100"
-                }`}
-              >
-                <Microscope className="w-5 h-5" /> Lab Services
-              </button>
-              <button 
-                onClick={() => setActiveTab("software")}
-                className={`flex-1 flex items-center justify-center gap-2 py-4 px-6 rounded-xl font-bold transition-colors ${
-                  activeTab === "software" 
-                    ? "bg-[#111111] text-white" 
-                    : "bg-gray-100/50 text-gray-500 hover:bg-gray-100"
-                }`}
-              >
-                <Activity className="w-5 h-5" /> TxA Software
-              </button>
-            </div>
+            {/* SECCIONES APILADAS (Kits y Servicios) */}
+            <div className="flex flex-col gap-12 md:gap-16">
+              
+              {/* SECCIÓN: KITS */}
+              <div className="flex flex-col gap-6">
+                <div className="flex items-center gap-3 border-b border-gray-100 pb-4">
+                  <Box className="w-6 h-6 text-[#111111]" />
+                  <h3 className="text-xl md:text-2xl font-bold text-[#111111]">In-house Kits</h3>
+                </div>
+                {/* Contenedor temporal para el flujo */}
+                <div className="bg-[#F9FAFB] rounded-2xl p-8 text-center min-h-[150px] flex items-center justify-center">
+                   <p className="text-gray-400 font-medium">
+                     [ Aquí irá el flujo dinámico de KITS para {currentData.name} en {selectedLanguage} ]
+                   </p>
+                </div>
+              </div>
 
-            {/* Contenido dinámico (Espacio reservado) */}
-            <div className="text-center py-20 bg-[#F9FAFB] rounded-2xl">
-               <p className="text-gray-400 font-medium">
-                 [ Aquí irá el flujo dinámico para {currentData.name} en {selectedLanguage} seleccionando {activeTab} ]
-               </p>
+              {/* SECCIÓN: LAB SERVICES */}
+              <div className="flex flex-col gap-6">
+                <div className="flex items-center gap-3 border-b border-gray-100 pb-4">
+                  <Microscope className="w-6 h-6 text-[#111111]" />
+                  <h3 className="text-xl md:text-2xl font-bold text-[#111111]">Lab Services</h3>
+                </div>
+                {/* Contenedor temporal para el flujo */}
+                <div className="bg-[#F9FAFB] rounded-2xl p-8 text-center min-h-[150px] flex items-center justify-center">
+                   <p className="text-gray-400 font-medium">
+                     [ Aquí irá el flujo dinámico de SERVICIOS para {currentData.name} en {selectedLanguage} ]
+                   </p>
+                </div>
+              </div>
+
             </div>
 
           </div>
