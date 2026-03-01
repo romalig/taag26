@@ -1,7 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Globe, X, ChevronDown, Box, Microscope, Users, Brain, Dna } from "lucide-react";
+
+// --- TRADUCCIONES PARA EL EFECTO DEL TÍTULO ---
+const IMPACT_TRANSLATIONS = [
+  "Local Impact.",       // English
+  "Impacto Local.",      // Spanish / Portuguese
+  "Impact Local.",       // French
+  "Lokale Wirkung.",     // German
+  "Impatto Locale.",     // Italian
+  "Lokale Impact.",      // Dutch
+  "地域への影響。",         // Japanese
+  "تأثير محلي."          // Arabic
+];
 
 // --- BASE DE DATOS DE PAÍSES E IDIOMAS ---
 const COUNTRY_DATA: Record<string, { name: string; languages: string[]; flagColors: string }> = {
@@ -50,6 +62,17 @@ export default function WhereWeAre() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("USA");
   const [selectedLanguage, setSelectedLanguage] = useState("English");
+  
+  // Estado para el índice del idioma rotativo
+  const [impactIndex, setImpactIndex] = useState(0);
+
+  // Efecto para rotar el idioma del título cada 1 segundo exacto
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImpactIndex((prev) => (prev + 1) % IMPACT_TRANSLATIONS.length);
+    }, 2000); 
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSelect = (countryKey: string, lang: string) => {
     setSelectedCountry(countryKey);
@@ -64,8 +87,12 @@ export default function WhereWeAre() {
       
       {/* 1. HERO SECTION */}
       <div className="max-w-[1000px] mx-auto px-6 text-center mb-16 md:mb-24 relative z-20">
-        <h1 className="text-4xl md:text-6xl font-bold text-[#111111] tracking-tight mb-6">
-          Global Science. <br className="md:hidden" /> Local Impact.
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-[#111111] tracking-tight mb-14">
+          Global Science. <br />
+          {/* El texto "Local Impact" rotativo, en gris y en la línea de abajo */}
+          <span key={impactIndex} className="block text-gray-400 animate-in fade-in slide-in-from-bottom-2 duration-500 mt-2 md:mt-4">
+            {IMPACT_TRANSLATIONS[impactIndex]}
+          </span>
         </h1>
         <p className="text-lg md:text-xl text-gray-600 font-medium max-w-3xl mx-auto leading-relaxed">
           With operational TAAG Hubs and a network of partner labs and distributors, we bring the TAAG ecosystem directly to your facility. Support in your language, in your time zone, right by your side.
@@ -89,7 +116,7 @@ export default function WhereWeAre() {
             </p>
           </div>
 
-          {/* B. 3 ICONOS MINIMALISTAS (Equilibrados en tamaño y texto) */}
+          {/* B. 3 ICONOS MINIMALISTAS (Color Rojo corporativo TAAG, sin bordes) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-12 w-full max-w-5xl mx-auto mb-24">
             
             {/* Concepto 1: TAAG Hubs (Cerebro limpio) */}
@@ -124,14 +151,14 @@ export default function WhereWeAre() {
           {/* C. SELECTOR Y TARJETA BLANCA */}
           <div className="flex flex-col items-center w-full">
             
-            {/* Botón Selector (Sin bordes en lo absoluto) */}
+            {/* Botón Selector (CERO BORDES, Flat Puro) */}
             <div className="flex flex-col items-center justify-center mb-10 w-full relative z-20">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-3">
                 Select your region
               </span>
               <button 
                 onClick={() => setIsModalOpen(true)}
-                className="flex items-center gap-3 px-6 py-3 bg-white rounded-full hover:bg-gray-50 transition-all group"
+                className="flex items-center gap-3 px-6 py-3 bg-white rounded-full hover:bg-gray-50 transition-colors group"
               >
                 <Globe className="w-5 h-5 text-gray-500 group-hover:text-[#111111] transition-colors" />
                 <span className="text-base font-semibold text-[#111111]">
@@ -141,7 +168,7 @@ export default function WhereWeAre() {
               </button>
             </div>
 
-            {/* Tarjeta Blanca Dinámica (Sin bordes) */}
+            {/* Tarjeta Blanca Dinámica (CERO BORDES, Flat Puro) */}
             <div className="relative w-full bg-white rounded-2xl md:rounded-[2.5rem] overflow-hidden min-h-[500px]">
               
               {/* GLOW SUTIL SUPERIOR */}
@@ -164,7 +191,7 @@ export default function WhereWeAre() {
                   
                   {/* KITS */}
                   <div className="flex flex-col gap-6">
-                    <div className="flex items-center gap-3 pb-4">
+                    <div className="flex items-center gap-3 pb-2">
                       <Box className="w-6 h-6 text-[#111111]" />
                       <h3 className="text-xl md:text-2xl font-bold text-[#111111]">In-house Kits</h3>
                     </div>
@@ -178,7 +205,7 @@ export default function WhereWeAre() {
 
                   {/* LAB SERVICES */}
                   <div className="flex flex-col gap-6">
-                    <div className="flex items-center gap-3 pb-4">
+                    <div className="flex items-center gap-3 pb-2">
                       <Microscope className="w-6 h-6 text-[#111111]" />
                       <h3 className="text-xl md:text-2xl font-bold text-[#111111]">Lab Services</h3>
                     </div>
