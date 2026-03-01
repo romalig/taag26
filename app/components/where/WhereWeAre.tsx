@@ -70,7 +70,7 @@ export default function WhereWeAre() {
   useEffect(() => {
     const interval = setInterval(() => {
       setImpactIndex((prev) => (prev + 1) % IMPACT_TRANSLATIONS.length);
-    }, 2000); 
+    }, 1000); 
     return () => clearInterval(interval);
   }, []);
 
@@ -87,7 +87,7 @@ export default function WhereWeAre() {
       
       {/* 1. HERO SECTION */}
       <div className="max-w-[1000px] mx-auto px-6 text-center mb-16 md:mb-24 relative z-20">
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-[#111111] tracking-tight mb-14">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#111111] tracking-tight mb-12 md:mb-16">
           Global Science. <br />
           {/* El texto "Local Impact" rotativo, en gris y en la línea de abajo */}
           <span key={impactIndex} className="block text-gray-400 animate-in fade-in slide-in-from-bottom-2 duration-500 mt-2 md:mt-4">
