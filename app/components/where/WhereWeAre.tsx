@@ -68,6 +68,7 @@ const LocalCarousel = ({ title, items }: LocalCarouselProps) => {
             </div>
             
             <div className="pr-4 flex flex-col flex-grow">
+               {/* FECHA (Solo si existe en la data) */}
                {item.date && (
                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">
                    {item.date}
@@ -79,6 +80,7 @@ const LocalCarousel = ({ title, items }: LocalCarouselProps) => {
                  {item.desc}
                </p>
 
+               {/* BOTÓN LEARN MORE */}
                {item.linkText && (
                  <a href="#" className="text-sm text-[#0066cc] font-medium hover:underline mt-auto flex items-center w-fit">
                    {item.linkText} <span className="text-[10px] leading-none ml-1 mt-0.5">&gt;</span>
@@ -89,6 +91,7 @@ const LocalCarousel = ({ title, items }: LocalCarouselProps) => {
         ))}
       </div>
 
+      {/* Controles del Carrusel */}
       <div className="hidden md:flex justify-end gap-3 mt-8 pr-4 w-full">
         <button 
           onClick={() => scroll('left')}
@@ -216,32 +219,38 @@ export default function WhereWeAre() {
       {/* ========================================================= */}
       <div className="bg-white relative w-full flex-grow pb-32 flex flex-col items-center">
         
-        {/* LÍNEAS STICKY Y BLOQUEADOR */}
-        <div className="sticky top-[56px] md:top-[60px] z-30 w-full h-0">
+        {/* ========================================================= */}
+        {/* LÍNEAS STICKY Y BLOQUEADOR (CORRECCIÓN DE RENDERIZADO)      */}
+        {/* ========================================================= */}
+        {/* Key dinámico fuerza reconstrucción total y evita color pegado. transform-gpu arregla cortes en iOS Safari. */}
+        <div key={`sticky-${selectedCountry}`} className="sticky top-[56px] md:top-[60px] z-30 w-full h-0 transform-gpu">
           
           {/* Bloqueador blanco sólido */}
           <div className="absolute top-0 inset-x-0 h-4 bg-white z-0"></div>
 
-          {/* Resplandor suave (Glow) */}
+          {/* Resplandor suave (Glow sin transición para cambio instantáneo) */}
           <div className="absolute top-[1px] inset-x-0 flex flex-row h-4 opacity-40 blur-[6px] pointer-events-none z-10">
-            <div className={`flex-1 ${currentData.glowColors[0]} transition-colors duration-500`}></div>
-            <div className={`flex-1 ${currentData.glowColors[1]} transition-colors duration-500`}></div>
-            <div className={`flex-1 ${currentData.glowColors[2]} transition-colors duration-500`}></div>
+            <div className={`flex-1 ${currentData.glowColors[0]}`}></div>
+            <div className={`flex-1 ${currentData.glowColors[1]}`}></div>
+            <div className={`flex-1 ${currentData.glowColors[2]}`}></div>
           </div>
           
           {/* Líneas nítidas principales */}
           <div className="absolute top-0 inset-x-0 flex flex-row h-[3px] w-full opacity-100 z-20">
-            <div className={`flex-1 ${currentData.glowColors[0]} transition-colors duration-500`}></div>
-            <div className={`flex-1 ${currentData.glowColors[1]} transition-colors duration-500`}></div>
-            <div className={`flex-1 ${currentData.glowColors[2]} transition-colors duration-500`}></div>
+            <div className={`flex-1 ${currentData.glowColors[0]}`}></div>
+            <div className={`flex-1 ${currentData.glowColors[1]}`}></div>
+            <div className={`flex-1 ${currentData.glowColors[2]}`}></div>
           </div>
         </div>
 
-        {/* BOTÓN SELECTOR RESPONSIVO */}
-        <div className="relative -mt-4 md:-mt-7 z-40">
+        {/* ========================================================= */}
+        {/* BOTÓN SELECTOR RESPONSIVO                                 */}
+        {/* ========================================================= */}
+        {/* Z-40: Por encima de la línea (z-30), pero por debajo del Header (z-50). transform-gpu evita recortes de hitboxes. */}
+        <div className="relative -mt-4 md:-mt-7 z-40 transform-gpu flex justify-center w-full">
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-3 md:gap-4 px-6 py-2.5 md:px-10 md:py-4 bg-white rounded-full border border-gray-200 transition-all hover:bg-gray-50 hover:shadow-sm"
+            className="flex items-center gap-3 md:gap-4 px-6 py-2.5 md:px-10 md:py-4 bg-white rounded-full border border-gray-200 transition-all hover:bg-gray-50 shadow-[0_2px_10px_rgba(0,0,0,0.03)]"
           >
             <Globe className="w-4 h-4 md:w-5 md:h-5 text-gray-500" />
             <span className="text-sm md:text-xl font-bold text-[#111111]">
@@ -251,7 +260,9 @@ export default function WhereWeAre() {
           </button>
         </div>
 
-        {/* ÁREA DE CONTENIDO */}
+        {/* ========================================================= */}
+        {/* ÁREA DE CONTENIDO (z-20)                                  */}
+        {/* ========================================================= */}
         <div className="relative z-20 w-full max-w-7xl mx-auto px-4 md:px-6 text-left mt-16 md:mt-24">
           <div className="w-full animate-in fade-in duration-500" key={`content-${selectedCountry}-${selectedLanguage}`}>
             
@@ -382,6 +393,7 @@ export default function WhereWeAre() {
                     </div>
 
                     <div className="pt-6 border-t border-gray-200 mt-auto">
+                        <h4 className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-4">{t.keyContacts}</h4>
                         <div className="flex items-center gap-4">
                           <img src="/face.png" alt="Contact" className="w-14 h-14 object-cover rounded-full shrink-0 ring-2 ring-white" />
                           <div className="flex flex-col">
@@ -428,6 +440,7 @@ export default function WhereWeAre() {
                     </div>
 
                     <div className="pt-6 border-t border-gray-200 mt-auto">
+                        <h4 className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-4">{t.keyContacts}</h4>
                         <div className="flex items-center gap-4">
                           <img src="/face.png" alt="Contact" className="w-14 h-14 object-cover rounded-full shrink-0 ring-2 ring-white" />
                           <div className="flex flex-col">
