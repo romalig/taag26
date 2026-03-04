@@ -220,33 +220,32 @@ export default function WhereWeAre() {
       <div className="bg-white relative w-full flex-grow pb-32 flex flex-col items-center">
         
         {/* ========================================================= */}
-        {/* LÍNEAS STICKY Y BLOQUEADOR (CORRECCIÓN DE RENDERIZADO)      */}
+        {/* LÍNEAS STICKY Y BLOQUEADOR                                  */}
         {/* ========================================================= */}
-        {/* Key dinámico fuerza reconstrucción total y evita color pegado. transform-gpu arregla cortes en iOS Safari. */}
         <div key={`sticky-${selectedCountry}`} className="sticky top-[56px] md:top-[60px] z-30 w-full h-0 transform-gpu">
           
           {/* Bloqueador blanco sólido */}
           <div className="absolute top-0 inset-x-0 h-4 bg-white z-0"></div>
 
-          {/* Resplandor suave (Glow sin transición para cambio instantáneo) */}
-          <div className="absolute top-[1px] inset-x-0 flex flex-row h-4 opacity-40 blur-[6px] pointer-events-none z-10">
+          {/* Resplandor suave (Glow con colores originales puros) */}
+          <div className="absolute top-[1px] inset-x-0 flex flex-row h-4 opacity-50 blur-[6px] pointer-events-none z-10">
             <div className={`flex-1 ${currentData.glowColors[0]}`}></div>
             <div className={`flex-1 ${currentData.glowColors[1]}`}></div>
             <div className={`flex-1 ${currentData.glowColors[2]}`}></div>
           </div>
           
-          {/* Líneas nítidas principales */}
+          {/* Líneas nítidas principales. 
+              Si el color es blanco, se le agrega un micro-shadow para que no se pierda contra el fondo blanco del bloqueador. */}
           <div className="absolute top-0 inset-x-0 flex flex-row h-[3px] w-full opacity-100 z-20">
-            <div className={`flex-1 ${currentData.glowColors[0]}`}></div>
-            <div className={`flex-1 ${currentData.glowColors[1]}`}></div>
-            <div className={`flex-1 ${currentData.glowColors[2]}`}></div>
+            <div className={`flex-1 ${currentData.glowColors[0]} ${currentData.glowColors[0] === 'bg-white' ? 'shadow-[0_1px_3px_rgba(0,0,0,0.1)]' : ''}`}></div>
+            <div className={`flex-1 ${currentData.glowColors[1]} ${currentData.glowColors[1] === 'bg-white' ? 'shadow-[0_1px_3px_rgba(0,0,0,0.1)]' : ''}`}></div>
+            <div className={`flex-1 ${currentData.glowColors[2]} ${currentData.glowColors[2] === 'bg-white' ? 'shadow-[0_1px_3px_rgba(0,0,0,0.1)]' : ''}`}></div>
           </div>
         </div>
 
         {/* ========================================================= */}
         {/* BOTÓN SELECTOR RESPONSIVO                                 */}
         {/* ========================================================= */}
-        {/* Z-40: Por encima de la línea (z-30), pero por debajo del Header (z-50). transform-gpu evita recortes de hitboxes. */}
         <div className="relative -mt-4 md:-mt-7 z-40 transform-gpu flex justify-center w-full">
           <button 
             onClick={() => setIsModalOpen(true)}
