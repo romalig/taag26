@@ -225,8 +225,8 @@ export default function WhereWeAre() {
       {/* ========================================================= */}
       <div className="bg-[#F4F4F5] relative w-full flex-grow pb-32 flex flex-col items-center">
         
-        {/* LÍNEAS MINIMALISTAS EN EL BORDE SUPERIOR (Efecto Bandera Estático y Sticky) */}
-        <div className="sticky top-0 z-40 w-full h-0">
+        {/* LÍNEAS MINIMALISTAS EN EL BORDE SUPERIOR (Efecto Bandera Estático) */}
+        <div className="absolute top-0 inset-x-0 z-10">
           {/* Resplandor suave detrás */}
           <div className="absolute top-0 inset-x-0 flex flex-row h-3 opacity-30 blur-md">
             <div className={`flex-1 ${currentData.glowColors[0]} transition-colors duration-500`}></div>
@@ -234,7 +234,7 @@ export default function WhereWeAre() {
             <div className={`flex-1 ${currentData.glowColors[2]} transition-colors duration-500`}></div>
           </div>
           {/* Líneas nítidas principales */}
-          <div className="absolute top-0 inset-x-0 flex flex-row h-[3px] w-full opacity-90">
+          <div className="relative flex flex-row h-[3px] w-full opacity-90">
             <div className={`flex-1 ${currentData.glowColors[0]} transition-colors duration-500`}></div>
             <div className={`flex-1 ${currentData.glowColors[1]} transition-colors duration-500`}></div>
             <div className={`flex-1 ${currentData.glowColors[2]} transition-colors duration-500`}></div>
@@ -242,7 +242,7 @@ export default function WhereWeAre() {
         </div>
 
         {/* BOTÓN SELECTOR ANCLADO AL BORDE */}
-        <div className="relative -mt-7 z-50">
+        <div className="relative -mt-7 z-30">
           <button 
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-4 px-10 py-4 bg-white rounded-full border border-gray-200 transition-all hover:bg-gray-50 hover:shadow-sm"
@@ -256,7 +256,7 @@ export default function WhereWeAre() {
         </div>
 
         {/* ÁREA DE CONTENIDO */}
-        <div className="relative z-20 w-full max-w-7xl mx-auto px-4 md:px-6 text-left mt-24">
+        <div className="relative z-20 w-full max-w-7xl mx-auto px-4 md:px-6 text-left mt-16">
           <div className="w-full animate-in fade-in duration-500" key={`content-${selectedCountry}-${selectedLanguage}`}>
             
             <LocalCarousel title={`${t.featuredSolutions} ${currentData.name}`} items={LOCAL_SOLUTIONS} />
