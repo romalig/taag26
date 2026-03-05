@@ -42,7 +42,8 @@ Save to `{@artifacts_path}/spec.md` with:
 - Delivery phases (incremental, testable milestones)
 - Verification approach using project lint/test commands
 
-### [ ] Step: Planning
+### [x] Step: Planning
+<!-- chat-id: 1c0d6af7-e582-4f24-8f91-9ee333320190 -->
 
 Create a detailed implementation plan based on `{@artifacts_path}/spec.md`.
 
@@ -58,8 +59,54 @@ If the feature is trivial and doesn't warrant full specification, update this wo
 
 Save to `{@artifacts_path}/plan.md`.
 
-### [ ] Step: Implementation
+### [ ] Step: Create .dockerignore at project root
 
-This step should be replaced with detailed implementation tasks from the Planning step.
+Create `.dockerignore` at the project root to exclude unnecessary files from the Docker build context.
 
-If Planning didn't replace this step, execute the tasks in `{@artifacts_path}/plan.md`, updating checkboxes as you go. Run planned tests/lint and record results in plan.md.
+Content to include:
+- `node_modules`
+- `.next`
+- `.git`
+- `.gitignore`
+- `.zenflow`
+- `*.log`
+- `*.pem`
+- `.DS_Store`
+- `.env*`
+- `public`
+
+Reference: spec.md § `.dockerignore`
+
+### [ ] Step: Create .docker/Dockerfile
+
+Create `.docker/Dockerfile` for the Next.js development container.
+
+- Base image: `node:22-alpine`
+- `WORKDIR /app`
+- `COPY package.json package-lock.json ./`
+- `RUN npm ci`
+- `EXPOSE 3000`
+- `CMD ["npm", "run", "dev"]`
+
+Reference: spec.md § `.docker/Dockerfile`
+
+### [ ] Step: Create docker-compose.yml at project root
+
+Create `docker-compose.yml` at the project root to orchestrate the development container.
+
+- Single service `web`
+- Build context `.` with dockerfile `.docker/Dockerfile`
+- Port mapping `3000:3000`
+- Bind mount `.:/app` for hot reload
+- Anonymous volume `/app/node_modules` to isolate container node_modules
+- Environment variables: `NODE_ENV=development`, `CHOKIDAR_USEPOLLING=true`, `WATCHPACK_POLLING=true`
+
+Reference: spec.md § `docker-compose.yml`
+
+### [ ] Step: Verify Docker build and runtime
+
+Run build and smoke-test the container:
+
+1. `docker compose build --no-cache` — expected: exits 0, `npm ci` completes successfully
+2. `docker compose up` — expected: Next.js dev server starts, `http://localhost:3000` loads the TAAG landing page
+3. Edit a source file (e.g., `app/page.tsx`) — expected: fast refresh triggers in the browser without container restart
