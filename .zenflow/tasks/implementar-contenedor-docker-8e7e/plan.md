@@ -59,7 +59,8 @@ If the feature is trivial and doesn't warrant full specification, update this wo
 
 Save to `{@artifacts_path}/plan.md`.
 
-### [ ] Step: Create .dockerignore at project root
+### [x] Step: Create .dockerignore at project root
+<!-- chat-id: e6b37e63-c4c1-4d66-93cc-f2f59e11bb62 -->
 
 Create `.dockerignore` at the project root to exclude unnecessary files from the Docker build context.
 

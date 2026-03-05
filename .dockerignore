@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.gitignore
+.zenflow
+*.log
+*.pem
+.DS_Store
+.env*
+public
