@@ -23,7 +23,6 @@
 # misc
 .DS_Store
 *.pem
-.docker/nginx/certs/*.pem
 
 # debug
 npm-debug.log*
