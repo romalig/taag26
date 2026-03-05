@@ -106,7 +106,8 @@ Create `docker-compose.yml` at the project root to orchestrate the development c
 
 Reference: spec.md § `docker-compose.yml`
 
-### [ ] Step: Verify Docker build and runtime
+### [x] Step: Verify Docker build and runtime
+<!-- chat-id: 2b80691c-8f1f-4206-b8a6-867bb6357307 -->
 
 Run build and smoke-test the container:
 
