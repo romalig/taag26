@@ -92,7 +92,8 @@ Create `.docker/Dockerfile` for the Next.js development container.
 
 Reference: spec.md § `.docker/Dockerfile`
 
-### [ ] Step: Create docker-compose.yml at project root
+### [x] Step: Create docker-compose.yml at project root
+<!-- chat-id: d282a89f-2661-468c-b63f-82944ae9f39a -->
 
 Create `docker-compose.yml` at the project root to orchestrate the development container.
 
