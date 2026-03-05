@@ -78,7 +78,8 @@ Content to include:
 
 Reference: spec.md § `.dockerignore`
 
-### [ ] Step: Create .docker/Dockerfile
+### [x] Step: Create .docker/Dockerfile
+<!-- chat-id: daba1850-eeb4-4967-97c4-b602ca4e9f11 -->
 
 Create `.docker/Dockerfile` for the Next.js development container.
 
