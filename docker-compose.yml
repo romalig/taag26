@@ -3,8 +3,6 @@ services:
     build:
       context: .
       dockerfile: .docker/Dockerfile
-    ports:
-      - "3000:3000"
     volumes:
       - .:/app
       - /app/node_modules
@@ -12,3 +10,13 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+
+  nginx:
+    build:
+      context: .docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
