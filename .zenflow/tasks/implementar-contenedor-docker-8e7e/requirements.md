@@ -17,7 +17,7 @@ Set up a Docker-based local development environment for `taag-web`, a Next.js 16
 | Language | TypeScript 5 |
 | React | 19.2.3 |
 | CSS | Tailwind CSS 4 via `@tailwindcss/postcss` |
-| Fonts | Google Fonts (Sora) via `next/font/google` — requires internet at build time |
+| Fonts | Google Fonts (Sora) via `next/font/google` — downloaded at container startup (first compilation) |
 | Animation | Framer Motion 12.34.0 |
 | Icons | Lucide React 0.562.0 |
 | Particles | tsparticles 3.9.1 + @tsparticles/react 3.0.0 |
@@ -58,11 +58,11 @@ The `.gitignore` already covers `node_modules/`, `.next/`, `/build`, `/out/`, `*
 
 ### Non-Functional Requirements
 
-1. **NFR-1**: The Dockerfile must use a multi-stage or lean base image to keep image size reasonable.
-2. **NFR-2**: Configuration files (`Dockerfile`, `.dockerignore`) live in `.docker/` folder. `docker-compose.yml` lives at the project root.
+1. **NFR-1**: The Dockerfile must use a lean base image to keep image size reasonable.
+2. **NFR-2**: The `Dockerfile` lives in `.docker/`; `.dockerignore` and `docker-compose.yml` live at the project root (Docker requires `.dockerignore` in the build context directory, not the Dockerfile directory).
 3. **NFR-3**: The solution targets **development** mode (`next dev`) — production optimization is out of scope for this task.
-4. **NFR-4**: The container must have internet access during build to download Google Fonts (used via `next/font/google`).
-5. **NFR-5**: A `.dockerignore` must be provided to prevent copying unnecessary files into the image (e.g., `node_modules`, `.next`, large build artifacts).
+4. **NFR-4**: The running container must have internet access so `next/font/google` can download the Sora font on first startup. No internet access is required during `docker build`.
+5. **NFR-5**: A `.dockerignore` at the project root must be provided to prevent copying unnecessary files into the build context (e.g., `node_modules`, `.next`, large image assets).
 
 ---
 
@@ -70,7 +70,7 @@ The `.gitignore` already covers `node_modules/`, `.next/`, `/build`, `/out/`, `*
 
 | # | Decision |
 |---|----------|
-| A1 | Node.js base image: `node:20-alpine` — LTS, compatible with Next.js 16 and React 19, small footprint. |
+| A1 | Node.js base image: `node:22-alpine` — current LTS (since Oct 2024), compatible with Next.js 16 and React 19, small footprint. |
 | A2 | Development mode only (`next dev`) for this task. Production Dockerfile is deferred. |
 | A3 | Port `3000` exposed (Next.js default). No need to change it. |
 | A4 | `node_modules` mounted as an anonymous Docker volume to prevent host/container architecture conflicts. |
@@ -84,8 +84,8 @@ The `.gitignore` already covers `node_modules/`, `.next/`, `/build`, `/out/`, `*
 
 | File | Location | Purpose |
 |------|----------|---------|
-| `Dockerfile` | `.docker/Dockerfile` | Multi-stage build for the Next.js app |
-| `.dockerignore` | `.docker/.dockerignore` | Exclude unnecessary files from build context |
+| `Dockerfile` | `.docker/Dockerfile` | Development Dockerfile for the Next.js app |
+| `.dockerignore` | Project root (`.dockerignore`) | Exclude unnecessary files from build context |
 | `docker-compose.yml` | Project root | Orchestrates container startup for development |
 
 ---
