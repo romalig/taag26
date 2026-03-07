@@ -1,14 +1,37 @@
 services:
-  web:
+  # Desarrollo: Next.js dev server directo
+  web-taagbio-dev:
+    container_name: web-taagbio-dev
     build:
       context: .
       dockerfile: .docker/Dockerfile
+      target: deps
     ports:
-      - "3000:3000"
+      - "8001:3000"
+      - "4001:443"
     volumes:
       - .:/app
       - /app/node_modules
+      - /app/.next
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+    command: npm run dev
+    profiles:
+      - dev
+
+  # # Produccion: Next.js + nginx TLS
+  # web-taagbio:
+  #   container_name: web-taagbio
+  #   build:
+  #     context: .
+  #     dockerfile: .docker/Dockerfile
+  #     target: runner
+  #   ports:
+  #     - "443:443"
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #   profiles:
+  #     - prod
