@@ -17,21 +17,25 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+      - API_BASE_URL=${API_BASE_URL:-}
+      - API_SERVICE_KEY=${API_SERVICE_KEY:-}
     command: npm run dev
     profiles:
       - dev
 
-  # # Produccion: Next.js + nginx TLS
-  # web-taagbio:
-  #   container_name: web-taagbio
-  #   build:
-  #     context: .
-  #     dockerfile: .docker/Dockerfile
-  #     target: runner
-  #   ports:
-  #     - "${WEB_TAAGBIO_SSL_PORT:-443}:443"
-  #     - "${WEB_TAAGBIO_PORT:-3000}:3000"
-  #   environment:
-  #     - NODE_ENV=production
-  #   profiles:
-  #     - prod
+  # Produccion: Next.js + nginx TLS
+  web-taagbio:
+    container_name: web-taagbio
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+      target: runner
+    ports:
+      - "${WEB_TAAGBIO_SSL_PORT:-443}:443"
+      - "${WEB_TAAGBIO_PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - API_BASE_URL=${API_BASE_URL}
+      - API_SERVICE_KEY=${API_SERVICE_KEY}
+    profiles:
+      - prod

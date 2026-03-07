@@ -1,0 +1,63 @@
+# CI/CD Pipeline — TAAG Bio Frontend
+# Builds production Docker image and deploys via webhook
+
+stages:
+  - build-latest
+  - deploy
+
+variables:
+  IMAGE_NAME: $REPGITLAB_REGISTRY_URL/comercial-pages/taag-bio/taag-site
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_TLS_CERTDIR: ""
+
+default:
+  image: docker:26.1.1
+  services:
+    - docker:26.1.1-dind
+  before_script:
+    - echo "$REPGITT_REGISTRY_PASSWORD" | docker login $REPGITLAB_REGISTRY_URL -u "$REPGITT_REGISTRY_USERNAME" --password-stdin
+
+# Backup current latest image before overwriting
+backup_latest:
+  stage: build-latest
+  variables:
+    IMG_TAG_ORIG: $IMAGE_NAME:latest
+    IMG_TAG_BACK: $IMAGE_NAME:latest-back
+  script:
+    - docker pull $IMG_TAG_ORIG
+    - docker tag "$IMG_TAG_ORIG" "$IMG_TAG_BACK"
+    - docker push $IMG_TAG_BACK
+  only:
+    - master
+  tags:
+    - docker
+
+# Build production image and push as latest
+build_latest:
+  stage: build-latest
+  variables:
+    IMG_TAG_FINAL: "$IMAGE_NAME:latest"
+  script:
+    - echo "Building production image with tag 'latest'"
+    - docker build -t $IMG_TAG_FINAL . -f .docker/Dockerfile
+    - docker push $IMG_TAG_FINAL
+  needs: ["backup_latest"]
+  only:
+    - master
+  tags:
+    - docker
+  timeout: 4h
+
+# Deploy to production (manual trigger)
+deploy_production:
+  stage: deploy
+  script:
+    - echo "Triggering production deploy webhook"
+    - apk add --no-cache curl
+    - curl -k -X POST $REPGITT_WEBHOOK_URL_PROD
+  needs: ["build_latest"]
+  when: manual
+  only:
+    - master
+  tags:
+    - docker
