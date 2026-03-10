@@ -17,8 +17,8 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
-      - API_BASE_URL=${API_BASE_URL:-}
-      - API_SERVICE_KEY=${API_SERVICE_KEY:-}
+      - CHAT_IA_WEBPAGE_API_URL=${CHAT_IA_WEBPAGE_API_URL:-}
+      - CHAT_IA_WEBPAGE_SERVICE_KEY=${CHAT_IA_WEBPAGE_SERVICE_KEY:-}
     command: npm run dev
     profiles:
       - dev
@@ -35,7 +35,7 @@ services:
       - "${WEB_TAAGBIO_PORT:-3000}:3000"
     environment:
       - NODE_ENV=production
-      - API_BASE_URL=${API_BASE_URL}
-      - API_SERVICE_KEY=${API_SERVICE_KEY}
+      - CHAT_IA_WEBPAGE_API_URL=${CHAT_IA_WEBPAGE_API_URL}
+      - CHAT_IA_WEBPAGE_SERVICE_KEY=${CHAT_IA_WEBPAGE_SERVICE_KEY}
     profiles:
       - prod

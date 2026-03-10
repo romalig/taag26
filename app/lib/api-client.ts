@@ -1,36 +1,33 @@
-const API_BASE_URL = process.env.API_BASE_URL || "";
-const API_SERVICE_KEY = process.env.API_SERVICE_KEY || "";
+const CHAT_API_URL = process.env.CHAT_IA_WEBPAGE_API_URL || "";
+const CHAT_SERVICE_KEY = process.env.CHAT_IA_WEBPAGE_SERVICE_KEY || "";
 
-interface ApiRequestOptions {
-  method?: string;
-  body?: unknown;
-  headers?: Record<string, string>;
+interface ChatPayload {
+  message: string;
+  session_id: string;
 }
 
-export async function apiRequest<T>(
-  path: string,
-  options: ApiRequestOptions = {}
-): Promise<T> {
-  if (!API_BASE_URL) {
-    throw new Error("API_BASE_URL is not configured");
+/**
+ * Opens a streaming connection to the chat API and returns the raw Response
+ * for the caller to proxy or consume as SSE.
+ */
+export async function chatStream(body: ChatPayload): Promise<Response> {
+  if (!CHAT_API_URL) {
+    throw new Error("CHAT_IA_WEBPAGE_API_URL is not configured");
   }
 
-  const { method = "GET", body, headers = {} } = options;
-
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method,
+  const response = await fetch(CHAT_API_URL, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Accept: "application/json",
-      "X-Service-Key": API_SERVICE_KEY,
-      ...headers,
+      Accept: "text/event-stream",
+      "X-Service-Key": CHAT_SERVICE_KEY,
     },
-    ...(body ? { body: JSON.stringify(body) } : {}),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
     throw new Error(`API error: ${response.status} ${response.statusText}`);
   }
 
-  return response.json() as Promise<T>;
+  return response;
 }

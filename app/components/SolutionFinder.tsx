@@ -1,38 +1,58 @@
 "use client";
 
-import { useState } from "react";
-import { recommendSolution } from "../lib/recommendSolution";
-import { Solution } from "../lib/solutionFinderCatalog";
-import { Loader2, ArrowRight, Check, Sparkles, Terminal } from "lucide-react"; 
-
-interface UISolution extends Solution {
-  description?: string;
-  href?: string;
-}
+import { useState, useRef, useCallback } from "react";
+import { Loader2, ArrowRight, Sparkles, Terminal } from "lucide-react"; 
 
 export default function SolutionFinder() {
   const [challenge, setChallenge] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [result, setResult] = useState<UISolution | null>(null);
+  const [reply, setReply] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const sessionRef = useRef<string | null>(null);
 
-  function handleGenerate() {
-    if (!challenge.trim()) return;
+  const handleGenerate = useCallback(async () => {
+    if (!challenge.trim() || isAnalyzing) return;
     setIsAnalyzing(true);
-    setResult(null);
-    
-    setTimeout(() => {
-      const rec = recommendSolution(challenge);
-      
-      const enhancedResult: UISolution = {
-        ...rec,
-        description: `Our ${rec.name} platform is designed specifically for this challenge. It utilizes ${rec.technology} to isolate target organisms without interference, ensuring compliance and preventing costly holds.`,
-        href: "/solutions/industrial" 
-      };
+    setReply("");
 
-      setResult(enhancedResult);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: challenge,
+          ...(sessionRef.current ? { session_id: sessionRef.current } : {}),
+        }),
+      });
+
+      if (!res.ok || !res.body) throw new Error(`Error: ${res.status}`);
+
+      const sid = res.headers.get("x-session-id");
+      if (sid) { setSessionId(sid); sessionRef.current = sid; }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          const token = line.slice(6);
+          if (token === "</stream>") continue;
+          setReply((prev) => (prev ?? "") + token);
+        }
+      }
+    } catch {
+      setReply("Could not connect to the assistant. Please try again.");
+    } finally {
       setIsAnalyzing(false);
-    }, 1200); 
-  }
+    }
+  }, [challenge, isAnalyzing]);
 
   return (
     <section className="bg-[#F5F5F7] py-24 lg:py-32 relative overflow-hidden" id="solution-finder">
@@ -69,7 +89,7 @@ export default function SolutionFinder() {
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
             
             {/* LEFT: INPUT AREA (Always Active Tech Card) */}
-            <div className={`lg:col-span-5 flex flex-col transition-all duration-500 ${result ? 'lg:opacity-100' : 'lg:col-span-8 lg:col-start-3'}`}>
+            <div className={`lg:col-span-5 flex flex-col transition-all duration-500 ${reply !== null ? 'lg:opacity-100' : 'lg:col-span-8 lg:col-start-3'}`}>
                 
                 {/* CAMBIOS APLICADOS:
                    1. Shadow permanente roja suave: shadow-[0_20px_40px_-15px_rgba(255,39,10,0.15)]
@@ -100,7 +120,7 @@ export default function SolutionFinder() {
 
                         <button
                             onClick={handleGenerate}
-                            disabled={isAnalyzing || !challenge}
+                            disabled={isAnalyzing || !challenge.trim()}
                             className="group/btn relative overflow-hidden flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-[#111111] text-white rounded-full font-bold hover:bg-[#FF270A] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                         >
                             <span className="relative z-10 flex items-center gap-2">
@@ -115,53 +135,29 @@ export default function SolutionFinder() {
                 </div>
             </div>
 
-            {/* RIGHT: RESULT AREA (Tech Reveal) */}
-            {result && (
+            {/* RIGHT: RESULT AREA */}
+            {(reply !== null) && (
                 <div className="lg:col-span-7 animate-in fade-in slide-in-from-bottom-8 duration-700">
                     <div className="h-full">
-                        
                         <div className="bg-gradient-to-br from-white to-[#F0F0F2] rounded-[2.5rem] h-full p-8 md:p-12 flex flex-col relative overflow-hidden border border-white ring-1 ring-black/5 shadow-2xl shadow-[#FF270A]/10">
                             
-                            {/* Decoración de fondo */}
                             <div className="absolute top-[-20%] right-[-10%] w-[300px] h-[300px] border-[40px] border-white rounded-full opacity-50 blur-xl pointer-events-none" />
                             <div className="absolute bottom-[-10%] left-[-5%] w-[200px] h-[200px] bg-gray-100 rounded-full mix-blend-multiply opacity-50 blur-3xl pointer-events-none" />
 
-                            <div className="relative z-10 flex flex-col h-full">
-                                
-                                {/* Header Tech */}
-                                <div className="flex items-center justify-between mb-8">
-                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-full border border-gray-100 shadow-sm">
-                                        <div className="w-4 h-4 rounded-full bg-[#FF270A] flex items-center justify-center text-white shadow-[0_0_10px_#FF270A]">
-                                            <Check className="w-2.5 h-2.5" />
-                                        </div>
-                                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#111111]">
-                                            Match Found
-                                        </span>
-                                    </div>
-                                    <div className="text-[10px] font-mono font-bold text-gray-400">
-                                        ID: {result.id.toUpperCase()}
-                                    </div>
+                            <div className="relative z-10 flex flex-col h-full gap-6">
+
+                                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-full border border-gray-100 shadow-sm self-start">
+                                    <Sparkles className="w-3 h-3 text-[#FF270A]" />
+                                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#111111]">
+                                      AI Response
+                                    </span>
+                                    {isAnalyzing && <Loader2 className="w-3 h-3 animate-spin text-gray-400" />}
                                 </div>
 
-                                {/* Content */}
-                                <h3 className="text-3xl md:text-5xl font-extrabold text-[#111111] mb-6 leading-tight tracking-tight">
-                                    {result.name}
-                                </h3>
-                                
-                                <p className="text-lg md:text-xl text-gray-500 leading-relaxed mb-10 max-w-2xl border-l-2 border-[#FF270A]/20 pl-6">
-                                    {result.description}
+                                <p className="text-lg md:text-xl text-gray-600 leading-relaxed whitespace-pre-wrap border-l-2 border-[#FF270A]/20 pl-6 flex-1">
+                                    {reply}
+                                    {isAnalyzing && <span className="inline-block w-0.5 h-5 bg-gray-400 animate-pulse ml-0.5 align-middle" />}
                                 </p>
-
-                                {/* Footer Action */}
-                                <div className="mt-auto pt-8 border-t border-gray-200/60">
-                                     <a 
-                                        href={result.href || "#"} 
-                                        className="inline-flex items-center justify-center gap-3 w-full md:w-auto px-10 py-5 rounded-full bg-[#FF270A] text-white text-sm font-bold uppercase tracking-widest hover:bg-[#d92008] transition-all shadow-[0_10px_30px_-10px_rgba(255,39,10,0.4)] hover:shadow-[0_15px_35px_-10px_rgba(255,39,10,0.5)] hover:-translate-y-1"
-                                     >
-                                         View Solution 
-                                         <ArrowRight className="w-4 h-4" />
-                                     </a>
-                                </div>
                             </div>
                         </div>
                     </div>
