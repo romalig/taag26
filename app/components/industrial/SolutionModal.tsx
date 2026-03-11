@@ -42,7 +42,7 @@ export default function SolutionModal() {
         onClick={closeModal} 
       >
         
-        {/* TARJETA MODAL (w-[95vw] para celular, extra ancha en Desktop) */}
+        {/* TARJETA MODAL (Ajuste a 95vw en móvil y máximo ancho en Desktop) */}
         <div 
           className={`
             relative 

@@ -46,12 +46,12 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   return (
     <div className="w-full bg-white rounded-[2.5rem] overflow-hidden">
       
-      <div className="p-8 md:p-12 pb-16 bg-white">
+      <div className="p-6 md:p-12 pb-16 bg-white">
         
         {/* === HEADER === */}
         <div className="mb-6 pt-4">
           <div className="max-w-4xl">
-            {/* ETIQUETA ROJA (Ahora siempre visible y arriba) */}
+            {/* ETIQUETA ROJA (Ahora visible tanto en móvil como en escritorio, arriba del título) */}
             <div className="mb-4">
               <span className="text-[#FF270A] font-bold uppercase tracking-widest text-[10px] md:text-xs">
                 Technical Data Sheet
@@ -67,7 +67,8 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
               <p className="text-sm font-medium text-gray-400 mt-3 mb-10">Rev. {data.version}</p>
             )}
             
-            <div className="flex flex-wrap gap-2 mb-8">
+            {/* CHIPS CON MÁS ESPACIO DEBAJO (mb-14) */}
+            <div className="flex flex-wrap gap-2 mb-14">
               {data.chips.map((tech) => (
                 <span key={tech} className="px-4 py-1.5 rounded-full bg-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600 border border-gray-200">
                   {tech}
@@ -174,9 +175,9 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         </div>
 
         {/* === STORAGE & CERTIFICATIONS === */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 items-start">
             {/* Storage */}
-            <div className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100">
+            <div className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 w-full">
                <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-6">Storage Conditions</h3>
                <div className="space-y-5">
                   <div>
@@ -191,7 +192,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             </div>
             
             {/* Certifications */}
-            <div className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 flex flex-col justify-center">
+            <div className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 flex flex-col justify-center w-full">
                <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-6">Certifications</h3>
                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                   <div className="text-sm font-medium text-gray-700 leading-relaxed flex-1 whitespace-pre-line text-center sm:text-left">

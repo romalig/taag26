@@ -16,32 +16,31 @@ const styles = StyleSheet.create({
   
   // Header
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 30, paddingBottom: 15, borderBottomWidth: 0.5, borderBottomColor: "#E5E7EB" },
-  logoImage: { width: 80, height: "auto" }, 
+  logoImage: { width: 80, objectFit: "contain" }, 
   headerMeta: { textAlign: "right" },
   headerTitle: { fontSize: 8, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: 2, fontWeight: "bold" },
   
   // Title Section
-  tagLabel: { fontSize: 8, color: "#FF270A", fontWeight: "bold", textTransform: "uppercase", letterSpacing: 1, marginBottom: 4 },
-  titleContainer: { marginBottom: 15 },
+  titleContainer: { marginBottom: 4 },
   title: { fontSize: 24, color: "#111111", fontWeight: "bold" },
-  versionText: { fontSize: 9, color: "#9CA3AF", marginTop: 4 },
+  versionText: { fontSize: 9, color: "#9CA3AF", marginBottom: 15 },
   
-  // Chips
-  chipsContainer: { flexDirection: "row", flexWrap: "wrap", gap: 5, marginBottom: 20 },
+  // Chips (Más espacio abajo)
+  chipsContainer: { flexDirection: "row", flexWrap: "wrap", gap: 5, marginBottom: 35 },
   chip: { backgroundColor: "#F3F4F6", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10, fontSize: 7, color: "#4B5563", fontWeight: "bold", textTransform: "uppercase" },
 
-  // Metrics Grid
-  metricsGrid: { flexDirection: "row", borderBottomWidth: 0.5, borderBottomColor: "#E5E7EB", paddingBottom: 15, marginBottom: 20 },
+  // Metrics Grid (Más padding y más margin inferior)
+  metricsGrid: { flexDirection: "row", borderBottomWidth: 0.5, borderBottomColor: "#E5E7EB", paddingBottom: 20, marginBottom: 30 },
   metricCol: { flex: 1, paddingRight: 10 },
   metricLabel: { fontSize: 7, color: "#9CA3AF", textTransform: "uppercase", fontWeight: "bold", marginBottom: 4, letterSpacing: 1 },
   metricValue: { fontSize: 10, color: "#111111", fontWeight: "bold" },
 
-  // Sections & Layout
-  row: { flexDirection: "row", gap: 20, marginBottom: 20 },
+  // Sections & Layout (Margen ampliado entre bloques paralelos)
+  row: { flexDirection: "row", gap: 20, marginBottom: 30, alignItems: "flex-start" },
   col23: { flex: 2, paddingRight: 15 },
   col13: { flex: 1 },
   colHalf: { flex: 1 },
-  sectionTitle: { fontSize: 11, fontWeight: "bold", color: "#111111", marginBottom: 8 },
+  sectionTitle: { fontSize: 11, fontWeight: "bold", color: "#111111", marginBottom: 10 },
   text: { fontSize: 9, lineHeight: 1.6, color: "#4B5563", marginBottom: 6, textAlign: "justify" },
   
   // Boxes
@@ -49,8 +48,13 @@ const styles = StyleSheet.create({
   boxOrange: { backgroundColor: "#FFF7ED", padding: 12, borderRadius: 8, borderWidth: 0.5, borderColor: "#FFEDD5" },
   boxTitle: { fontSize: 8, fontWeight: "bold", color: "#111111", textTransform: "uppercase", marginBottom: 6, letterSpacing: 1 },
   boxTitleOrange: { fontSize: 8, fontWeight: "bold", color: "#EA580C", textTransform: "uppercase", marginBottom: 6, letterSpacing: 1 },
-  boxItem: { fontSize: 8, lineHeight: 1.5, color: "#4B5563", marginBottom: 4 },
-  boxItemOrange: { fontSize: 8, lineHeight: 1.5, color: "#C2410C", marginBottom: 4 },
+  
+  // Bullets
+  bulletRow: { flexDirection: "row", marginBottom: 5 },
+  bulletIcon: { fontSize: 8, color: "#4B5563", marginRight: 4 },
+  bulletIconOrange: { fontSize: 8, color: "#EA580C", marginRight: 4 },
+  bulletText: { fontSize: 8, lineHeight: 1.5, color: "#4B5563", flex: 1 },
+  bulletTextOrange: { fontSize: 8, lineHeight: 1.5, color: "#C2410C", flex: 1 },
 
   // Specs Table
   specContainer: { borderTopWidth: 0.5, borderTopColor: "#E5E7EB", marginTop: 5 },
@@ -61,19 +65,19 @@ const styles = StyleSheet.create({
   // Storage Sub-labels
   subLabel: { fontSize: 7, fontWeight: "bold", color: "#9CA3AF", textTransform: "uppercase", marginTop: 8, marginBottom: 2, letterSpacing: 1 },
 
-  // Product Tables
-  table: { width: "100%", marginTop: 5, marginBottom: 15 },
-  tableHeader: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#E5E7EB", paddingVertical: 6, paddingHorizontal: 4 },
-  tableRow: { flexDirection: "row", borderBottomWidth: 0.5, borderBottomColor: "#F3F4F6", paddingVertical: 8, paddingHorizontal: 4 },
-  th: { fontSize: 7, color: "#9CA3AF", fontWeight: "bold", textTransform: "uppercase", letterSpacing: 1 },
-  td: { fontSize: 8, color: "#4B5563", lineHeight: 1.4 },
+  // Product Tables (Aumentado el espacio alrededor de las tablas)
+  table: { width: "100%", marginTop: 8, marginBottom: 30 },
+  tableHeader: { flexDirection: "row", backgroundColor: "#F9FAFB", paddingVertical: 6, paddingHorizontal: 4, borderBottomWidth: 1, borderBottomColor: "#E5E7EB" },
+  tableRow: { flexDirection: "row", borderBottomWidth: 0.5, borderBottomColor: "#F3F4F6", paddingVertical: 6, paddingHorizontal: 4 },
+  th: { fontSize: 7, color: "#111111", fontWeight: "bold", textTransform: "uppercase" },
+  td: { fontSize: 8, color: "#4B5563" },
   
   // Column Widths
-  colCat: { width: "15%", color: "#FF270A", fontWeight: "bold" },
-  colName: { width: "20%", fontWeight: "bold", color: "#111111" },
+  colCat: { width: "18%", color: "#FF270A", fontWeight: "bold" },
+  colName: { width: "22%", fontWeight: "bold", color: "#111111" },
   colSize: { width: "15%" },
-  colFormat: { width: "12%" },
-  colDesc: { width: "38%" },
+  colFormat: { width: "15%" },
+  colDesc: { width: "30%" },
 
   // Footer
   footer: { position: "absolute", bottom: 30, left: 40, right: 40, borderTopWidth: 0.5, borderTopColor: "#E5E7EB", paddingTop: 10, flexDirection: "row", justifyContent: "space-between" },
@@ -90,17 +94,20 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
           <Image src="/logo-red1.png" style={styles.logoImage} /> 
           <View style={styles.headerMeta}>
              <Text style={styles.headerTitle}>Technical Data Sheet</Text>
-             <Text style={{ fontSize: 7, color: "#D1D5DB", marginTop: 2, textAlign: "right" }}>Rev. {new Date().getFullYear()}.01</Text>
           </View>
         </View>
 
         {/* TITLE BLOCK */}
         <View style={styles.titleContainer}>
-           <Text style={styles.tagLabel}>Technical Data Sheet</Text>
            <Text style={styles.title}>{data.title}</Text>
-           {data.version && <Text style={styles.versionText}>Rev. {data.version}</Text>}
         </View>
+        
+        {/* VERSIÓN */}
+        {data.version && (
+           <Text style={styles.versionText}>Rev. {data.version}</Text>
+        )}
 
+        {/* CHIPS */}
         <View style={styles.chipsContainer}>
            {data.chips.map((chip, i) => <Text key={i} style={styles.chip}>{chip}</Text>)}
         </View>
@@ -130,13 +137,18 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
            <View style={styles.col13}>
               <View style={styles.boxGray}>
                  <Text style={styles.boxTitle}>Key Advantages</Text>
-                 {data.advantages.map((adv, i) => <Text key={i} style={styles.boxItem}>• {adv}</Text>)}
+                 {data.advantages.map((adv, i) => (
+                    <View key={i} style={styles.bulletRow} wrap={false}>
+                       <Text style={styles.bulletIcon}>•</Text>
+                       <Text style={styles.bulletText}>{adv}</Text>
+                    </View>
+                 ))}
               </View>
            </View>
         </View>
 
-        {/* PRINCIPLE */}
-        <View style={{ marginBottom: 20 }}>
+        {/* PRINCIPLE (Mayor separación) */}
+        <View style={{ marginBottom: 30 }}>
             <Text style={styles.sectionTitle}>Principle</Text>
             {data.principle.map((pr, i) => <Text key={i} style={styles.text}>{pr}</Text>)}
         </View>
@@ -152,13 +164,18 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
            <View style={styles.colHalf}>
               <View style={styles.boxOrange}>
                  <Text style={styles.boxTitleOrange}>Limitations</Text>
-                 {data.limitations.map((lim, i) => <Text key={i} style={styles.boxItemOrange}>• {lim}</Text>)}
+                 {data.limitations.map((lim, i) => (
+                    <View key={i} style={styles.bulletRow} wrap={false}>
+                       <Text style={styles.bulletIconOrange}>•</Text>
+                       <Text style={styles.bulletTextOrange}>{lim}</Text>
+                    </View>
+                 ))}
               </View>
            </View>
         </View>
 
-        {/* TECH SPECS */}
-        <View style={{ marginBottom: 20 }} break>
+        {/* TECH SPECS (Mayor separación) */}
+        <View style={{ marginBottom: 30 }}>
              <Text style={styles.sectionTitle}>Technical Specifications</Text>
              <View style={styles.specContainer}>
                 <SpecRow label="Microorganisms" value={data.techSpecs.targets} />
@@ -184,17 +201,16 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
               </View>
            </View>
            <View style={styles.colHalf}>
-              <View style={[styles.boxGray, { height: "100%" }]}>
+              <View style={styles.boxGray}>
                  <Text style={styles.boxTitle}>Certifications</Text>
                  <Text style={styles.text}>{data.techSpecs.certifications}</Text>
-                 {/* La imagen en react-pdf funciona si la ruta es pública */}
-                 {data.certImage && <Image src={data.certImage} style={{ width: 60, height: 60, marginTop: 5 }} />}
+                 {data.certImage && <Image src={data.certImage} style={{ width: 60, marginTop: 5, objectFit: "contain" }} />}
               </View>
            </View>
         </View>
 
-        {/* ORDER INFO KITS */}
-        <Text style={styles.sectionTitle}>Order Information</Text>
+        {/* ORDER INFO KITS (Margen superior agregado) */}
+        <Text style={[styles.sectionTitle, { marginTop: 10 }]}>Order Information</Text>
         <View style={styles.table}>
            <View style={styles.tableHeader} fixed>
               <Text style={[styles.th, styles.colCat]}>Cat. No</Text>
@@ -216,8 +232,8 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
 
         {/* SUPPLIES */}
         {data.supplies && data.supplies.length > 0 && (
-            <View break={data.pcrKits.length > 4}> 
-              <Text style={styles.sectionTitle}>Additional Supplies</Text>
+            <View wrap={false}> 
+              <Text style={[styles.sectionTitle, { marginTop: 10 }]}>Additional Supplies</Text>
               <View style={styles.table}>
                 <View style={styles.tableHeader} fixed>
                     <Text style={[styles.th, styles.colCat]}>Cat. No</Text>
@@ -242,8 +258,8 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         {/* FOOTER */}
         <View style={styles.footer} fixed>
            <View>
-              <Text style={styles.footerText}>support@taag-genetics.com</Text>
-              <Text style={styles.footerText}>www.taag-genetics.com</Text>
+              <Text style={styles.footerText}>support@taag.bio</Text>
+              <Text style={styles.footerText}>www.taag.bio</Text>
            </View>
            <Text style={styles.footerText} render={({ pageNumber, totalPages }) => (
               `Page ${pageNumber} of ${totalPages}`
@@ -256,7 +272,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
 }
 
 const SpecRow = ({ label, value }: { label: string, value: string }) => (
-  <View style={styles.specRow}>
+  <View style={styles.specRow} wrap={false}>
      <Text style={styles.specLabel}>{label}</Text>
      <Text style={styles.specValue}>{value}</Text>
   </View>

@@ -199,7 +199,7 @@ export const SOLUTIONS_DATA: Record<string, SolutionContent> = {
       "This kit has been validated only for the sample matrices indicated in the Intended Use section.",
       "For use with other matrices, TAAG may provide scientific support or perform validation upon request.",
       "All TAAG Technologies PCR kits have undergone in silico inclusivity and exclusivity analyses using publicly available genomic databases.",
-      "For details on validations or in silico analyses, contact your TAAG representative or distributor."
+      "For details on validations or in silico analyses, contact your TAAG representative or distributor.",
     ],
     techSpecs: {
       targets: "Salmonella spp., S. aureus, E. coli and L. monocytogenes",
@@ -222,7 +222,7 @@ export const SOLUTIONS_DATA: Record<string, SolutionContent> = {
     pcrKits: [
       { cat: "V-SF30", name: "Specio 4.1 - Tube format", size: "96 reactions", format: "Tube", desc: "• 4 Tubes of Master mix Specio 4.1 – 297 µL\n• 4 Tubes of Primer mix Specio 4.1 - 330 µL\n• 1 Tube of DNA Polymerase - 21 µL\n• 1 Tube of Positive control Pathogens F - 100 µL\n• 1 Tube of Negative control - 352 µL" },
       { cat: "V-SF42", name: "Specio 4.1 - SPID format", size: "96 reactions", format: "SPID", desc: "• 12 preloaded PCR strips\n• 1 Tube of Positive control Pathogens F - 100 µL\n• 1 Tube of Negative control - 352 µL" },
-      { cat: "V-SF95", name: "Specio 4.1 - SPID format", size: "480 reactions", format: "SPID", desc: "• 60 preloaded PCR strips\n• 5 Tubes of Positive control Pathogens F - 100 µL\n• 5 Tubes of Negative control - 352 µL" }
+      { cat: "V-SF95", name: "Specio 4.1 - SPID format", size: "480 reactions", format: "SPID", desc: "• 60 preloaded PCR strips\n• 5 Tubes of Positive control Pathogens F - 100 µL\n• 5 Tubes of Negative control - 352 µL" },
     ],
     supplies: [
       { cat: "V-TB09", name: "Collectio 1 Neutro Sampling", size: "100 reactions", format: "Tube", desc: "Device for collecting, neutralizing and transporting surface samples." },
