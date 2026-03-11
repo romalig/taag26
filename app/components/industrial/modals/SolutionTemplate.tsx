@@ -11,32 +11,35 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
 
   if (!data) return null;
 
+  // ===================================================================
+  // NUEVA FUNCIÓN DE DESCARGA DIRECTA (A prueba de bloqueadores)
+  // ===================================================================
   const handleDownloadPDF = async () => {
-    const newWindow = window.open('', '_blank');
-    if (!newWindow) {
-        alert("Please allow popups for this website to view the PDF.");
-        return;
-    }
-    newWindow.document.write(`
-      <html>
-        <head><title>Loading PDF...</title></head>
-        <body style="margin:0; display:flex; justify-content:center; align-items:center; height:100vh; background:#f4f4f5; font-family:sans-serif; color:#555;">
-           <div style="text-align:center;">
-             <div style="margin-bottom:10px; font-weight:bold;">Generating Datasheet...</div>
-             <div style="font-size:12px;">Please wait a moment.</div>
-           </div>
-        </body>
-      </html>
-    `);
     setIsGeneratingPdf(true);
+    
     try {
+      // 1. Generamos el PDF en memoria
       const blob = await pdf(<DatasheetDocument data={data} />).toBlob();
       const url = URL.createObjectURL(blob);
-      newWindow.location.href = url;
+      
+      // 2. Creamos un enlace HTML "invisible"
+      const link = document.createElement("a");
+      link.href = url;
+      
+      // 3. Le asignamos un nombre al archivo dinámicamente
+      const safeName = data.title.replace(/[^a-zA-Z0-9]/g, "_");
+      link.download = `TAAG_Datasheet_${safeName}.pdf`; 
+      
+      // 4. Lo agregamos al documento, le hacemos clic y lo eliminamos
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // 5. Limpieza de memoria
       setTimeout(() => URL.revokeObjectURL(url), 3000);
+
     } catch (error) {
       console.error("PDF Error:", error);
-      newWindow.close(); 
       alert("Error generating PDF. Please try again.");
     } finally {
       setIsGeneratingPdf(false);
@@ -51,7 +54,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         {/* === HEADER === */}
         <div className="mb-6 pt-4">
           <div className="max-w-4xl">
-            {/* ETIQUETA ROJA (Ahora visible tanto en móvil como en escritorio, arriba del título) */}
+            {/* ETIQUETA ROJA */}
             <div className="mb-4">
               <span className="text-[#FF270A] font-bold uppercase tracking-widest text-[10px] md:text-xs">
                 Technical Data Sheet
@@ -67,7 +70,6 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
               <p className="text-sm font-medium text-gray-400 mt-3 mb-10">Rev. {data.version}</p>
             )}
             
-            {/* CHIPS CON MÁS ESPACIO DEBAJO (mb-14) */}
             <div className="flex flex-wrap gap-2 mb-14">
               {data.chips.map((tech) => (
                 <span key={tech} className="px-4 py-1.5 rounded-full bg-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600 border border-gray-200">
@@ -295,7 +297,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             ) : (
               <>
                 <Download className="w-4 h-4 text-gray-500 group-hover:text-[#111111] transition-colors" />
-                View Datasheet (PDF)
+                Download Datasheet (PDF)
               </>
             )}
          </button>

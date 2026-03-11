@@ -149,57 +149,53 @@ export default function SolutionsCatalog() {
                 </div>
 
                 {/* --- HEADER STICKY (TABS O INDICADOR DE BÚSQUEDA) --- */}
-                <div className="sticky top-[80px] z-40">
+                {/* Sello matemático: top-[56px] en móvil y top-[60px] en desktop para que encaje exacto bajo el Header */}
+                <div className="sticky top-[56px] md:top-[60px] z-40 bg-white py-4 -mx-10 md:-mx-20 px-10 md:px-20 transition-all border-b border-gray-100 flex items-center justify-center">
                    
-                   {/* CORTINA BLANCA: Tapará el gap entre este header sticky y el header principal de la web */}
-                   <div className="absolute bottom-full left-0 w-full h-[150px] bg-white pointer-events-none z-0"></div>
-
-                   <div className="bg-white py-4 -mx-10 md:-mx-20 px-10 md:px-20 transition-all border-b border-gray-100 min-h-[80px] flex items-center justify-center relative z-10">
-                       {/* CASO 1: MOSTRAR INDICADOR DE BÚSQUEDA */}
-                       {searchQuery && !isToolbarVisible ? (
-                          <div className="w-fit mx-auto animate-fadeIn flex items-center justify-between gap-6 bg-white border border-gray-200 text-[#111111] px-6 py-2.5 rounded-full shadow-lg">
-                              <div className="flex items-center gap-3">
-                                 <Filter className="w-4 h-4 text-[#FF270A]" />
-                                 <span className="text-xs md:text-sm font-medium text-gray-600">
-                                   Filtering by: <span className="font-bold text-[#111111]">"{searchQuery}"</span>
-                                 </span>
-                              </div>
-                              <button 
-                                 onClick={() => {
-                                   setSearchQuery("");
-                                   const el = document.getElementById("panel-start");
-                                   if(el) {
-                                     const pos = el.getBoundingClientRect().top + window.pageYOffset - 140;
-                                     window.scrollTo({ top: pos, behavior: "smooth" });
-                                   }
-                                 }}
-                                 className="p-1.5 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors group"
-                              >
-                                 <X className="w-3 h-3 text-gray-500 group-hover:text-[#FF270A]" />
-                              </button>
+                   {/* CASO 1: MOSTRAR INDICADOR DE BÚSQUEDA */}
+                   {searchQuery && !isToolbarVisible ? (
+                      <div className="w-fit mx-auto animate-fadeIn flex items-center justify-between gap-6 bg-white border border-gray-200 text-[#111111] px-6 py-2.5 rounded-full shadow-sm">
+                          <div className="flex items-center gap-3">
+                             <Filter className="w-4 h-4 text-[#FF270A]" />
+                             <span className="text-xs md:text-sm font-medium text-gray-600">
+                               Filtering by: <span className="font-bold text-[#111111]">"{searchQuery}"</span>
+                             </span>
                           </div>
-                       ) : (
-                          /* CASO 2: MOSTRAR TABS NORMALES */
-                          <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible p-2 no-scrollbar items-center justify-start w-full -ml-2">
-                              {PANEL_CATEGORIES.map((category) => (
-                                 <button
-                                    key={category.id}
-                                    onClick={() => handleTabClick(category.id)}
-                                    disabled={!!searchQuery}
-                                    className={`px-5 py-2.5 rounded-full text-xs font-medium tracking-wide transition-all duration-300 border whitespace-nowrap shrink-0 ${
-                                       activePanelTab === category.id && !searchQuery
-                                          ? "bg-[#111111] text-white border-[#111111] shadow-lg scale-105"
-                                          : searchQuery 
-                                            ? "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed" 
-                                            : "bg-white text-gray-500 border-gray-200 hover:border-gray-400 hover:text-[#111111]"
-                                    }`}
-                                 >
-                                    {category.label}
-                                 </button>
-                              ))}
-                          </div>
-                       )}
-                   </div>
+                          <button 
+                             onClick={() => {
+                               setSearchQuery("");
+                               const el = document.getElementById("panel-start");
+                               if(el) {
+                                 const pos = el.getBoundingClientRect().top + window.pageYOffset - 140;
+                                 window.scrollTo({ top: pos, behavior: "smooth" });
+                               }
+                             }}
+                             className="p-1.5 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors group"
+                          >
+                             <X className="w-3 h-3 text-gray-500 group-hover:text-[#FF270A]" />
+                          </button>
+                      </div>
+                   ) : (
+                      /* CASO 2: MOSTRAR TABS NORMALES */
+                      <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible p-2 no-scrollbar items-center justify-start w-full -ml-2">
+                          {PANEL_CATEGORIES.map((category) => (
+                             <button
+                                key={category.id}
+                                onClick={() => handleTabClick(category.id)}
+                                disabled={!!searchQuery}
+                                className={`px-5 py-2.5 rounded-full text-xs font-medium tracking-wide transition-all duration-300 border whitespace-nowrap shrink-0 ${
+                                   activePanelTab === category.id && !searchQuery
+                                      ? "bg-[#111111] text-white border-[#111111] shadow-lg scale-105"
+                                      : searchQuery 
+                                        ? "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed" 
+                                        : "bg-white text-gray-500 border-gray-200 hover:border-gray-400 hover:text-[#111111]"
+                                }`}
+                             >
+                                {category.label}
+                             </button>
+                          ))}
+                      </div>
+                   )}
                 </div>
 
                 <div className="flex flex-col mt-4 min-h-[300px]">
