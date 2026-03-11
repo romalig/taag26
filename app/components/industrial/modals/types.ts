@@ -2,6 +2,8 @@
 
 export interface SolutionContent {
   title: string;
+  version?: string; // NUEVO
+  certImage?: string; // NUEVO
   chips: string[];
   description: string[];
   mainIndustries: string[];

@@ -7,7 +7,9 @@ import { useCTA } from "../CTAProvider";
 import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
 import SolutionTemplate from "./modals/SolutionTemplate";
-import { SOLUTIONS_DATA } from "../data/solutionsData";
+
+// IMPORTAMOS TU BASE DE DATOS REAL
+import { SOLUTIONS_DATA } from "../data/solutionsData"; // <-- Ajusta esta ruta si es diferente
 
 export default function SolutionsCatalog() {
   const { openMeeting } = useCTA();
@@ -17,11 +19,9 @@ export default function SolutionsCatalog() {
   const [searchQuery, setSearchQuery] = useState("");
   const panelRef = useRef<HTMLDivElement>(null);
   
-  // Ref para detectar visibilidad de la barra de búsqueda original
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [isToolbarVisible, setIsToolbarVisible] = useState(true);
 
-  // --- DETECTOR DE SCROLL ---
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -30,14 +30,10 @@ export default function SolutionsCatalog() {
       { threshold: 0, rootMargin: "-80px 0px 0px 0px" } 
     );
 
-    if (toolbarRef.current) {
-      observer.observe(toolbarRef.current);
-    }
-
+    if (toolbarRef.current) observer.observe(toolbarRef.current);
     return () => observer.disconnect();
   }, []);
 
-  // --- ESCUCHAR EVENTO EXTERNO ---
   useEffect(() => {
     const handleSearchTrigger = (e: CustomEvent) => {
         setSearchQuery(e.detail);
@@ -62,9 +58,7 @@ export default function SolutionsCatalog() {
   const handleTabClick = (categoryId: string) => {
     setActivePanelTab(categoryId);
     setSearchQuery("");
-    if (panelRef.current) {
-        scrollToTarget(panelRef.current, 200); 
-    }
+    if (panelRef.current) scrollToTarget(panelRef.current, 200); 
   };
 
   const allSolutions = Object.values(PANEL_SOLUTIONS).flat();
@@ -83,15 +77,26 @@ export default function SolutionsCatalog() {
     return searchTerms.every((term) => itemText.includes(term));
   });
 
+  // ===================================================================
+  // FUNCIÓN CONECTADA A TU ARCHIVO SOLUTIONS_DATA REAL
+  // ===================================================================
   const handleOpenDetails = (item: any) => {
-    const lookupKey = item.id || item.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
-    const data = SOLUTIONS_DATA[lookupKey];
+    // 1. Buscamos el ID del kit seleccionado (Asumimos que el objeto item tiene una propiedad .id)
+    // Si no tiene .id, intentamos usar el título formateado.
+    const kitId = item.id || item.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
 
-    if (data) {
-      openModal(<SolutionTemplate data={data} />);
-    } else {
-      console.warn(`[SolutionsCatalog] Faltan datos para la clave: "${lookupKey}".`);
+    // 2. Buscamos la información en tu archivo solutionsData.ts
+    let data = SOLUTIONS_DATA[kitId];
+
+    // 3. FALLBACK: Si no encuentra el ID exacto, cargamos el "tg-multiplex-pathogens" por defecto
+    // Así el modal nunca falla, incluso si no has registrado todos los kits aún.
+    if (!data) {
+      console.warn(`No se encontró info para el kit con ID: "${kitId}". Cargando información por defecto.`);
+      data = SOLUTIONS_DATA["tg-multiplex-pathogens"]; 
     }
+
+    // 4. Abrimos el modal con la data final
+    openModal(<SolutionTemplate data={data} />);
   };
 
   return (
@@ -99,7 +104,6 @@ export default function SolutionsCatalog() {
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-[3rem] border border-gray-200 shadow-sm">
           
-          {/* HERO DEL CATALOGO */}
           <div className="relative h-[420px] md:h-[500px] rounded-t-[3rem] overflow-hidden">
             <Image src="/hero16.png" alt="TAAG Solutions Ecosystem" fill className="object-cover object-right md:object-center" priority />
              
@@ -111,11 +115,9 @@ export default function SolutionsCatalog() {
              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
           </div>
 
-          {/* CONTENIDO DEL PANEL */}
           <div className="pb-12 pt-0 bg-white relative z-20 rounded-b-[3rem]">
              <div className="w-full px-10 md:px-20" ref={panelRef} id="panel-start">
                 
-                {/* --- TOOLBAR ORIGINAL (Referencia para el Observer) --- */}
                 <div ref={toolbarRef} className="pt-12 mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                    <div className="relative group w-full md:max-w-md">
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#FF270A] transition-colors" />
@@ -146,10 +148,8 @@ export default function SolutionsCatalog() {
                    </a>
                 </div>
 
-                {/* --- HEADER STICKY (TABS O INDICADOR DE BÚSQUEDA) --- */}
                 <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-xl py-4 -mx-10 md:-mx-20 px-10 md:px-20 transition-all border-b border-transparent min-h-[80px] flex items-center justify-center">
                    
-                   {/* CASO 1: MOSTRAR INDICADOR DE BÚSQUEDA (Minimalista, Blanco, Centrado) */}
                    {searchQuery && !isToolbarVisible ? (
                       <div className="w-fit mx-auto animate-fadeIn flex items-center justify-between gap-6 bg-white border border-gray-200 text-[#111111] px-6 py-2.5 rounded-full shadow-lg">
                           <div className="flex items-center gap-3">
@@ -173,7 +173,6 @@ export default function SolutionsCatalog() {
                           </button>
                       </div>
                    ) : (
-                      /* CASO 2: MOSTRAR TABS NORMALES */
                       <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible p-2 no-scrollbar items-center justify-start w-full -ml-2">
                           {PANEL_CATEGORIES.map((category) => (
                              <button
@@ -195,12 +194,10 @@ export default function SolutionsCatalog() {
                    )}
                 </div>
 
-                {/* --- RESULTADOS --- */}
                 <div className="flex flex-col mt-4 min-h-[300px]">
                    {filteredSolutions.length > 0 ? (
                      filteredSolutions.map((item, index) => (
                         <div key={index} className="flex flex-col md:flex-row justify-between items-start md:items-center py-8 px-4 -mx-4 rounded-2xl group hover:bg-gray-50/80 transition-all duration-300">
-                           {/* Info */}
                            <div className="flex-1 pr-0 md:pr-12 mb-6 md:mb-0">
                               <h4 className="text-lg font-bold text-[#111111] mb-2 group-hover:text-[#FF270A] transition-colors">{item.title}</h4>
                               <p className="text-gray-500 text-sm font-medium mb-3 max-w-2xl leading-relaxed">{item.description}</p>
@@ -221,7 +218,6 @@ export default function SolutionsCatalog() {
                               </div>
                            </div>
 
-                           {/* Botones */}
                            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 transition-all duration-300">
                               <button onClick={openMeeting} className="px-6 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors shadow-md min-w-[100px]">
                                  Contact
@@ -244,7 +240,6 @@ export default function SolutionsCatalog() {
                      </div>
                    )}
 
-                   {/* DIDN'T FIND IT? */}
                    <div className="mt-6 mb-2 p-6 md:p-8 text-center flex flex-col items-center bg-gray-50 rounded-3xl border border-gray-100">
                        <div className="mb-4">
                           <Image src="/logo_mila.png" alt="MILA Logo" width={60} height={60} className="mx-auto opacity-80" />

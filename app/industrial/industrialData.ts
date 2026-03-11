@@ -65,26 +65,33 @@ export const PANEL_CATEGORIES = [
 export const PANEL_SOLUTIONS: Record<string, { id?: string; title: string; description: string; targets: string; technology?: string }[]> = {  
   "Pathogens": [
     {
-      id: "salmonella-spp-rapid",
-      title: "Salmonella spp. Rapid Kit",
-      description: "Detect Salmonella in environmental sponges and raw materials with high sensitivity.",
-      targets: "Target: invA gene",
-      technology: "AiGOR",
+      id: "specio-4-1", // <-- Conecta con SOLUTIONS_DATA["pathogen-control"]
+      title: "Specio 4.1 Salmonella spp., L. monocytogenes, E. coli and S. aureus",
+      description: "Multiplex real-time PCR kit for the simultaneous detection of Salmonella spp., S. aureus, E. coli and L. monocytogenes.",
+      targets: "Salmonella spp., L.monocytogenes, E. coli, S. aureus",
+      technology: "Kai"
     },
     {
-      id: "listeria-monocytogenes-pro",
-      title: "Listeria monocytogenes Pro",
-      description: "Specific identification of L. mono to prevent outbreaks in RTE foods.",
-      targets: "Target: hlyA gene",
-      technology: "Real-Time PCR",
+      id: "pathogen-control", // <-- Conecta con SOLUTIONS_DATA["pathogen-control"]
+      title: "Zero-Risk Internal EMP",
+      description: "Allows food production facilities to bring pathogen testing in-house without the need for a BSL-2 laboratory using proprietary lysis inactivation.",
+      targets: "Listeria spp. & Salmonella spp.",
+      technology: "AiGOR"
     },
     {
-      id: "ecoli-o157",
-      title: "E. coli O157:H7 Screen",
-      description: "Critical screening for pathogenic E. coli in meat and fresh produce.",
-      targets: "Targets: stx1, stx2",
-      technology: "Multiplex PCR",
+      id: "tg-multiplex-pathogens", // <-- Conecta con SOLUTIONS_DATA["tg-multiplex-pathogens"]
+      title: "TAAG F41 Multiplex Pathogens",
+      description: "A comprehensive molecular diagnostic tool designed for the simultaneous detection of Salmonella spp., Listeria monocytogenes, and E. coli O157:H7.",
+      targets: "Salmonella, L. mono, E. coli",
+      technology: "MILA"
     },
+    {
+      id: "taag-e41-listeria", // <-- Conecta con SOLUTIONS_DATA["taag-e41-listeria"]
+      title: "TAAG E41 Listeria species",
+      description: "A highly sensitive assay dedicated to the detection of all Listeria species, designed specifically for environmental monitoring programs.",
+      targets: "Listeria spp.",
+      technology: "Kai"
+    }
   ],
   "Spoilage": [
     {
