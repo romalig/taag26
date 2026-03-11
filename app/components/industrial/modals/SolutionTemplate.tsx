@@ -49,15 +49,24 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
       <div className="p-8 md:p-12 pb-16 bg-white">
         
         {/* === HEADER === */}
-        <div className="flex flex-col md:flex-row justify-between md:items-start mb-6 relative pt-6 md:pt-4">
-          <div className="max-w-4xl pr-0 md:pr-10">
+        <div className="mb-6 pt-4">
+          <div className="max-w-4xl">
+            {/* ETIQUETA ROJA (Ahora siempre visible y arriba) */}
+            <div className="mb-4">
+              <span className="text-[#FF270A] font-bold uppercase tracking-widest text-[10px] md:text-xs">
+                Technical Data Sheet
+              </span>
+            </div>
+            
             <h2 className="text-3xl md:text-5xl font-extrabold text-[#111111] tracking-tight leading-tight mb-2">
               {data.title}
             </h2>
+            
             {/* VERSIÓN */}
             {data.version && (
               <p className="text-sm font-medium text-gray-400 mt-3 mb-10">Rev. {data.version}</p>
             )}
+            
             <div className="flex flex-wrap gap-2 mb-8">
               {data.chips.map((tech) => (
                 <span key={tech} className="px-4 py-1.5 rounded-full bg-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600 border border-gray-200">
@@ -65,12 +74,6 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
                 </span>
               ))}
             </div>
-          </div>
-          {/* ETIQUETA ROJA: "TECHNICAL DATA SHEET" */}
-          <div className="absolute top-0 right-2 hidden md:block text-right">
-            <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs">
-              Technical Data Sheet
-            </span>
           </div>
         </div>
 
@@ -86,7 +89,6 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           </div>
           <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Main Industries</span>
-              {/* Mostramos solo las primeras 3 de forma completa */}
               <span className="block text-base md:text-lg font-bold text-[#111111] leading-tight">
                  {data.mainIndustries.slice(0, 3).join(", ")}
               </span>
@@ -195,7 +197,6 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
                   <div className="text-sm font-medium text-gray-700 leading-relaxed flex-1 whitespace-pre-line text-center sm:text-left">
                      {data.techSpecs.certifications}
                   </div>
-                  {/* IMAGEN DE CERTIFICACIÓN MÁS GRANDE */}
                   {data.certImage && (
                      <div className="w-32 h-32 md:w-40 md:h-40 relative shrink-0">
                         <img src={data.certImage} alt="Certification" className="w-full h-full object-contain mix-blend-multiply" />

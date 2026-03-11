@@ -3,7 +3,6 @@
 import { Document, Page, Text, View, StyleSheet, Image, Font } from "@react-pdf/renderer";
 import { SolutionContent } from "./types";
 
-// 1. REGISTRO DE FUENTE SORA (Localmente para evitar errores)
 Font.register({
   family: "Sora",
   fonts: [
@@ -13,7 +12,6 @@ Font.register({
 });
 
 const styles = StyleSheet.create({
-  // Usamos Sora
   page: { padding: 40, paddingBottom: 60, paddingTop: 40, fontFamily: "Sora", fontSize: 9, color: "#374151" },
   
   // Header
@@ -23,36 +21,59 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 8, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: 2, fontWeight: "bold" },
   
   // Title Section
-  titleContainer: { flexDirection: "row", alignItems: "center", marginBottom: 15 },
-  titleAccent: { width: 4, height: 24, backgroundColor: "#FF270A", marginRight: 10, borderRadius: 2 },
+  tagLabel: { fontSize: 8, color: "#FF270A", fontWeight: "bold", textTransform: "uppercase", letterSpacing: 1, marginBottom: 4 },
+  titleContainer: { marginBottom: 15 },
   title: { fontSize: 24, color: "#111111", fontWeight: "bold" },
+  versionText: { fontSize: 9, color: "#9CA3AF", marginTop: 4 },
   
-  // Sections
-  section: { marginBottom: 15 },
-  sectionTitle: { fontSize: 10, fontWeight: "bold", color: "#FF270A", marginBottom: 5, marginTop: 14, textTransform: "uppercase", letterSpacing: 0.5 },
-  
-  text: { fontSize: 9, lineHeight: 1.6, color: "#4B5563", marginBottom: 4, textAlign: "justify" },
-  listItem: { fontSize: 9, lineHeight: 1.6, color: "#4B5563", marginLeft: 10 },
+  // Chips
+  chipsContainer: { flexDirection: "row", flexWrap: "wrap", gap: 5, marginBottom: 20 },
+  chip: { backgroundColor: "#F3F4F6", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10, fontSize: 7, color: "#4B5563", fontWeight: "bold", textTransform: "uppercase" },
 
-  // Specs Grid
+  // Metrics Grid
+  metricsGrid: { flexDirection: "row", borderBottomWidth: 0.5, borderBottomColor: "#E5E7EB", paddingBottom: 15, marginBottom: 20 },
+  metricCol: { flex: 1, paddingRight: 10 },
+  metricLabel: { fontSize: 7, color: "#9CA3AF", textTransform: "uppercase", fontWeight: "bold", marginBottom: 4, letterSpacing: 1 },
+  metricValue: { fontSize: 10, color: "#111111", fontWeight: "bold" },
+
+  // Sections & Layout
+  row: { flexDirection: "row", gap: 20, marginBottom: 20 },
+  col23: { flex: 2, paddingRight: 15 },
+  col13: { flex: 1 },
+  colHalf: { flex: 1 },
+  sectionTitle: { fontSize: 11, fontWeight: "bold", color: "#111111", marginBottom: 8 },
+  text: { fontSize: 9, lineHeight: 1.6, color: "#4B5563", marginBottom: 6, textAlign: "justify" },
+  
+  // Boxes
+  boxGray: { backgroundColor: "#F9FAFB", padding: 12, borderRadius: 8, borderWidth: 0.5, borderColor: "#E5E7EB" },
+  boxOrange: { backgroundColor: "#FFF7ED", padding: 12, borderRadius: 8, borderWidth: 0.5, borderColor: "#FFEDD5" },
+  boxTitle: { fontSize: 8, fontWeight: "bold", color: "#111111", textTransform: "uppercase", marginBottom: 6, letterSpacing: 1 },
+  boxTitleOrange: { fontSize: 8, fontWeight: "bold", color: "#EA580C", textTransform: "uppercase", marginBottom: 6, letterSpacing: 1 },
+  boxItem: { fontSize: 8, lineHeight: 1.5, color: "#4B5563", marginBottom: 4 },
+  boxItemOrange: { fontSize: 8, lineHeight: 1.5, color: "#C2410C", marginBottom: 4 },
+
+  // Specs Table
   specContainer: { borderTopWidth: 0.5, borderTopColor: "#E5E7EB", marginTop: 5 },
-  specRow: { flexDirection: "row", paddingVertical: 5, borderBottomWidth: 0.5, borderBottomColor: "#F3F4F6" },
-  specLabel: { width: "35%", fontSize: 8, fontWeight: "bold", color: "#374151", textTransform: "uppercase" },
+  specRow: { flexDirection: "row", paddingVertical: 6, borderBottomWidth: 0.5, borderBottomColor: "#F3F4F6" },
+  specLabel: { width: "35%", fontSize: 8, fontWeight: "bold", color: "#6B7280" },
   specValue: { width: "65%", fontSize: 9, color: "#111111" },
 
-  // Tables
-  table: { width: "100%", marginTop: 5, marginBottom: 10 },
-  tableHeader: { flexDirection: "row", backgroundColor: "#F9FAFB", paddingVertical: 6, paddingHorizontal: 4, borderBottomWidth: 1, borderBottomColor: "#E5E7EB" },
-  tableRow: { flexDirection: "row", borderBottomWidth: 0.5, borderBottomColor: "#F3F4F6", paddingVertical: 6, paddingHorizontal: 4 },
-  th: { fontSize: 7, color: "#111111", fontWeight: "bold", textTransform: "uppercase" },
-  td: { fontSize: 8, color: "#4B5563" },
+  // Storage Sub-labels
+  subLabel: { fontSize: 7, fontWeight: "bold", color: "#9CA3AF", textTransform: "uppercase", marginTop: 8, marginBottom: 2, letterSpacing: 1 },
+
+  // Product Tables
+  table: { width: "100%", marginTop: 5, marginBottom: 15 },
+  tableHeader: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#E5E7EB", paddingVertical: 6, paddingHorizontal: 4 },
+  tableRow: { flexDirection: "row", borderBottomWidth: 0.5, borderBottomColor: "#F3F4F6", paddingVertical: 8, paddingHorizontal: 4 },
+  th: { fontSize: 7, color: "#9CA3AF", fontWeight: "bold", textTransform: "uppercase", letterSpacing: 1 },
+  td: { fontSize: 8, color: "#4B5563", lineHeight: 1.4 },
   
   // Column Widths
-  colCat: { width: "18%", color: "#FF270A", fontWeight: "bold" },
-  colName: { width: "22%", fontWeight: "bold", color: "#111111" },
+  colCat: { width: "15%", color: "#FF270A", fontWeight: "bold" },
+  colName: { width: "20%", fontWeight: "bold", color: "#111111" },
   colSize: { width: "15%" },
-  colFormat: { width: "15%" },
-  colDesc: { width: "30%" },
+  colFormat: { width: "12%" },
+  colDesc: { width: "38%" },
 
   // Footer
   footer: { position: "absolute", bottom: 30, left: 40, right: 40, borderTopWidth: 0.5, borderTopColor: "#E5E7EB", paddingTop: 10, flexDirection: "row", justifyContent: "space-between" },
@@ -64,7 +85,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
     <Document>
       <Page size="A4" style={styles.page} wrap>
         
-        {/* --- HEADER --- */}
+        {/* HEADER */}
         <View style={styles.header} fixed>
           <Image src="/logo-red1.png" style={styles.logoImage} /> 
           <View style={styles.headerMeta}>
@@ -73,68 +94,114 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
           </View>
         </View>
 
-        {/* --- TITLE BLOCK --- */}
+        {/* TITLE BLOCK */}
         <View style={styles.titleContainer}>
-           <View style={styles.titleAccent} />
+           <Text style={styles.tagLabel}>Technical Data Sheet</Text>
            <Text style={styles.title}>{data.title}</Text>
+           {data.version && <Text style={styles.versionText}>Rev. {data.version}</Text>}
         </View>
 
-        {/* --- DESCRIPTION --- */}
-        <View style={styles.section}>
-           {data.description.map((p, i) => <Text key={i} style={styles.text}>{p}</Text>)}
+        <View style={styles.chipsContainer}>
+           {data.chips.map((chip, i) => <Text key={i} style={styles.chip}>{chip}</Text>)}
         </View>
 
-        {/* --- TWO COLUMNS LAYOUT --- */}
-        <View style={{ flexDirection: "row", gap: 20, marginBottom: 10 }}>
-            <View style={{ flex: 1 }}>
-                <Text style={styles.sectionTitle}>Main Industries</Text>
-                {data.mainIndustries.map((ind, i) => <Text key={i} style={styles.listItem}>• {ind}</Text>)}
-            </View>
-            <View style={{ flex: 1 }}>
-                <Text style={styles.sectionTitle}>Intended Use</Text>
-                {data.intendedUse.map((use, i) => <Text key={i} style={styles.text}>{use}</Text>)}
-            </View>
+        {/* METRICS GRID */}
+        <View style={styles.metricsGrid}>
+           <View style={styles.metricCol}>
+              <Text style={styles.metricLabel}>Targets</Text>
+              <Text style={styles.metricValue}>{data.techSpecs.targets}</Text>
+           </View>
+           <View style={styles.metricCol}>
+              <Text style={styles.metricLabel}>LOD</Text>
+              <Text style={styles.metricValue}>{data.techSpecs.lod}</Text>
+           </View>
+           <View style={styles.metricCol}>
+              <Text style={styles.metricLabel}>Main Industries</Text>
+              <Text style={styles.metricValue}>{data.mainIndustries.slice(0, 3).join(", ")}</Text>
+           </View>
         </View>
 
-        {/* --- PRINCIPLE --- */}
-        <View style={styles.section}>
+        {/* INTENDED USE & ADVANTAGES */}
+        <View style={styles.row}>
+           <View style={styles.col23}>
+              <Text style={styles.sectionTitle}>Intended Use</Text>
+              {data.intendedUse.map((p, i) => <Text key={i} style={styles.text}>{p}</Text>)}
+           </View>
+           <View style={styles.col13}>
+              <View style={styles.boxGray}>
+                 <Text style={styles.boxTitle}>Key Advantages</Text>
+                 {data.advantages.map((adv, i) => <Text key={i} style={styles.boxItem}>• {adv}</Text>)}
+              </View>
+           </View>
+        </View>
+
+        {/* PRINCIPLE */}
+        <View style={{ marginBottom: 20 }}>
             <Text style={styles.sectionTitle}>Principle</Text>
             {data.principle.map((pr, i) => <Text key={i} style={styles.text}>{pr}</Text>)}
         </View>
 
-        {/* --- SPECS --- */}
-        <View style={styles.section} break>
+        {/* INDUSTRIES & LIMITATIONS */}
+        <View style={styles.row}>
+           <View style={styles.colHalf}>
+              <Text style={styles.sectionTitle}>Industries</Text>
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 4 }}>
+                 {data.mainIndustries.map((ind, i) => <Text key={i} style={styles.chip}>{ind}</Text>)}
+              </View>
+           </View>
+           <View style={styles.colHalf}>
+              <View style={styles.boxOrange}>
+                 <Text style={styles.boxTitleOrange}>Limitations</Text>
+                 {data.limitations.map((lim, i) => <Text key={i} style={styles.boxItemOrange}>• {lim}</Text>)}
+              </View>
+           </View>
+        </View>
+
+        {/* TECH SPECS */}
+        <View style={{ marginBottom: 20 }} break>
              <Text style={styles.sectionTitle}>Technical Specifications</Text>
              <View style={styles.specContainer}>
-                <SpecRow label="Targets" value={data.techSpecs.targets} />
-                <SpecRow label="Limit of Detection (LOD)" value={data.techSpecs.lod} />
+                <SpecRow label="Microorganisms" value={data.techSpecs.targets} />
+                <SpecRow label="Performance (LOD)" value={data.techSpecs.lod} />
                 <SpecRow label="Validated Matrices" value={data.techSpecs.matrices} />
-                <SpecRow label="Time to Results" value={data.techSpecs.time} />
+                <SpecRow label="Time" value={data.techSpecs.time} />
                 <SpecRow label="Technology" value={data.techSpecs.technology} />
                 <SpecRow label="Validated Thermocyclers" value={data.techSpecs.thermocyclers} />
-                <SpecRow label="Detection Channels" value={data.techSpecs.channels} />
                 <SpecRow label="Detection Chemistry" value={data.techSpecs.chemistry} />
-                <SpecRow label="Storage Conditions" value={data.techSpecs.storage} />
-                <SpecRow label="Shelf Life" value={data.techSpecs.shelfLife} />
-                <SpecRow label="Certifications" value={data.techSpecs.certifications} />
+                <SpecRow label="Detection Channel" value={data.techSpecs.channels} />
              </View>
         </View>
 
-        {/* --- LIMITATIONS --- */}
-        <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Limitations</Text>
-            {data.limitations.map((lim, i) => <Text key={i} style={styles.listItem}>• {lim}</Text>)}
+        {/* STORAGE & CERTIFICATIONS */}
+        <View style={styles.row}>
+           <View style={styles.colHalf}>
+              <View style={styles.boxGray}>
+                 <Text style={styles.boxTitle}>Storage Conditions</Text>
+                 <Text style={styles.subLabel}>Temperature</Text>
+                 <Text style={styles.text}>{data.techSpecs.storage}</Text>
+                 <Text style={styles.subLabel}>Shelf Life</Text>
+                 <Text style={styles.text}>{data.techSpecs.shelfLife}</Text>
+              </View>
+           </View>
+           <View style={styles.colHalf}>
+              <View style={[styles.boxGray, { height: "100%" }]}>
+                 <Text style={styles.boxTitle}>Certifications</Text>
+                 <Text style={styles.text}>{data.techSpecs.certifications}</Text>
+                 {/* La imagen en react-pdf funciona si la ruta es pública */}
+                 {data.certImage && <Image src={data.certImage} style={{ width: 60, height: 60, marginTop: 5 }} />}
+              </View>
+           </View>
         </View>
 
-        {/* --- ORDER INFO --- */}
-        <Text style={[styles.sectionTitle, { marginTop: 10 }]} break>Order Information</Text>
+        {/* ORDER INFO KITS */}
+        <Text style={styles.sectionTitle}>Order Information</Text>
         <View style={styles.table}>
            <View style={styles.tableHeader} fixed>
-              <Text style={[styles.th, styles.colCat]}>Cat. Num</Text>
+              <Text style={[styles.th, styles.colCat]}>Cat. No</Text>
               <Text style={[styles.th, styles.colName]}>Name</Text>
               <Text style={[styles.th, styles.colSize]}>Size</Text>
               <Text style={[styles.th, styles.colFormat]}>Format</Text>
-              <Text style={[styles.th, styles.colDesc]}>Description</Text>
+              <Text style={[styles.th, styles.colDesc]}>Kit Content</Text>
            </View>
            {data.pcrKits.map((row, i) => (
              <View key={i} style={styles.tableRow} wrap={false}>
@@ -147,14 +214,14 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
            ))}
         </View>
 
-        {/* --- SUPPLIES --- */}
+        {/* SUPPLIES */}
         {data.supplies && data.supplies.length > 0 && (
-            <View break={data.pcrKits.length > 5}> 
-              <Text style={styles.sectionTitle}>Order Information – Additional Supplies</Text>
+            <View break={data.pcrKits.length > 4}> 
+              <Text style={styles.sectionTitle}>Additional Supplies</Text>
               <View style={styles.table}>
                 <View style={styles.tableHeader} fixed>
-                    <Text style={[styles.th, styles.colCat]}>Cat. Num</Text>
-                    <Text style={[styles.th, styles.colName]}>Name</Text>
+                    <Text style={[styles.th, styles.colCat]}>Cat. No</Text>
+                    <Text style={[styles.th, styles.colName]}>Product</Text>
                     <Text style={[styles.th, styles.colSize]}>Size</Text>
                     <Text style={[styles.th, styles.colFormat]}>Format</Text>
                     <Text style={[styles.th, styles.colDesc]}>Description</Text>
@@ -172,7 +239,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
             </View>
         )}
 
-        {/* --- FOOTER --- */}
+        {/* FOOTER */}
         <View style={styles.footer} fixed>
            <View>
               <Text style={styles.footerText}>support@taag-genetics.com</Text>

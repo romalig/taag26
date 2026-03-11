@@ -148,8 +148,11 @@ export default function SolutionsCatalog() {
                    </a>
                 </div>
 
-                <div className="sticky top-[80px] z-40 bg-white/95 backdrop-blur-xl py-4 -mx-10 md:-mx-20 px-10 md:px-20 transition-all border-b border-transparent min-h-[80px] flex items-center justify-center">
+                {/* --- HEADER STICKY (TABS O INDICADOR DE BÚSQUEDA) --- */}
+                {/* CAMBIO: bg-white sólido y border-b visible para evitar que el texto se traslape feo por detrás */}
+                <div className="sticky top-[80px] z-40 bg-white py-4 -mx-10 md:-mx-20 px-10 md:px-20 transition-all border-b border-gray-100 min-h-[80px] flex items-center justify-center">
                    
+                   {/* CASO 1: MOSTRAR INDICADOR DE BÚSQUEDA (Minimalista, Blanco, Centrado) */}
                    {searchQuery && !isToolbarVisible ? (
                       <div className="w-fit mx-auto animate-fadeIn flex items-center justify-between gap-6 bg-white border border-gray-200 text-[#111111] px-6 py-2.5 rounded-full shadow-lg">
                           <div className="flex items-center gap-3">
@@ -173,6 +176,7 @@ export default function SolutionsCatalog() {
                           </button>
                       </div>
                    ) : (
+                      /* CASO 2: MOSTRAR TABS NORMALES */
                       <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible p-2 no-scrollbar items-center justify-start w-full -ml-2">
                           {PANEL_CATEGORIES.map((category) => (
                              <button

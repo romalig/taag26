@@ -38,15 +38,15 @@ export default function SolutionModal() {
 
       {/* WRAPPER SCROLLEABLE */}
       <div 
-        className="absolute inset-0 overflow-y-auto overflow-x-hidden scroll-smooth py-12 md:py-20 px-4 flex items-start justify-center"
+        className="absolute inset-0 overflow-y-auto overflow-x-hidden scroll-smooth py-12 md:py-20 flex items-start justify-center"
         onClick={closeModal} 
       >
         
-        {/* TARJETA MODAL (Ahora más ancha en Desktop) */}
+        {/* TARJETA MODAL (w-[95vw] para celular, extra ancha en Desktop) */}
         <div 
           className={`
             relative 
-            w-[95%] md:w-full max-w-6xl xl:max-w-7xl 
+            w-[95vw] sm:w-[95%] md:w-full max-w-6xl xl:max-w-7xl 
             h-auto
             bg-white rounded-[2.5rem] shadow-2xl
             transform transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)]
