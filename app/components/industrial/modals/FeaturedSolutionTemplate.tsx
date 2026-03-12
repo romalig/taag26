@@ -60,7 +60,6 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                    </h3>
                 </div>
 
-                {/* AiGOR Logo Chip - REDUCIDO Y PROPORCIONAL */}
                 <div className="relative mb-16 z-10 flex flex-col items-center">
                    <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-[#FF270A] rounded-[1.5rem] blur-xl opacity-60"></div>
                    <div className="relative w-40 h-40 md:w-52 md:h-52 bg-[#0a0a0a] rounded-[1.5rem] border border-white/10 shadow-2xl flex flex-col items-center justify-center p-6 overflow-hidden">
@@ -120,6 +119,49 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
              </p>
           </div>
 
+          {/* PRODUCTO MULTIPLEX (Preventive Modal / Spoilage Modal) */}
+          {data.preventiveProduct && (
+             <div className="mb-24 w-full">
+                <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-4">
+                  {data.preventiveProduct.title}
+                </h3>
+                <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-10 max-w-4xl">
+                   {data.preventiveProduct.desc}
+                </p>
+                <div className="bg-[#121212] rounded-[2rem] p-8 md:p-12 border border-black relative overflow-hidden">
+                   <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none"></div>
+                   <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-[#FF270A]/10 blur-[100px] rounded-full pointer-events-none"></div>
+                   
+                   <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+                      <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+                         <h4 className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-6 flex items-center gap-3">
+                            <Zap className="w-5 h-5" /> {data.preventiveProduct.list1Title || "Pathogens Detected"}
+                         </h4>
+                         <ul className="space-y-4">
+                            {data.preventiveProduct.list1.map((item: string, i: number) => (
+                               <li key={i} className="flex items-start gap-3 text-white md:text-lg font-medium">
+                                  <CheckCircle2 className="w-6 h-6 text-[#FF270A] shrink-0" /> {item}
+                               </li>
+                            ))}
+                         </ul>
+                      </div>
+                      <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+                         <h4 className="text-blue-400 font-bold uppercase tracking-widest text-xs mb-6 flex items-center gap-3">
+                            <Activity className="w-5 h-5" /> {data.preventiveProduct.list2Title || "Indicators Detected"}
+                         </h4>
+                         <ul className="space-y-4">
+                            {data.preventiveProduct.list2.map((item: string, i: number) => (
+                               <li key={i} className="flex items-start gap-3 text-white md:text-lg font-medium">
+                                  <CheckCircle2 className="w-6 h-6 text-blue-400 shrink-0" /> {item}
+                               </li>
+                            ))}
+                         </ul>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          )}
+
           {/* ELEVIA PRODUCTS */}
           {data.eleviaProducts && (
              <div className="mb-24 w-full">
@@ -146,7 +188,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                      </div>
                    ))}
 
-                   {data.eleviaProducts.upcoming.map((prod: any, i: number) => (
+                   {data.eleviaProducts.upcoming && data.eleviaProducts.upcoming.map((prod: any, i: number) => (
                      <div key={i} className="md:col-span-2 bg-[#121212] rounded-[2rem] p-8 h-[260px] md:h-[280px] relative flex flex-col justify-between border border-black">
                         <div>
                            <h3 className="text-xl font-bold text-white mb-4">{prod.title}</h3>
@@ -185,11 +227,33 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
              </div>
           </div>
 
-          {/* TABLA DE PROTOCOLOS */}
-          {data.protocolsTable && (
-             <div className="mb-10 w-full">
+          {/* VALIDATED MATRICES & AOAC LOGO */}
+          {data.matrices && data.matrices.length > 0 && (
+             <div className="mb-16 w-full pt-8 border-t border-gray-100">
                 <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-8">
-                  Protocol zero vs. Protocol xpress: the right strategy for every situation
+                  Validated Matrices
+                </h3>
+                <div className="flex flex-wrap gap-3 mb-10">
+                   {data.matrices.map((mat: string, i: number) => (
+                      <span key={i} className="px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 shadow-sm">
+                         {mat}
+                      </span>
+                   ))}
+                </div>
+                {/* Logo AOAC */}
+                {data.aoacLogo && (
+                   <div className="relative w-32 h-16 opacity-90">
+                      <Image src={data.aoacLogo} alt="AOAC Validated" fill className="object-contain object-left" />
+                   </div>
+                )}
+             </div>
+          )}
+
+          {/* TABLA DINÁMICA DE COMPARACIÓN */}
+          {data.table && (
+             <div className="mb-24 w-full">
+                <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-8">
+                  {data.table.title}
                 </h3>
                 <div className="overflow-x-auto pb-4">
                   <table className="w-full text-left border-collapse min-w-[700px]">
@@ -198,28 +262,68 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                         <th className="py-4 pr-4 w-[25%]"></th>
                         <th className="py-4 px-4 w-[37.5%]">
                           <div className="flex items-center gap-3">
-                            <span className="font-bold text-[#111111] text-sm tracking-wide">PROTOCOL ZERO</span>
-                            <div className="relative w-16 h-6 shrink-0">
-                               <Image src="/zero_logo.png" alt="Zero Logo" fill className="object-contain object-left" />
-                            </div>
+                            <span className="font-bold text-[#111111] text-sm tracking-wide">{data.table.col1.title}</span>
+                            {data.table.col1.image && (
+                              <div className="relative w-16 h-6 shrink-0">
+                                 <Image src={data.table.col1.image} alt="Col 1 Logo" fill className="object-contain object-left" />
+                              </div>
+                            )}
                           </div>
                         </th>
                         <th className="py-4 pl-4 w-[37.5%]">
                           <div className="flex items-center gap-3">
-                            <span className="font-bold text-[#111111] text-sm tracking-wide">PROTOCOL XPRESS</span>
-                            <div className="relative w-20 h-6 shrink-0">
-                               <Image src="/xpress_logo.png" alt="Xpress Logo" fill className="object-contain object-left" />
-                            </div>
+                            <span className="font-bold text-[#111111] text-sm tracking-wide">{data.table.col2.title}</span>
+                            {data.table.col2.image && (
+                              <div className="relative w-20 h-6 shrink-0">
+                                 <Image src={data.table.col2.image} alt="Col 2 Logo" fill className="object-contain object-left" />
+                              </div>
+                            )}
                           </div>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {data.protocolsTable.map((row: any, i: number) => (
+                      {data.table.rows.map((row: any, i: number) => (
                         <tr key={i} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
                           <td className="py-5 pr-4 font-bold text-[#111111] text-sm">{row.feature}</td>
-                          <td className="py-5 px-4 text-gray-600 text-sm leading-relaxed">{row.zero}</td>
-                          <td className="py-5 pl-4 text-gray-600 text-sm leading-relaxed">{row.xpress}</td>
+                          <td className="py-5 px-4 text-gray-600 text-sm leading-relaxed">{row.col1}</td>
+                          <td className="py-5 pl-4 text-gray-600 text-sm leading-relaxed">{row.col2}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="md:hidden text-xs text-gray-400 flex items-center gap-1.5 mt-2 pl-1">
+                   <ArrowRightLeft className="w-3 h-3" /> Swipe left to view all columns
+                </p>
+             </div>
+          )}
+
+          {/* === NUEVA SECCIÓN: ORDERING INFORMATION === */}
+          {data.orderingInfo && data.orderingInfo.length > 0 && (
+             <div className="mb-10 w-full pt-8 border-t border-gray-100">
+                <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-8">
+                  Ordering Information
+                </h3>
+                <div className="overflow-x-auto pb-4">
+                  <table className="w-full text-left border-collapse min-w-[850px]">
+                    <thead>
+                      <tr className="border-b-2 border-[#111111]">
+                        <th className="py-4 pr-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[12%]">Cat. No</th>
+                        <th className="py-4 px-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[25%]">Product</th>
+                        <th className="py-4 px-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[12%]">Size</th>
+                        <th className="py-4 px-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[12%]">Format</th>
+                        <th className="py-4 pl-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[39%]">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.orderingInfo.map((item: any, i: number) => (
+                        <tr key={i} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
+                          <td className="py-4 pr-4 text-gray-500 text-sm font-mono">{item.catNo}</td>
+                          <td className="py-4 px-4 font-bold text-[#111111] text-sm">{item.product}</td>
+                          <td className="py-4 px-4 text-gray-600 text-sm">{item.size}</td>
+                          <td className="py-4 px-4 text-gray-600 text-sm">{item.format}</td>
+                          <td className="py-4 pl-4 text-gray-600 text-sm leading-relaxed">{item.description}</td>
                         </tr>
                       ))}
                     </tbody>
