@@ -29,7 +29,8 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
       </div>
 
       {/* 2. TÍTULO Y BAJADA */}
-      <div className="px-8 md:px-12 pt-16 pb-12 md:pt-24 md:pb-20 bg-white w-full">
+      {/* CONDICIONAL: Si no hay AiGOR, reducimos el padding bottom (pb) para que se pegue al Solution Overview */}
+      <div className={`px-8 md:px-12 pt-16 md:pt-24 bg-white w-full ${data.hasAigorBanner ? 'pb-12 md:pb-20' : 'pb-6 md:pb-10'}`}>
         <div className="max-w-5xl mx-auto w-full">
             <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs md:text-sm mb-6 block">
                Featured Solution
@@ -106,11 +107,12 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
       )}
 
       {/* === 4. RESTO DEL CONTENIDO === */}
-      <div className="p-8 md:p-12 bg-white w-full">
+      {/* CONDICIONAL: Si hay AiGOR damos margen superior, si no, lo pegamos */}
+      <div className={`px-8 md:px-12 bg-white w-full ${data.hasAigorBanner ? 'pt-8' : 'pt-0'}`}>
         <div className="max-w-5xl mx-auto w-full">
           
           {/* SOLUTION OVERVIEW */}
-          <div className="mb-20 w-full pt-6">
+          <div className="mb-20 w-full">
              <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
                Solution Overview
              </h3>
@@ -119,7 +121,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
              </p>
           </div>
 
-          {/* PRODUCTO MULTIPLEX (Preventive Modal / Spoilage Modal) */}
+          {/* PRODUCTO MULTIPLEX (Preventive Modal / Spoilage Modal / Salmonella E.coli Modal) */}
           {data.preventiveProduct && (
              <div className="mb-24 w-full">
                 <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-4">
@@ -299,7 +301,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
              </div>
           )}
 
-          {/* === NUEVA SECCIÓN: ORDERING INFORMATION === */}
+          {/* ORDERING INFORMATION */}
           {data.orderingInfo && data.orderingInfo.length > 0 && (
              <div className="mb-10 w-full pt-8 border-t border-gray-100">
                 <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-8">

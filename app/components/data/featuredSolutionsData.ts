@@ -193,15 +193,9 @@ export const FEATURED_MODALS_DATA: Record<string, any> = {
       title: "Beverage Spoilage Multiplex Kit",
       desc: "A powerful all-in-one molecular assay designed specifically for the beverage industry. Screen for hundreds of spoilage organisms in one single reaction to ensure absolute product stability.",
       list1Title: "Bacterial Targets",
-      list1: [
-        "100+ Acidophilic bacteria"
-      ],
+      list1: ["100+ Acidophilic bacteria"],
       list2Title: "Yeast & Mold Targets",
-      list2: [
-        "100+ Yeasts & Molds",
-        "Preservative resistant yeasts",
-        "Brettanomyces spp."
-      ]
+      list2: ["100+ Yeasts & Molds", "Preservative resistant yeasts", "Brettanomyces spp."]
     },
     advantages: [
       "Comprehensive Coverage: Detects 100+ acidophilic bacteria and 100+ yeasts and molds simultaneously.",
@@ -236,6 +230,66 @@ export const FEATURED_MODALS_DATA: Record<string, any> = {
       logo: "/LogoTxANB.png",
       title: "TAAG Xpert Assistant. Your AI-powered ecosystem.",
       desc: "TxA is a complete ecosystem built to manage your entire microbiology operation. Track spoilage trends across your facility, predict contamination risks, and release your beverage batches digitally and securely.",
+      linkText: "Explore TxA",
+      linkHref: "/TxA"
+    }
+  },
+
+  // ==========================================
+  // 5. MODAL SALMONELLA & E.COLI PROTECTION
+  // ==========================================
+  "salmonella-ecoli-protection": {
+    heroImage: "/lechuga.png", 
+    title: "Protection against Salmonella and Pathogenic E. coli",
+    subtitle: "Safeguard your fresh produce, poultry, and meat with simultaneous multiplex detection of Salmonella, E. coli O157:H7, and STEC in a single reaction.",
+    description: "Fresh produce (like leafy greens), poultry, and raw meats are highly susceptible to contamination by severe foodborne pathogens. Running separate testing protocols for Salmonella, E. coli O157:H7, and STEC is time-consuming, expensive, and delays product release. Our multiplex PCR solution allows you to detect all three critical targets simultaneously from a single enriched sample. Ensure absolute consumer safety, accelerate your positive release, and drastically reduce your laboratory footprint.",
+    hasAigorBanner: false, 
+    preventiveProduct: {
+      title: "Multiplex Salmonella & Pathogenic E. coli Kit",
+      desc: "A highly robust multiplex assay engineered specifically for the poultry, meat, and fresh produce industries. Detect the most dangerous foodborne pathogens in one streamlined workflow.",
+      list1Title: "Pathogens Detected",
+      list1: ["Salmonella spp.", "E. coli O157:H7", "E. coli STEC"],
+      list2Title: "Assay Benefits",
+      list2: ["Universal enrichment protocol", "Simultaneous amplification in one tube", "Validated workflow accuracy"]
+    },
+    advantages: [
+      "Simultaneous Detection: Identify Salmonella, E. coli O157:H7, and STEC in exactly the same PCR tube.",
+      "Universal Enrichment: One single sample preparation and enrichment broth for all three pathogens, saving hours of hands-on time.",
+      "Rapid Product Release: Get accurate results under 24 hours, preventing inventory bottlenecks for highly perishable goods.",
+      "Cost Efficiency: Slash your reagent, plastics, and labor costs by consolidating three individual pathogen tests into one.",
+      "Industry Specific: Optimized and validated for challenging matrices in the poultry, meat, and leafy-green sectors.",
+      "Brand Protection: Prevent devastating multi-pathogen outbreaks and costly product recalls with reliable molecular precision."
+    ],
+    matrices: [
+      "Lettuce",
+      "Cabbage",
+      "Spinach",
+      "Leafy greens",
+      "Poultry",
+      "Meat"
+    ],
+    aoacLogo: "/AOAC.png", 
+    table: {
+      title: "Triple Threat Defense: Singleplex vs. TAAG Multiplex PCR",
+      col1: { title: "TRADITIONAL SINGLEPLEX", image: "" }, 
+      col2: { title: "TAAG MULTIPLEX PCR", image: "" },
+      rows: [
+        { feature: "Pathogens Screened", col1: "One per reaction", col2: "Salmonella, E. coli O157:H7, STEC" },
+        { feature: "Reactions per Sample", col1: "3 separate tubes", col2: "1 single tube" },
+        { feature: "Enrichment Media", col1: "Multiple specific broths", col2: "Universal enrichment broth" },
+        { feature: "Hands-on Time", col1: "High (Multiple pipetting steps)", col2: "Low (Streamlined prep)" },
+        { feature: "Overall Cost", col1: "High", col2: "Reduced by up to 66%" }
+      ]
+    },
+    orderingInfo: [
+      { catNo: "V-FP05-1", product: "Multiplex Salmonella & E. coli Kit", size: "96 reactions", format: "PCR Tubes", description: "Simultaneous detection of Salmonella spp., E. coli O157:H7, and STEC." },
+      { catNo: "V-NC03-1", product: "Nucleia Universal", size: "100 extractions", format: "Reagent Kit", description: "Universal DNA extraction protocol for complex food matrices." },
+      { catNo: "V-BP02-1", product: "Universal Pathogen Broth", size: "500 g", format: "Dehydrated Powder", description: "Optimized broth for simultaneous growth of Salmonella and E. coli strains." }
+    ],
+    txaSection: {
+      logo: "/LogoTxANB.png",
+      title: "TAAG Xpert Assistant. Your AI-powered ecosystem.",
+      desc: "TxA is a complete ecosystem built to manage your entire microbiology operation. From digital field sampling and multiplex result tracking, to automated compliance reporting specifically for fresh produce and meat processors.",
       linkText: "Explore TxA",
       linkHref: "/TxA"
     }

@@ -42,7 +42,9 @@ export default function FeaturedSolutions() {
     } else if (idx === 2) {
       finalData = FEATURED_MODALS_DATA["full-preventive-control"];
     } else if (idx === 3) {
-      finalData = FEATURED_MODALS_DATA["broad-spectrum-spoilage"]; // NUEVO
+      finalData = FEATURED_MODALS_DATA["broad-spectrum-spoilage"]; 
+    } else if (idx === 4) {
+      finalData = FEATURED_MODALS_DATA["salmonella-ecoli-protection"]; // NUEVO
     } else {
       // Fallback
       finalData = {
@@ -53,7 +55,7 @@ export default function FeaturedSolutions() {
       };
     }
 
-    if (finalData && (idx === 0 || idx === 1 || idx === 2 || idx === 3)) {
+    if (finalData && (idx === 0 || idx === 1 || idx === 2 || idx === 3 || idx === 4)) {
        finalData = { ...finalData, title: solution.title };
     }
 
