@@ -27,7 +27,7 @@ export default function SolutionModal() {
   return (
     <div className="fixed inset-0 z-[100] flex justify-center">
       
-      {/* 1. BACKDROP */}
+      {/* BACKDROP */}
       <div 
         className={`
           fixed inset-0 bg-black/40 transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)]
@@ -36,35 +36,25 @@ export default function SolutionModal() {
         onClick={closeModal} 
       />
 
-      {/* 2. WRAPPER SCROLLEABLE */}
+      {/* WRAPPER SCROLLEABLE */}
       <div 
-        className="absolute inset-0 overflow-y-auto overflow-x-hidden scroll-smooth py-12 md:py-20 px-4 flex items-start justify-center"
+        className="absolute inset-0 overflow-y-auto overflow-x-hidden scroll-smooth py-12 md:py-20 flex items-start justify-center"
         onClick={closeModal} 
       >
         
-        {/* 3. TARJETA MODAL */}
+        {/* TARJETA MODAL (Ajuste a 95vw en móvil y máximo ancho en Desktop) */}
         <div 
           className={`
             relative 
-            w-[95%] md:w-full max-w-5xl 
+            w-[95vw] sm:w-[95%] md:w-full max-w-6xl xl:max-w-7xl 
             h-auto
             bg-white rounded-[2.5rem] shadow-2xl
-            
-            /* ANIMACIÓN */
             transform transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)]
-            
-            ${isAnimating 
-              ? 'translate-y-0 opacity-100 scale-100' 
-              : 'translate-y-24 opacity-0 scale-95' 
-            }
+            ${isAnimating ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-24 opacity-0 scale-95'}
           `}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* 4. BOTÓN CERRAR "STICKY" (El cambio clave)
-              - sticky top-6: Se pega a 6 unidades del techo de la pantalla al scrollear.
-              - h-0: No empuja el contenido hacia abajo (flota).
-              - z-50: Siempre encima del texto.
-          */}
+          {/* BOTÓN CERRAR "STICKY" */}
           <div className="sticky top-6 z-50 flex justify-end h-0 overflow-visible pr-6">
             <button 
               onClick={closeModal}
