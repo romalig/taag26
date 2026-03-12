@@ -7,9 +7,8 @@ import { useCTA } from "../CTAProvider";
 import { FEATURED_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
 
-// IMPORTAMOS LA PLANTILLA MAESTRA Y LA BASE DE DATOS
-import SolutionTemplate from "./modals/SolutionTemplate";
-import { SOLUTIONS_DATA } from "../data/solutionsData"; // Ruta corregida para consistencia
+import FeaturedSolutionTemplate from "./modals/FeaturedSolutionTemplate";
+import { FEATURED_MODALS_DATA } from "../data/featuredSolutionsData"; // <-- Importamos la data externa
 
 export default function FeaturedSolutions() {
   const { openMeeting } = useCTA();
@@ -28,35 +27,27 @@ export default function FeaturedSolutions() {
       },
       { threshold: 0.1 }
     );
-
-    if (imageRef.current) {
-      observer.observe(imageRef.current);
-    }
-
+    if (imageRef.current) observer.observe(imageRef.current);
     return () => observer.disconnect();
   }, []);
 
-  const scrollToId = (id: string, offset = 120) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-    }
-  };
+  const handleOpenDetails = (solution: any, idx: number) => {
+    // Si es el primer elemento (Zero-Risk), usamos su data. Si no, un fallback temporal.
+    let finalData = FEATURED_MODALS_DATA["zero-risk-emp"];
 
-  // --- FUNCIÓN INTELIGENTE PARA ABRIR MODALES ---
-  const handleOpenDetails = (id: string) => {
-    // 1. Buscamos los datos en el archivo centralizado usando el ID
-    const data = SOLUTIONS_DATA[id];
-
-    if (data) {
-      // 2. Si existen datos, abrimos el modal inyectando la info en la Plantilla Maestra
-      openModal(<SolutionTemplate data={data} />);
+    if (idx !== 0) {
+      finalData = {
+        ...finalData,
+        title: solution.title,
+        subtitle: solution.descriptionLeft || solution.description,
+        description: "Contenido pendiente. Se cargará cuando me envíes el PDF correspondiente a esta solución.",
+        hasAigorBanner: false 
+      };
     } else {
-      // 3. Si no hay datos, mostramos advertencia en consola
-      console.warn(`[FeaturedSolutions] No se encontraron datos en solutionsData.ts para el ID: "${id}".`);
+       finalData = { ...finalData, title: solution.title };
     }
+
+    openModal(<FeaturedSolutionTemplate data={finalData} />);
   };
 
   return (
@@ -66,10 +57,7 @@ export default function FeaturedSolutions() {
           
           <div
             className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: "radial-gradient(#111 1px, transparent 1px)",
-              backgroundSize: "24px 24px",
-            }}
+            style={{ backgroundImage: "radial-gradient(#111 1px, transparent 1px)", backgroundSize: "24px 24px" }}
           />
 
           <div className="relative z-10 text-center mb-8 max-w-2xl mx-auto">
@@ -84,24 +72,15 @@ export default function FeaturedSolutions() {
           <div
             ref={imageRef}
             className={`relative w-full max-w-lg h-[250px] md:h-[350px] z-0 mb-12 transition-all duration-1000 ease-out transform ${
-              isImageVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-24"
+              isImageVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-24"
             }`}
           >
-            <Image
-              src="/2bacterias_verdes3.png"
-              alt="Microbiology Hero"
-              fill
-              className="object-contain"
-              priority
-            />
+            <Image src="/2bacterias_verdes3.png" alt="Microbiology Hero" fill className="object-contain" priority />
           </div>
 
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 w-full -mt-26 md:-mt-28">
             {FEATURED_SOLUTIONS.map((solution, idx) => {
               
-              // --- CARD TIPO 1: HERO GRANDE (Index 0) ---
               if (idx === 0) {
                 return (
                   <div key={solution.id} className="md:col-span-2 group bg-[#FDF6E3] rounded-[2.5rem] p-0 md:px-8 md:pt-8 md:pb-0 flex flex-col md:grid md:grid-cols-3 gap-0 md:gap-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-yellow-300 overflow-hidden relative">
@@ -175,9 +154,8 @@ export default function FeaturedSolutions() {
                            Contact <ArrowRight className="w-3 h-3" />
                            </button>
                            
-                            {/* BOTÓN DETAILS CONECTADO AL SISTEMA DE DATOS */}
                             <button 
-                              onClick={() => handleOpenDetails(solution.id)}
+                              onClick={() => handleOpenDetails(solution, idx)}
                               className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm flex items-center justify-center"
                             >
                               Details
@@ -188,18 +166,12 @@ export default function FeaturedSolutions() {
                 );
               }
 
-              // --- CARD TIPO 2: TxA (Index 5) ---
               if (idx === 5) {
                 return (
                   <div key={solution.id} className="md:col-span-2 group relative rounded-[2.5rem] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-[#111111] flex flex-col md:flex-row h-auto md:h-[200px] border border-[#FF270A] shadow-[0_0_15px_rgba(255,39,10,0.2)] md:border-none md:shadow-none">
                      <div className="absolute inset-0 z-0 hidden md:block">
                          {solution.image && (
-                             <Image
-                               src={solution.image} 
-                               alt={solution.title}
-                               fill
-                               className="object-cover object-center" 
-                             />
+                             <Image src={solution.image} alt={solution.title} fill className="object-cover object-center" />
                          )}
                          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/30 to-transparent z-10"></div>
                       </div>
@@ -228,7 +200,7 @@ export default function FeaturedSolutions() {
                            </div>
                         </div>
                         <div className="relative mt-6 z-30 opacity-100 translate-y-0 md:absolute md:bottom-6 md:right-10 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
-                           <button onClick={openMeeting} className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
+                           <button onClick={() => handleOpenDetails(solution, idx)} className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
                              Learn More <ArrowRight className="w-3 h-3" />
                            </button>
                         </div>
@@ -237,7 +209,6 @@ export default function FeaturedSolutions() {
                 );
               }
 
-              // --- CARD TIPO 3: STANDARD ---
               return (
                 <div key={solution.id} className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[520px] md:h-[480px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center">
                    <div className="relative z-10 w-full max-w-[400px] flex flex-col items-center">
@@ -260,9 +231,8 @@ export default function FeaturedSolutions() {
                         Contact <ArrowRight className="w-3 h-3" />
                       </button>
                       
-                      {/* BOTÓN DETAILS CONECTADO AL SISTEMA DE DATOS */}
                       <button 
-                        onClick={() => handleOpenDetails(solution.id)}
+                        onClick={() => handleOpenDetails(solution, idx)}
                         className="flex-1 py-3 bg-white/90 backdrop-blur border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors shadow-xl"
                       >
                         Details
