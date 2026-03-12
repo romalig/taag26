@@ -3,16 +3,16 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, Loader2, ArrowRight, Timer, Activity, Zap, Mail } from "lucide-react";
+import { Download, Loader2, ArrowRight, Timer, Activity, Zap, Mail, CheckCircle2, ArrowRightLeft } from "lucide-react";
 import { pdf } from "@react-pdf/renderer";
 import BrochureDocument from "./BrochureDocument";
 import { useModal } from "../ModalProvider";
-import { useCTA } from "../../CTAProvider"; // <-- Importamos tu hook de Contacto
+import { useCTA } from "../../CTAProvider";
 
 export default function FeaturedSolutionTemplate({ data }: { data: any }) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const { closeModal } = useModal();
-  const { openMeeting } = useCTA(); // <-- Lo iniciamos
+  const { openMeeting } = useCTA(); 
 
   if (!data) return null;
 
@@ -65,7 +65,8 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
                {data.title}
             </h2>
-            <p className="text-lg md:text-xl text-gray-500 font-medium leading-relaxed">
+            {/* BAJADA HERO - Tamaño ajustado y peso normal */}
+            <p className="text-base md:text-lg text-gray-600 leading-relaxed max-w-4xl">
                {data.subtitle}
             </p>
         </div>
@@ -88,14 +89,14 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                    </h3>
                 </div>
 
-                <div className="relative mb-20 z-10 flex flex-col items-center">
-                   <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-[#FF270A] rounded-[2.5rem] blur-xl opacity-60"></div>
-                   <div className="relative w-64 h-64 md:w-[300px] md:h-[300px] bg-[#0a0a0a] rounded-[2.5rem] border border-white/10 shadow-2xl flex flex-col items-center justify-center p-10 overflow-hidden">
+                <div className="relative mb-16 z-10 flex flex-col items-center">
+                   <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-[#FF270A] rounded-[2rem] blur-xl opacity-60"></div>
+                   <div className="relative w-52 h-52 md:w-64 md:h-64 bg-[#0a0a0a] rounded-[2rem] border border-white/10 shadow-2xl flex flex-col items-center justify-center p-8 overflow-hidden">
                       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-50"></div>
-                      <h2 className="text-6xl md:text-7xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">
+                      <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">
                         AiGOR
                       </h2>
-                      <span className="mt-5 text-xs md:text-sm font-bold uppercase tracking-[0.25em] text-[#FF270A]">
+                      <span className="mt-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.25em] text-[#FF270A]">
                         RNA TECHNOLOGY
                       </span>
                    </div>
@@ -142,7 +143,8 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
              <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
                Solution Overview
              </h3>
-             <p className="text-gray-600 text-base md:text-lg leading-relaxed">
+             {/* BAJADA OVERVIEW - Tamaño ajustado y peso normal */}
+             <p className="text-base md:text-lg text-gray-600 leading-relaxed max-w-4xl">
                {data.description}
              </p>
           </div>
@@ -150,11 +152,12 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
           {/* ELEVIA PRODUCTS */}
           {data.eleviaProducts && (
              <div className="mb-24 w-full">
-                <div className="mb-10 max-w-3xl">
-                   <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-4">
+                <div className="mb-10 max-w-4xl">
+                   <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
                      Welcome to the future.<br/>Meet Elevia Products.
                    </h3>
-                   <p className="text-lg text-gray-600 leading-relaxed font-medium">
+                   {/* BAJADA ELEVIA - Tamaño ajustado y peso normal */}
+                   <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                      {data.eleviaProducts.intro}
                    </p>
                 </div>
@@ -168,7 +171,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                         </div>
                         <div className="relative z-10 flex flex-col flex-1 p-8 pt-4 md:p-10 md:pt-4">
                            <h3 className="text-2xl font-bold text-white tracking-tight mb-3">{prod.title}</h3>
-                           <p className="text-white/80 font-medium text-sm leading-relaxed">{prod.desc}</p>
+                           <p className="text-white/80 text-sm leading-relaxed">{prod.desc}</p>
                         </div>
                      </div>
                    ))}
@@ -252,27 +255,29 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                     </tbody>
                   </table>
                 </div>
+                <p className="md:hidden text-xs text-gray-400 flex items-center gap-1.5 mt-2 pl-1">
+                   <ArrowRightLeft className="w-3 h-3" /> Swipe left to view all columns
+                </p>
              </div>
           )}
 
         </div> 
       </div>
 
-      {/* === 5. NUEVA SECCIÓN: TxA (Full-Width Gris con títulos corregidos) === */}
+      {/* === 5. NUEVA SECCIÓN: TxA === */}
       {data.txaSection && (
          <div className="w-full bg-[#F4F4F5] py-20 md:py-28 px-8 md:px-12 relative flex flex-col items-center text-center">
             <div className="max-w-4xl mx-auto flex flex-col items-center">
-               {/* 2. Logo TxA un POCO más grande */}
                <div className="relative w-48 h-20 md:w-56 md:h-24 mb-10">
                   <Image src={data.txaSection.logo} alt="TxA Logo" fill className="object-contain" />
                </div>
                
-               {/* 3. Título con formato corregido (estilo Elevia) */}
                <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-8">
                  {data.txaSection.title}
                </h3>
                
-               <p className="text-lg md:text-xl text-gray-500 font-medium leading-relaxed mb-12 max-w-3xl whitespace-pre-line">
+               {/* BAJADA TxA - Tamaño ajustado y peso normal */}
+               <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-12 max-w-4xl whitespace-pre-line">
                  {data.txaSection.desc}
                </p>
 
