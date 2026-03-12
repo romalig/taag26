@@ -1,44 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, Loader2, ArrowRight, Timer, Activity, Zap, Mail, CheckCircle2, ArrowRightLeft } from "lucide-react";
-import { pdf } from "@react-pdf/renderer";
-import BrochureDocument from "./BrochureDocument";
+import { ArrowRight, Timer, Activity, Zap, Mail, CheckCircle2, ArrowRightLeft } from "lucide-react";
 import { useModal } from "../ModalProvider";
 import { useCTA } from "../../CTAProvider";
 
 export default function FeaturedSolutionTemplate({ data }: { data: any }) {
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const { closeModal } = useModal();
   const { openMeeting } = useCTA(); 
 
   if (!data) return null;
-
-  const handleDownloadPDF = async () => {
-    setIsGeneratingPdf(true);
-    try {
-      const blob = await pdf(<BrochureDocument data={data} />).toBlob();
-      const url = URL.createObjectURL(blob);
-      
-      const link = document.createElement("a");
-      link.href = url;
-      const safeName = data.title.replace(/[^a-zA-Z0-9]/g, "_");
-      link.download = `TAAG_Brochure_${safeName}.pdf`; 
-      
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      setTimeout(() => URL.revokeObjectURL(url), 3000);
-    } catch (error) {
-      console.error("PDF Error:", error);
-      alert("Error generating PDF. Please try again.");
-    } finally {
-      setIsGeneratingPdf(false);
-    }
-  };
 
   return (
     <div className="w-full bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
@@ -65,7 +37,6 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
                {data.title}
             </h2>
-            {/* BAJADA HERO - Tamaño ajustado y peso normal */}
             <p className="text-base md:text-lg text-gray-600 leading-relaxed max-w-4xl">
                {data.subtitle}
             </p>
@@ -89,14 +60,15 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                    </h3>
                 </div>
 
+                {/* AiGOR Logo Chip - REDUCIDO Y PROPORCIONAL */}
                 <div className="relative mb-16 z-10 flex flex-col items-center">
-                   <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-[#FF270A] rounded-[2rem] blur-xl opacity-60"></div>
-                   <div className="relative w-52 h-52 md:w-64 md:h-64 bg-[#0a0a0a] rounded-[2rem] border border-white/10 shadow-2xl flex flex-col items-center justify-center p-8 overflow-hidden">
+                   <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-[#FF270A] rounded-[1.5rem] blur-xl opacity-60"></div>
+                   <div className="relative w-40 h-40 md:w-52 md:h-52 bg-[#0a0a0a] rounded-[1.5rem] border border-white/10 shadow-2xl flex flex-col items-center justify-center p-6 overflow-hidden">
                       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-50"></div>
-                      <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">
+                      <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">
                         AiGOR
                       </h2>
-                      <span className="mt-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.25em] text-[#FF270A]">
+                      <span className="mt-3 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.25em] text-[#FF270A]">
                         RNA TECHNOLOGY
                       </span>
                    </div>
@@ -143,7 +115,6 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
              <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
                Solution Overview
              </h3>
-             {/* BAJADA OVERVIEW - Tamaño ajustado y peso normal */}
              <p className="text-base md:text-lg text-gray-600 leading-relaxed max-w-4xl">
                {data.description}
              </p>
@@ -156,7 +127,6 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                    <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
                      Welcome to the future.<br/>Meet Elevia Products.
                    </h3>
-                   {/* BAJADA ELEVIA - Tamaño ajustado y peso normal */}
                    <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                      {data.eleviaProducts.intro}
                    </p>
@@ -264,7 +234,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
         </div> 
       </div>
 
-      {/* === 5. NUEVA SECCIÓN: TxA === */}
+      {/* === 5. NUEVA SECCIÓN: TxA (Full-Width Gris) === */}
       {data.txaSection && (
          <div className="w-full bg-[#F4F4F5] py-20 md:py-28 px-8 md:px-12 relative flex flex-col items-center text-center">
             <div className="max-w-4xl mx-auto flex flex-col items-center">
@@ -276,7 +246,6 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                  {data.txaSection.title}
                </h3>
                
-               {/* BAJADA TxA - Tamaño ajustado y peso normal */}
                <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-12 max-w-4xl whitespace-pre-line">
                  {data.txaSection.desc}
                </p>
@@ -292,31 +261,14 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
          </div>
       )}
 
-      {/* === 6. BOTONES FINALES (Contacto y Descarga) === */}
-      <div className="p-8 md:p-12 flex flex-col md:flex-row justify-end items-center gap-4 bg-white">
+      {/* === 6. BOTÓN FINAL (Contacto) === */}
+      <div className="p-8 md:p-12 flex justify-end items-center bg-white">
          <button 
            onClick={openMeeting}
-           className="w-full md:w-auto py-4 px-8 bg-white border border-gray-200 text-[#111111] rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gray-50 hover:border-gray-400 transition-all flex items-center justify-center gap-3 shadow-sm hover:shadow-md"
+           className="w-full md:w-auto py-4 px-8 bg-[#111111] hover:bg-[#FF270A] text-white rounded-full text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-1"
          >
-            <Mail className="w-5 h-5 text-gray-500" />
+            <Mail className="w-5 h-5" />
             Contact Sales
-         </button>
-
-         <button 
-           onClick={handleDownloadPDF}
-           disabled={isGeneratingPdf}
-           className="w-full md:w-auto py-4 px-8 bg-[#111111] hover:bg-[#FF270A] text-white rounded-full text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-1 disabled:opacity-50 disabled:hover:translate-y-0"
-         >
-            {isGeneratingPdf ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin text-white/70" /> Generating Brochure...
-              </>
-            ) : (
-              <>
-                <Download className="w-5 h-5" />
-                Download Brochure (PDF)
-              </>
-            )}
          </button>
       </div>
 
