@@ -146,6 +146,19 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Unwrap the backend envelope { status, success, data: { action, message, cards, … } }
+    // so the client always receives the inner payload directly.
+    if (responsePayload.startsWith("{")) {
+      try {
+        const envelope = JSON.parse(responsePayload);
+        if (envelope.data && typeof envelope.data === "object") {
+          responsePayload = JSON.stringify(envelope.data);
+        }
+      } catch {
+        // keep responsePayload as-is
+      }
+    }
+
     // Return the complete, deduplicated response as a single SSE event.
     const encoder = new TextEncoder();
     const ssePayload = `data: ${responsePayload}\n\ndata: </stream>\n\n`;

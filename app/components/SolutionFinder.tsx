@@ -73,7 +73,6 @@ export default function SolutionFinder() {
           setStructuredReply(structured);
           setRawReply(null);
         }
-        setChallenge("");
       } catch {
         setStructuredReply({
           action: "error",
