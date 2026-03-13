@@ -29,8 +29,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
       </div>
 
       {/* 2. TÍTULO Y BAJADA */}
-      {/* CONDICIONAL: Si no hay AiGOR, reducimos el padding bottom (pb) para que se pegue al Solution Overview */}
-      <div className={`px-8 md:px-12 pt-16 md:pt-24 bg-white w-full ${data.hasAigorBanner ? 'pb-12 md:pb-20' : 'pb-6 md:pb-10'}`}>
+      <div className={`px-8 md:px-12 pt-16 md:pt-24 bg-white w-full ${data.hasAigorBanner ? 'pb-12 md:pb-20' : 'pb-4 md:pb-8'}`}>
         <div className="max-w-5xl mx-auto w-full">
             <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs md:text-sm mb-6 block">
                Featured Solution
@@ -107,8 +106,8 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
       )}
 
       {/* === 4. RESTO DEL CONTENIDO === */}
-      {/* CONDICIONAL: Si hay AiGOR damos margen superior, si no, lo pegamos */}
-      <div className={`px-8 md:px-12 bg-white w-full ${data.hasAigorBanner ? 'pt-8' : 'pt-0'}`}>
+      {/* Si tiene AiGOR añadimos espacio generoso arriba (pt-16/pt-24), si NO tiene, lo acercamos (pt-4/pt-8) */}
+      <div className={`px-8 md:px-12 pb-12 md:pb-20 bg-white w-full ${data.hasAigorBanner ? 'pt-16 md:pt-24' : 'pt-4 md:pt-8'}`}>
         <div className="max-w-5xl mx-auto w-full">
           
           {/* SOLUTION OVERVIEW */}
@@ -303,7 +302,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
 
           {/* ORDERING INFORMATION */}
           {data.orderingInfo && data.orderingInfo.length > 0 && (
-             <div className="mb-10 w-full pt-8 border-t border-gray-100">
+             <div className="mb-6 w-full pt-8 border-t border-gray-100">
                 <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-8">
                   Ordering Information
                 </h3>
@@ -374,7 +373,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
            className="w-full md:w-auto py-4 px-8 bg-[#111111] hover:bg-[#FF270A] text-white rounded-full text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-1"
          >
             <Mail className="w-5 h-5" />
-            Contact Sales
+            Contact Us
          </button>
       </div>
 

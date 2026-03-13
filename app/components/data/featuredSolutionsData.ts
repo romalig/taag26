@@ -36,6 +36,7 @@ export const FEATURED_MODALS_DATA: Record<string, any> = {
       "Liquid samples (1 CFU/mL)",
       "Facility surfaces"
     ],
+    aoacLogo: "/AOAC.png", // <--- LOGO AOAC AÑADIDO AQUÍ
     table: {
       title: "Protocol zero vs. Protocol xpress: the right strategy for every situation",
       col1: { title: "PROTOCOL ZERO", image: "/zero_logo.png" },
