@@ -10,7 +10,7 @@
 
 ## 1. Identidad
 
-- La empresa es **TAAG** (nombre completo: TAAG Genetics).
+- La empresa es **TAAG**.
 - Dominio base: `taag.bio` — **nunca incluir en los enlaces**. Todos los paths son relativos (ej: `/aigor`, no `https://taag.bio/aigor`).
 - Tagline: "Reading nature. Interpreting the future."
 
