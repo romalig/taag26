@@ -2,21 +2,61 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { ChevronRight, Search, X, Download, Zap, Target, Filter } from "lucide-react";
+import { ChevronRight, Search, X, Download, Zap, Target, Filter, Loader2, AlertCircle } from "lucide-react";
 import { useCTA } from "../CTAProvider";
 import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
 import SolutionTemplate from "./modals/SolutionTemplate";
+import type { SolutionContent } from "./modals/types";
 
-// IMPORTAMOS TU BASE DE DATOS REAL
 import { SOLUTIONS_DATA } from "../data/solutionsData"; // <-- Ajusta esta ruta si es diferente
+import {
+  getIndustryCategories,
+  getCategoryCatalogItems,
+  getKitSolution,
+  type IndustryCategory,
+  type IndustrialCatalogItem,
+} from "@/app/lib/products-api";
+
+interface CategoryTab {
+  id: string;
+  label: string;
+}
+
+interface CatalogItem {
+  uuid?: string;
+  id?: string;
+  title: string;
+  description: string;
+  targets: string;
+  technology?: string;
+}
+
+interface CatalogSearchEvent extends Event {
+  detail?: string;
+}
+
+const FALLBACK_CATEGORIES: CategoryTab[] = PANEL_CATEGORIES.map((category) => ({
+  id: category.id,
+  label: category.label,
+}));
+
+const FALLBACK_SOLUTIONS = PANEL_SOLUTIONS as Record<string, CatalogItem[]>;
 
 export default function SolutionsCatalog() {
   const { openMeeting } = useCTA();
   const { openModal } = useModal();
 
-  const [activePanelTab, setActivePanelTab] = useState("Pathogens");
+  // const [categories, setCategories] = useState<CategoryTab[]>(FALLBACK_CATEGORIES);
+  // const [activePanelTab, setActivePanelTab] = useState(FALLBACK_CATEGORIES[0]?.id || "Pathogens");
+  const [categories, setCategories] = useState<CategoryTab[]>([]);
+  const [activePanelTab, setActivePanelTab] = useState("");
+  const [catalogByCategory, setCatalogByCategory] = useState<Record<string, CatalogItem[]>>(FALLBACK_SOLUTIONS);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
+  const [isItemsLoading, setIsItemsLoading] = useState(false);
+  const [itemsError, setItemsError] = useState("");
+  const [detailsLoadingUuid, setDetailsLoadingUuid] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   
   const toolbarRef = useRef<HTMLDivElement>(null);
@@ -34,20 +74,135 @@ export default function SolutionsCatalog() {
     return () => observer.disconnect();
   }, []);
 
+  /* Read ?search= query param: load ALL category items from API, then apply search */
+  const urlSearchHandled = useRef(false);
   useEffect(() => {
-    const handleSearchTrigger = (e: CustomEvent) => {
-        setSearchQuery(e.detail);
+    if (urlSearchHandled.current) return;
+    const params = new URLSearchParams(window.location.search);
+    const initial = params.get("search");
+    if (!initial || categories.length === 0) return;
+
+    urlSearchHandled.current = true;
+
+    const loadAllAndSearch = async () => {
+      setIsItemsLoading(true);
+      const loaded: Record<string, CatalogItem[]> = {};
+      await Promise.all(
+        categories.map(async (cat) => {
+          if (catalogByCategory[cat.id] && catalogByCategory[cat.id] !== FALLBACK_SOLUTIONS[cat.id]) return;
+          try {
+            const items = await getCategoryCatalogItems(cat.id);
+            loaded[cat.id] = items;
+          } catch {
+            /* keep fallback for this category */
+          }
+        })
+      );
+
+      if (Object.keys(loaded).length > 0) {
+        setCatalogByCategory((prev) => ({ ...prev, ...loaded }));
+      }
+      setIsItemsLoading(false);
+      setSearchQuery(initial);
+
+      requestAnimationFrame(() => {
+        const element = document.getElementById("panel-start");
+        if (element) {
+          const pos = element.getBoundingClientRect().top + window.pageYOffset - 140;
+          window.scrollTo({ top: pos, behavior: "smooth" });
+        }
+      });
+    };
+
+    loadAllAndSearch();
+  }, [categories]);
+
+  useEffect(() => {
+    const handleSearchTrigger = (event: Event) => {
+        const customEvent = event as CatalogSearchEvent;
+        setSearchQuery(customEvent.detail || "");
         const element = document.getElementById("panel-start");
         if (element) {
             const elementPosition = element.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - 140; 
+            const offsetPosition = elementPosition + window.pageYOffset - 140;
             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
         }
     };
 
-    window.addEventListener('trigger-catalog-search' as any, handleSearchTrigger as any);
-    return () => window.removeEventListener('trigger-catalog-search' as any, handleSearchTrigger as any);
+    window.addEventListener("trigger-catalog-search", handleSearchTrigger as EventListener);
+    return () => window.removeEventListener("trigger-catalog-search", handleSearchTrigger as EventListener);
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadCategories = async () => {
+      setIsCategoriesLoading(true);
+
+      try {
+        const raw: IndustryCategory[] = await getIndustryCategories();
+        const nextCategories = raw
+          .filter((category) => category.uuid && category.nombre)
+          .map((category) => ({
+            id: category.uuid,
+            label: category.nombre,
+          }));
+
+        if (!isMounted || nextCategories.length === 0) return;
+
+        setCategories(nextCategories);
+        setActivePanelTab(nextCategories[0].id);
+      } catch (error) {
+        console.error("Industrial categories fallback:", error);
+      } finally {
+        if (isMounted) {
+          setIsCategoriesLoading(false);
+        }
+      }
+    };
+
+    loadCategories();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!activePanelTab || searchQuery || catalogByCategory[activePanelTab]) return;
+
+    let isMounted = true;
+
+    const loadItems = async () => {
+      setIsItemsLoading(true);
+      setItemsError("");
+
+      try {
+        const items: IndustrialCatalogItem[] = await getCategoryCatalogItems(activePanelTab);
+        if (!isMounted) return;
+
+        setCatalogByCategory((current) => ({
+          ...current,
+          [activePanelTab]: items,
+        }));
+      } catch (error) {
+        console.error("Industrial products fallback:", error);
+        if (isMounted) {
+          setItemsError("Products could not be updated from the API. Showing local content.");
+        }
+      } finally {
+        if (isMounted) {
+          setIsItemsLoading(false);
+        }
+      }
+    };
+
+    loadItems();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activePanelTab, searchQuery, catalogByCategory]);
 
   const scrollToTarget = (element: HTMLElement, offset = 140) => {
     const elementPosition = element.getBoundingClientRect().top;
@@ -61,8 +216,8 @@ export default function SolutionsCatalog() {
     if (panelRef.current) scrollToTarget(panelRef.current, 200); 
   };
 
-  const allSolutions = Object.values(PANEL_SOLUTIONS).flat();
-  const categorySolutions = PANEL_SOLUTIONS[activePanelTab] || [];
+  const allSolutions = Object.values(catalogByCategory).flat();
+  const categorySolutions = catalogByCategory[activePanelTab] || [];
   const sourceList = searchQuery ? allSolutions : categorySolutions;
 
   const filteredSolutions = sourceList.filter((item) => {
@@ -71,7 +226,7 @@ export default function SolutionsCatalog() {
       ${item.title} 
       ${item.description} 
       ${item.targets} 
-      ${(item as any).technology || ""} 
+      ${item.technology || ""} 
     `.toLowerCase();
 
     return searchTerms.every((term) => itemText.includes(term));
@@ -80,23 +235,28 @@ export default function SolutionsCatalog() {
   // ===================================================================
   // FUNCIÓN CONECTADA A TU ARCHIVO SOLUTIONS_DATA REAL
   // ===================================================================
-  const handleOpenDetails = (item: any) => {
-    // 1. Buscamos el ID del kit seleccionado (Asumimos que el objeto item tiene una propiedad .id)
-    // Si no tiene .id, intentamos usar el título formateado.
-    const kitId = item.id || item.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+  const handleOpenDetails = (item: CatalogItem) => {
+    const fallbackId = item.id || item.title.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
+    const fallbackData = SOLUTIONS_DATA[fallbackId] || SOLUTIONS_DATA["tg-multiplex-pathogens"];
 
-    // 2. Buscamos la información en tu archivo solutionsData.ts
-    let data = SOLUTIONS_DATA[kitId];
-
-    // 3. FALLBACK: Si no encuentra el ID exacto, cargamos el "tg-multiplex-pathogens" por defecto
-    // Así el modal nunca falla, incluso si no has registrado todos los kits aún.
-    if (!data) {
-      console.warn(`No se encontró info para el kit con ID: "${kitId}". Cargando información por defecto.`);
-      data = SOLUTIONS_DATA["tg-multiplex-pathogens"]; 
+    if (!item.uuid) {
+      openModal(<SolutionTemplate data={fallbackData} />);
+      return;
     }
 
-    // 4. Abrimos el modal con la data final
-    openModal(<SolutionTemplate data={data} />);
+    setDetailsLoadingUuid(item.uuid);
+
+    getKitSolution(item.uuid)
+      .then((data) => {
+        openModal(<SolutionTemplate data={data || fallbackData} />);
+      })
+      .catch((error) => {
+        console.error("Industrial solution fallback:", error);
+        openModal(<SolutionTemplate data={fallbackData} />);
+      })
+      .finally(() => {
+        setDetailsLoadingUuid((current) => (current === item.uuid ? null : current));
+      });
   };
 
   return (
@@ -158,7 +318,7 @@ export default function SolutionsCatalog() {
                           <div className="flex items-center gap-3">
                              <Filter className="w-4 h-4 text-[#FF270A]" />
                              <span className="text-xs md:text-sm font-medium text-gray-600">
-                               Filtering by: <span className="font-bold text-[#111111]">"{searchQuery}"</span>
+                               Filtering by: <span className="font-bold text-[#111111]">&quot;{searchQuery}&quot;</span>
                              </span>
                           </div>
                           <button 
@@ -178,7 +338,7 @@ export default function SolutionsCatalog() {
                    ) : (
                       /* CASO 2: MOSTRAR TABS NORMALES */
                       <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible p-2 no-scrollbar items-center justify-start w-full -ml-2">
-                          {PANEL_CATEGORIES.map((category) => (
+                          {categories.map((category) => (
                              <button
                                 key={category.id}
                                 onClick={() => handleTabClick(category.id)}
@@ -199,7 +359,27 @@ export default function SolutionsCatalog() {
                 </div>
 
                 <div className="flex flex-col mt-4 min-h-[300px]">
-                   {filteredSolutions.length > 0 ? (
+                   {isCategoriesLoading && categories === FALLBACK_CATEGORIES && (
+                     <div className="flex items-center gap-3 py-4 text-sm text-gray-400">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Loading categories...</span>
+                     </div>
+                   )}
+
+                   {itemsError && !searchQuery && (
+                     <div className="mb-4 flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700">
+                        <AlertCircle className="w-4 h-4 shrink-0" />
+                        <span>{itemsError}</span>
+                     </div>
+                   )}
+
+                   {isItemsLoading && !searchQuery ? (
+                     <div className="flex flex-col items-center justify-center py-20 text-center opacity-70">
+                        <Loader2 className="w-10 h-10 animate-spin text-[#FF270A] mb-4" />
+                        <p className="text-lg font-bold text-gray-500">Loading products...</p>
+                        <p className="text-sm text-gray-400">We are updating this category from the API.</p>
+                     </div>
+                   ) : filteredSolutions.length > 0 ? (
                      filteredSolutions.map((item, index) => (
                         <div key={index} className="flex flex-col md:flex-row justify-between items-start md:items-center py-8 px-4 -mx-4 rounded-2xl group hover:bg-gray-50/80 transition-all duration-300">
                            <div className="flex-1 pr-0 md:pr-12 mb-6 md:mb-0">
@@ -213,10 +393,10 @@ export default function SolutionsCatalog() {
                                       {item.targets}
                                    </span>
                                 )}
-                                {(item as any).technology && (
+                                {item.technology && (
                                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold text-gray-600 tracking-wider border border-gray-200">
                                       <Zap className="w-3 h-3 text-[#FF270A]" />
-                                      {(item as any).technology}
+                                      {item.technology}
                                    </span>
                                 )}
                               </div>
@@ -229,9 +409,19 @@ export default function SolutionsCatalog() {
                               
                               <button 
                                 onClick={() => handleOpenDetails(item)}
+                                disabled={detailsLoadingUuid === item.uuid}
                                 className="px-5 py-3 bg-white border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors flex items-center gap-2 justify-center shadow-sm"
                               >
-                                 Details <ChevronRight className="w-3 h-3" />
+                                 {detailsLoadingUuid === item.uuid ? (
+                                   <>
+                                     <Loader2 className="w-3 h-3 animate-spin" />
+                                     Loading
+                                   </>
+                                 ) : (
+                                   <>
+                                     Details <ChevronRight className="w-3 h-3" />
+                                   </>
+                                 )}
                               </button>
                            </div>
                         </div>
@@ -248,7 +438,7 @@ export default function SolutionsCatalog() {
                        <div className="mb-4">
                           <Image src="/logo_mila.png" alt="MILA Logo" width={60} height={60} className="mx-auto opacity-80" />
                        </div>
-                       <h4 className="text-xl font-extrabold text-[#111111] mb-2">Didn't find what you're looking for?</h4>
+                       <h4 className="text-xl font-extrabold text-[#111111] mb-2">Didn&apos;t find what you&apos;re looking for?</h4>
                        <p className="text-gray-500 text-sm font-medium mb-6 max-w-lg leading-relaxed">
                           Powered by Mila, our R&D team turns unique challenges into custom solutions.
                        </p>

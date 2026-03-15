@@ -17,6 +17,8 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+      - NEXT_PUBLIC_PRODUCTS_API_URL=${NEXT_PUBLIC_PRODUCTS_API_URL:-http://localhost:8000/api/v1}
+      - NEXT_PUBLIC_PRODUCTS_SERVICE_KEY=${NEXT_PUBLIC_PRODUCTS_SERVICE_KEY:-}
       - CHAT_IA_WEBPAGE_API_URL=${CHAT_IA_WEBPAGE_API_URL:-}
       - CHAT_IA_WEBPAGE_SERVICE_KEY=${CHAT_IA_WEBPAGE_SERVICE_KEY:-}
     command: npm run dev
@@ -30,6 +32,9 @@ services:
       context: .
       dockerfile: .docker/Dockerfile
       target: runner
+      args:
+        - NEXT_PUBLIC_PRODUCTS_API_URL=${NEXT_PUBLIC_PRODUCTS_API_URL:-}
+        - NEXT_PUBLIC_PRODUCTS_SERVICE_KEY=${NEXT_PUBLIC_PRODUCTS_SERVICE_KEY:-}
     ports:
       - "${WEB_TAAGBIO_SSL_PORT:-443}:443"
       - "${WEB_TAAGBIO_PORT:-3000}:3000"

@@ -12,6 +12,10 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
+# NEXT_PUBLIC_* vars must be present at build time so Next.js inlines them
+ARG NEXT_PUBLIC_PRODUCTS_API_URL=""
+ARG NEXT_PUBLIC_PRODUCTS_SERVICE_KEY=""
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 

@@ -69,10 +69,10 @@ export function ProductCard({ card, theme = "dark", description }: ProductCardPr
           </div>
         )}
 
-        {/* CTA */}
-        {card.canonicalUrl && (
+        {/* CTA — navigate to /industrial with search pre-filled */}
+        {card.name && (
           <a
-            href={card.canonicalUrl}
+            href={`/industrial?search=${encodeURIComponent(card.name)}`}
             className="self-start inline-flex items-center gap-2.5 bg-[#FF270A] text-white font-bold text-sm uppercase tracking-widest px-8 py-4 rounded-full hover:bg-[#cc1f07] transition-colors shadow-md shadow-[#FF270A]/20"
           >
             View Solution
