@@ -13,6 +13,7 @@ import { SOLUTIONS_DATA } from "../data/solutionsData"; // <-- Ajusta esta ruta 
 import {
   getIndustryCategories,
   getCategoryCatalogItems,
+  getAllProductsByCategory,
   getKitSolution,
   type IndustryCategory,
   type IndustrialCatalogItem,
@@ -74,33 +75,24 @@ export default function SolutionsCatalog() {
     return () => observer.disconnect();
   }, []);
 
-  /* Read ?search= query param: load ALL category items from API, then apply search */
+  /* Read ?search= query param: single API call to load all products
+     grouped by category, then apply the search filter. */
   const urlSearchHandled = useRef(false);
   useEffect(() => {
     if (urlSearchHandled.current) return;
     const params = new URLSearchParams(window.location.search);
     const initial = params.get("search");
-    if (!initial || categories.length === 0) return;
+    if (!initial) return;
 
     urlSearchHandled.current = true;
 
-    const loadAllAndSearch = async () => {
+    const loadAndSearch = async () => {
       setIsItemsLoading(true);
-      const loaded: Record<string, CatalogItem[]> = {};
-      await Promise.all(
-        categories.map(async (cat) => {
-          if (catalogByCategory[cat.id] && catalogByCategory[cat.id] !== FALLBACK_SOLUTIONS[cat.id]) return;
-          try {
-            const items = await getCategoryCatalogItems(cat.id);
-            loaded[cat.id] = items;
-          } catch {
-            /* keep fallback for this category */
-          }
-        })
-      );
-
-      if (Object.keys(loaded).length > 0) {
-        setCatalogByCategory((prev) => ({ ...prev, ...loaded }));
+      try {
+        const byCategory = await getAllProductsByCategory();
+        setCatalogByCategory((prev) => ({ ...prev, ...byCategory }));
+      } catch {
+        /* keep fallback data */
       }
       setIsItemsLoading(false);
       setSearchQuery(initial);
@@ -114,8 +106,8 @@ export default function SolutionsCatalog() {
       });
     };
 
-    loadAllAndSearch();
-  }, [categories]);
+    loadAndSearch();
+  }, []);
 
   useEffect(() => {
     const handleSearchTrigger = (event: Event) => {
