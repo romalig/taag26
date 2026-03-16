@@ -42,8 +42,13 @@ COPY .docker/background.sh /scripts/background.sh
 COPY .docker/start.sh /scripts/start.sh
 RUN chmod +x /scripts/background.sh /scripts/start.sh
 
-# Crear directorio SSL y asignar permisos
+# Crear directorio SSL, generar certificados autofirmados y asignar permisos
 RUN mkdir -p /etc/nginx/ssl /var/log/nginx /var/lib/nginx/logs \
+    && openssl req -x509 -nodes -days 365 \
+        -newkey rsa:2048 \
+        -keyout /etc/nginx/ssl/nginx.key \
+        -out /etc/nginx/ssl/nginx.crt \
+        -subj "/CN=taag-bio/O=TAAG/C=MX" \
     && chown -R nextjs:nodejs /etc/nginx/ssl /var/log/nginx /var/lib/nginx /run/nginx
 
 # Copiar assets publicos
