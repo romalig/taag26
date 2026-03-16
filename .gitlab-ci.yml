@@ -17,7 +17,7 @@ default:
   services:
     - docker:26.1.1-dind
   before_script:
-    - echo "$REPGITT_REGISTRY_PASSWORD" | docker login $REPGITLAB_REGISTRY_URL -u "$REPGITT_REGISTRY_USERNAME" --password-stdin
+    - echo "$REPGIT_REGISTRY_PASS_GPOTAAGBIO" | docker login $REPGITLAB_REGISTRY_URL -u "$REPGIT_REGISTRY_USR_GPOTAAGBIO" --password-stdin
 
 # ── Desarrollo ──────────────────────────────────────────
 
