@@ -2,21 +2,17 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { ChevronRight, Search, X, Download, Zap, Target, Filter, Loader2, AlertCircle } from "lucide-react";
+import { ChevronRight, Search, X, Download, Zap, Target, Filter, Loader2 } from "lucide-react";
 import { useCTA } from "../CTAProvider";
 import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
 import SolutionTemplate from "./modals/SolutionTemplate";
 import type { SolutionContent } from "./modals/types";
 
-import { SOLUTIONS_DATA } from "../data/solutionsData"; // <-- Ajusta esta ruta si es diferente
+import { SOLUTIONS_DATA } from "../data/solutionsData";
 import {
-  getIndustryCategories,
-  getCategoryCatalogItems,
   getAllProductsByCategory,
   getKitSolution,
-  type IndustryCategory,
-  type IndustrialCatalogItem,
 } from "@/app/lib/products-api";
 
 interface CategoryTab {
@@ -48,18 +44,14 @@ export default function SolutionsCatalog() {
   const { openMeeting } = useCTA();
   const { openModal } = useModal();
 
-  // const [categories, setCategories] = useState<CategoryTab[]>(FALLBACK_CATEGORIES);
-  // const [activePanelTab, setActivePanelTab] = useState(FALLBACK_CATEGORIES[0]?.id || "Pathogens");
-  const [categories, setCategories] = useState<CategoryTab[]>([]);
-  const [activePanelTab, setActivePanelTab] = useState("");
+  const [categories, setCategories] = useState<CategoryTab[]>(FALLBACK_CATEGORIES);
+  const [activePanelTab, setActivePanelTab] = useState(FALLBACK_CATEGORIES[0]?.id || "");
   const [catalogByCategory, setCatalogByCategory] = useState<Record<string, CatalogItem[]>>(FALLBACK_SOLUTIONS);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
-  const [isItemsLoading, setIsItemsLoading] = useState(false);
-  const [itemsError, setItemsError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [detailsLoadingUuid, setDetailsLoadingUuid] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  
+
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [isToolbarVisible, setIsToolbarVisible] = useState(true);
 
@@ -68,46 +60,76 @@ export default function SolutionsCatalog() {
       ([entry]) => {
         setIsToolbarVisible(entry.isIntersecting);
       },
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" } 
+      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
     );
 
     if (toolbarRef.current) observer.observe(toolbarRef.current);
     return () => observer.disconnect();
   }, []);
 
-  /* Read ?search= query param: single API call to load all products
-     grouped by category, then apply the search filter. */
-  const urlSearchHandled = useRef(false);
+  /* ---------------------------------------------------------------
+     SINGLE API CALL: load all products + derive categories from it
+     --------------------------------------------------------------- */
+  const pendingSearchQuery = useRef<string | null>(null);
+
   useEffect(() => {
-    if (urlSearchHandled.current) return;
+    let isMounted = true;
+
+    // Check if there's a ?search= param to apply after loading
     const params = new URLSearchParams(window.location.search);
-    const initial = params.get("search");
-    if (!initial) return;
+    const urlSearch = params.get("search");
+    if (urlSearch) pendingSearchQuery.current = urlSearch;
 
-    urlSearchHandled.current = true;
-
-    const loadAndSearch = async () => {
-      setIsItemsLoading(true);
+    const loadAll = async () => {
+      setIsLoading(true);
       try {
-        const byCategory = await getAllProductsByCategory();
-        setCatalogByCategory((prev) => ({ ...prev, ...byCategory }));
-      } catch {
-        /* keep fallback data */
-      }
-      setIsItemsLoading(false);
-      setSearchQuery(initial);
+        const result = await getAllProductsByCategory();
+        if (!isMounted) return;
 
-      requestAnimationFrame(() => {
-        const element = document.getElementById("panel-start");
-        if (element) {
-          const pos = element.getBoundingClientRect().top + window.pageYOffset - 140;
-          window.scrollTo({ top: pos, behavior: "smooth" });
+        // Derive categories from the data (unique, preserving order)
+        const seen = new Set<string>();
+        const derivedCategories: CategoryTab[] = [];
+        for (const [uuid, items] of Object.entries(result.byCategory)) {
+          if (!seen.has(uuid) && items.length > 0) {
+            seen.add(uuid);
+            derivedCategories.push({ id: uuid, label: result.categoryNames[uuid] || uuid });
+          }
         }
-      });
+
+        if (derivedCategories.length > 0) {
+          setCategories(derivedCategories);
+          setActivePanelTab(derivedCategories[0].id);
+        }
+
+        setCatalogByCategory(result.byCategory);
+      } catch (error) {
+        console.error("Products API fallback:", error);
+        // Keep fallback data already set in initial state
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
     };
 
-    loadAndSearch();
+    loadAll();
+    return () => { isMounted = false; };
   }, []);
+
+  /* Apply ?search= AFTER catalog data has loaded from API */
+  useEffect(() => {
+    if (isLoading || !pendingSearchQuery.current) return;
+    const query = pendingSearchQuery.current;
+    pendingSearchQuery.current = null;
+
+    setSearchQuery(query);
+
+    requestAnimationFrame(() => {
+      const element = document.getElementById("panel-start");
+      if (element) {
+        const pos = element.getBoundingClientRect().top + window.pageYOffset - 140;
+        window.scrollTo({ top: pos, behavior: "smooth" });
+      }
+    });
+  }, [isLoading]);
 
   useEffect(() => {
     const handleSearchTrigger = (event: Event) => {
@@ -125,77 +147,6 @@ export default function SolutionsCatalog() {
     return () => window.removeEventListener("trigger-catalog-search", handleSearchTrigger as EventListener);
   }, []);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadCategories = async () => {
-      setIsCategoriesLoading(true);
-
-      try {
-        const raw: IndustryCategory[] = await getIndustryCategories();
-        const nextCategories = raw
-          .filter((category) => category.uuid && category.nombre)
-          .map((category) => ({
-            id: category.uuid,
-            label: category.nombre,
-          }));
-
-        if (!isMounted || nextCategories.length === 0) return;
-
-        setCategories(nextCategories);
-        setActivePanelTab(nextCategories[0].id);
-      } catch (error) {
-        console.error("Industrial categories fallback:", error);
-      } finally {
-        if (isMounted) {
-          setIsCategoriesLoading(false);
-        }
-      }
-    };
-
-    loadCategories();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!activePanelTab || searchQuery || catalogByCategory[activePanelTab]) return;
-
-    let isMounted = true;
-
-    const loadItems = async () => {
-      setIsItemsLoading(true);
-      setItemsError("");
-
-      try {
-        const items: IndustrialCatalogItem[] = await getCategoryCatalogItems(activePanelTab);
-        if (!isMounted) return;
-
-        setCatalogByCategory((current) => ({
-          ...current,
-          [activePanelTab]: items,
-        }));
-      } catch (error) {
-        console.error("Industrial products fallback:", error);
-        if (isMounted) {
-          setItemsError("Products could not be updated from the API. Showing local content.");
-        }
-      } finally {
-        if (isMounted) {
-          setIsItemsLoading(false);
-        }
-      }
-    };
-
-    loadItems();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [activePanelTab, searchQuery, catalogByCategory]);
-
   const scrollToTarget = (element: HTMLElement, offset = 140) => {
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.pageYOffset - offset;
@@ -209,8 +160,12 @@ export default function SolutionsCatalog() {
   };
 
   const allSolutions = Object.values(catalogByCategory).flat();
+  // Deduplicate by uuid when searching across all categories
+  const uniqueSolutions = searchQuery
+    ? Array.from(new Map(allSolutions.map((item) => [item.uuid || item.title, item])).values())
+    : allSolutions;
   const categorySolutions = catalogByCategory[activePanelTab] || [];
-  const sourceList = searchQuery ? allSolutions : categorySolutions;
+  const sourceList = searchQuery ? uniqueSolutions : categorySolutions;
 
   const filteredSolutions = sourceList.filter((item) => {
     const searchTerms = searchQuery.toLowerCase().split(" ").filter(term => term.length > 0);
@@ -351,25 +306,10 @@ export default function SolutionsCatalog() {
                 </div>
 
                 <div className="flex flex-col mt-4 min-h-[300px]">
-                   {isCategoriesLoading && categories === FALLBACK_CATEGORIES && (
-                     <div className="flex items-center gap-3 py-4 text-sm text-gray-400">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Loading categories...</span>
-                     </div>
-                   )}
-
-                   {itemsError && !searchQuery && (
-                     <div className="mb-4 flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700">
-                        <AlertCircle className="w-4 h-4 shrink-0" />
-                        <span>{itemsError}</span>
-                     </div>
-                   )}
-
-                   {isItemsLoading && !searchQuery ? (
+                   {isLoading ? (
                      <div className="flex flex-col items-center justify-center py-20 text-center opacity-70">
                         <Loader2 className="w-10 h-10 animate-spin text-[#FF270A] mb-4" />
                         <p className="text-lg font-bold text-gray-500">Loading products...</p>
-                        <p className="text-sm text-gray-400">We are updating this category from the API.</p>
                      </div>
                    ) : filteredSolutions.length > 0 ? (
                      filteredSolutions.map((item, index) => (

@@ -173,17 +173,23 @@ interface PcrKitWithCategories {
   industry_categories: IndustryCategory[];
 }
 
+export interface AllProductsResult {
+  byCategory: Record<string, IndustrialCatalogItem[]>;
+  categoryNames: Record<string, string>; // uuid → label
+}
+
 /**
- * Single-call fetch of ALL products grouped by category.
- * Returns a record keyed by category UUID → catalog items.
- * Used for cross-category search from ?search= URL param.
+ * Single-call fetch of ALL products with their associated categories.
+ * Returns products grouped by category UUID + a lookup of category names.
+ * This single endpoint replaces the need for separate category and item calls.
  */
-export async function getAllProductsByCategory(): Promise<Record<string, IndustrialCatalogItem[]>> {
+export async function getAllProductsByCategory(): Promise<AllProductsResult> {
   const kits = await fetchProductsApi<PcrKitWithCategories[]>(
     "/products/pcr-kit-food/with-categories"
   );
 
   const byCategory: Record<string, IndustrialCatalogItem[]> = {};
+  const categoryNames: Record<string, string> = {};
 
   for (const kit of kits) {
     const item: IndustrialCatalogItem = {
@@ -197,10 +203,11 @@ export async function getAllProductsByCategory(): Promise<Record<string, Industr
     for (const cat of kit.industry_categories) {
       if (!byCategory[cat.uuid]) byCategory[cat.uuid] = [];
       byCategory[cat.uuid].push(item);
+      if (!categoryNames[cat.uuid]) categoryNames[cat.uuid] = cat.nombre;
     }
   }
 
-  return byCategory;
+  return { byCategory, categoryNames };
 }
 
 export async function getCategoryCatalogItems(categoryUuid: string): Promise<IndustrialCatalogItem[]> {
