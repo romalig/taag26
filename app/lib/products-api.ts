@@ -255,7 +255,7 @@ export async function getKitSolution(uuid: string): Promise<SolutionContent> {
     limitations: toSentenceList(solution.limitations, "Consult the datasheet for product limitations."),
     techSpecs: {
       targets: toText(solution.techSpecs?.targets),
-      lod: toText(solution.techSpecs?.performance),
+      performance: toText(solution.techSpecs?.performance),
       matrices: toText(solution.techSpecs?.matrices),
       time: toText(solution.techSpecs?.time),
       technology: toText(solution.techSpecs?.technology),

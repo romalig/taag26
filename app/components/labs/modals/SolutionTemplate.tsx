@@ -83,8 +83,8 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
               <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.targets}</span>
           </div>
           <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">LOD</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.lod}</span>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Performance</span>
+              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.performance}</span>
           </div>
           <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Matrices</span>

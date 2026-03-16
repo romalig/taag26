@@ -10,7 +10,7 @@ export interface SolutionContent {
   limitations: string[];
   techSpecs: {
     targets: string;
-    lod: string;
+    performance: string;
     matrices: string;
     time: string;
     technology: string;

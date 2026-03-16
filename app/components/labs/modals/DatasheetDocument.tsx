@@ -69,7 +69,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
           <Image src="/logo-red1.png" style={styles.logoImage} /> 
           <View style={styles.headerMeta}>
              <Text style={styles.headerTitle}>Technical Data Sheet</Text>
-             <Text style={{ fontSize: 7, color: "#D1D5DB", marginTop: 2, textAlign: "right" }}>Rev. {new Date().getFullYear()}.01</Text>
+             <Text style={{ fontSize: 7, color: "#D1D5DB", marginTop: 2, textAlign: "right" }}>{new Date().getFullYear()}.01</Text>
           </View>
         </View>
 
@@ -107,7 +107,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
              <Text style={styles.sectionTitle}>Technical Specifications</Text>
              <View style={styles.specContainer}>
                 <SpecRow label="Targets" value={data.techSpecs.targets} />
-                <SpecRow label="Limit of Detection (LOD)" value={data.techSpecs.lod} />
+                <SpecRow label="Performance" value={data.techSpecs.performance} />
                 <SpecRow label="Validated Matrices" value={data.techSpecs.matrices} />
                 <SpecRow label="Time to Results" value={data.techSpecs.time} />
                 <SpecRow label="Technology" value={data.techSpecs.technology} />
