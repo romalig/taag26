@@ -1,7 +1,9 @@
 # CI/CD Pipeline — TAAG Bio Frontend
-# Builds production Docker image and deploys via webhook
+# Builds Docker images and deploys via webhook
 
 stages:
+  - build-dev
+  - deploy-dev
   - build-latest
   - deploy
 
@@ -16,6 +18,39 @@ default:
     - docker:26.1.1-dind
   before_script:
     - echo "$REPGITT_REGISTRY_PASSWORD" | docker login $REPGITLAB_REGISTRY_URL -u "$REPGITT_REGISTRY_USERNAME" --password-stdin
+
+# ── Desarrollo ──────────────────────────────────────────
+
+# Build dev image and push as dev
+build_dev:
+  stage: build-dev
+  variables:
+    IMG_TAG_FINAL: "$IMAGE_NAME:dev"
+  script:
+    - echo "Building dev image with tag 'dev'"
+    - docker build -t $IMG_TAG_FINAL . -f .docker/Dockerfile
+    - docker push $IMG_TAG_FINAL
+  only:
+    - desarrollo
+  tags:
+    - docker
+  timeout: 4h
+
+# Deploy to development (manual trigger)
+deploy_development:
+  stage: deploy-dev
+  script:
+    - echo "Triggering development deploy webhook"
+    - apk add --no-cache curl
+    - curl -k -X POST $REPGITT_WEBHOOK_URL_DEV
+  needs: ["build_dev"]
+  when: manual
+  only:
+    - desarrollo
+  tags:
+    - docker
+
+# ── Producción ──────────────────────────────────────────
 
 # Backup current latest image before overwriting
 backup_latest:
