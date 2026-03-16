@@ -3,7 +3,7 @@ node_modules
 .git
 .gitignore
 .claude
-.docker
+.docker/Dockerfile
 .zenflow
 .zencode
 *.log
