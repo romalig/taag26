@@ -43,8 +43,8 @@ COPY .docker/start.sh /scripts/start.sh
 RUN chmod +x /scripts/background.sh /scripts/start.sh
 
 # Crear directorio SSL y asignar permisos
-RUN mkdir -p /etc/nginx/ssl /var/log/nginx \
-    && chown -R nextjs:nodejs /etc/nginx/ssl /var/log/nginx /run/nginx
+RUN mkdir -p /etc/nginx/ssl /var/log/nginx /var/lib/nginx/logs \
+    && chown -R nextjs:nodejs /etc/nginx/ssl /var/log/nginx /var/lib/nginx /run/nginx
 
 # Copiar assets publicos
 COPY --from=builder /app/public ./public
