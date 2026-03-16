@@ -10,6 +10,9 @@ _term() {
 }
 trap _term SIGTERM SIGINT
 
+# Generar certificados SSL si no existen
+/scripts/background.sh
+
 # Iniciar Next.js en background
 echo "[start.sh] Iniciando Next.js..."
 node /app/server.js &
