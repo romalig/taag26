@@ -27,6 +27,7 @@ export default function SolutionFinder() {
       if (!text || isAnalyzing) return;
 
       setIsAnalyzing(true);
+      setChallenge("");
       setRawReply("");
       setStructuredReply(null);
 
@@ -86,7 +87,8 @@ export default function SolutionFinder() {
     [challenge, isAnalyzing]
   );
 
-  const hasResult = rawReply !== null || structuredReply !== null;
+  const hasStreamContent = rawReply !== null && rawReply.length > 0;
+  const hasResult = hasStreamContent || structuredReply !== null;
 
   return (
     <section
@@ -122,10 +124,10 @@ export default function SolutionFinder() {
 
         {/* MAIN INTERFACE */}
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
-          {/* LEFT: INPUT — centred when no result */}
+          {/* LEFT: INPUT — wider & centred when no result */}
           <div
-            className={`lg:col-span-5 flex flex-col ${
-              !hasResult ? "lg:col-start-4" : ""
+            className={`lg:col-span-5 flex flex-col transition-all duration-500 ${
+              hasResult || isAnalyzing ? "lg:opacity-100" : "lg:col-span-8 lg:col-start-3"
             }`}
           >
             <div className="group bg-white/80 backdrop-blur-xl border border-white/40 ring-1 ring-black/5 rounded-[2.5rem] p-8 md:p-10 h-full flex flex-col shadow-[0_20px_40px_-15px_rgba(255,39,10,0.12)] hover:shadow-[0_30px_60px_-15px_rgba(255,39,10,0.2)] transition-all duration-500 relative overflow-hidden">
@@ -177,8 +179,8 @@ export default function SolutionFinder() {
             </div>
           </div>
 
-          {/* RIGHT: RESULT */}
-          {hasResult && (
+          {/* RIGHT: RESULT or LOADING */}
+          {(hasResult || isAnalyzing) && (
             <div className="lg:col-span-7 animate-in fade-in slide-in-from-bottom-8 duration-700">
               <div className="h-full">
                 <div className="bg-gradient-to-br from-white to-[#F0F0F2] rounded-[2.5rem] h-full p-8 md:p-12 flex flex-col relative overflow-hidden border border-white ring-1 ring-black/5 shadow-2xl shadow-[#FF270A]/10">
@@ -196,8 +198,40 @@ export default function SolutionFinder() {
                       )}
                     </div>
 
+                    {/* Loading skeleton — shown while analyzing and no content yet */}
+                    {isAnalyzing && !hasResult && (
+                      <div className="flex-1 flex flex-col gap-6 justify-center items-center py-8">
+                        <div className="relative w-16 h-16">
+                          <div className="absolute inset-0 rounded-full border-[3px] border-gray-200" />
+                          <div className="absolute inset-0 rounded-full border-[3px] border-transparent border-t-[#FF270A] animate-spin" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <Sparkles className="w-5 h-5 text-[#FF270A]" />
+                          </div>
+                        </div>
+                        <div className="text-center space-y-2">
+                          <p className="text-sm font-bold text-[#111111] font-mono uppercase tracking-wider">
+                            Analyzing your request
+                          </p>
+                          <p className="text-xs text-gray-400 max-w-xs">
+                            Searching our catalog for the best matching solutions...
+                          </p>
+                        </div>
+                        <div className="w-full max-w-sm space-y-3 mt-4">
+                          <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full w-2/3 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-full animate-pulse" />
+                          </div>
+                          <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full w-1/2 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-full animate-pulse" />
+                          </div>
+                          <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full w-4/5 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-full animate-pulse" />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     {/* Plain text (streaming or unstructured) */}
-                    {rawReply !== null && !structuredReply && !looksLikeJson(rawReply) && (
+                    {rawReply !== null && rawReply.length > 0 && !structuredReply && !looksLikeJson(rawReply) && (
                       <p className="text-lg md:text-xl text-gray-600 leading-relaxed whitespace-pre-wrap border-l-2 border-[#FF270A]/20 pl-6 flex-1">
                         {rawReply}
                         {isAnalyzing && (
@@ -207,7 +241,7 @@ export default function SolutionFinder() {
                     )}
 
                     {/* JSON streaming — show processing indicator */}
-                    {rawReply !== null && !structuredReply && looksLikeJson(rawReply) && isAnalyzing && (
+                    {rawReply !== null && rawReply.length > 0 && !structuredReply && looksLikeJson(rawReply) && isAnalyzing && (
                       <div className="flex-1 flex items-center gap-2 text-gray-400">
                         <Loader2 className="w-4 h-4 animate-spin" />
                         <span className="text-sm">Processing response…</span>
@@ -215,7 +249,7 @@ export default function SolutionFinder() {
                     )}
 
                     {/* Stream finished but could not parse */}
-                    {rawReply !== null && !structuredReply && looksLikeJson(rawReply) && !isAnalyzing && (
+                    {rawReply !== null && rawReply.length > 0 && !structuredReply && looksLikeJson(rawReply) && !isAnalyzing && (
                       <div className="flex flex-col gap-4 flex-1">
                         <div className="flex items-start gap-3 text-red-600 bg-red-50 border border-red-100 rounded-2xl p-4">
                           <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
