@@ -28,7 +28,11 @@ build_dev:
     IMG_TAG_FINAL: "$IMAGE_NAME:dev"
   script:
     - echo "Building dev image with tag 'dev'"
-    - docker build -t $IMG_TAG_FINAL . -f .docker/Dockerfile
+    - >-
+      docker build
+      --build-arg NEXT_PUBLIC_PRODUCTS_API_URL="$NEXT_PUBLIC_PRODUCTS_API_URL"
+      --build-arg NEXT_PUBLIC_PRODUCTS_SERVICE_KEY="$NEXT_PUBLIC_PRODUCTS_SERVICE_KEY"
+      -t $IMG_TAG_FINAL . -f .docker/Dockerfile
     - docker push $IMG_TAG_FINAL
   only:
     - desarrollo
@@ -74,7 +78,11 @@ build_latest:
     IMG_TAG_FINAL: "$IMAGE_NAME:latest"
   script:
     - echo "Building production image with tag 'latest'"
-    - docker build -t $IMG_TAG_FINAL . -f .docker/Dockerfile
+    - >-
+      docker build
+      --build-arg NEXT_PUBLIC_PRODUCTS_API_URL="$NEXT_PUBLIC_PRODUCTS_API_URL"
+      --build-arg NEXT_PUBLIC_PRODUCTS_SERVICE_KEY="$NEXT_PUBLIC_PRODUCTS_SERVICE_KEY"
+      -t $IMG_TAG_FINAL . -f .docker/Dockerfile
     - docker push $IMG_TAG_FINAL
   needs: ["backup_latest"]
   only:
