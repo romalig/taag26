@@ -30,7 +30,7 @@ ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 
-# Instalar nginx y openssl para TLS en transito
+# Instalar nginx, openssl y bash (para terminal en Portainer)
 RUN apk add --no-cache nginx openssl
 
 RUN addgroup --system --gid 1001 nodejs
@@ -59,10 +59,13 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Variables server-side (runtime) — se pueden sobreescribir en docker run / Portainer
-ARG CHAT_IA_WEBPAGE_API_URL=""
-ARG CHAT_IA_WEBPAGE_SERVICE_KEY=""
-ENV CHAT_IA_WEBPAGE_API_URL=$CHAT_IA_WEBPAGE_API_URL
-ENV CHAT_IA_WEBPAGE_SERVICE_KEY=$CHAT_IA_WEBPAGE_SERVICE_KEY
+# ARG CHAT_IA_WEBPAGE_API_URL=""
+# ARG CHAT_IA_WEBPAGE_SERVICE_KEY=""
+# ENV CHAT_IA_WEBPAGE_API_URL=$CHAT_IA_WEBPAGE_API_URL
+# ENV CHAT_IA_WEBPAGE_SERVICE_KEY=$CHAT_IA_WEBPAGE_SERVICE_KEY
+
+# Omitir validacion de certificados autofirmados en fetch de Node.js
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
 USER nextjs
 
