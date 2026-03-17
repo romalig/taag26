@@ -24,6 +24,8 @@ default:
 # Build dev image and push as dev
 build_dev:
   stage: build-dev
+  environment:
+    name: desarrollo
   variables:
     IMG_TAG_FINAL: "$IMAGE_NAME:dev"
   script:
@@ -43,6 +45,8 @@ build_dev:
 # Deploy to development (manual trigger)
 deploy_development:
   stage: deploy-dev
+  environment:
+    name: desarrollo
   script:
     - echo "Triggering development deploy webhook"
     - apk add --no-cache curl
@@ -74,6 +78,8 @@ backup_latest:
 # Build production image and push as latest
 build_latest:
   stage: build-latest
+  environment:
+    name: production
   variables:
     IMG_TAG_FINAL: "$IMAGE_NAME:latest"
   script:
@@ -94,6 +100,8 @@ build_latest:
 # Deploy to production (manual trigger)
 deploy_production:
   stage: deploy
+  environment:
+    name: production
   script:
     - echo "Triggering production deploy webhook"
     - apk add --no-cache curl
