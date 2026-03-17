@@ -58,6 +58,12 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Variables server-side (runtime) — se pueden sobreescribir en docker run / Portainer
+ARG CHAT_IA_WEBPAGE_API_URL=""
+ARG CHAT_IA_WEBPAGE_SERVICE_KEY=""
+ENV CHAT_IA_WEBPAGE_API_URL=$CHAT_IA_WEBPAGE_API_URL
+ENV CHAT_IA_WEBPAGE_SERVICE_KEY=$CHAT_IA_WEBPAGE_SERVICE_KEY
+
 USER nextjs
 
 EXPOSE 443 3000

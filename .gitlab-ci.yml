@@ -34,6 +34,8 @@ build_dev:
       docker build
       --build-arg NEXT_PUBLIC_PRODUCTS_API_URL="$NEXT_PUBLIC_PRODUCTS_API_URL"
       --build-arg NEXT_PUBLIC_PRODUCTS_SERVICE_KEY="$NEXT_PUBLIC_PRODUCTS_SERVICE_KEY"
+      --build-arg CHAT_IA_WEBPAGE_API_URL="$CHAT_IA_WEBPAGE_API_URL"
+      --build-arg CHAT_IA_WEBPAGE_SERVICE_KEY="$CHAT_IA_WEBPAGE_SERVICE_KEY"
       -t $IMG_TAG_FINAL . -f .docker/Dockerfile
     - docker push $IMG_TAG_FINAL
   only:
@@ -88,6 +90,8 @@ build_latest:
       docker build
       --build-arg NEXT_PUBLIC_PRODUCTS_API_URL="$NEXT_PUBLIC_PRODUCTS_API_URL"
       --build-arg NEXT_PUBLIC_PRODUCTS_SERVICE_KEY="$NEXT_PUBLIC_PRODUCTS_SERVICE_KEY"
+      --build-arg CHAT_IA_WEBPAGE_API_URL="$CHAT_IA_WEBPAGE_API_URL"
+      --build-arg CHAT_IA_WEBPAGE_SERVICE_KEY="$CHAT_IA_WEBPAGE_SERVICE_KEY"
       -t $IMG_TAG_FINAL . -f .docker/Dockerfile
     - docker push $IMG_TAG_FINAL
   needs: ["backup_latest"]
