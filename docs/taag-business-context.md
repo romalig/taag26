@@ -1,6 +1,6 @@
-# TAAG Genetics — Contexto de Negocio para Asistente de Chat
+# TAAG — Contexto de Negocio para Asistente de Chat
 
-> Documento de referencia para el modelo de IA que atiende clientes de TAAG Genetics.
+> Documento de referencia para el modelo de IA que atiende clientes de TAAG.
 > Contiene información de productos, tecnologías, servicios, ubicaciones y casos de uso.
 > **IMPORTANTE:** Todos los enlaces son paths relativos. NO incluir dominio base.
 
@@ -10,7 +10,7 @@
 
 | Campo | Detalle |
 |---|---|
-| **Nombre** | TAAG Genetics |
+| **Nombre** | TAAG |
 | **Nombre corto** | TAAG |
 | **Sitio web** | `/` (home) |
 | **Tagline** | "Reading nature. Interpreting the future." |

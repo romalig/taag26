@@ -9,6 +9,8 @@ export interface DifyCard {
   /** Product's own description (from product.description in the API response) */
   productDescription?: string;
   canonicalUrl: string;
+  /** Card type from API — "product_match" = catalog product, others = landing page */
+  type: string;
 }
 
 export type DifyAction =
@@ -76,6 +78,7 @@ function normalizeCard(raw: unknown): DifyCard | null {
       canonicalUrl: typeof p.url === "string" && p.url ? p.url
         : typeof p.canonicalUrl === "string" && p.canonicalUrl ? p.canonicalUrl
         : "",
+      type: String(r.type || "product_match"),
     };
   }
 
@@ -92,6 +95,7 @@ function normalizeCard(raw: unknown): DifyCard | null {
         : [],
       productDescription: r.description ? String(r.description) : undefined,
       canonicalUrl: String(r.canonicalUrl || ""),
+      type: String(r.type || "product_match"),
     };
   }
 

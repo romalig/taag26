@@ -27,7 +27,6 @@ export default function SolutionFinder() {
       if (!text || isAnalyzing) return;
 
       setIsAnalyzing(true);
-      setChallenge("");
       setRawReply("");
       setStructuredReply(null);
 

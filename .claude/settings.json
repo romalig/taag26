@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Necesito analizar productos de cacao contra salmonella en menos de 24 hrs\"\"\"\",\"\"\"\"session_id\"\"\"\":\"\"\"\"test-debug-001\"\"\"\"}')",
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Cuál es la tecnología más rápida que tienen?\"\"\"\",\"\"\"\"session_id\"\"\"\":\"\"\"\"test-debug-002\"\"\"\"}')"
+    ]
+  }
+}
