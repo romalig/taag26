@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Loader2,
   ArrowRight,
@@ -24,6 +24,26 @@ export default function SolutionFinder() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const sessionRef = useRef<string | null>(null);
   const { openModal } = useModal();
+
+  // Health-check: "System Active" / "Limited" / "Offline"
+  const [systemStatus, setSystemStatus] = useState<"checking" | "online" | "degraded" | "offline">("checking");
+
+  useEffect(() => {
+    let mounted = true;
+    const check = () =>
+      fetch("/api/chat", { method: "GET" })
+        .then(async (res) => {
+          if (!mounted) return;
+          if (!res.ok) { setSystemStatus("offline"); return; }
+          const data = await res.json();
+          setSystemStatus(data.status === "online" ? "online" : "degraded");
+        })
+        .catch(() => { if (mounted) setSystemStatus("offline"); });
+
+    check();
+    const interval = setInterval(check, 30_000);
+    return () => { mounted = false; clearInterval(interval); };
+  }, []);
 
   const handleViewDatasheet = useCallback(
     async (uuid: string) => {
@@ -167,9 +187,28 @@ export default function SolutionFinder() {
               />
 
               <div className="mt-8 pt-8 border-t border-gray-100 flex items-center justify-between gap-4">
-                <div className="hidden md:flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider font-mono">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF270A] animate-pulse" />
-                  System Active
+                <div className="hidden md:flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider font-mono">
+                  {systemStatus === "checking" ? (
+                    <>
+                      <span className="w-1.5 h-1.5 rounded-full bg-gray-300 animate-pulse" />
+                      <span className="text-gray-400">Connecting…</span>
+                    </>
+                  ) : systemStatus === "online" ? (
+                    <>
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-gray-400">System Active</span>
+                    </>
+                  ) : systemStatus === "degraded" ? (
+                    <>
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                      <span className="text-gray-400">Limited Service</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF270A]" />
+                      <span className="text-gray-400">System Offline</span>
+                    </>
+                  )}
                 </div>
 
                 <button
@@ -178,16 +217,8 @@ export default function SolutionFinder() {
                   className="group/btn relative overflow-hidden flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-[#111111] text-white rounded-full font-bold hover:bg-[#FF270A] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                 >
                   <span className="relative z-10 flex items-center gap-2">
-                    {isAnalyzing ? (
-                      <>
-                        Processing <Loader2 className="w-4 h-4 animate-spin" />
-                      </>
-                    ) : (
-                      <>
-                        Analyze Request{" "}
-                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                      </>
-                    )}
+                    Analyze Request{" "}
+                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                   </span>
                 </button>
               </div>
@@ -208,9 +239,6 @@ export default function SolutionFinder() {
                       <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#111111]">
                         AI Response
                       </span>
-                      {isAnalyzing && (
-                        <Loader2 className="w-3 h-3 animate-spin text-gray-400" />
-                      )}
                     </div>
 
                     {/* Loading skeleton — shown while analyzing and no content yet */}

@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ChevronRight, Search, X, Download, Zap, Target, Filter, Loader2 } from "lucide-react";
 import { useCTA } from "../CTAProvider";
-import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
+// Static fallback data commented out — categories now come from the API via target_type
+// import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
 import SolutionTemplate from "./modals/SolutionTemplate";
 import type { SolutionContent } from "./modals/types";
@@ -33,20 +34,16 @@ interface CatalogSearchEvent extends Event {
   detail?: string;
 }
 
-const FALLBACK_CATEGORIES: CategoryTab[] = PANEL_CATEGORIES.map((category) => ({
-  id: category.id,
-  label: category.label,
-}));
-
-const FALLBACK_SOLUTIONS = PANEL_SOLUTIONS as Record<string, CatalogItem[]>;
+const EMPTY_CATEGORIES: CategoryTab[] = [];
+const EMPTY_SOLUTIONS: Record<string, CatalogItem[]> = {};
 
 export default function SolutionsCatalog() {
   const { openMeeting } = useCTA();
   const { openModal } = useModal();
 
-  const [categories, setCategories] = useState<CategoryTab[]>(FALLBACK_CATEGORIES);
-  const [activePanelTab, setActivePanelTab] = useState(FALLBACK_CATEGORIES[0]?.id || "");
-  const [catalogByCategory, setCatalogByCategory] = useState<Record<string, CatalogItem[]>>(FALLBACK_SOLUTIONS);
+  const [categories, setCategories] = useState<CategoryTab[]>(EMPTY_CATEGORIES);
+  const [activePanelTab, setActivePanelTab] = useState("");
+  const [catalogByCategory, setCatalogByCategory] = useState<Record<string, CatalogItem[]>>(EMPTY_SOLUTIONS);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [detailsLoadingUuid, setDetailsLoadingUuid] = useState<string | null>(null);

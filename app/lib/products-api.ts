@@ -167,27 +167,31 @@ export async function getIndustryCategories(): Promise<IndustryCategory[]> {
 // ---------------------------------------------------------------------------
 // Shape returned by /pcr-kit-food/with-categories
 // ---------------------------------------------------------------------------
-interface PcrKitWithCategories {
+interface CommercialCategory {
+  uuid: string;
+  nombre: string;
+}
+
+interface PcrKitFoodWithCategories {
   uuid: string;
   title: string;
   description: string | null;
   targets: string | null;
   technology: string | null;
-  industry_categories: IndustryCategory[];
+  commercial_categories: CommercialCategory[];
 }
 
 export interface AllProductsResult {
   byCategory: Record<string, IndustrialCatalogItem[]>;
-  categoryNames: Record<string, string>; // uuid → label
+  categoryNames: Record<string, string>; // category uuid → label
 }
 
 /**
- * Single-call fetch of ALL products with their associated categories.
- * Returns products grouped by category UUID + a lookup of category names.
- * This single endpoint replaces the need for separate category and item calls.
+ * Fetches ALL products with their commercial categories and groups them.
+ * Returns products grouped by commercial category + a lookup of category names.
  */
 export async function getAllProductsByCategory(): Promise<AllProductsResult> {
-  const kits = await fetchProductsApi<PcrKitWithCategories[]>(
+  const kits = await fetchProductsApi<PcrKitFoodWithCategories[]>(
     "/products/pcr-kit-food/with-categories"
   );
 
@@ -195,18 +199,32 @@ export async function getAllProductsByCategory(): Promise<AllProductsResult> {
   const categoryNames: Record<string, string> = {};
 
   for (const kit of kits) {
+    const rawDesc = kit.description?.trim() || "";
+    const shortDesc = rawDesc
+      ? rawDesc.split(/\n/)[0].slice(0, 200) + (rawDesc.length > 200 ? "…" : "")
+      : "Technical details available in the product datasheet.";
+
     const item: IndustrialCatalogItem = {
       uuid: kit.uuid,
       title: kit.title,
-      description: kit.description?.trim() || "Technical details available in the product datasheet.",
+      description: shortDesc,
       targets: kit.targets || "N/A",
       technology: kit.technology || "N/A",
     };
 
-    for (const cat of kit.industry_categories) {
-      if (!byCategory[cat.uuid]) byCategory[cat.uuid] = [];
-      byCategory[cat.uuid].push(item);
-      if (!categoryNames[cat.uuid]) categoryNames[cat.uuid] = cat.nombre;
+    const cats = kit.commercial_categories;
+    if (!cats || cats.length === 0) {
+      // Products without categories go into "Other"
+      if (!byCategory["other"]) byCategory["other"] = [];
+      byCategory["other"].push(item);
+      if (!categoryNames["other"]) categoryNames["other"] = "Other";
+    } else {
+      for (const cat of cats) {
+        const key = cat.uuid;
+        if (!byCategory[key]) byCategory[key] = [];
+        byCategory[key].push(item);
+        if (!categoryNames[key]) categoryNames[key] = cat.nombre;
+      }
     }
   }
 

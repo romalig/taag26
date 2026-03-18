@@ -10,7 +10,20 @@
       "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"Accept: text/event-stream\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Necesito detectar salmonella en cacao\"\"\"\",\"\"\"\"session_id\"\"\"\":\"\"\"\"test-123\"\"\"\"}')",
       "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"Accept: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"message\"\":\"\"Necesito detectar salmonella en cacao\"\",\"\"session_id\"\":\"\"test-456\"\"}')",
       "Bash(curl -s http://localhost:8000/api/v1/products/pcr-kit-food/with-categories -H \"Accept: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\")",
-      "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"Accept: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Necesito detectar salmonella en cacao\"\"\"\",\"\"\"\"session_id\"\"\"\":\"\"\"\"test-789\"\"\"\"}')"
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"Accept: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Necesito detectar salmonella en cacao\"\"\"\",\"\"\"\"session_id\"\"\"\":\"\"\"\"test-789\"\"\"\"}')",
+      "WebFetch(domain:localhost)",
+      "Bash(curl -s -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" \"http://localhost:8000/api/v1/products/pcr-kit-food\")",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\)[''''data'''']; types=set\\(item.get\\(''''target_type'''',''''''''\\) for item in data\\); print\\(''''Total products:'''', len\\(data\\)\\); print\\(''''Target types:'''', sorted\\(types\\)\\); print\\(\\); [print\\(f''''{item[\"\"title\"\"]} -> target_type: {item.get\\(\"\"target_type\"\",\"\"N/A\"\"\\)}''''\\) for item in data[:5]]\")",
+      "Bash(python3 -c \"import json,sys; resp=json.load\\(sys.stdin\\); print\\(json.dumps\\(resp, indent=2\\)[:2000]\\)\")",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\)[''''data'''']; item=data[0]; print\\(''''Description length:'''', len\\(item.get\\(''''description'''',''''''''\\)\\)\\); print\\(\\); print\\(''''Description:''''\\); print\\(item.get\\(''''description'''',''''''''\\)[:300]\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8000/api/v1/health\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8000/health\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X HEAD \"http://localhost:8000/api/v1/chat/custom\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -X GET \"http://localhost:8000/api/v1/chat/custom\")",
+      "Bash(curl -s \"http://localhost:8001/api/chat\")",
+      "Bash(curl -s -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" \"http://localhost:8000/api/v1/health\")",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); [print\\(f''''{v[\"\"name\"\"]} -> status: {v[\"\"status\"\"]} | summary: {v[\"\"shortSummary\"\"]} | message: {v.get\\(\"\"notificationMessage\"\",\"\"\"\"\\)}''''\\) for v in data[''''checkResults''''].values\\(\\)]\")",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(json.dumps\\(data, indent=2\\)\\)\")"
     ]
   }
 }

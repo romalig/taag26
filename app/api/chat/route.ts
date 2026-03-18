@@ -77,6 +77,58 @@ function extractFirstJson(raw: string): string | null {
   return null;
 }
 
+/**
+ * Lightweight health-check: calls the backend /health endpoint and evaluates
+ * the "ChatCustom Service" check to determine if the AI assistant is available.
+ * Used by the "System Active" indicator in SolutionFinder.
+ */
+export async function GET() {
+  const chatUrl = process.env.CHAT_IA_WEBPAGE_API_URL;
+  if (!chatUrl) {
+    return NextResponse.json({ status: "offline", reason: "not configured" }, { status: 503 });
+  }
+
+  // Derive the base API URL from the chat URL
+  // e.g. http://host:8000/api/v1/chat/custom → http://host:8000/api/v1
+  const baseUrl = chatUrl.replace(/\/chat\/.*$/, "");
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+    const res = await fetch(`${baseUrl}/health`, {
+      signal: controller.signal,
+      headers: { "X-Service-Key": process.env.CHAT_IA_WEBPAGE_SERVICE_KEY ?? "" },
+    });
+    clearTimeout(timeout);
+
+    const body = await res.json();
+    const checks: Record<string, { name: string; status: string; notificationMessage?: string }> = body.checkResults ?? {};
+
+    // Find the ChatCustom Service check
+    const chatCheck = Object.values(checks).find((c) => c.name === "ChatCustom Service");
+
+    if (chatCheck && chatCheck.status === "ok") {
+      return NextResponse.json({ status: "online" });
+    }
+
+    // warning = non-critical dependency down (e.g. products DB) — service still works
+    if (chatCheck && chatCheck.status === "warning") {
+      return NextResponse.json(
+        { status: "degraded", reason: chatCheck.notificationMessage ?? "partial service" },
+        { status: 200 }
+      );
+    }
+
+    // failed = critical dependency down (AI provider) — service cannot respond
+    return NextResponse.json(
+      { status: "offline", reason: chatCheck?.notificationMessage ?? "chat check not found" },
+      { status: 503 }
+    );
+  } catch {
+    return NextResponse.json({ status: "offline" }, { status: 503 });
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as ChatRequest;
