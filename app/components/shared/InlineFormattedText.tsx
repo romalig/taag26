@@ -1,11 +1,20 @@
 import { Fragment, ReactNode } from "react";
 
+function decodeHtmlEntities(value: string): string {
+  return value
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'");
+}
+
 function stripUnsupportedTags(value: string): string {
   return value.replace(/<(?!\/?(?:sup|sub)\b|br\s*\/?)[^>]*>/gi, "");
 }
 
 function parseInlineFormattedText(value: string): ReactNode[] {
-  const sanitized = stripUnsupportedTags(value);
+  const sanitized = stripUnsupportedTags(decodeHtmlEntities(value));
   const tokens = sanitized.split(/(<\/?(?:sup|sub)>|<br\s*\/?>)/gi);
   const nodes: ReactNode[] = [];
   let activeTag: "sup" | "sub" | null = null;

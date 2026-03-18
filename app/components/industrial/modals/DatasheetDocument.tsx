@@ -1,8 +1,10 @@
 "use client";
 
+import React from "react";
 import { Document, Page, Text, View, StyleSheet, Image, Font } from "@react-pdf/renderer";
 import { SolutionContent } from "./types";
 import { hasDisplayValue } from "@/app/lib/spec-values";
+import { formatPdfInline } from "@/app/lib/pdf-inline-format";
 
 Font.register({
   family: "Sora",
@@ -117,7 +119,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         </View>
         {showTargetType && (
           <Text style={{ fontSize: 14, color: "#111111", fontWeight: "bold", marginBottom: 20 }}>
-            {data.targetType}
+            {formatPdfInline(data.targetType ?? "")}
           </Text>
         )}
 
@@ -125,12 +127,12 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         <View style={styles.metricsGrid}>
            <View style={styles.metricCol}>
               <Text style={styles.metricLabel}>Targets</Text>
-              <Text style={styles.metricValue}>{data.techSpecs.targets}</Text>
+              <Text style={styles.metricValue}>{formatPdfInline(data.techSpecs.targets)}</Text>
            </View>
            {showPerformance && (
              <View style={styles.metricCol}>
                 <Text style={styles.metricLabel}>Performance</Text>
-                <Text style={styles.metricValue}>{data.techSpecs.performance}</Text>
+                <Text style={styles.metricValue}>{formatPdfInline(data.techSpecs.performance)}</Text>
              </View>
            )}
            <View style={styles.metricCol}>
@@ -189,14 +191,14 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         <View style={{ marginBottom: 30 }}>
              <Text style={styles.sectionTitle}>Technical Specifications</Text>
              <View style={styles.specContainer}>
-                <SpecRow label="Microorganisms" value={data.techSpecs.targets} />
-                {showPerformance && <SpecRow label="Performance" value={data.techSpecs.performance} />}
-                <SpecRow label="Validated Matrices" value={data.techSpecs.matrices} />
-                <SpecRow label="Time" value={data.techSpecs.time} />
-                <SpecRow label="Technology" value={data.techSpecs.technology} />
-                <SpecRow label="Validated Thermocyclers" value={data.techSpecs.thermocyclers} />
-                <SpecRow label="Detection Chemistry" value={data.techSpecs.chemistry} />
-                <SpecRow label="Detection Channel" value={data.techSpecs.channels} />
+                <SpecRow label="Microorganisms" value={formatPdfInline(data.techSpecs.targets)} />
+                {showPerformance && <SpecRow label="Performance" value={formatPdfInline(data.techSpecs.performance)} />}
+                <SpecRow label="Validated Matrices" value={formatPdfInline(data.techSpecs.matrices)} />
+                <SpecRow label="Time" value={formatPdfInline(data.techSpecs.time)} />
+                <SpecRow label="Technology" value={formatPdfInline(data.techSpecs.technology)} />
+                <SpecRow label="Validated Thermocyclers" value={formatPdfInline(data.techSpecs.thermocyclers)} />
+                <SpecRow label="Detection Chemistry" value={formatPdfInline(data.techSpecs.chemistry)} />
+                <SpecRow label="Detection Channel" value={formatPdfInline(data.techSpecs.channels)} />
              </View>
         </View>
 
@@ -206,15 +208,15 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
               <View style={styles.boxGray}>
                  <Text style={styles.boxTitle}>Storage Conditions</Text>
                  <Text style={styles.subLabel}>Temperature</Text>
-                 <Text style={styles.text}>{data.techSpecs.storage}</Text>
+                 <Text style={styles.text}>{formatPdfInline(data.techSpecs.storage)}</Text>
                  <Text style={styles.subLabel}>Shelf Life</Text>
-                 <Text style={styles.text}>{data.techSpecs.shelfLife}</Text>
+                 <Text style={styles.text}>{formatPdfInline(data.techSpecs.shelfLife)}</Text>
               </View>
            </View>
            <View style={styles.colHalf}>
               <View style={styles.boxGray}>
                  <Text style={styles.boxTitle}>Certifications</Text>
-                 <Text style={styles.text}>{data.techSpecs.certifications}</Text>
+                 <Text style={styles.text}>{formatPdfInline(data.techSpecs.certifications)}</Text>
                  {data.certImage && <Image src={data.certImage} style={{ width: 60, marginTop: 5, objectFit: "contain" }} />}
               </View>
            </View>
@@ -282,7 +284,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
   );
 }
 
-const SpecRow = ({ label, value }: { label: string, value: string }) => (
+const SpecRow = ({ label, value }: { label: string, value: React.ReactNode }) => (
   <View style={styles.specRow} wrap={false}>
      <Text style={styles.specLabel}>{label}</Text>
      <Text style={styles.specValue}>{value}</Text>

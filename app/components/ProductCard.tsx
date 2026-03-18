@@ -8,9 +8,11 @@ interface ProductCardProps {
   theme?: "dark" | "light";
   /** AI-generated explanation to show as description (used in light theme) */
   description?: string;
+  /** Called when a product_match card with a uuid is clicked — opens the datasheet inline */
+  onViewDatasheet?: (uuid: string) => void;
 }
 
-export function ProductCard({ card, theme = "dark", description }: ProductCardProps) {
+export function ProductCard({ card, theme = "dark", description, onViewDatasheet }: ProductCardProps) {
   /* ------------------------------------------------------------------ */
   /* LIGHT — hero card matching the design mockup                        */
   /* ------------------------------------------------------------------ */
@@ -69,18 +71,28 @@ export function ProductCard({ card, theme = "dark", description }: ProductCardPr
           </div>
         )}
 
-        {/* CTA — product_match appends ?search= for catalog filtering; technology cards go to landing page */}
+        {/* CTA — product_match with uuid opens datasheet inline; technology cards go to landing page */}
         {(card.canonicalUrl || card.name) && (
-          <a
-            href={card.type === "product_match"
-              ? `${card.canonicalUrl || "/industrial"}?search=${encodeURIComponent(card.name)}`
-              : card.canonicalUrl || `/industrial?search=${encodeURIComponent(card.name)}`
-            }
-            className="self-start inline-flex items-center gap-2.5 bg-[#FF270A] text-white font-bold text-sm uppercase tracking-widest px-8 py-4 rounded-full hover:bg-[#cc1f07] transition-colors shadow-md shadow-[#FF270A]/20"
-          >
-            View Solution
-            <ArrowRight className="w-4 h-4" />
-          </a>
+          card.type === "product_match" && card.uuid && onViewDatasheet ? (
+            <button
+              onClick={() => onViewDatasheet(card.uuid!)}
+              className="self-start inline-flex items-center gap-2.5 bg-[#FF270A] text-white font-bold text-sm uppercase tracking-widest px-8 py-4 rounded-full hover:bg-[#cc1f07] transition-colors shadow-md shadow-[#FF270A]/20"
+            >
+              View Datasheet
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          ) : (
+            <a
+              href={card.type === "product_match"
+                ? `${card.canonicalUrl || "/industrial"}?search=${encodeURIComponent(card.name)}`
+                : card.canonicalUrl || `/industrial?search=${encodeURIComponent(card.name)}`
+              }
+              className="self-start inline-flex items-center gap-2.5 bg-[#FF270A] text-white font-bold text-sm uppercase tracking-widest px-8 py-4 rounded-full hover:bg-[#cc1f07] transition-colors shadow-md shadow-[#FF270A]/20"
+            >
+              View Solution
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          )
         )}
       </div>
     );

@@ -1,5 +1,7 @@
 export interface DifyCard {
   id: string;
+  /** Product UUID in the Laravel database — used to fetch the full datasheet */
+  uuid?: string;
   name: string;
   /** Category label — may be "PCR Kit", "Kit", "Service", etc. */
   category: string;
@@ -63,8 +65,12 @@ function normalizeCard(raw: unknown): DifyCard | null {
       p.time_to_result || p.timeToResult || specs.pcr_time || ""
     );
 
+    // uuid may come inside product, at top level, or as product_uuid
+    const uuid = p.uuid || r.uuid || r.product_uuid || p.product_uuid;
+
     return {
       id: String(p.code || p.id || ""),
+      uuid: uuid ? String(uuid) : undefined,
       name: String(p.name || ""),
       category: String(p.category || ""),
       technology,
@@ -86,6 +92,7 @@ function normalizeCard(raw: unknown): DifyCard | null {
   if (r.id || r.name) {
     return {
       id: String(r.id || ""),
+      uuid: (r.uuid || r.product_uuid) ? String(r.uuid || r.product_uuid) : undefined,
       name: String(r.name || ""),
       category: String(r.category || ""),
       technology: String(r.technology || ""),

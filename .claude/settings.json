@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Necesito analizar productos de cacao contra salmonella en menos de 24 hrs\"\"\"\",\"\"\"\"session_id\"\"\"\":\"\"\"\"test-debug-001\"\"\"\"}')",
-      "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Cuál es la tecnología más rápida que tienen?\"\"\"\",\"\"\"\"session_id\"\"\"\":\"\"\"\"test-debug-002\"\"\"\"}')"
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Cuál es la tecnología más rápida que tienen?\"\"\"\",\"\"\"\"session_id\"\"\"\":\"\"\"\"test-debug-002\"\"\"\"}')",
+      "Bash(grep -r \"json\\\\|csv\\\\|export\\\\|download\" /Users/carp/Documents/taag/proyectos/desarrollos/taag.bio/code/front.taag.bio/app --include=*.ts --include=*.tsx -l ! -path */node_modules/* ! -path */.next/* ! -path */.claude/*)",
+      "Bash(curl -sL -o /Users/carp/Documents/taag/proyectos/desarrollos/taag.bio/code/front.taag.bio/public/fonts/NotoSans-Regular.ttf \"https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSans/NotoSans-Regular.ttf\")",
+      "Bash(curl -sL -o /Users/carp/Documents/taag/proyectos/desarrollos/taag.bio/code/front.taag.bio/public/fonts/NotoSans-Bold.ttf \"https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSans/NotoSans-Bold.ttf\")",
+      "Bash(ls -la /Users/carp/Documents/taag/proyectos/desarrollos/taag.bio/code/front.taag.bio/public/fonts/NotoSans*.ttf)",
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"Accept: text/event-stream\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Necesito detectar salmonella en cacao\"\"\"\",\"\"\"\"session_id\"\"\"\":\"\"\"\"test-123\"\"\"\"}')",
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"Accept: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"message\"\":\"\"Necesito detectar salmonella en cacao\"\",\"\"session_id\"\":\"\"test-456\"\"}')",
+      "Bash(curl -s http://localhost:8000/api/v1/products/pcr-kit-food/with-categories -H \"Accept: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\")",
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/chat/custom -H \"Content-Type: application/json\" -H \"Accept: application/json\" -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" -d '{\"\"\"\"message\"\"\"\":\"\"\"\"Necesito detectar salmonella en cacao\"\"\"\",\"\"\"\"session_id\"\"\"\":\"\"\"\"test-789\"\"\"\"}')"
     ]
   }
 }

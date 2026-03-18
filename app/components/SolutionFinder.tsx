@@ -12,6 +12,9 @@ import {
 } from "lucide-react";
 import { parseDifyResponse, looksLikeJson, DifyResponse } from "@/app/types/dify";
 import { ProductCard } from "@/app/components/ProductCard";
+import { useModal } from "@/app/components/industrial/ModalProvider";
+import SolutionTemplate from "@/app/components/industrial/modals/SolutionTemplate";
+import { getKitSolution } from "@/app/lib/products-api";
 
 export default function SolutionFinder() {
   const [challenge, setChallenge] = useState("");
@@ -20,6 +23,19 @@ export default function SolutionFinder() {
   const [structuredReply, setStructuredReply] = useState<DifyResponse | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const sessionRef = useRef<string | null>(null);
+  const { openModal } = useModal();
+
+  const handleViewDatasheet = useCallback(
+    async (uuid: string) => {
+      try {
+        const data = await getKitSolution(uuid);
+        openModal(<SolutionTemplate data={data} />);
+      } catch (err) {
+        console.error("Failed to load datasheet:", err);
+      }
+    },
+    [openModal]
+  );
 
   const handleGenerate = useCallback(
     async (overrideText?: string) => {
@@ -281,6 +297,7 @@ export default function SolutionFinder() {
                                 key={`${card.id || "card"}-${idx}`}
                                 card={card}
                                 theme="light"
+                                onViewDatasheet={handleViewDatasheet}
                               />
                             ))}
                           </div>

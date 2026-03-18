@@ -3,8 +3,10 @@ import { Sora } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { CTAProvider } from "./components/CTAProvider"; 
+import { CTAProvider } from "./components/CTAProvider";
 import BookMeetingModal from "./components/BookMeetingModal";
+import { ModalProvider } from "./components/industrial/ModalProvider";
+import SolutionModal from "./components/industrial/SolutionModal";
 
 const sora = Sora({ 
   subsets: ["latin"],
@@ -29,10 +31,13 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`${sora.className} antialiased`}>
         <CTAProvider>
-          <Header theme="dark" />
-          {children}
-          <Footer />
-          <BookMeetingModal />
+          <ModalProvider>
+            <Header theme="dark" />
+            {children}
+            <Footer />
+            <BookMeetingModal />
+            <SolutionModal />
+          </ModalProvider>
         </CTAProvider>
       </body>
     </html>
