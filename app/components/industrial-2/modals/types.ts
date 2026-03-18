@@ -2,6 +2,7 @@
 
 export interface SolutionContent {
   title: string;
+  targetType?: string;
   chips: string[];
   description: string[];
   mainIndustries: string[];

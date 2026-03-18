@@ -2,6 +2,7 @@
 
 import { Document, Page, Text, View, StyleSheet, Image, Font } from "@react-pdf/renderer";
 import { SolutionContent } from "./types";
+import { hasDisplayValue } from "@/app/lib/spec-values";
 
 Font.register({
   family: "Sora",
@@ -85,6 +86,9 @@ const styles = StyleSheet.create({
 });
 
 export default function DatasheetDocument({ data }: { data: SolutionContent }) {
+  const showPerformance = hasDisplayValue(data.techSpecs.performance);
+  const showTargetType = hasDisplayValue(data.targetType);
+
   return (
     <Document>
       <Page size="A4" style={styles.page} wrap>
@@ -111,6 +115,11 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         <View style={styles.chipsContainer}>
            {data.chips.map((chip, i) => <Text key={i} style={styles.chip}>{chip}</Text>)}
         </View>
+        {showTargetType && (
+          <Text style={{ fontSize: 14, color: "#111111", fontWeight: "bold", marginBottom: 20 }}>
+            {data.targetType}
+          </Text>
+        )}
 
         {/* METRICS GRID */}
         <View style={styles.metricsGrid}>
@@ -118,10 +127,12 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
               <Text style={styles.metricLabel}>Targets</Text>
               <Text style={styles.metricValue}>{data.techSpecs.targets}</Text>
            </View>
-           <View style={styles.metricCol}>
-              <Text style={styles.metricLabel}>Performance</Text>
-              <Text style={styles.metricValue}>{data.techSpecs.performance}</Text>
-           </View>
+           {showPerformance && (
+             <View style={styles.metricCol}>
+                <Text style={styles.metricLabel}>Performance</Text>
+                <Text style={styles.metricValue}>{data.techSpecs.performance}</Text>
+             </View>
+           )}
            <View style={styles.metricCol}>
               <Text style={styles.metricLabel}>Main Industries</Text>
               <Text style={styles.metricValue}>{data.mainIndustries.slice(0, 3).join(", ")}</Text>
@@ -179,7 +190,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
              <Text style={styles.sectionTitle}>Technical Specifications</Text>
              <View style={styles.specContainer}>
                 <SpecRow label="Microorganisms" value={data.techSpecs.targets} />
-                <SpecRow label="Performance" value={data.techSpecs.performance} />
+                {showPerformance && <SpecRow label="Performance" value={data.techSpecs.performance} />}
                 <SpecRow label="Validated Matrices" value={data.techSpecs.matrices} />
                 <SpecRow label="Time" value={data.techSpecs.time} />
                 <SpecRow label="Technology" value={data.techSpecs.technology} />

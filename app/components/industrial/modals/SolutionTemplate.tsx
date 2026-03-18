@@ -5,9 +5,12 @@ import { CheckCircle2, FlaskConical, Download, Mail, ArrowRightLeft, Loader2, Al
 import { pdf } from "@react-pdf/renderer";
 import DatasheetDocument from "./DatasheetDocument";
 import { SolutionContent } from "./types";
+import { hasDisplayValue } from "@/app/lib/spec-values";
 
 export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const showPerformance = hasDisplayValue(data.techSpecs.performance);
+  const showTargetType = hasDisplayValue(data.targetType);
 
   if (!data) return null;
 
@@ -70,26 +73,33 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
               <p className="text-sm font-medium text-gray-400 mt-3 mb-10">{data.version}</p>
             )}
             
-            <div className="flex flex-wrap gap-2 mb-14">
+            <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-14">
               {data.chips.map((tech) => (
                 <span key={tech} className="px-4 py-1.5 rounded-full bg-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600 border border-gray-200">
                   {tech}
                 </span>
               ))}
+              {showTargetType && (
+                <span className="text-2xl md:text-[2.1rem] font-medium tracking-tight text-[#111111] leading-none md:ml-6">
+                  {data.targetType}
+                </span>
+              )}
             </div>
           </div>
         </div>
 
         {/* === METRICS GRID === */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 border-b border-gray-100 pb-12">
+        <div className={`grid grid-cols-1 gap-8 mb-12 border-b border-gray-100 pb-12 ${showPerformance ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
           <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
               <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.targets}</span>
           </div>
-          <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Performance</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.performance}</span>
-          </div>
+          {showPerformance && (
+            <div>
+                <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Performance</span>
+                <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.performance}</span>
+            </div>
+          )}
           <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Main Industries</span>
               <span className="block text-base md:text-lg font-bold text-[#111111] leading-tight">
@@ -132,7 +142,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         {/* === INDUSTRIES & LIMITATIONS === */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             <div>
-               <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-4">Industries</h3>
+               <h3 className="text-xl font-bold text-[#111111] mb-4">Industries</h3>
                <div className="flex flex-wrap gap-2">
                  {data.mainIndustries.map((ind, i) => (
                     <span key={i} className="px-3 py-1.5 bg-gray-50 text-gray-600 text-xs font-medium rounded-lg border border-gray-200">{ind}</span>
@@ -160,7 +170,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           <div className="border-t border-gray-200">
              {[
                { label: "Microorganisms", value: data.techSpecs.targets },
-               { label: "Performance", value: data.techSpecs.performance },
+               ...(showPerformance ? [{ label: "Performance", value: data.techSpecs.performance }] : []),
                { label: "Validated Matrices", value: data.techSpecs.matrices },
                { label: "Time", value: data.techSpecs.time },
                { label: "Technology", value: data.techSpecs.technology },

@@ -2,6 +2,7 @@
 
 import { Document, Page, Text, View, StyleSheet, Image, Font } from "@react-pdf/renderer";
 import { SolutionContent } from "./types";
+import { hasDisplayValue } from "@/app/lib/spec-values";
 
 // 1. REGISTRO DE FUENTE SORA (Localmente para evitar errores)
 Font.register({
@@ -60,6 +61,9 @@ const styles = StyleSheet.create({
 });
 
 export default function DatasheetDocument({ data }: { data: SolutionContent }) {
+  const showPerformance = hasDisplayValue(data.techSpecs.performance);
+  const showTargetType = hasDisplayValue(data.targetType);
+
   return (
     <Document>
       <Page size="A4" style={styles.page} wrap>
@@ -78,6 +82,14 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
            <View style={styles.titleAccent} />
            <Text style={styles.title}>{data.title}</Text>
         </View>
+
+        {/* --- DESCRIPTION --- */}
+        {showTargetType && (
+          <View style={styles.section}>
+             <Text style={styles.sectionTitle}>Target Type</Text>
+             <Text style={styles.text}>{data.targetType}</Text>
+          </View>
+        )}
 
         {/* --- DESCRIPTION --- */}
         <View style={styles.section}>
@@ -107,7 +119,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
              <Text style={styles.sectionTitle}>Technical Specifications</Text>
              <View style={styles.specContainer}>
                 <SpecRow label="Targets" value={data.techSpecs.targets} />
-                <SpecRow label="Performance" value={data.techSpecs.performance} />
+                {showPerformance && <SpecRow label="Performance" value={data.techSpecs.performance} />}
                 <SpecRow label="Validated Matrices" value={data.techSpecs.matrices} />
                 <SpecRow label="Time to Results" value={data.techSpecs.time} />
                 <SpecRow label="Technology" value={data.techSpecs.technology} />

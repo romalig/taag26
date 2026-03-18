@@ -5,9 +5,12 @@ import { CheckCircle2, FlaskConical, Download, Mail, ArrowRightLeft, Loader2 } f
 import { pdf } from "@react-pdf/renderer";
 import DatasheetDocument from "./DatasheetDocument";
 import { SolutionContent } from "./types";
+import { hasDisplayValue } from "@/app/lib/spec-values";
 
 export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const showPerformance = hasDisplayValue(data.techSpecs.performance);
+  const showTargetType = hasDisplayValue(data.targetType);
 
   if (!data) return null;
 
@@ -67,25 +70,32 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
             {data.title}
           </h2>
-          <div className="flex flex-wrap gap-3 mb-10">
+          <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-10">
             {data.chips.map((tech) => (
               <span key={tech} className="px-4 py-1.5 rounded-full bg-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600 border border-gray-200">
                 {tech}
               </span>
             ))}
+            {showTargetType && (
+              <span className="text-2xl md:text-[2.1rem] font-medium tracking-tight text-[#111111] leading-none md:ml-6">
+                {data.targetType}
+              </span>
+            )}
           </div>
         </div>
 
         {/* Metrics Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 border-b border-gray-100 pb-12">
+        <div className={`grid grid-cols-2 gap-6 mb-12 border-b border-gray-100 pb-12 ${showPerformance ? "md:grid-cols-4" : "md:grid-cols-3"}`}>
           <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
               <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.targets}</span>
           </div>
-          <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Performance</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.performance}</span>
-          </div>
+          {showPerformance && (
+            <div>
+                <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Performance</span>
+                <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.performance}</span>
+            </div>
+          )}
           <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Matrices</span>
               <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.matrices}</span>

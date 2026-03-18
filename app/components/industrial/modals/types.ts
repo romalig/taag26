@@ -4,6 +4,7 @@ export interface SolutionContent {
   title: string;
   version?: string; // NUEVO
   certImage?: string; // NUEVO
+  targetType?: string;
   chips: string[];
   description: string[];
   mainIndustries: string[];

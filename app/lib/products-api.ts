@@ -76,6 +76,9 @@ interface PcrKitFoodSolution {
   uuid: string;
   title?: string | null;
   version?: string | null;
+  type_of_analysis?: string | null;
+  target_type?: string | null;
+  targetType?: string | null;
   chips?: string[];
   description?: string[];
   mainIndustries?: string[];
@@ -246,6 +249,11 @@ export async function getKitSolution(uuid: string): Promise<SolutionContent> {
 
   return {
     title: toText(solution.title, "Product datasheet"),
+    targetType:
+      solution.targetType?.trim() ||
+      solution.target_type?.trim() ||
+      solution.type_of_analysis?.trim() ||
+      undefined,
     version: solution.version?.trim() || undefined,
     chips: solution.chips?.length ? solution.chips : ["PCR Kit Food"],
     description: toSentenceList(solution.description, "Technical product information."),

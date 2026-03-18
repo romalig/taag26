@@ -269,7 +269,7 @@ export default function SolutionFinder() {
                     {/* show_products */}
                     {structuredReply?.action === "show_products" && (
                       <div className="flex flex-col gap-4 flex-1">
-                        {structuredReply.message && (structuredReply.cards ?? []).length !== 1 && (
+                        {structuredReply.message && (
                           <p className="text-base text-gray-600 leading-relaxed border-l-2 border-[#FF270A]/20 pl-4">
                             {structuredReply.message}
                           </p>
@@ -281,11 +281,6 @@ export default function SolutionFinder() {
                                 key={`${card.id || "card"}-${idx}`}
                                 card={card}
                                 theme="light"
-                                description={
-                                  (structuredReply.cards ?? []).length === 1
-                                    ? structuredReply.message
-                                    : undefined
-                                }
                               />
                             ))}
                           </div>
