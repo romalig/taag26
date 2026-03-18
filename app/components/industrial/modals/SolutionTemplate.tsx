@@ -6,6 +6,7 @@ import { pdf } from "@react-pdf/renderer";
 import DatasheetDocument from "./DatasheetDocument";
 import { SolutionContent } from "./types";
 import { hasDisplayValue } from "@/app/lib/spec-values";
+import InlineFormattedText from "@/app/components/shared/InlineFormattedText";
 
 export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
@@ -92,12 +93,12 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         <div className={`grid grid-cols-1 gap-8 mb-12 border-b border-gray-100 pb-12 ${showPerformance ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
           <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.targets}</span>
+              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight"><InlineFormattedText value={data.techSpecs.targets} /></span>
           </div>
           {showPerformance && (
             <div>
                 <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Performance</span>
-                <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.performance}</span>
+                <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight"><InlineFormattedText value={data.techSpecs.performance} /></span>
             </div>
           )}
           <div>
@@ -180,7 +181,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
              ].map((row, i) => (
                 <div key={i} className="grid grid-cols-1 md:grid-cols-4 py-4 border-b border-gray-100">
                    <div className="text-sm font-semibold text-gray-500">{row.label}</div>
-                   <div className="md:col-span-3 text-sm font-medium text-[#111111] leading-relaxed">{row.value}</div>
+                   <div className="md:col-span-3 text-sm font-medium text-[#111111] leading-relaxed"><InlineFormattedText value={row.value} /></div>
                 </div>
              ))}
           </div>
