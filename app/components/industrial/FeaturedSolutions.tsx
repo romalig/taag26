@@ -8,7 +8,7 @@ import { FEATURED_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
 
 import FeaturedSolutionTemplate from "./modals/FeaturedSolutionTemplate";
-import { FEATURED_MODALS_DATA } from "../data/featuredSolutionsData"; // <-- Importamos la data externa
+import { FEATURED_MODALS_DATA } from "../data/featuredSolutionsData"; 
 
 export default function FeaturedSolutions() {
   const { openMeeting } = useCTA();
@@ -32,18 +32,30 @@ export default function FeaturedSolutions() {
   }, []);
 
   const handleOpenDetails = (solution: any, idx: number) => {
-    // Si es el primer elemento (Zero-Risk), usamos su data. Si no, un fallback temporal.
-    let finalData = FEATURED_MODALS_DATA["zero-risk-emp"];
+    let finalData;
 
-    if (idx !== 0) {
+    // Asignación de datos basada en el índice de la tarjeta
+    if (idx === 0) {
+      finalData = FEATURED_MODALS_DATA["zero-risk-emp"];
+    } else if (idx === 1) {
+      finalData = FEATURED_MODALS_DATA["fast-salmonella-food"];
+    } else if (idx === 2) {
+      finalData = FEATURED_MODALS_DATA["full-preventive-control"];
+    } else if (idx === 3) {
+      finalData = FEATURED_MODALS_DATA["broad-spectrum-spoilage"]; 
+    } else if (idx === 4) {
+      finalData = FEATURED_MODALS_DATA["salmonella-ecoli-protection"]; // NUEVO
+    } else {
+      // Fallback
       finalData = {
-        ...finalData,
         title: solution.title,
         subtitle: solution.descriptionLeft || solution.description,
-        description: "Contenido pendiente. Se cargará cuando me envíes el PDF correspondiente a esta solución.",
+        description: "Contenido pendiente. Se cargará cuando construyamos este modal.",
         hasAigorBanner: false 
       };
-    } else {
+    }
+
+    if (finalData && (idx === 0 || idx === 1 || idx === 2 || idx === 3 || idx === 4)) {
        finalData = { ...finalData, title: solution.title };
     }
 
