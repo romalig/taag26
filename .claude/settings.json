@@ -24,6 +24,9 @@
       "Bash(curl -s -H \"X-Service-Key: 0487313863f2d50ae0224ee5e1a71df6e6b6cb79c6f5c7583edf05a4a98f82ac\" \"http://localhost:8000/api/v1/health\")",
       "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); [print\\(f''''{v[\"\"name\"\"]} -> status: {v[\"\"status\"\"]} | summary: {v[\"\"shortSummary\"\"]} | message: {v.get\\(\"\"notificationMessage\"\",\"\"\"\"\\)}''''\\) for v in data[''''checkResults''''].values\\(\\)]\")",
       "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(json.dumps\\(data, indent=2\\)\\)\")"
+    ],
+    "additionalDirectories": [
+      "/Users/carp/Documents/taag/proyectos/desarrollos/taag.bio/code/api.taag.bio/app/Modules/Products/app/Transformers/PcrKitFood"
     ]
   }
 }

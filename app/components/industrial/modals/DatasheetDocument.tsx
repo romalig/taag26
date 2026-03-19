@@ -110,18 +110,14 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         
         {/* VERSIÓN */}
         {data.version && (
-           <Text style={styles.versionText}>Rev. {data.version}</Text>
+           <Text style={styles.versionText}>{data.version}</Text>
         )}
 
         {/* CHIPS */}
         <View style={styles.chipsContainer}>
            {data.chips.map((chip, i) => <Text key={i} style={styles.chip}>{chip}</Text>)}
+           {showTargetType && <Text style={styles.chip}>{data.targetType}</Text>}
         </View>
-        {showTargetType && (
-          <Text style={{ fontSize: 14, color: "#111111", fontWeight: "bold", marginBottom: 20 }}>
-            {formatPdfInline(data.targetType ?? "")}
-          </Text>
-        )}
 
         {/* METRICS GRID */}
         <View style={styles.metricsGrid}>

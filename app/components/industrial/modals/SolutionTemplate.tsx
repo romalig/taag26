@@ -81,7 +81,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
                 </span>
               ))}
               {showTargetType && (
-                <span className="text-2xl md:text-[2.1rem] font-medium tracking-tight text-[#111111] leading-none md:ml-6">
+                <span className="px-4 py-1.5 rounded-full bg-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600 border border-gray-200">
                   {data.targetType}
                 </span>
               )}

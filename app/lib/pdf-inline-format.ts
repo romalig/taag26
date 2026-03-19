@@ -39,50 +39,52 @@ function stripUnsupportedTags(value: string): string {
 // ---------------------------------------------------------------------------
 
 const NOTO_STYLE = { fontFamily: "NotoSans" };
-const SUP_STYLE = { fontFamily: "NotoSans", fontSize: "60%" as unknown as number };
-const SUB_STYLE = { fontFamily: "NotoSans", fontSize: "60%" as unknown as number };
+
+// ---------------------------------------------------------------------------
+// Unicode super/subscript maps — NotoSans renders these glyphs correctly and
+// they are positioned as true superscripts/subscripts by the font itself.
+// ---------------------------------------------------------------------------
+const SUPERSCRIPT_MAP: Record<string, string> = {
+  "0": "\u2070", "1": "\u00B9", "2": "\u00B2", "3": "\u00B3", "4": "\u2074",
+  "5": "\u2075", "6": "\u2076", "7": "\u2077", "8": "\u2078", "9": "\u2079",
+  "+": "\u207A", "-": "\u207B", "=": "\u207C", "(": "\u207D", ")": "\u207E",
+  "n": "\u207F", "i": "\u2071",
+};
+
+const SUBSCRIPT_MAP: Record<string, string> = {
+  "0": "\u2080", "1": "\u2081", "2": "\u2082", "3": "\u2083", "4": "\u2084",
+  "5": "\u2085", "6": "\u2086", "7": "\u2087", "8": "\u2088", "9": "\u2089",
+  "+": "\u208A", "-": "\u208B", "=": "\u208C", "(": "\u208D", ")": "\u208E",
+};
+
+function toUnicodeSup(content: string): string {
+  return Array.from(content).map((c) => SUPERSCRIPT_MAP[c] || c).join("");
+}
+
+function toUnicodeSub(content: string): string {
+  return Array.from(content).map((c) => SUBSCRIPT_MAP[c] || c).join("");
+}
 
 export function formatPdfInline(value: string): React.ReactNode[] {
-  const cleaned = stripUnsupportedTags(decodeHtmlEntities(value));
+  // Pre-process: convert <sup>/<sub> to Unicode chars BEFORE splitting,
+  // so the result is a flat string with no HTML tags except <br>.
+  let cleaned = stripUnsupportedTags(decodeHtmlEntities(value));
+  cleaned = cleaned.replace(/<sup\b[^>]*>(.*?)<\/sup>/gi, (_, c: string) => toUnicodeSup(c));
+  cleaned = cleaned.replace(/<sub\b[^>]*>(.*?)<\/sub>/gi, (_, c: string) => toUnicodeSub(c));
 
-  // Split keeping the delimiters (sup/sub/br tags) as separate tokens
-  const tokens = cleaned.split(
-    /(<sup\b[^>]*>.*?<\/sup>|<sub\b[^>]*>.*?<\/sub>|<br\s*\/?>)/gi
-  );
+  // Split only on <br> now
+  const segments = cleaned.split(/<br\s*\/?>/gi);
 
   const nodes: React.ReactNode[] = [];
 
-  tokens.forEach((token, i) => {
-    if (!token) return;
+  segments.forEach((segment, i) => {
+    if (i > 0) nodes.push("\n");
+    if (!segment) return;
 
-    // <br>
-    if (/^<br\s*\/?>$/i.test(token)) {
-      nodes.push("\n");
-      return;
-    }
-
-    // <sup>…</sup>
-    const supMatch = token.match(/<sup\b[^>]*>(.*?)<\/sup>/i);
-    if (supMatch) {
-      nodes.push(
-        React.createElement(Text, { key: `sup-${i}`, style: SUP_STYLE }, supMatch[1])
-      );
-      return;
-    }
-
-    // <sub>…</sub>
-    const subMatch = token.match(/<sub\b[^>]*>(.*?)<\/sub>/i);
-    if (subMatch) {
-      nodes.push(
-        React.createElement(Text, { key: `sub-${i}`, style: SUB_STYLE }, subMatch[1])
-      );
-      return;
-    }
-
-    // Plain text – check if it contains chars that Sora can't render
-    if (/[^\x00-\x7F]/.test(token)) {
+    // Check if segment contains non-ASCII chars (Unicode super/sub, µ, –, etc.)
+    if (/[^\x00-\x7F]/.test(segment)) {
       // Split into runs of ASCII vs non-ASCII so only special chars use NotoSans
-      const runs = token.split(/([^\x00-\x7F]+)/);
+      const runs = segment.split(/([^\x00-\x7F]+)/);
       runs.forEach((run, j) => {
         if (!run) return;
         if (/[^\x00-\x7F]/.test(run)) {
@@ -93,10 +95,9 @@ export function formatPdfInline(value: string): React.ReactNode[] {
           nodes.push(run);
         }
       });
-      return;
+    } else {
+      nodes.push(segment);
     }
-
-    nodes.push(token);
   });
 
   return nodes;
@@ -105,25 +106,9 @@ export function formatPdfInline(value: string): React.ReactNode[] {
 // ---------------------------------------------------------------------------
 // Legacy plain-text formatter (kept for any non-PDF contexts)
 // ---------------------------------------------------------------------------
-const SUPERSCRIPT_MAP: Record<string, string> = {
-  "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴",
-  "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹",
-  "+": "⁺", "-": "⁻", "=": "⁼", "(": "⁽", ")": "⁾", "n": "ⁿ", "i": "ⁱ",
-};
-
-const SUBSCRIPT_MAP: Record<string, string> = {
-  "0": "₀", "1": "₁", "2": "₂", "3": "₃", "4": "₄",
-  "5": "₅", "6": "₆", "7": "₇", "8": "₈", "9": "₉",
-  "+": "₊", "-": "₋", "=": "₌", "(": "₍", ")": "₎",
-};
-
-function mapCharacters(value: string, map: Record<string, string>): string {
-  return Array.from(value).map((char) => map[char] || char).join("");
-}
-
 export function formatPdfInlineText(value: string): string {
   return stripUnsupportedTags(decodeHtmlEntities(value))
     .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<sup\b[^>]*>(.*?)<\/sup>/gi, (_, content: string) => mapCharacters(content, SUPERSCRIPT_MAP))
-    .replace(/<sub\b[^>]*>(.*?)<\/sub>/gi, (_, content: string) => mapCharacters(content, SUBSCRIPT_MAP));
+    .replace(/<sup\b[^>]*>(.*?)<\/sup>/gi, (_, content: string) => toUnicodeSup(content))
+    .replace(/<sub\b[^>]*>(.*?)<\/sub>/gi, (_, content: string) => toUnicodeSub(content));
 }
