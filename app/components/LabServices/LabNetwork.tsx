@@ -10,8 +10,8 @@ export default function LaboratoryServicesHero() {
         {/* Glow de fondo de IndustrialHero */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-b from-gray-50 to-transparent rounded-full blur-3xl -z-10 opacity-60 pointer-events-none" />
 
-        {/* Título y Bajada (IndustrialHero Style) */}
-        <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-12 md:mb-18 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto drop-shadow-sm">
+        {/* Título y Bajada (IndustrialHero Style - SIN SOMBRA) */}
+        <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-12 md:mb-18 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
           The future of <br className="hidden md:block" />
           <span className="text-gray-400 inline-block">Laboratory Services.</span>
         </h1>
@@ -47,7 +47,7 @@ export default function LaboratoryServicesHero() {
             </p>
           </div>
 
-          {/* Concepto 3 - Transición a Fuchsia/Pink (Ajustado para mejor contraste) */}
+          {/* Concepto 3 - Transición a Fuchsia */}
           <div className="flex flex-col items-center text-center group">
             <Dna 
               className="w-6 h-6 md:w-8 md:h-8 mb-3 md:mb-4 group-hover:-translate-y-0.5 transition-transform text-fuchsia-500" 
