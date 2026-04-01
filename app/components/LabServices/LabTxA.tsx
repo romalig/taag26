@@ -254,7 +254,7 @@ export default function LabTxA() {
             </div>
 
             {/* CONTENIDO VISUAL INFERIOR: CHAT ANIMADO */}
-            <div className="absolute bottom-0 left-0 w-full h-[75%] md:h-full z-10 pointer-events-none overflow-hidden flex items-end justify-end">
+            <div className="absolute bottom-0 left-0 w-full h-[60%] md:h-full z-10 pointer-events-none overflow-hidden flex items-end justify-end">
                 <div className="w-full h-full flex items-end justify-end p-4 md:p-10">
                     
                     <div className="w-full max-w-[480px] flex flex-col gap-3 md:gap-4 transform scale-[0.90] origin-bottom-right md:scale-100">
