@@ -195,7 +195,7 @@ export default function LabTxA() {
         <div className="w-full max-w-7xl px-6 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-5">
           
           {/* COLUMNA IZQUIERDA (1/3) */}
-          <div className="flex flex-col gap-5 lg:col-span-1 relative z-30">
+          <div className="flex flex-col gap-5 lg:col-span-1">
             
             {/* --- TARJETA 1: TxA APP --- */}
             <div className="bg-white rounded-[2.5rem] p-8 h-[280px] lg:flex-1 relative flex flex-col justify-center">
@@ -237,7 +237,7 @@ export default function LabTxA() {
           <div 
             ref={cardRef}
             /* SOLUCIÓN MÓVIL: Altura aumentada h-[600px] para dar mucho más espacio */
-            className="lg:col-span-2 w-full h-[600px] md:h-[580px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 bg-gradient-to-br from-indigo-600 to-blue-500 shadow-2xl shadow-indigo-600/20"
+            className="lg:col-span-2 w-full h-[520px] md:h-[580px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 bg-gradient-to-br from-indigo-600 to-blue-500 shadow-2xl shadow-indigo-600/20"
           >
             {/* Efecto de Brillo de la Tarjeta (Shine) */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shine pointer-events-none z-0" />
@@ -254,12 +254,10 @@ export default function LabTxA() {
             </div>
 
             {/* CONTENIDO VISUAL INFERIOR: CHAT ANIMADO */}
-            {/* SOLUCIÓN MÓVIL: h-[55%] asegura que el chat nunca toque el texto de arriba */}
-            <div className="absolute bottom-0 left-0 w-full h-[55%] md:h-full z-10 pointer-events-none overflow-hidden flex items-end justify-end">
+            <div className="absolute bottom-0 left-0 w-full h-[75%] md:h-full z-10 pointer-events-none overflow-hidden flex items-end justify-end">
                 <div className="w-full h-full flex items-end justify-end p-4 md:p-10">
                     
-                    {/* Escala reducida en móvil (scale-[0.80]) para que quepa perfecto */}
-                    <div className="w-full max-w-[480px] flex flex-col gap-3 md:gap-4 transform scale-[0.80] origin-bottom-right md:scale-100">
+                    <div className="w-full max-w-[480px] flex flex-col gap-3 md:gap-4 transform scale-[0.90] origin-bottom-right md:scale-100">
                         
                         {/* Mensaje del Usuario */}
                         <div className={`self-end bg-white/10 backdrop-blur-md text-white px-5 py-3 rounded-2xl rounded-tr-sm max-w-[90%] border border-white/20 shadow-lg transition-all duration-500 transform ${showUserMessage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
