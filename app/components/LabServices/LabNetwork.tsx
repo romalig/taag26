@@ -8,7 +8,7 @@ export default function LaboratoryServicesHero() {
       {/* Añadimos min-h-screen para que ocupe el 100% del monitor.
         Añadimos flex flex-col justify-center para centrar el contenido verticalmente.
       */}
-      <section className="w-full min-h-screen relative overflow-hidden flex flex-col justify-center pt-32 pb-24">
+      <section className="w-full min-h-screen relative overflow-hidden flex flex-col justify-center pt-32 pb-24 border-b border-gray-100/50">
         
         {/* Glow de fondo superior */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-b from-gray-50 to-transparent rounded-full blur-3xl opacity-60 pointer-events-none z-0" />
@@ -79,9 +79,9 @@ export default function LaboratoryServicesHero() {
         </div>
 
         {/* ================================================================ */}
-        {/* GLOW INFERIOR: Anclado al fondo absoluto del contenedor min-h-screen */}
+        {/* GLOW INFERIOR CORREGIDO: Más vivo e intenso */}
         {/* ================================================================ */}
-        <div className="absolute bottom-[-60px] left-0 right-0 h-[120px] bg-gradient-to-r from-blue-700 via-purple-600 via-fuchsia-500 to-[#FF270A] blur-[60px] opacity-50 pointer-events-none z-0" />
+        <div className="absolute bottom-[-60px] left-0 right-0 h-[100px] bg-gradient-to-r from-blue-700 via-purple-600 via-fuchsia-500 to-[#FF270A] blur-[40px] opacity-60 pointer-events-none z-0" />
 
       </section>
     </main>
