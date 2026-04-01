@@ -232,7 +232,7 @@ export default function LabTxA() {
           <div 
             ref={cardRef}
             /* h-[480px] en móvil para hacerlo compacto y elegante como la foto. md:h-[580px] para encuadrar en PC con las otras tarjetas. */
-            className="lg:col-span-2 w-full h-[480px] sm:h-[500px] md:h-[580px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 bg-gradient-to-br from-indigo-600 to-blue-500 shadow-2xl shadow-indigo-600/20"
+            className="lg:col-span-2 w-full h-[490px] sm:h-[500px] md:h-[580px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 bg-gradient-to-br from-indigo-600 to-blue-500 shadow-2xl shadow-indigo-600/20"
           >
             {/* Efecto de Brillo de la Tarjeta (Shine) */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shine pointer-events-none z-0" />
