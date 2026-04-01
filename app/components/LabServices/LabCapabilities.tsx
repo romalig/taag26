@@ -70,8 +70,8 @@ export default function LabCapabilities() {
             </p>
           </div>
 
-          {/* Tarjeta ISO: Plana (SIN bordes y SIN sombras) */}
-          <div className="bg-white rounded-[2.5rem] p-8 max-w-sm w-full shrink-0 flex items-start gap-6 transition-transform hover:-translate-y-1 duration-300">
+          {/* Tarjeta ISO: Actualizada a gris claro bg-[#F4F4F5] */}
+          <div className="bg-[#F4F4F5] rounded-[2.5rem] p-8 max-w-sm w-full shrink-0 flex items-start gap-6 transition-transform hover:-translate-y-1 duration-300">
             <ShieldCheck className="w-10 h-10 text-[#FF270A] shrink-0 mt-1" strokeWidth={1.5} />
             <div>
               <h4 className="font-bold text-[#111111] text-lg mb-2 leading-tight">ISO 17025 <br/>Accredited</h4>
@@ -197,10 +197,10 @@ export default function LabCapabilities() {
           </div>
         </div>
 
-        {/* TARJETA INFERIOR: Plana */}
+        {/* TARJETA INFERIOR: Actualizada a gris claro bg-[#F4F4F5] */}
         <div 
           ref={cardRef}
-          className={`mt-24 bg-white rounded-[2.5rem] p-10 md:p-12 flex flex-col xl:flex-row items-center justify-between gap-12 ${isInView ? 'animate-trigger' : ''}`}
+          className={`mt-24 bg-[#F4F4F5] rounded-[2.5rem] p-10 md:p-12 flex flex-col xl:flex-row items-center justify-between gap-12 ${isInView ? 'animate-trigger' : ''}`}
         >
           
           <div className="flex flex-col sm:flex-row items-center gap-10 md:gap-14 w-full xl:w-auto justify-center xl:justify-start">
