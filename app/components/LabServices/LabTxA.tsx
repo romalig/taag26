@@ -128,22 +128,18 @@ export default function LabTxA() {
     return () => observer.disconnect();
   }, []);
 
-  // --- OBSERVER DE LA TARJETA ---
+  // --- OBSERVER DE LA TARJETA (FIRE ONCE) ---
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             setIsCardVisible(true);
-            obs.disconnect();
-          } else {
-            setShowUserMessage(false);
-            setIsTyping(false);
-            setShowAiResponse(false);
+            obs.disconnect(); // APAGA EL SENSOR: Solución definitiva al scroll freeze
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 } 
     );
     if (cardRef.current) observer.observe(cardRef.current);
     return () => observer.disconnect();
@@ -205,7 +201,7 @@ export default function LabTxA() {
               <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
                 Digitize your sampling process for total control and end-to-end traceability.
               </p>
-              {/* Botón Restaurado exactamente igual a tu TxASystem.tsx original */}
+              {/* Botón con z-50 para garantizar que sea clickeable siempre */}
               <button 
                 onClick={() => handleOpenModule('app')}
                 className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group z-50 cursor-pointer"
@@ -222,7 +218,6 @@ export default function LabTxA() {
               <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
                 Utilize predictive microbiology for comprehensive and preventive quality management.
               </p>
-              {/* Botón Restaurado exactamente igual a tu TxASystem.tsx original */}
               <button 
                 onClick={() => handleOpenModule('qa')}
                 className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group z-50 cursor-pointer"
@@ -236,17 +231,17 @@ export default function LabTxA() {
           {/* COLUMNA DERECHA (2/3): CHAT AI */}
           <div 
             ref={cardRef}
-            /* SOLUCIÓN MÓVIL: Altura aumentada h-[600px] para dar mucho más espacio */
-            className="lg:col-span-2 w-full h-[520px] md:h-[580px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 bg-gradient-to-br from-indigo-600 to-blue-500 shadow-2xl shadow-indigo-600/20"
+            /* h-[480px] en móvil para hacerlo compacto y elegante como la foto. md:h-[580px] para encuadrar en PC con las otras tarjetas. */
+            className="lg:col-span-2 w-full h-[480px] sm:h-[500px] md:h-[580px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 bg-gradient-to-br from-indigo-600 to-blue-500 shadow-2xl shadow-indigo-600/20"
           >
             {/* Efecto de Brillo de la Tarjeta (Shine) */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shine pointer-events-none z-0" />
             
             {/* Texto descriptivo superior */}
-            <div className="absolute top-0 left-0 w-full p-8 md:p-12 z-20 pointer-events-none flex flex-col items-start">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 font-sora tracking-tight">Meet your new Expert.</h3>
+            <div className="absolute top-0 left-0 w-full p-6 sm:p-8 md:p-12 z-20 pointer-events-none flex flex-col items-start">
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3 font-sora tracking-tight">Meet your new Expert.</h3>
                 <p 
-                    className={`text-sm md:text-base font-medium leading-relaxed text-indigo-100 max-w-[85%] md:max-w-[340px] transition-all duration-1000 transform ${isCardVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+                    className={`text-[13px] md:text-base font-medium leading-relaxed text-indigo-100 max-w-[90%] md:max-w-[340px] transition-all duration-1000 transform ${isCardVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
                     style={{ animationDelay: '100ms' }}
                 >
                     Stop digging through spreadsheets. TxA identifies trends, anomalies, and emerging risks in plain language.
@@ -254,18 +249,20 @@ export default function LabTxA() {
             </div>
 
             {/* CONTENIDO VISUAL INFERIOR: CHAT ANIMADO */}
-            <div className="absolute bottom-0 left-0 w-full h-[60%] md:h-full z-10 pointer-events-none overflow-hidden flex items-end justify-end">
+            {/* h-[70%] asegura que el bloque del chat empiece desde abajo sin invadir el texto superior */}
+            <div className="absolute bottom-0 left-0 w-full h-[70%] md:h-full z-10 pointer-events-none overflow-hidden flex items-end justify-end">
                 <div className="w-full h-full flex items-end justify-end p-4 md:p-10">
                     
-                    <div className="w-full max-w-[480px] flex flex-col gap-3 md:gap-4 transform scale-[0.90] origin-bottom-right md:scale-100">
+                    {/* scale-[0.82] logra que todo el chat quepa en pantalla pequeña sin amontonarse, idéntico a tu captura */}
+                    <div className="w-full max-w-[480px] flex flex-col gap-2.5 md:gap-4 transform scale-[0.82] sm:scale-[0.88] md:scale-100 origin-bottom-right">
                         
                         {/* Mensaje del Usuario */}
                         <div className={`self-end bg-white/10 backdrop-blur-md text-white px-5 py-3 rounded-2xl rounded-tr-sm max-w-[90%] border border-white/20 shadow-lg transition-all duration-500 transform ${showUserMessage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                            <p className="text-sm font-medium">Any emerging trends in zone B?</p>
+                            <p className="text-[13px] md:text-sm font-medium">Any emerging trends in zone B?</p>
                         </div>
                         
-                        {/* Animación de "Escribiendo..." - siempre en DOM, controlado por opacity */}
-                        <div className={`self-start flex gap-3 transition-all duration-300 ${isTyping ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                        {/* Animación de "Escribiendo..." */}
+                        <div className={`self-start flex gap-3 transition-all duration-300 ${isTyping ? 'opacity-100' : 'opacity-0 pointer-events-none hidden'}`}>
                             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0 shadow-sm border border-white/10">
                                 <Sparkles className="w-4 h-4 text-white" />
                             </div>
@@ -286,7 +283,7 @@ export default function LabTxA() {
                                     <div className="flex items-center gap-2 mb-1">
                                         <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-indigo-600">TxA Insight</span>
                                     </div>
-                                    <p className="text-sm leading-relaxed font-medium">
+                                    <p className="text-[13px] md:text-sm leading-relaxed font-medium">
                                         Detected a <span className="font-bold text-indigo-900">15% increase</span> in <span className="italic">Listeria spp.</span> positives near Line 4.
                                     </p>
                                 </div>
@@ -296,7 +293,7 @@ export default function LabTxA() {
                             <div className="flex gap-3">
                                 <div className="w-8 h-8 shrink-0" />
                                 <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl w-full pointer-events-auto">
-                                    <p className="text-sm leading-relaxed font-medium mb-3">
+                                    <p className="text-[13px] md:text-sm leading-relaxed font-medium mb-3">
                                         Based on recent <span className="italic">Listeria spp.</span> trends, I've generated an optimized targeted sampling map.
                                     </p>
                                     <div className="border border-indigo-100 rounded-xl p-3 bg-indigo-50/50 hover:bg-indigo-50 transition-colors cursor-pointer group/cta">
@@ -308,7 +305,7 @@ export default function LabTxA() {
                                             <div className="w-6 h-6 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0">
                                                 <Map className="w-3 h-3 text-indigo-600" />
                                             </div>
-                                            <p className="text-[10px] font-bold text-indigo-700 leading-tight">Click here to see the proposed sampling scheme.</p>
+                                            <p className="text-[9px] md:text-[10px] font-bold text-indigo-700 leading-tight">Click here to see the proposed sampling scheme.</p>
                                         </div>
                                     </div>
                                 </div>
