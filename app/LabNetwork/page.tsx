@@ -2,6 +2,7 @@
 
 import Header from "../components/Header";
 import LabNetwork from "../components/LabServices/LabNetwork";
+import LabCapabilities from "../components/LabServices/LabCapabilities";
 import { ModalProvider } from "../components/industrial/ModalProvider"; 
 import SolutionModal from "../components/industrial/SolutionModal";
 
@@ -13,6 +14,7 @@ export default function IndustrialPage() {
     <main className="bg-white min-h-screen font-sans selection:bg-[#FF270A] selection:text-white">
       <Header/>
       <LabNetwork/>
+      <LabCapabilities/>
     </main>
     </ModalProvider>
   );
