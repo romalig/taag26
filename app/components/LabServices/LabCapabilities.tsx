@@ -28,7 +28,7 @@ export default function LabCapabilities() {
   }, []);
 
   return (
-    <section className="w-full bg-[#F4F4F5] py-20 md:py-32 border-t border-gray-200/50">
+    <section className="w-full bg-white py-20 md:py-32 border-t border-gray-200/50">
       
       {/* Animaciones CSS Ajustadas: Más recorrido y secuenciales */}
       <style dangerouslySetInnerHTML={{__html: `

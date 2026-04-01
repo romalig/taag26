@@ -3,6 +3,7 @@
 import Header from "../components/Header";
 import LabNetwork from "../components/LabServices/LabNetwork";
 import LabCapabilities from "../components/LabServices/LabCapabilities";
+import LabTxA from "../components/LabServices/LabTxA";
 import { ModalProvider } from "../components/industrial/ModalProvider"; 
 import SolutionModal from "../components/industrial/SolutionModal";
 
@@ -15,6 +16,7 @@ export default function IndustrialPage() {
       <Header/>
       <LabNetwork/>
       <LabCapabilities/>
+      <LabTxA/>
     </main>
     </ModalProvider>
   );
