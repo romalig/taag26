@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import LabNetwork from "../components/LabServices/LabNetwork";
 import LabCapabilities from "../components/LabServices/LabCapabilities";
 import LabTxA from "../components/LabServices/LabTxA";
+import LabLocations from "../components/LabServices/LabLocations";
 import { ModalProvider } from "../components/industrial/ModalProvider"; 
 import SolutionModal from "../components/industrial/SolutionModal";
 
@@ -15,6 +16,7 @@ export default function IndustrialPage() {
         <LabNetwork/>
         <LabCapabilities/>
         <LabTxA/>
+        <LabLocations/>
       </main>
       <SolutionModal /> {/* ← Este es el que faltaba: renderiza el modal en pantalla */}
     </ModalProvider>
