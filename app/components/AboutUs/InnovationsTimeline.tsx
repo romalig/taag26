@@ -7,14 +7,12 @@ export default function InnovationsTimeline() {
   const [isFutureVisible, setIsFutureVisible] = useState(false);
   const futureCardRef = useRef<HTMLDivElement>(null);
 
-  // Observer para encender la sombra tecnológica cuando se llega a la última tarjeta
+  // Observer modificado: Se enciende al entrar y se REINICIA al salir
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsFutureVisible(true);
-          observer.disconnect(); // Solo se enciende una vez
-        }
+        // Actualiza el estado dependiendo de si está o no en pantalla
+        setIsFutureVisible(entry.isIntersecting);
       },
       { threshold: 0.3 } // Se activa cuando el 30% de la tarjeta es visible
     );
@@ -22,6 +20,7 @@ export default function InnovationsTimeline() {
     if (futureCardRef.current) {
       observer.observe(futureCardRef.current);
     }
+    
     return () => observer.disconnect();
   }, []);
 
@@ -60,7 +59,7 @@ export default function InnovationsTimeline() {
         {/* Encabezado de la Sección */}
         <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28 relative z-10">
           <h2 className="text-3xl md:text-5xl font-bold text-[#111111] mb-6 font-sora tracking-tight leading-tight">
-            A history of firsts. <br className="hidden md:block" />
+            A history of firsts.<br /> {/* Salto de línea forzado en todas las pantallas */}
             <span className="text-[#FF270A]">
               A future of breakthroughs.
             </span>
@@ -126,14 +125,11 @@ export default function InnovationsTimeline() {
                 <div className="relative w-full" ref={futureCardRef}>
                   
                   {/* === SOMBRA TECNOLÓGICA (DETRÁS DE LA TARJETA) === */}
-                  {/* -inset-2 o -inset-3 hace que el div sea más grande que la tarjeta, saliendo por los bordes. blur-2xl difumina los bordes. */}
-                  <div 
-                    className={`absolute -inset-2.5 rounded-[2.5rem] bg-gradient-to-r from-[#FF270A] via-[#8B5CF6] to-[#00C7FD] blur-xl md:blur-2xl z-0 transition-all duration-1000 ease-out
-                      ${isFutureVisible ? 'opacity-50 md:opacity-60 scale-100 tech-bg-animate' : 'opacity-0 scale-95'}`}
-                  />
-
+                <div 
+                   className={`absolute -inset-2.5 rounded-[2.5rem] bg-gradient-to-r from-[#FF270A] via-[#8B5CF6] to-[#00C7FD] blur-xl md:blur-2xl z-0 transition-all duration-1000 ease-out
+                   ${isFutureVisible ? 'opacity-50 md:opacity-60 scale-100 tech-bg-animate delay-500' : 'opacity-0 scale-95'}`}
+                />
                   {/* === TARJETA PRINCIPAL === */}
-                  {/* Debe tener bg-color, z-10 y position relative para tapar el centro de la sombra */}
                   <div className="relative bg-[#F4F4F5] rounded-[2rem] p-8 md:p-10 z-10 hover:-translate-y-1 transition-transform duration-300">
                     
                     <div className="flex items-center gap-2 mb-3">
