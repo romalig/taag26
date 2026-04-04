@@ -1,8 +1,30 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { Dna, Layers, BrainCircuit, Cpu, Activity, Sparkles } from "lucide-react";
 
 export default function InnovationsTimeline() {
+  const [isFutureVisible, setIsFutureVisible] = useState(false);
+  const futureCardRef = useRef<HTMLDivElement>(null);
+
+  // Observer para encender la sombra tecnológica cuando se llega a la última tarjeta
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsFutureVisible(true);
+          observer.disconnect(); // Solo se enciende una vez
+        }
+      },
+      { threshold: 0.3 } // Se activa cuando el 30% de la tarjeta es visible
+    );
+
+    if (futureCardRef.current) {
+      observer.observe(futureCardRef.current);
+    }
+    return () => observer.disconnect();
+  }, []);
+
   const innovations = [
     {
       icon: <Dna className="w-5 h-5 text-[#FF270A]" />,
@@ -36,10 +58,10 @@ export default function InnovationsTimeline() {
       <div className="max-w-5xl mx-auto px-6">
         
         {/* Encabezado de la Sección */}
-        <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28">
+        <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28 relative z-10">
           <h2 className="text-3xl md:text-5xl font-bold text-[#111111] mb-6 font-sora tracking-tight leading-tight">
             A history of firsts. <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF270A] to-[#A31C08]">
+            <span className="text-[#FF270A]">
               A future of breakthroughs.
             </span>
           </h2>
@@ -48,14 +70,14 @@ export default function InnovationsTimeline() {
           </p>
         </div>
 
-        {/* ESTRUCTURA CORREGIDA DE LA LÍNEA DE TIEMPO */}
+        {/* ESTRUCTURA DE LA LÍNEA DE TIEMPO */}
         <div className="relative w-full">
           
-          {/* La Línea Vertical (Fija a la izquierda en móvil, al centro en PC) */}
+          {/* La Línea Vertical Central */}
           <div className="absolute top-0 bottom-0 left-[20px] md:left-1/2 w-[2px] bg-gray-200 transform md:-translate-x-1/2 z-0" />
 
           {/* Contenedor de las Tarjetas */}
-          <div className="space-y-12 md:space-y-24">
+          <div className="space-y-12 md:space-y-24 relative z-10">
             
             {/* Mapeo de Innovaciones 1 a 5 */}
             {innovations.map((item, index) => {
@@ -69,9 +91,8 @@ export default function InnovationsTimeline() {
                   </div>
 
                   {/* Tarjeta de Contenido */}
-                  {/* Lógica: pl-[70px] en móvil para esquivar la línea. En PC, alterna entre derecha/izquierda */}
                   <div className={`w-full md:w-1/2 pl-[70px] md:pl-0 ${isLeft ? 'md:pr-16' : 'md:pl-16 md:ml-auto'}`}>
-                    <div className="bg-[#F4F4F5] rounded-[2rem] p-8 hover:-translate-y-1 transition-transform duration-300">
+                    <div className="bg-[#F4F4F5] rounded-[2rem] p-8 group">
                       <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">
                         Innovation 0{index + 1}
                       </span>
@@ -89,42 +110,49 @@ export default function InnovationsTimeline() {
             })}
 
             {/* ========================================================= */}
-            {/* EL FUTURO (PUNTO 6) - DISEÑO ESPECIAL DESTACADO           */}
+            {/* EL FUTURO (PUNTO 6) - SOMBRA ANIMADA DINÁMICA             */}
             {/* ========================================================= */}
             <div className="relative flex flex-col md:flex-row items-center w-full z-10 pt-8 md:pt-12">
               
               {/* Icono Central Brillante */}
-              <div className="absolute left-[20px] md:left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-[#111111] flex items-center justify-center shadow-[0_0_20px_rgba(255,39,10,0.4)] z-20 mt-4 md:mt-0 top-0 md:top-auto">
+              <div className="absolute left-[20px] md:left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-[#111111] flex items-center justify-center z-20 mt-4 md:mt-0 top-0 md:top-auto">
                 <Sparkles className="w-5 h-5 text-[#FF270A]" />
               </div>
 
-              {/* Tarjeta Oscura y Tecnológica (Siempre va a la derecha en este caso, ya que es la 6ta) */}
+              {/* Contenedor de la Tarjeta del Futuro */}
               <div className="w-full md:w-1/2 pl-[70px] md:pl-16 md:ml-auto">
-                <div className="relative bg-[#111111] rounded-[2rem] p-8 md:p-10 shadow-2xl overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+                
+                {/* Ref para el IntersectionObserver */}
+                <div className="relative w-full" ref={futureCardRef}>
                   
-                  {/* Glow interno animado */}
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#FF270A]/20 to-purple-600/20 blur-3xl rounded-full pointer-events-none group-hover:opacity-100 transition-opacity duration-700 opacity-50" />
+                  {/* === SOMBRA TECNOLÓGICA (DETRÁS DE LA TARJETA) === */}
+                  {/* -inset-2 o -inset-3 hace que el div sea más grande que la tarjeta, saliendo por los bordes. blur-2xl difumina los bordes. */}
+                  <div 
+                    className={`absolute -inset-2.5 rounded-[2.5rem] bg-gradient-to-r from-[#FF270A] via-[#8B5CF6] to-[#00C7FD] blur-xl md:blur-2xl z-0 transition-all duration-1000 ease-out
+                      ${isFutureVisible ? 'opacity-50 md:opacity-60 scale-100 tech-bg-animate' : 'opacity-0 scale-95'}`}
+                  />
 
-                  <div className="relative z-10">
+                  {/* === TARJETA PRINCIPAL === */}
+                  {/* Debe tener bg-color, z-10 y position relative para tapar el centro de la sombra */}
+                  <div className="relative bg-[#F4F4F5] rounded-[2rem] p-8 md:p-10 z-10 hover:-translate-y-1 transition-transform duration-300">
+                    
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="flex h-2 w-2 relative">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF270A] opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF270A]"></span>
-                      </span>
                       <span className="text-[10px] font-bold text-[#FF270A] uppercase tracking-widest">
-                        Coming Soon
+                        Under Active Development
                       </span>
                     </div>
                     
-                    <h3 className="text-2xl font-bold text-white mb-4 font-sora tracking-tight">
+                    <h3 className="text-2xl font-bold text-[#111111] mb-4 font-sora tracking-tight">
                       The Next Generation
                     </h3>
-                    <p className="text-[15px] md:text-base text-gray-400 font-medium leading-relaxed">
-                      Based on <strong className="text-white">AiGOR</strong> and <strong className="text-white">MILA</strong>, we are developing the next generation of assays. Expect unprecedented capabilities: <span className="text-[#FF270A]">extremely fast (same-shift results)</span>, highly multiplexed, and fully quantitative results.
+                    
+                    <p className="text-[15px] md:text-base text-gray-600 font-medium leading-relaxed">
+                      Based on <strong className="text-[#111111]">AiGOR</strong> and <strong className="text-[#111111]">MILA</strong>, we are currently developing the next generation of assays. Expect unprecedented capabilities: extremely fast (same-shift results), highly multiplexed, and fully quantitative results.
                     </p>
-                  </div>
 
+                  </div>
                 </div>
+
               </div>
 
             </div>
@@ -136,6 +164,26 @@ export default function InnovationsTimeline() {
 
       <style jsx>{`
         .font-sora { font-family: var(--font-sora), sans-serif; }
+
+        /* Animación para que los colores de la sombra se muevan de lado a lado */
+        @keyframes shiftGradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        /* Animación para que la sombra "respire" (pulse sutilmente) */
+        @keyframes breatheGlow {
+          0%, 100% { transform: scale(1); filter: blur(24px); }
+          50% { transform: scale(1.02); filter: blur(28px); }
+        }
+
+        .tech-bg-animate {
+          background-size: 200% 200%;
+          animation: 
+            shiftGradient 6s ease infinite,
+            breatheGlow 4s ease-in-out infinite;
+        }
       `}</style>
     </section>
   );

@@ -41,10 +41,10 @@ export default function AboutUs() {
             {/* Columna Izquierda */}
             <div className="space-y-6">
               <p>
-                Founded in 2001, TAAG started as a dedicated testing laboratory. Over two decades, we expanded our footprint, successfully operating facilities across Chile, the United States, and Mexico before the COVID-19 pandemic.
+                Founded in 2001, TAAG started as a dedicated testing laboratory. Over two decades, we expanded our footprint, successfully operating facilities across United States, Belgium, Chile, and Mexico.
               </p>
               <p>
-                During the pandemic, TAAG evolved. To guarantee supply chain continuity and accelerate innovation at a critical time for the global food and health industries, we rapidly integrated advanced kit manufacturing capabilities into our operations.
+                During the COVID-19 pandemic, TAAG evolved. To guarantee supply chain continuity and accelerate innovation at a critical time for the global food and health industries, we rapidly integrated advanced kit manufacturing capabilities into our operations.
               </p>
             </div>
 
