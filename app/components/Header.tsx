@@ -15,7 +15,7 @@ const NAV_LINKS = [
   { name: "Lab services", href: "LabNetwork/" },
   { name: "Lab Partners", href: "/labs" },
   { name: "Where We Are", href: "/where" },
-  { name: "About", href: "/about" },
+  { name: "About", href: "/AboutUs" },
 ];
 
 const HUBS_LIST = ["USA", "Belgium", "Mexico", "Chile"];
