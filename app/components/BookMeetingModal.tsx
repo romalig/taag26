@@ -48,12 +48,12 @@ export default function BookMeetingModal() {
           {/* CAMBIO 3: 'my-8' da aire arriba y abajo al hacer scroll */}
           <div className="relative w-full max-w-5xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-300 my-8 text-left">
             
-            {/* BOTÓN CERRAR */}
+            {/* BOTÓN CERRAR - Modificado para tener siempre fondo blanco y borde gris */}
             <button 
               onClick={closeMeeting}
-              className="absolute top-4 right-4 md:top-6 md:right-6 z-20 p-2 rounded-full bg-black/5 hover:bg-black/10 transition-colors"
+              className="absolute top-4 right-4 md:top-6 md:right-6 z-20 p-2 rounded-full bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
             >
-              <X className="w-5 h-5 text-black/60" />
+              <X className="w-5 h-5 text-gray-600" />
             </button>
 
             {/* COLUMNA IZQUIERDA (Dark Side) */}
@@ -102,6 +102,7 @@ export default function BookMeetingModal() {
                      <div className="text-[10px] text-white/50 uppercase tracking-wider truncate">
                         support@taag.bio
                      </div>
+
                    </div>
                 </a>
               </div>
