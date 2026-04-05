@@ -1,3 +1,4 @@
+import Header from "../../components/Header";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { ArrowRight, CheckCircle2, Target, Lightbulb } from "lucide-react";
@@ -20,7 +21,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
 
   return (
     <main className="w-full bg-white min-h-screen">
-      
+    <Header theme="hybrid" />
       {/* --- HERO SECTION --- */}
       <section className="relative w-full h-[60vh] min-h-[500px] flex items-end pb-16 md:pb-24">
         {/* Imagen de fondo */}
