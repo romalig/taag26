@@ -2,58 +2,19 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link"; // 1. IMPORTAMOS LINK DE NEXT.JS
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
-// CONFIGURACIÓN DE TAMAÑOS (Tu data original)
-const CLIENTS = [
-  { 
-    name: "Danone", 
-    src: "/logos/danone.png", 
-    sizeClass: "h-24" 
-  },
-  { 
-    name: "Coca-Cola", 
-    src: "/logos/coca-cola.png", 
-    sizeClass: "h-16" 
-  },
-  { 
-    name: "Grupo Bimbo", 
-    src: "/logos/bimbo.png", 
-    sizeClass: "h-12" 
-  },
-  { 
-    name: "Kerry", 
-    src: "/logos/kerry2.png", 
-    sizeClass: "h-16" 
-  },
-];
+// 2. IMPORTAMOS NUESTRA BASE DE DATOS CENTRAL
+// (Asegúrate de que la ruta coincida con donde guardaste el archivo)
+import { CASE_STUDIES } from "@/app/components/data/caseStudies";
 
-// DATA ORIGINAL DE TUS CASOS DE ESTUDIO
-const CASES = [
-  {
-    id: 1,
-    company: "Danone",
-    category: "MILA™ Custom Design",
-    title: "Precision Probiotics.",
-    description: "Developing a custom triplex qPCR kit to quantify proprietary strains in finished yogurt products.",
-    image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=800&auto=format&fit=crop", 
-  },
-  {
-    id: 2,
-    company: "Arca Continental",
-    category: "TxA™ Digital Transformation",
-    title: "Bottling Intelligence.",
-    description: "Standardizing microbiological control across 35 production plants with our AI-driven software.",
-    image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=800&auto=format&fit=crop", 
-  },
-  {
-    id: 3,
-    company: "Global Chocolate Leader",
-    category: "AiGOR™ Pathogen Safety",
-    title: "Safety at Speed.",
-    description: "Ultra-fast Salmonella detection in chocolate matrices without complex enrichment.",
-    image: "https://images.unsplash.com/photo-1606312619070-d48b4c652a52?q=80&w=800&auto=format&fit=crop", 
-  }
+// CONFIGURACIÓN DE TAMAÑOS (Logos)
+const CLIENTS = [
+  { name: "Danone", src: "/logos/danone.png", sizeClass: "h-24" },
+  { name: "Coca-Cola", src: "/logos/coca-cola.png", sizeClass: "h-16" },
+  { name: "Grupo Bimbo", src: "/logos/bimbo.png", sizeClass: "h-12" },
+  { name: "Kerry", src: "/logos/kerry2.png", sizeClass: "h-16" },
 ];
 
 export default function CaseStudies() {
@@ -93,7 +54,6 @@ export default function CaseStudies() {
       {/* ENCABEZADO Y PARTNERS */}
       <div className="max-w-7xl mx-auto px-10 md:px-20 mb-10 md:mb-16 relative z-10">
         
-        {/* Textos Principales */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
           <div className="max-w-2xl">
             <span className="text-[#FF270A] font-bold tracking-widest uppercase text-xs mb-3 block">
@@ -111,7 +71,6 @@ export default function CaseStudies() {
           </div>
         </div>
 
-        {/* Sección de Logos */}
         <div className="flex items-center gap-4 mb-6">
            <div className="h-8 w-[3px] bg-[#FF270A] rounded-full"></div>
            <span className="text-xs font-bold uppercase tracking-widest text-[#111111]/40">
@@ -138,7 +97,7 @@ export default function CaseStudies() {
 
       </div>
 
-      {/* --- TÍTULO SOBRE LAS TARJETAS (Restaurado) --- */}
+      {/* TÍTULO SOBRE LAS TARJETAS */}
       <div className="max-w-7xl mx-auto px-10 md:px-20 mb-6 relative z-10">
         <div className="flex items-center gap-4">
            <div className="h-8 w-[3px] bg-[#FF270A] rounded-full"></div>
@@ -148,8 +107,8 @@ export default function CaseStudies() {
         </div>
       </div>
 
-      {/* CARRUSEL TIPO SUCCESS-STORIES UNIFICADO */}
-      <div className="relative w-full"> {/* Se removió la clase "group" global para corregir la animación */}
+      {/* CARRUSEL */}
+      <div className="relative w-full">
         
         {/* Flechas Desktop */}
         <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 left-4 z-30 transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
@@ -164,22 +123,22 @@ export default function CaseStudies() {
         </div>
 
         {/* Área Scrolleable */}
-        {/* Usamos variables CSS para alinear perfectamente con el max-w-7xl (1280px) de arriba */}
         <div 
           ref={scrollRef}
           onScroll={checkScroll}
           style={{
-            '--edge-padding-mobile': '2.5rem', /* 40px para px-10 */
-            '--edge-padding-desktop': 'max(5rem, calc((100vw - 80rem) / 2 + 5rem))', /* Alineación exacta con px-20 */
+            '--edge-padding-mobile': '2.5rem', 
+            '--edge-padding-desktop': 'max(5rem, calc((100vw - 80rem) / 2 + 5rem))', 
           } as React.CSSProperties}
           className="flex gap-4 md:gap-6 overflow-x-auto pb-6 w-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pl-[var(--edge-padding-mobile)] pr-[var(--edge-padding-mobile)] md:pl-[var(--edge-padding-desktop)] md:pr-[var(--edge-padding-desktop)] scroll-pl-[var(--edge-padding-mobile)] scroll-pr-[var(--edge-padding-mobile)] md:scroll-pl-[var(--edge-padding-desktop)] md:scroll-pr-[var(--edge-padding-desktop)]"
         >
-          {CASES.map((item) => {
+          {/* 3. MAPEAMOS USANDO CASE_STUDIES Y USAMOS <Link> */}
+          {CASE_STUDIES.map((item) => {
             return (
-              <div 
+              <Link 
+                href={`/cases/${item.slug}`} // Ruta dinámica conectada
                 key={item.id}
-                // Añadida clase "group" exclusivamente a la tarjeta individual para que solo esta reaccione
-                className="group relative flex-shrink-0 w-[85vw] md:w-[420px] h-[460px] md:h-[580px] rounded-[2.5rem] flex flex-col justify-between snap-start transition-transform duration-300 hover:scale-[1.01] overflow-hidden bg-black text-white p-8 md:p-10 border border-white/10"
+                className="group relative flex-shrink-0 w-[85vw] md:w-[420px] h-[460px] md:h-[580px] rounded-[2.5rem] flex flex-col justify-between snap-start transition-transform duration-300 hover:scale-[1.01] overflow-hidden bg-black text-white p-8 md:p-10 border border-white/10 cursor-pointer"
               >
                 {/* Imagen de Fondo */}
                 <div className="absolute inset-0 z-0">
@@ -224,24 +183,24 @@ export default function CaseStudies() {
                        {item.description}
                      </p>
                      <div className="pt-6 border-t border-white/20">
-                         <button className="text-xs font-bold uppercase tracking-widest flex items-center gap-2 text-white hover:text-[#FF270A] transition-colors">
+                         {/* Convertido de button a div porque ya estamos dentro de un <Link> */}
+                         <div className="text-xs font-bold uppercase tracking-widest flex items-center gap-2 text-white group-hover:text-[#FF270A] transition-colors">
                            Read case study <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                         </button>
+                         </div>
                      </div>
                    </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
 
-        {/* --- CONTROLES MÓVILES (BAJO EL CARRUSEL) --- */}
+        {/* --- CONTROLES MÓVILES --- */}
         <div className="flex md:hidden justify-end gap-3 px-6 mt-4">
            <button 
              onClick={() => scroll("left")} 
              disabled={!canScrollLeft}
              className={`w-10 h-10 rounded-full bg-[#111111] text-white flex items-center justify-center transition-all active:scale-95 ${!canScrollLeft ? 'opacity-30 cursor-not-allowed' : 'opacity-100 shadow-lg'}`}
-             aria-label="Scroll left"
            >
              <ChevronLeft className="w-5 h-5" />
            </button>
@@ -249,7 +208,6 @@ export default function CaseStudies() {
              onClick={() => scroll("right")} 
              disabled={!canScrollRight}
              className={`w-10 h-10 rounded-full bg-[#111111] text-white flex items-center justify-center transition-all active:scale-95 ${!canScrollRight ? 'opacity-30 cursor-not-allowed' : 'opacity-100 shadow-lg'}`}
-             aria-label="Scroll right"
            >
              <ChevronRight className="w-5 h-5" />
            </button>
