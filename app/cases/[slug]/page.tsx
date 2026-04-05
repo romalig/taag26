@@ -1,5 +1,6 @@
 "use client";
 
+import Header from "../../components/Header";
 import { use } from "react"; // Importamos 'use' para desempaquetar Promesas en el cliente
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -27,7 +28,7 @@ export default function CaseStudyPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <main className="w-full bg-white min-h-screen">
-      
+    <Header theme="hybrid" />
       {/* --- HERO SECTION --- */}
       <section className="relative w-full h-[60vh] min-h-[500px] flex items-end pb-16 md:pb-24">
         <div className="absolute inset-0 z-0">
