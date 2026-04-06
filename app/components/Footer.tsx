@@ -40,13 +40,10 @@ export default function Footer() {
             <h4 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-6">SOLUTIONS</h4>
             <ul className="space-y-4 text-sm font-medium text-white/80">
               <li>
-                <Link href="/industrial" className="hover:text-[#FF270A] transition-colors">
-                Industrial Microbiology
-                </Link>
-              </li>
-              <li><Link href="/customized" className="hover:text-[#FF270A] transition-colors">Customized Molecular</Link></li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Digital Transformation</Link></li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Resources</Link></li>
+                <Link href="/industrial" className="hover:text-[#FF270A] transition-colors">Industrial Microbiology</Link></li>
+              <li><Link href="/customized" className="hover:text-[#FF270A] transition-colors">Customized Solutions</Link></li>
+              <li><Link href="/txa" className="hover:text-[#FF270A] transition-colors">Digital Transformation</Link></li>
+              <li><Link href="/LabNetwork" className="hover:text-[#FF270A] transition-colors">Lab services</Link></li>
             </ul>
           </div>
 
@@ -54,9 +51,8 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <h4 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-6">TECHNOLOGIES</h4>
             <ul className="space-y-4 text-sm font-medium text-white/80">
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">AIGOR</Link></li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">MILA</Link></li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">KAI</Link></li>
+              <li><Link href="/aigor" className="hover:text-[#FF270A] transition-colors">AIGOR</Link></li>
+              <li><Link href="/customized" className="hover:text-[#FF270A] transition-colors">MILA</Link></li>
             </ul>
           </div>
 
@@ -64,13 +60,13 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <h4 className="text-xs font-bold uppercase tracking-widest text-white/30 mb-6">Company</h4>
             <ul className="space-y-4 text-sm font-medium text-white/80">
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">About Us</Link></li>
+              <li><Link href="/AboutUs" className="hover:text-[#FF270A] transition-colors">About Us</Link></li>
               <li>
-                <a href="#" className="flex items-center gap-2 hover:text-[#FF270A] transition-colors">
+                <a href="/where" className="flex items-center gap-2 hover:text-[#FF270A] transition-colors">
                   <Globe className="w-4 h-4" /> Locations
                 </a>
               </li>
-              <li><Link href="#" className="hover:text-[#FF270A] transition-colors">Contact</Link></li>
+              <li><Link href="mailto:support@taag.bio" className="hover:text-[#FF270A] transition-colors">Contact</Link></li>
             </ul>
           </div>
         </div>
