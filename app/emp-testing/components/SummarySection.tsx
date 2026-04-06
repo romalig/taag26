@@ -57,7 +57,7 @@ export default function SummarySection() {
                 Core Business Impact
               </span>
               
-              <h3 className="text-6xl md:text-7xl xl:text-[50px] font-black tracking-tighter mb-4 leading-none break-words">
+              <h3 className="text-4xl md:text-5xl xl:text-[50px] font-black tracking-tighter mb-4 leading-none break-words">
                 €{financialMetrics.annualSavings.toLocaleString('de-DE')}
               </h3>
 
