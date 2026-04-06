@@ -4,7 +4,7 @@ import { Clock, Zap, FlaskConical } from "lucide-react";
 
 export default function SummarySection() {
   const financialMetrics = {
-    annualSavings: 228883,
+    annualSavings: 228000,
   };
 
   return (
@@ -52,14 +52,12 @@ export default function SummarySection() {
 
           {/* Columna Derecha: Tarjeta de Impacto */}
           <div className="lg:col-span-4 flex flex-col gap-8 lg:sticky lg:top-32 relative z-20">
-            {/* Agregamos overflow-hidden por seguridad para que nada salga de la tarjeta */}
             <div className="bg-[#111111] text-white rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden">
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#FF270A] mb-4 block">
                 Core Business Impact
               </span>
               
-              {/* TAMAÑO CORREGIDO: Ajustado para que encaje perfecto dentro de la tarjeta */}
-              <h3 className="text-4xl md:text-4xl xl:text-[50px] font-black tracking-tighter mb-4 leading-none break-words">
+              <h3 className="text-6xl md:text-7xl xl:text-[50px] font-black tracking-tighter mb-4 leading-none break-words">
                 €{financialMetrics.annualSavings.toLocaleString('de-DE')}
               </h3>
 
@@ -83,7 +81,10 @@ export default function SummarySection() {
                       <div className="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-0.5">{item.label}</div>
                       <div className="text-base font-extrabold text-white">{item.value}</div>
                     </div>
-                    <div className="text-[9px] font-bold text-white/30 uppercase tracking-wider shrink-0">{item.change}</div>
+                    {/* CAMBIO AQUÍ: de text-white/30 a text-gray-400 para mejor legibilidad */}
+                    <div className="text-[9px] font-bold text-gray-400 uppercase tracking-wider shrink-0">
+                      {item.change}
+                    </div>
                   </li>
                 ))}
               </ul>
