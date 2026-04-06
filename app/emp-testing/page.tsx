@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import HeroSection from "./components/HeroSection";
 import SummarySection from "./components/SummarySection";
 import FinancialSection from "./components/FinancialSection";
+import ImplementationSection from "./components/ImplementationSection"; 
 
 export default function EMPTestingPremiumPage() {
   return (
@@ -11,8 +12,7 @@ export default function EMPTestingPremiumPage() {
       <HeroSection />
       <SummarySection />
       <FinancialSection />
-      
-      {/* Próximas secciones irán aquí */}
+      <ImplementationSection /> 
     </main>
   );
 }

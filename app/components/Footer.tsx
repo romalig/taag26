@@ -98,7 +98,7 @@ export default function Footer() {
         {/* SECCIÓN INFERIOR: Copyright */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-white/30">
-            © 2026 TAAG Genetics. All rights reserved.
+            © 2026 TAAG. All rights reserved.
           </p>
           <div className="flex gap-6 text-xs text-white/30 font-medium">
             <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
