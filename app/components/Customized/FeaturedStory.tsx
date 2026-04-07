@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link"; // 1. Importamos Link de Next.js
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function FeaturedStory() {
@@ -19,7 +20,6 @@ export default function FeaturedStory() {
         </div>
 
         {/* TARJETA GRANDE */}
-        {/* Eliminado: shadow-sm, border */}
         <div className="bg-[#F5F5F7] rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row">
           
           {/* 1. COLUMNA IMAGEN */}
@@ -37,7 +37,6 @@ export default function FeaturedStory() {
               
               {/* Tag del Cliente */}
               <div className="mb-6">
-                {/* Eliminado: shadow-sm, border */}
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[#111111] text-[10px] font-bold uppercase tracking-wider">
                   <CheckCircle2 className="w-3 h-3 text-blue-600" />
                   Top 3 Global Dairy Company
@@ -59,15 +58,18 @@ export default function FeaturedStory() {
                 </p>
               </div>
 
-              {/* Botón CTA */}
+              {/* Botón CTA CONECTADO AL CASO DE ESTUDIO */}
               <div>
-                <button className="group/btn inline-flex items-center gap-3 text-sm font-bold text-[#111111]">
+                {/* 2. Cambiamos el <button> por <Link> apuntando al slug de Danone */}
+                <Link 
+                  href="/cases/danone-precision-probiotics" 
+                  className="group/btn inline-flex items-center gap-3 text-sm font-bold text-[#111111] cursor-pointer"
+                >
                     Read full case study
-                    {/* Eliminado: shadow-sm, border */}
                     <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center transition-transform group-hover/btn:scale-105">
                         <ArrowRight className="w-4 h-4 text-gray-600 group-hover/btn:text-[#111111] group-hover/btn:translate-x-0.5 transition-all" />
                     </div>
-                </button>
+                </Link>
               </div>
 
           </div>

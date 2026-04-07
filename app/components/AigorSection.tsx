@@ -10,13 +10,11 @@ export default function AigorSection() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Solo se activa una vez cuando entra en pantalla (threshold 0.1 = 10% visible)
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect(); // Desconectamos para que no se anime de nuevo al subir y bajar
-        }
+        // Se actualiza el estado basándose en si la sección es visible o no.
+        // Esto permite que la animación se reinicie cada vez que el usuario vuelve a esta sección.
+        setIsVisible(entry.isIntersecting);
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 } // Se activa cuando el 10% de la sección es visible
     );
 
     if (sectionRef.current) {
@@ -48,7 +46,7 @@ export default function AigorSection() {
           }`}
         >
             {/* Sombra de color detrás del chip (El HALO) */}
-            {/* Se expande al aparecer y luego queda estático */}
+            {/* El delay-300 asegura que aparezca desde atrás un instante después de que el chip empiece a subir */}
             <div className={`absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-[#FF270A] rounded-3xl blur transition-opacity duration-[2s] delay-300 ${
                isVisible ? "opacity-60" : "opacity-0"
             }`}></div>
@@ -125,14 +123,14 @@ export default function AigorSection() {
 
         </div>
 
-        {/* CTA */}
+        {/* CTA MODIFICADO */}
         <div className={`mt-16 transition-all duration-1000 delay-1000 ${
            isVisible ? "opacity-100" : "opacity-0"
         }`}>
-          <button className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-white hover:text-[#FF270A] transition-colors group">
+          <a href="/aigor" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-white hover:text-[#FF270A] transition-colors group cursor-pointer">
             Explore AiGOR Products
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
+          </a>
         </div>
 
       </div>

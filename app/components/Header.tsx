@@ -12,10 +12,10 @@ const NAV_LINKS = [
   { name: "Industrial Microbiology", href: "/industrial" },
   { name: "Customized Molecular", href: "/customized" },
   { name: "Digital Transformation", href: "/TxA" },
+  { name: "Lab services", href: "LabNetwork/" },
   { name: "Lab Partners", href: "/labs" },
   { name: "Where We Are", href: "/where" },
-  { name: "Resources", href: "#resources" },
-  { name: "About", href: "/about" },
+  { name: "About", href: "/AboutUs" },
 ];
 
 const HUBS_LIST = ["USA", "Belgium", "Mexico", "Chile"];

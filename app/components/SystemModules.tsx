@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 const CARD_IMG = "/2bacterias_verdes.png";
 const CARD_IMG1 = "/TxA.png";
 const CARD_IMG2 = "/world3.png";
-const CARD_IMG3 = "/mila2.png";
+const CARD_IMG3 = "/mila3.png";
 
 // Color unificado para todas las tarjetas
 const CARD_THEME = {
@@ -15,7 +15,18 @@ const CARD_THEME = {
   badgeBorder: "border-white/20"
 };
 
-const MODULES = [
+// Definimos el tipo para asegurar que Typescript no se queje de la propiedad opcional
+type ModuleItem = {
+  id: string;
+  tag: string;
+  title: string;
+  description: string;
+  img: string;
+  link: string;
+  imgWidth?: string; // Propiedad opcional para controlar tamaños individuales
+};
+
+const MODULES: ModuleItem[] = [
   {
     id: "industrial",
     tag: "Speed",
@@ -31,6 +42,7 @@ const MODULES = [
     description: "AI-designed molecular assays for your specific needs.",
     img: CARD_IMG3, 
     link: "/customized",
+    imgWidth: "w-[40%] md:w-[32%]", // <-- Ancho personalizado para achicar esta imagen
   },
   {
     id: "digital",
@@ -38,7 +50,7 @@ const MODULES = [
     title: "Digital Transformation",
     description: "Trace contamination sources with TxA™ plant mapping.",
     img: CARD_IMG1, 
-    link: "#digital",
+    link: "/TxA",
   },
   {
     id: "hubs",
@@ -46,7 +58,7 @@ const MODULES = [
     title: "Global Hubs",
     description: "Local labs delivering advanced molecular services.",
     img: CARD_IMG2, 
-    link: "#hubs",
+    link: "/LabNetwork",
   }
 ];
 
@@ -80,7 +92,7 @@ export default function SystemModules() {
           </div>
 
           {/* Columna 2 */}
-          <div className="flex flex-col gap-6 md:gap-8 lg:gap-10 md:mt-32">
+          <div className="flex flex-col gap-6 md:gap-8 lg:gap-10 md:mt-24">
              {MODULES.filter((_, i) => i % 2 !== 0).map((mod) => (
               <Card key={mod.id} item={mod} />
             ))}
@@ -92,15 +104,14 @@ export default function SystemModules() {
   );
 }
 
-function Card({ item }: { item: typeof MODULES[0] }) {
+function Card({ item }: { item: ModuleItem }) {
   return (
     <a 
       href={item.link}
-      // CAMBIO 1: active:scale-[0.98] para efecto de presión táctil en móviles
       className={`group relative flex flex-col justify-between w-full rounded-[2.5rem] overflow-hidden transition-all duration-300 hover:shadow-2xl active:scale-[0.98] md:hover:-translate-y-2 ${CARD_THEME.bg}`}
     >
       {/* 1. CONTENIDO SUPERIOR */}
-      <div className="pt-10 md:pt-14 px-6 md:px-8 text-center z-10">
+      <div className="pt-8 md:pt-10 px-6 md:px-8 text-center z-10">
         
         {/* Badge */}
         <div className="flex justify-center mb-6">
@@ -110,18 +121,17 @@ function Card({ item }: { item: typeof MODULES[0] }) {
         </div>
 
         {/* Título */}
-        <h3 className={`text-2xl md:text-4xl font-bold mb-4 ${CARD_THEME.text} tracking-tight leading-tight`}>
+        <h3 className={`text-2xl md:text-3xl font-bold mb-4 ${CARD_THEME.text} tracking-tight leading-tight`}>
           {item.title}
         </h3>
         
         {/* Descripción */}
-        <p className={`text-sm md:text-base font-medium opacity-70 leading-relaxed max-w-xs mx-auto ${CARD_THEME.text}`}>
+        <p className={`text-sm md:text-[15px] font-medium opacity-70 leading-relaxed max-w-xs mx-auto ${CARD_THEME.text}`}>
           {item.description}
         </p>
 
         {/* Link / Botón Hover */}
-        {/* CAMBIO 2: opacity-100 por defecto (móvil) -> lg:opacity-0 (desktop) */}
-        <div className="mt-8 flex justify-center opacity-100 transform translate-y-0 lg:opacity-0 lg:translate-y-2 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300">
+        <div className="mt-6 flex justify-center opacity-100 transform translate-y-0 lg:opacity-0 lg:translate-y-2 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300">
            <div className={`flex items-center gap-2 px-6 py-2.5 rounded-full bg-white shadow-lg text-xs font-bold uppercase tracking-widest ${CARD_THEME.text}`}>
               Explore <ArrowRight className="w-3 h-3" />
            </div>
@@ -129,12 +139,12 @@ function Card({ item }: { item: typeof MODULES[0] }) {
       </div>
 
       {/* 2. IMAGEN INFERIOR */}
-      <div className="relative mt-8 md:mt-auto w-full flex justify-center items-end">
+      <div className="relative mt-6 md:mt-8 w-full flex justify-center items-end">
         <img
           src={item.img}
           alt={item.title}
-          // CAMBIO 3: translate-y-0 en móvil para que se vea bien siempre. La animación de movimiento queda solo para desktop (lg:)
-          className="w-[85%] md:w-[80%] h-auto object-contain transform translate-y-0 lg:translate-y-4 transition-transform duration-700 lg:group-hover:scale-110 lg:group-hover:translate-y-0"
+          // Usamos item.imgWidth si existe, si no, usa el tamaño normal más compacto que definimos (w-65% en móvil, w-55% en PC)
+          className={`${item.imgWidth || "w-[65%] md:w-[55%]"} h-auto object-contain transform translate-y-0 lg:translate-y-4 transition-transform duration-700 lg:group-hover:scale-105 lg:group-hover:translate-y-0`}
         />
       </div>
     </a>
