@@ -26,7 +26,7 @@ export default function SummarySection() {
                   Global food manufacturers often outsource environmental monitoring to third-party labs, incurring lead times of 48-72 hours and significant per-sample fees. 
                 </p>
                 <p>
-                  This reactive approach means Zone 1 and 2 surfaces are often reused before results are known, creating a critical bottleneck in same-day decision making.
+                  This reactive approach means surfaces are often reused before results are known, increasing the risk and creating a critical bottleneck in production.
                 </p>
               </div>
             </div>
@@ -40,10 +40,7 @@ export default function SummarySection() {
               </div>
               <div className="space-y-6 text-sm md:text-lg text-gray-600 leading-relaxed font-medium pl-6 md:pl-8">
                 <p>
-                  By adopting the AiGOR™ kits in-house, facilities can leverage ultra-sensitive RNA amplification to detect and quantify pathogens like Salmonella spp. directly on site. 
-                </p>
-                <p>
-                  This Protocol ZERO approach delivers actionable results in just 3 hours without enrichment, enabling immediate corrective actions.
+                  By adopting the Elevia kits (powered by AiGOR™) in-house, facilities can leverage ultra-sensitive RNA amplification to detect pathogens like Salmonella spp. directly on site, in juts 3 hours and without enrichment. 
                 </p>
               </div>
             </div>
@@ -70,8 +67,8 @@ export default function SummarySection() {
               <ul className="flex flex-col gap-6">
                 {[
                   { icon: Clock, label: "Time to Result", value: "< 3 Hours", change: "was 72h" },
-                  { icon: FlaskConical, label: "Enrichment Phase", value: "Zero", change: "was 16-24h" },
-                  { icon: Zap, label: "Corrective Action", value: "Same-Day", change: "was Delayed" },
+                  { icon: FlaskConical, label: "Enrichment time", value: "Zero", change: "was 24h" },
+                  { icon: Zap, label: "Corrective Action", value: "Same-Day", change: "was 3 days" },
                 ].map((item, index) => (
                   <li key={index} className="flex gap-4 items-center">
                     <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#FF270A] shrink-0">
