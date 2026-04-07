@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.gitignore
+.claude
+.docker/Dockerfile
+.zenflow
+.zencode
+*.log
+*.pem
+*.md
+.DS_Store
+.env*
+.vercel

@@ -67,7 +67,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             
             {/* VERSIÓN */}
             {data.version && (
-              <p className="text-sm font-medium text-gray-400 mt-3 mb-10">Rev. {data.version}</p>
+              <p className="text-sm font-medium text-gray-400 mt-3 mb-10">{data.version}</p>
             )}
             
             <div className="flex flex-wrap gap-2 mb-14">
@@ -87,8 +87,8 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
               <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.targets}</span>
           </div>
           <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">LOD</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.lod}</span>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Performance</span>
+              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.performance}</span>
           </div>
           <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Main Industries</span>
@@ -160,7 +160,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           <div className="border-t border-gray-200">
              {[
                { label: "Microorganisms", value: data.techSpecs.targets },
-               { label: "Performance (LOD)", value: data.techSpecs.lod },
+               { label: "Performance", value: data.techSpecs.performance },
                { label: "Validated Matrices", value: data.techSpecs.matrices },
                { label: "Time", value: data.techSpecs.time },
                { label: "Technology", value: data.techSpecs.technology },

@@ -119,8 +119,8 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
               <Text style={styles.metricValue}>{data.techSpecs.targets}</Text>
            </View>
            <View style={styles.metricCol}>
-              <Text style={styles.metricLabel}>LOD</Text>
-              <Text style={styles.metricValue}>{data.techSpecs.lod}</Text>
+              <Text style={styles.metricLabel}>Performance</Text>
+              <Text style={styles.metricValue}>{data.techSpecs.performance}</Text>
            </View>
            <View style={styles.metricCol}>
               <Text style={styles.metricLabel}>Main Industries</Text>
@@ -179,7 +179,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
              <Text style={styles.sectionTitle}>Technical Specifications</Text>
              <View style={styles.specContainer}>
                 <SpecRow label="Microorganisms" value={data.techSpecs.targets} />
-                <SpecRow label="Performance (LOD)" value={data.techSpecs.lod} />
+                <SpecRow label="Performance" value={data.techSpecs.performance} />
                 <SpecRow label="Validated Matrices" value={data.techSpecs.matrices} />
                 <SpecRow label="Time" value={data.techSpecs.time} />
                 <SpecRow label="Technology" value={data.techSpecs.technology} />

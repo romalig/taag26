@@ -107,7 +107,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
              <Text style={styles.sectionTitle}>Technical Specifications</Text>
              <View style={styles.specContainer}>
                 <SpecRow label="Targets" value={data.techSpecs.targets} />
-                <SpecRow label="Limit of Detection (LOD)" value={data.techSpecs.lod} />
+                <SpecRow label="Performance" value={data.techSpecs.performance} />
                 <SpecRow label="Validated Matrices" value={data.techSpecs.matrices} />
                 <SpecRow label="Time to Results" value={data.techSpecs.time} />
                 <SpecRow label="Technology" value={data.techSpecs.technology} />
