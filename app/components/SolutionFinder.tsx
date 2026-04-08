@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Loader2,
   ArrowRight,
@@ -13,13 +13,42 @@ import {
 import { parseDifyResponse, looksLikeJson, DifyResponse } from "@/app/types/dify";
 import { ProductCard } from "@/app/components/ProductCard";
 
+type ServiceHealth = "checking" | "up" | "down" | "misconfigured";
+
 export default function SolutionFinder() {
   const [challenge, setChallenge] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [rawReply, setRawReply] = useState<string | null>(null);
   const [structuredReply, setStructuredReply] = useState<DifyResponse | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [serviceHealth, setServiceHealth] = useState<ServiceHealth>("checking");
   const sessionRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+
+    (async () => {
+      try {
+        const res = await fetch("/api/chat/health", { cache: "no-store" });
+        const body = (await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          reason?: string;
+        };
+        if (!alive) return;
+
+        if (res.ok && body.ok) setServiceHealth("up");
+        else if (body.reason === "not_configured") setServiceHealth("misconfigured");
+        else setServiceHealth("down");
+      } catch {
+        if (!alive) return;
+        setServiceHealth("down");
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const handleGenerate = useCallback(
     async (overrideText?: string) => {
@@ -152,14 +181,40 @@ export default function SolutionFinder() {
               />
 
               <div className="mt-8 pt-8 border-t border-gray-100 flex items-center justify-between gap-4">
-                <div className="hidden md:flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider font-mono">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF270A] animate-pulse" />
-                  System Active
+                <div
+                  className="hidden md:flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider font-mono"
+                  title={
+                    serviceHealth === "checking"
+                      ? "Checking connection to assistant…"
+                      : serviceHealth === "misconfigured"
+                        ? "Chat API URL or key is not configured on the server"
+                        : serviceHealth === "down"
+                          ? "Assistant service is not reachable or returned an error"
+                          : "Assistant endpoint responded; ready to analyze"
+                  }
+                  aria-live="polite"
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                      serviceHealth === "up"
+                        ? "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.75)]"
+                        : serviceHealth === "checking"
+                          ? "bg-gray-400 animate-pulse"
+                          : serviceHealth === "misconfigured"
+                            ? "bg-amber-500"
+                            : "bg-red-500"
+                    }`}
+                    aria-hidden
+                  />
+                  {serviceHealth === "checking" && "Checking connection…"}
+                  {serviceHealth === "up" && "System Active"}
+                  {serviceHealth === "down" && "Assistant unavailable"}
+                  {serviceHealth === "misconfigured" && "Assistant not configured"}
                 </div>
 
                 <button
                   onClick={() => handleGenerate()}
-                  disabled={isAnalyzing || !challenge.trim()}
+                  disabled={isAnalyzing || !challenge.trim() || serviceHealth !== "up"}
                   className="group/btn relative overflow-hidden flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-[#111111] text-white rounded-full font-bold hover:bg-[#FF270A] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                 >
                   <span className="relative z-10 flex items-center gap-2">
