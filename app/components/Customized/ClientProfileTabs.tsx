@@ -11,6 +11,8 @@ import {
   ChevronRight,
   ArrowRight 
 } from "lucide-react";
+// 1. Importamos el proveedor del CTA (Modal de contacto)
+import { useCTA } from "@/app/components/CTAProvider";
 
 // DATOS DE LAS TARJETAS
 const CARDS = [
@@ -86,6 +88,9 @@ export default function ClientProfileTabs() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  
+  // 2. Extraemos la función openMeeting para abrir el modal
+  const { openMeeting } = useCTA();
 
   // Lógica de Scroll
   const checkScroll = () => {
@@ -117,7 +122,6 @@ export default function ClientProfileTabs() {
   const edgePadding = "max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem))";
 
   return (
-    // CAMBIO CRÍTICO: 'pt-0' elimina el espacio superior, 'pb-16' mantiene el aire al final.
     <section className="bg-[#F5F5F7] pt-0 pb-24 md:pb-20 relative overflow-hidden">
       
       {/* 1. ENCABEZADO DE SECCIÓN */}
@@ -234,9 +238,12 @@ export default function ClientProfileTabs() {
                       </p>
                     </div>
 
-                    {/* Botón Contacto (Neutro por defecto, color al hover) */}
+                    {/* 3. Botón Contacto: Agregamos onClick={openMeeting} */}
                     <div className="mt-auto pt-6 border-t border-gray-50 relative z-10">
-                        <button className={`group/btn w-full flex items-center justify-between text-sm font-bold text-[#111111] transition-colors ${card.hoverColor}`}>
+                        <button 
+                          onClick={openMeeting}
+                          className={`group/btn w-full flex items-center justify-between text-sm font-bold text-[#111111] transition-colors ${card.hoverColor}`}
+                        >
                             <span>Get Started</span>
                             <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center transition-colors group-hover/btn:bg-gray-200">
                                 <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />

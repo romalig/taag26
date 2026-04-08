@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, CheckCircle2, Clock, Dna, GitMerge, Zap, Activity, BrainCircuit, ShieldCheck, TrendingUp, Sparkles } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link"; // Asegúrate de importar Link
 import { useCTA } from "../CTAProvider";
 import { useModal } from "./ModalProvider";
 
@@ -305,6 +306,13 @@ export default function PartnerEcosystem() {
 
                 // --- CARDS 1 A 4: ESTILO APPLE MINIMALISTA ---
                 if (idx >= 1 && idx <= 4) {
+                  // Asignar el href según el índice
+                  let targetHref = "#";
+                  if (idx === 1) targetHref = "/industrial";
+                  if (idx === 2) targetHref = "/aigor";
+                  if (idx === 3) targetHref = "/TxA";
+                  if (idx === 4) targetHref = "/customized";
+
                   return (
                     <div key={solution.id} className="md:col-span-1 bg-white rounded-[2.5rem] p-10 md:p-14 flex flex-col items-center justify-start text-center relative h-auto min-h-[400px]">
                         
@@ -349,13 +357,13 @@ export default function PartnerEcosystem() {
                            {solution.description}
                         </p>
 
-                        {/* 4. Link Estilo Apple */}
-                        <button 
-                          onClick={() => handleOpenDetails(solution.id)}
+                        {/* 4. Link Estilo Apple reemplazado por <Link> de Next.js */}
+                        <Link 
+                          href={targetHref}
                           className="mt-auto text-[14px] md:text-[15px] text-[#0066cc] hover:underline font-medium flex items-center justify-center transition-colors"
                         >
                           Learn more about {solution.title.replace('.', '')} <span className="text-[10px] ml-1 translate-y-[0.5px] font-bold">&gt;</span>
-                        </button>
+                        </Link>
                     </div>
                   );
                 }
@@ -421,14 +429,7 @@ export default function PartnerEcosystem() {
                                 <p className="text-[#111111] text-sm md:text-base leading-relaxed font-normal mb-6 md:max-w-[400px]">
                                    {solution.description}
                                 </p>
-                                
-                                {/* LINK ESTILO APPLE */}
-                                <button 
-                                  onClick={() => handleOpenDetails(solution.id)}
-                                  className="w-full md:w-auto text-[14px] md:text-[15px] text-[#0066cc] hover:underline font-medium flex items-center justify-center md:justify-start"
-                                >
-                                  Learn more about our Support <span className="text-[10px] ml-1 translate-y-[0.5px] font-bold">&gt;</span>
-                                </button>
+                        
                             </div>
                         </div>
                     </div>

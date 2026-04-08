@@ -160,11 +160,11 @@ export default function FinancialSection() {
                    </li>
                    <li className="flex gap-3 md:gap-4 items-start">
                      <span className="font-bold text-base md:text-lg text-[#111111] shrink-0 w-5 md:w-6">C.</span>
-                     <span className="text-gray-700 font-medium text-sm md:text-base">External PCR testing for Salmonella spp. and Enterobacteriaceae:<br/><span className="font-bold text-[#111111]">€35/sample*</span></span>
+                     <span className="text-gray-700 font-medium text-sm md:text-base">External PCR testing for Salmonella spp. and Listeria spp:<br/><span className="font-bold text-[#111111]">€35/sample*</span></span>
                    </li>
                    <li className="flex gap-3 md:gap-4 items-start">
                      <span className="font-bold text-base md:text-lg text-[#111111] shrink-0 w-5 md:w-6">D.</span>
-                     <span className="text-gray-700 font-medium text-sm md:text-base">AiGOR testing cost for Salmonella spp. and Enterobacteriaceae:<br/><span className="font-bold text-[#111111]">€15/sample**</span></span>
+                     <span className="text-gray-700 font-medium text-sm md:text-base">AiGOR testing cost for Salmonella spp. and Listeria spp:<br/><span className="font-bold text-[#111111]">€15/sample**</span></span>
                    </li>
                    <li className="flex gap-3 md:gap-4 items-start">
                      <span className="font-bold text-base md:text-lg text-[#111111] shrink-0 w-5 md:w-6">E.</span>

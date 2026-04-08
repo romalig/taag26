@@ -1,25 +1,51 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
+// Importamos el hook para el modal
+import { useCTA } from "@/app/components/CTAProvider";
 
 export default function ContactSection() {
+  const { openMeeting } = useCTA();
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Implementamos exactamente el mismo Observer de InnovationsTimeline
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.3 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+    
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="bg-white py-20 px-6 md:px-10 overflow-hidden">
+    <section className="bg-white py-20 px-6 md:px-10">
       
-      <div className="max-w-[1200px] mx-auto relative z-10 font-sora">
+      <div className="max-w-[1200px] mx-auto font-sora">
 
         {/* CONTENEDOR DE LA TARJETA */}
-        <div className="relative group">
+        <div className="relative w-full" ref={cardRef}>
             
-            {/* CORRECCIÓN SOLO PARA MÓVIL:
-               - inset-4 (Móvil): Empujamos el fondo 16px hacia adentro. Esto esconde las esquinas
-                 cuadradas defectuosas DETRÁS de la tarjeta blanca. El brillo (blur) es lo único que asoma.
-               - md:inset-[1px] (Desktop): Mantiene el diseño original pegado al borde en pantallas grandes.
+            {/* EL GLOW DE INNOVATIONSTIMELINE:
+               - Implementa tech-bg-animate (shift + breathe)
+               - Usa el isVisible del IntersectionObserver
+               - -inset-2.5 y rounded-[3rem] asegura que abrace perfecto a la tarjeta sin cortar las esquinas
             */}
-            <div className="absolute inset-4 md:inset-[1px] bg-aurora-vibrant rounded-[2.5rem] blur-xl opacity-50 md:opacity-40 transition-opacity duration-500 group-hover:opacity-60 -z-10"></div>
+            <div 
+               className={`absolute -inset-2.5 md:-inset-3 rounded-[3rem] bg-gradient-to-r from-[#FF270A] via-[#7e22ce] to-[#f59e0b] blur-xl md:blur-2xl z-0 transition-all duration-1000 ease-out
+               ${isVisible ? 'opacity-40 md:opacity-50 scale-100 tech-bg-animate' : 'opacity-0 scale-95'}`}
+            />
 
             {/* TARJETA BLANCA */}
-            <div className="bg-white rounded-[2.5rem] px-8 py-10 md:px-16 md:py-14 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="relative z-10 bg-white rounded-[2.5rem] border border-gray-100 px-8 py-10 md:px-16 md:py-14 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
 
                 {/* TEXTO */}
                 <div className="text-center md:text-left max-w-3xl">
@@ -31,9 +57,12 @@ export default function ContactSection() {
                     </p>
                 </div>
 
-                {/* BOTÓN */}
+                {/* BOTÓN CONECTADO AL MODAL */}
                 <div className="flex-shrink-0">
-                    <button className="group/btn bg-[#111111] text-white text-base font-bold px-8 py-4 rounded-full flex items-center gap-3 hover:bg-gray-900 transition-all active:scale-95 shadow-lg shadow-black/10">
+                    <button 
+                      onClick={openMeeting}
+                      className="group/btn bg-[#111111] text-white text-base font-bold px-8 py-4 rounded-full flex items-center gap-3 hover:bg-[#FF270A] transition-all active:scale-95 shadow-lg shadow-black/10"
+                    >
                         Contact Us
                         <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                     </button>
@@ -45,25 +74,25 @@ export default function ContactSection() {
       </div>
 
       <style jsx>{`
-        .font-sora {
-          font-family: var(--font-sora), sans-serif;
+        .font-sora { font-family: var(--font-sora), sans-serif; }
+
+        /* Animación copiada exactamente de InnovationsTimeline */
+        @keyframes shiftGradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
 
-        .bg-aurora-vibrant {
-          background: linear-gradient(
-            90deg, 
-            #D92408, 
-            #7e22ce, 
-            #db2777,
-            #f59e0b
-          );
+        @keyframes breatheGlow {
+          0%, 100% { transform: scale(1); filter: blur(24px); }
+          50% { transform: scale(1.02); filter: blur(28px); }
+        }
+
+        .tech-bg-animate {
           background-size: 200% 200%;
-          animation: auroraMove 6s ease infinite alternate;
-        }
-
-        @keyframes auroraMove {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
+          animation: 
+            shiftGradient 6s ease infinite,
+            breatheGlow 4s ease-in-out infinite;
         }
       `}</style>
     </section>
