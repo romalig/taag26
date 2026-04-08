@@ -94,7 +94,7 @@ build_latest:
       --build-arg CHAT_IA_WEBPAGE_SERVICE_KEY="$CHAT_IA_WEBPAGE_SERVICE_KEY"
       -t $IMG_TAG_FINAL . -f .docker/Dockerfile
     - docker push $IMG_TAG_FINAL
-  needs: ["backup_latest"]
+  # needs: ["backup_latest"]
   only:
     - master
   tags:
