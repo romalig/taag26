@@ -63,19 +63,19 @@ deploy_development:
 # ── Producción ──────────────────────────────────────────
 
 # Backup current latest image before overwriting
-backup_latest:
-  stage: build-latest
-  variables:
-    IMG_TAG_ORIG: $IMAGE_NAME:latest
-    IMG_TAG_BACK: $IMAGE_NAME:latest-back
-  script:
-    - docker pull $IMG_TAG_ORIG
-    - docker tag "$IMG_TAG_ORIG" "$IMG_TAG_BACK"
-    - docker push $IMG_TAG_BACK
-  only:
-    - master
-  tags:
-    - docker
+# backup_latest:
+#   stage: build-latest
+#   variables:
+#     IMG_TAG_ORIG: $IMAGE_NAME:latest
+#     IMG_TAG_BACK: $IMAGE_NAME:latest-back
+#   script:
+#     - docker pull $IMG_TAG_ORIG
+#     - docker tag "$IMG_TAG_ORIG" "$IMG_TAG_BACK"
+#     - docker push $IMG_TAG_BACK
+#   only:
+#     - master
+#   tags:
+#     - docker
 
 # Build production image and push as latest
 build_latest:
