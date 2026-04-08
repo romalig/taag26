@@ -48,9 +48,9 @@ const TXA_MODAL_DATA = {
         image: "/create-products.svg"
       },
       {
-        title: "Strict Regulatory Compliance",
-        text: "Maintain a complete, unaltered audit trail. Our system is fully aligned with ISO 13485 and 21 CFR Part 11 regulatory requirements.",
-        image: "/phone2.png"
+        title: "Meet your new and better laboratory report",
+        text: "Add the specific information you want to show in your reports to inform and share your laboratory results.",
+        image: "/laboratory-report.svg"
       }
     ]
   },
@@ -59,19 +59,19 @@ const TXA_MODAL_DATA = {
     intro: "Leverage predictive microbiology to anticipate risks and ensure comprehensive, proactive quality management across your entire facility.",
     features: [
       {
-        title: "Interactive Facility Heatmaps",
-        text: "Visualize pathogen occurrences and testing results across your entire production plant in real-time to spot historical problem areas.",
-        image: "/img-txa-lab.svg"
+        title: "In-depth analysis to maximize food quality and safety",
+        text: "This platform is all about microbiological food safety management. Here you can easily analyze your laboratory results, statistics, warnings, smart and dynamic corrective action proposals, and much more.",
+        image: "/TxA_QA1.svg"
       },
       {
-        title: "AI Risk Prediction",
-        text: "Our proprietary AI models analyze live data to flag potential contamination events before they reach critical thresholds.",
-        image: "/phone2.png"
+        title: "Real time warnings for fast corrective actions",
+        text: "In the notification panel, you will get alerts with detailed information about positive results found in your plant. In case of positive results, TxA will propose an automated, dynamic and smart corrective action.",
+        image: "/TxA_QA2.svg"
       },
       {
-        title: "Automated Compliance Reporting",
-        text: "Generate verified quality certificates, trend analyses, and comprehensive compliance reports with just a single click.",
-        image: "/phone2.png"
+        title: "A new and better way of “seeing” microbiology",
+        text: "You will see all relevant information about your environmental monitoring plan on your food plant layout in a comprehensive and intuitive way.",
+        image: "/TxA_QA3.svg"
       }
     ]
   }

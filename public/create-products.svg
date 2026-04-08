@@ -1,4 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1184.123" height="931.93" viewBox="0 0 1184.123 931.93">
+<defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&amp;display=swap');
+      text {
+        font-family: 'Sora', sans-serif;
+      }
+    </style>
+  </defs>
   <defs>
     <filter id="Trazado_9125" x="0" y="0" width="1184.123" height="931.93" filterUnits="userSpaceOnUse">
       <feOffset dx="15" dy="10" input="SourceAlpha"/>
