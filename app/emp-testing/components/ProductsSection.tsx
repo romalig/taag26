@@ -15,15 +15,15 @@ export default function ProductsSection() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 mb-16 md:mb-20 w-full">
            <div>
               <span className="text-[#FF270A] font-bold tracking-widest uppercase text-xs mb-3 md:mb-4 block">
-                THE ELEVIA™ SUITE
+                POWERED BY AIGOR
               </span>
               <h2 className="text-3xl md:text-5xl font-black leading-tight tracking-tighter text-white">
-                AiGOR-Powered <br /> <span className="text-gray-400">Multiplex Kits.</span>
+                ELEVIA <br /> <span className="text-gray-400">Multiplex Kits.</span>
               </h2>
            </div>
            {/* 1. Texto comienza más a la izquierda (cambiado max-w-sm a max-w-lg) */}
            <p className="text-sm md:text-base text-gray-400 leading-relaxed font-medium md:text-right md:max-w-lg pb-1 shrink-0">
-              Extreme sensitivity and multiplex capabilities targeting RNA to bypass traditional biological limits.
+              Elevia is our premium suite of diagnostic products based on AiGOR technology. By targeting RNA, Elevia bypasses traditional biological limits to deliver extreme sensitivity and ultra-fast results across your testing matrices.
            </p>
         </div>
 
@@ -53,7 +53,7 @@ export default function ProductsSection() {
                 Elevia Salmonella
               </h3>
               <p className="text-gray-400 font-medium leading-relaxed text-sm md:text-base mb-8">
-                Ultra-fast Salmonella detection in as little as 3 hours, and 6 hours, for environmental and food samples, respectively.
+                Ultra-fast Salmonella detection in as little as 3 hours in environmental samples.
               </p>
               
               {/* 3. Enlace Learn More (Blanco) */}
@@ -85,10 +85,10 @@ export default function ProductsSection() {
             {/* CONTENIDO TEXTUAL: 2. Textos más abajo */}
             <div className="relative z-10 flex flex-col flex-1 p-8 md:p-10 mt-[220px] md:mt-[280px]">
               <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight mb-3">
-                Elevia Salmonella + EB
+                Elevia Salmonella + Listeria spp
               </h3>
               <p className="text-gray-400 font-medium leading-relaxed text-sm md:text-base mb-8">
-                Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours.
+                Simultaneous identification of Salmonella and Listeria spp in a single reaction, in as little as 3 hours.
               </p>
               
               {/* 3. Enlace Learn More (Blanco) */}
@@ -110,10 +110,10 @@ export default function ProductsSection() {
             <div className="flex-1 flex flex-col">
               {/* Contenedor de título con altura uniforme para alinear descripciones */}
               <div className="h-16 md:h-20 mb-4 flex items-start">
-                <h3 className="text-xl font-bold text-white leading-snug">Elevia Salmonella + Listeria spp.</h3>
+                <h3 className="text-xl font-bold text-white leading-snug">Elevia Salmonella + Enterobacteria.</h3>
               </div>
               <p className="text-sm text-gray-400 font-medium leading-relaxed">
-                Simultaneous identification of Salmonella and Listeria spp in a single reaction, in as little as 3 hours.
+                Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours.
               </p>
             </div>
             
