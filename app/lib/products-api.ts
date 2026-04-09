@@ -13,10 +13,14 @@ interface Envelope<T> {
 // ---------------------------------------------------------------------------
 // Public domain types
 // ---------------------------------------------------------------------------
+/** API row shape `{ uuid, nombre }` (industry-categories list and commercial category pivots) */
 export interface IndustryCategory {
   uuid: string;
   nombre: string;
 }
+
+/** Same shape as {@link IndustryCategory}; used in `with-categories` payloads */
+export type CommercialCategory = IndustryCategory;
 
 export interface IndustrialCatalogItem {
   uuid: string;
@@ -162,7 +166,7 @@ export async function getIndustryCategories(): Promise<IndustryCategory[]> {
 }
 
 // ---------------------------------------------------------------------------
-// Shape returned by /pcr-kit-food/with-categories
+// Shape returned by GET /products/pcr-kit-food/with-categories (see OpenAPI / api-endpoints-frontend.md)
 // ---------------------------------------------------------------------------
 interface PcrKitWithCategories {
   uuid: string;
@@ -170,8 +174,23 @@ interface PcrKitWithCategories {
   description: string | null;
   targets: string | null;
   technology: string | null;
-  industry_categories: IndustryCategory[];
+  /** Laravel: producto.commercialCategories → JSON key commercial_categories */
+  commercial_categories?: CommercialCategory[] | null;
+  commercialCategories?: CommercialCategory[] | null;
 }
+
+function wireCommercialCategories(kit: PcrKitWithCategories): CommercialCategory[] {
+  const row = kit as Record<string, unknown>;
+  const snake = row.commercial_categories;
+  const camel = row.commercialCategories;
+  if (Array.isArray(snake)) return snake as CommercialCategory[];
+  if (Array.isArray(camel)) return camel as CommercialCategory[];
+  return [];
+}
+
+/** When commercial_categories is [] (empty pivot / no seed), still list kits under one tab */
+const UNCATEGORIZED_TAB_ID = "uncategorized";
+const UNCATEGORIZED_TAB_LABEL = "All solutions";
 
 export interface AllProductsResult {
   byCategory: Record<string, IndustrialCatalogItem[]>;
@@ -179,9 +198,8 @@ export interface AllProductsResult {
 }
 
 /**
- * Single-call fetch of ALL products with their associated categories.
+ * Single-call fetch of ALL products with their commercial categories (`commercial_categories` on each kit).
  * Returns products grouped by category UUID + a lookup of category names.
- * This single endpoint replaces the need for separate category and item calls.
  */
 export async function getAllProductsByCategory(): Promise<AllProductsResult> {
   const kits = await fetchProductsApi<PcrKitWithCategories[]>(
@@ -200,7 +218,13 @@ export async function getAllProductsByCategory(): Promise<AllProductsResult> {
       technology: kit.technology || "N/A",
     };
 
-    for (const cat of kit.industry_categories) {
+    const wired = wireCommercialCategories(kit);
+    const categoriesForGrouping: CommercialCategory[] =
+      wired.length > 0
+        ? wired
+        : [{ uuid: UNCATEGORIZED_TAB_ID, nombre: UNCATEGORIZED_TAB_LABEL }];
+
+    for (const cat of categoriesForGrouping) {
       if (!byCategory[cat.uuid]) byCategory[cat.uuid] = [];
       byCategory[cat.uuid].push(item);
       if (!categoryNames[cat.uuid]) categoryNames[cat.uuid] = cat.nombre;
