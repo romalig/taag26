@@ -15,6 +15,12 @@ WORKDIR /app
 # NEXT_PUBLIC_* vars must be present at build time so Next.js inlines them
 ARG NEXT_PUBLIC_PRODUCTS_API_URL=""
 ARG NEXT_PUBLIC_PRODUCTS_SERVICE_KEY=""
+# Chat upstream — same as CI build-args; must exist at `next build` so server
+# routes (e.g. /bff/chat) see a non-empty URL in the compiled bundle.
+ARG CHAT_IA_WEBPAGE_API_URL=""
+ARG CHAT_IA_WEBPAGE_SERVICE_KEY=""
+ENV CHAT_IA_WEBPAGE_API_URL=$CHAT_IA_WEBPAGE_API_URL
+ENV CHAT_IA_WEBPAGE_SERVICE_KEY=$CHAT_IA_WEBPAGE_SERVICE_KEY
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

@@ -9,7 +9,7 @@ interface ChatPayload {
  * Opens a streaming connection to the chat API and returns the raw Response
  * for the caller to proxy or consume as SSE.
  *
- * This remains server-side only (called from /api/chat route) because the
+ * This remains server-side only (called from the chat BFF route) because the
  * response requires buffering and JSON cleanup before reaching the client.
  */
 export async function chatStream(body: ChatPayload): Promise<Response> {

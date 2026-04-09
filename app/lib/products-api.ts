@@ -13,10 +13,14 @@ interface Envelope<T> {
 // ---------------------------------------------------------------------------
 // Public domain types
 // ---------------------------------------------------------------------------
+/** API row shape `{ uuid, nombre }` (industry-categories list and commercial category pivots) */
 export interface IndustryCategory {
   uuid: string;
   nombre: string;
 }
+
+/** Same shape as {@link IndustryCategory}; used in `with-categories` payloads */
+export type CommercialCategory = IndustryCategory;
 
 export interface IndustrialCatalogItem {
   uuid: string;
@@ -165,21 +169,34 @@ export async function getIndustryCategories(): Promise<IndustryCategory[]> {
 }
 
 // ---------------------------------------------------------------------------
-// Shape returned by /pcr-kit-food/with-categories
+// Shape returned by GET /products/pcr-kit-food/with-categories (see OpenAPI / api-endpoints-frontend.md)
 // ---------------------------------------------------------------------------
-interface CommercialCategory {
-  uuid: string;
-  nombre: string;
-}
-
 interface PcrKitFoodWithCategories {
   uuid: string;
   title: string;
   description: string | null;
   targets: string | null;
   technology: string | null;
-  commercial_categories: CommercialCategory[];
+  /** Laravel: producto.commercialCategories → JSON key commercial_categories */
+  commercial_categories?: CommercialCategory[] | null;
+  commercialCategories?: CommercialCategory[] | null;
+  /** Legacy / alternate relation name (same `{ uuid, nombre }[]` shape) */
+  industry_categories?: CommercialCategory[] | null;
 }
+
+function wireCommercialCategories(kit: PcrKitFoodWithCategories): CommercialCategory[] {
+  const snake = kit.commercial_categories;
+  const camel = kit.commercialCategories;
+  const legacy = kit.industry_categories;
+  if (Array.isArray(snake)) return snake;
+  if (Array.isArray(camel)) return camel;
+  if (Array.isArray(legacy)) return legacy;
+  return [];
+}
+
+/** When commercial_categories is [] (empty pivot / no seed), still list kits under one tab */
+const UNCATEGORIZED_TAB_ID = "uncategorized";
+const UNCATEGORIZED_TAB_LABEL = "All solutions";
 
 export interface AllProductsResult {
   byCategory: Record<string, IndustrialCatalogItem[]>;
@@ -187,18 +204,22 @@ export interface AllProductsResult {
 }
 
 /**
- * Fetches ALL products with their commercial categories and groups them.
- * Returns products grouped by commercial category + a lookup of category names.
+ * Single-call fetch of ALL products with their commercial categories (`commercial_categories` on each kit).
+ * Returns products grouped by category UUID + a lookup of category names.
  */
 export async function getAllProductsByCategory(): Promise<AllProductsResult> {
-  const kits = await fetchProductsApi<PcrKitFoodWithCategories[]>(
-    "/products/pcr-kit-food/with-categories"
-  );
+  const raw = await fetchProductsApi<unknown>("/products/pcr-kit-food/with-categories");
+  if (!Array.isArray(raw)) {
+    throw new Error("Products API: with-categories expected `data` to be a JSON array of kits");
+  }
+  const kits = raw as PcrKitFoodWithCategories[];
 
   const byCategory: Record<string, IndustrialCatalogItem[]> = {};
   const categoryNames: Record<string, string> = {};
 
   for (const kit of kits) {
+    if (!kit || typeof kit !== "object") continue;
+
     const rawDesc = kit.description?.trim() || "";
     const shortDesc = rawDesc
       ? rawDesc.split(/\n/)[0].slice(0, 200) + (rawDesc.length > 200 ? "…" : "")
@@ -212,19 +233,16 @@ export async function getAllProductsByCategory(): Promise<AllProductsResult> {
       technology: kit.technology || "N/A",
     };
 
-    const cats = kit.commercial_categories;
-    if (!cats || cats.length === 0) {
-      // Products without categories go into "Other"
-      if (!byCategory["other"]) byCategory["other"] = [];
-      byCategory["other"].push(item);
-      if (!categoryNames["other"]) categoryNames["other"] = "Other";
-    } else {
-      for (const cat of cats) {
-        const key = cat.uuid;
-        if (!byCategory[key]) byCategory[key] = [];
-        byCategory[key].push(item);
-        if (!categoryNames[key]) categoryNames[key] = cat.nombre;
-      }
+    const wired = wireCommercialCategories(kit);
+    const categoriesForGrouping: CommercialCategory[] =
+      wired.length > 0
+        ? wired
+        : [{ uuid: UNCATEGORIZED_TAB_ID, nombre: UNCATEGORIZED_TAB_LABEL }];
+
+    for (const cat of categoriesForGrouping) {
+      if (!byCategory[cat.uuid]) byCategory[cat.uuid] = [];
+      byCategory[cat.uuid].push(item);
+      if (!categoryNames[cat.uuid]) categoryNames[cat.uuid] = cat.nombre;
     }
   }
 

@@ -10,6 +10,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { parseDifyResponse, looksLikeJson, DifyResponse } from "@/app/types/dify";
+import { CHAT_BFF_PATH } from "@/app/lib/chat-bff-path";
 import { ProductCard } from "@/app/components/ProductCard";
 
 interface Message {
@@ -180,7 +181,7 @@ export default function TxAConversational() {
       ]);
 
       try {
-        const res = await fetch("/api/chat", {
+        const res = await fetch(CHAT_BFF_PATH, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
