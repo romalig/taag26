@@ -11,6 +11,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { parseDifyResponse, looksLikeJson, DifyResponse } from "@/app/types/dify";
+import { CHAT_BFF_HEALTH_PATH, CHAT_BFF_PATH } from "@/app/lib/chat-bff-path";
 import { ProductCard } from "@/app/components/ProductCard";
 
 type ServiceHealth = "checking" | "up" | "down" | "misconfigured";
@@ -29,7 +30,7 @@ export default function SolutionFinder() {
 
     (async () => {
       try {
-        const res = await fetch("/api/chat/health", { cache: "no-store" });
+        const res = await fetch(CHAT_BFF_HEALTH_PATH, { cache: "no-store" });
         const body = (await res.json().catch(() => ({}))) as {
           ok?: boolean;
           reason?: string;
@@ -61,7 +62,7 @@ export default function SolutionFinder() {
       setStructuredReply(null);
 
       try {
-        const res = await fetch("/api/chat", {
+        const res = await fetch(CHAT_BFF_PATH, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
