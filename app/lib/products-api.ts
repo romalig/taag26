@@ -180,11 +180,10 @@ interface PcrKitWithCategories {
 }
 
 function wireCommercialCategories(kit: PcrKitWithCategories): CommercialCategory[] {
-  const row = kit as Record<string, unknown>;
-  const snake = row["commercial_categories"];
-  const camel = row["commercialCategories"];
-  if (Array.isArray(snake)) return snake as CommercialCategory[];
-  if (Array.isArray(camel)) return camel as CommercialCategory[];
+  const snake = kit.commercial_categories;
+  const camel = kit.commercialCategories;
+  if (Array.isArray(snake)) return snake;
+  if (Array.isArray(camel)) return camel;
   return [];
 }
 
