@@ -177,13 +177,17 @@ interface PcrKitWithCategories {
   /** Laravel: producto.commercialCategories → JSON key commercial_categories */
   commercial_categories?: CommercialCategory[] | null;
   commercialCategories?: CommercialCategory[] | null;
+  /** Legacy / alternate relation name (same `{ uuid, nombre }[]` shape) */
+  industry_categories?: CommercialCategory[] | null;
 }
 
 function wireCommercialCategories(kit: PcrKitWithCategories): CommercialCategory[] {
   const snake = kit.commercial_categories;
   const camel = kit.commercialCategories;
+  const legacy = kit.industry_categories;
   if (Array.isArray(snake)) return snake;
   if (Array.isArray(camel)) return camel;
+  if (Array.isArray(legacy)) return legacy;
   return [];
 }
 
@@ -201,14 +205,18 @@ export interface AllProductsResult {
  * Returns products grouped by category UUID + a lookup of category names.
  */
 export async function getAllProductsByCategory(): Promise<AllProductsResult> {
-  const kits = await fetchProductsApi<PcrKitWithCategories[]>(
-    "/products/pcr-kit-food/with-categories"
-  );
+  const raw = await fetchProductsApi<unknown>("/products/pcr-kit-food/with-categories");
+  if (!Array.isArray(raw)) {
+    throw new Error("Products API: with-categories expected `data` to be a JSON array of kits");
+  }
+  const kits = raw as PcrKitWithCategories[];
 
   const byCategory: Record<string, IndustrialCatalogItem[]> = {};
   const categoryNames: Record<string, string> = {};
 
   for (const kit of kits) {
+    if (!kit || typeof kit !== "object") continue;
+
     const item: IndustrialCatalogItem = {
       uuid: kit.uuid,
       title: kit.title,
