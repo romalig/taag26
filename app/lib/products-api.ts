@@ -52,7 +52,7 @@ interface PcrKitFoodDetail {
   microorganisms?: string | null;
   main_industries?: string | null;
   intended_environment?: string | null;
-  performance?: string | null;
+  sensitivity?: string | null;
   validated_matrices?: string | null;
   detection_channel?: string | null;
   thermocycler?: string | null;
@@ -92,7 +92,7 @@ interface PcrKitFoodSolution {
   advantages?: string[];
   techSpecs?: {
     targets?: string | null;
-    performance?: string | null;
+    sensitivity?: string | null;
     matrices?: string | null;
     time?: string | null;
     technology?: string | null;
@@ -156,7 +156,7 @@ function getCatalogDescription(detail: PcrKitFoodDetail): string {
     detail.producto?.description_eng?.trim() ||
     detail.producto?.description_esp?.trim() ||
     detail.technical_principle?.trim() ||
-    detail.performance?.trim() ||
+    detail.sensitivity?.trim() ||
     "Technical details available in the product datasheet."
   );
 }
@@ -299,7 +299,7 @@ export async function getKitSolution(uuid: string): Promise<SolutionContent> {
     limitations: toSentenceList(solution.limitations, "Consult the datasheet for product limitations."),
     techSpecs: {
       targets: toText(solution.techSpecs?.targets),
-      performance: toText(solution.techSpecs?.performance),
+      sensitivity: toText(solution.techSpecs?.sensitivity),
       matrices: toText(solution.techSpecs?.matrices),
       time: toText(solution.techSpecs?.time),
       technology: toText(solution.techSpecs?.technology),

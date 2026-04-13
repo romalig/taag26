@@ -32,7 +32,7 @@ export const SOLUTIONS_DATA: Record<string, SolutionContent> = {
     ],
     techSpecs: {
       targets: "Listeria spp. & Salmonella spp.",
-      performance: "Surface samples: 1 CFU / 100 cm2",
+      sensitivity: "Surface samples: 1 CFU / 100 cm2",
       matrices: "Stainless steel, plastic, ceramic surfaces, and liquids",
       time: "Total Time: < 3 Hours",
       technology: "Real-Time PCR (TaqMan®) with Lysis Inactivation",
@@ -90,7 +90,7 @@ export const SOLUTIONS_DATA: Record<string, SolutionContent> = {
     ],
     techSpecs: {
       targets: "Salmonella spp., L. monocytogenes, E. coli O157:H7",
-      performance: "Food samples: 1 CFU/25g | Surface samples: 1 CFU/100 cm2",
+      sensitivity: "Food samples: 1 CFU/25g | Surface samples: 1 CFU/100 cm2",
       matrices: "Meats, Dairy, Surfaces, Water, Leafy greens",
       time: "PCR: 120 minutes (Plus enrichment)",
       technology: "Real-Time PCR with Melt Curve Analysis - KAI TM",
@@ -144,7 +144,7 @@ export const SOLUTIONS_DATA: Record<string, SolutionContent> = {
     ],
     techSpecs: {
       targets: "Listeria spp. (Genus wide)",
-      performance: "Surface samples: 1 CFU / 100 cm2",
+      sensitivity: "Surface samples: 1 CFU / 100 cm2",
       matrices: "Environmental Sponges/Swabs (Stainless steel, plastic, rubber)",
       time: "PCR: 120 minutes (Total time 22 hours incl. enrichment)",
       technology: "Real-Time PCR",
@@ -203,7 +203,7 @@ export const SOLUTIONS_DATA: Record<string, SolutionContent> = {
     ],
     techSpecs: {
       targets: "Salmonella spp., S. aureus, E. coli and L. monocytogenes",
-      performance: "Food: 1 CFU/25g | Surfaces: 1 CFU/100 cm2",
+      sensitivity: "Food: 1 CFU/25g | Surfaces: 1 CFU/100 cm2",
       matrices: "Stainless steel surfaces, pasteurized milk, leafy greens",
       time: "PCR: 120 minutes",
       technology: "Real-Time PCR with Melt Curve Analysis - KAI TM",

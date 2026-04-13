@@ -74,5 +74,7 @@ function parseInlineFormattedText(value: string): ReactNode[] {
 }
 
 export default function InlineFormattedText({ value }: { value: string }) {
-  return <>{parseInlineFormattedText(value)}</>;
+  return (
+    <span className="whitespace-pre-line">{parseInlineFormattedText(value)}</span>
+  );
 }

@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 });
 
 export default function DatasheetDocument({ data }: { data: SolutionContent }) {
-  const showPerformance = hasDisplayValue(data.techSpecs.performance);
+  const showSensitivity = hasDisplayValue(data.techSpecs.sensitivity);
   const showTargetType = hasDisplayValue(data.targetType);
 
   return (
@@ -119,21 +119,23 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
            {showTargetType && <Text style={styles.chip}>{data.targetType}</Text>}
         </View>
 
-        {/* METRICS GRID */}
-        <View style={styles.metricsGrid}>
-           <View style={styles.metricCol}>
-              <Text style={styles.metricLabel}>Targets</Text>
-              <Text style={styles.metricValue}>{formatPdfInline(data.techSpecs.targets)}</Text>
-           </View>
-           {showPerformance && (
-             <View style={styles.metricCol}>
-                <Text style={styles.metricLabel}>Performance</Text>
-                <Text style={styles.metricValue}>{formatPdfInline(data.techSpecs.performance)}</Text>
-             </View>
-           )}
-           <View style={styles.metricCol}>
-              <Text style={styles.metricLabel}>Main Industries</Text>
-              <Text style={styles.metricValue}>{data.mainIndustries.slice(0, 3).join(", ")}</Text>
+        {/* METRICS: Targets | Main industries | Sensitivity (one row) */}
+        <View style={{ borderBottomWidth: 0.5, borderBottomColor: "#E5E7EB", paddingBottom: 20, marginBottom: 30 }}>
+           <View style={{ flexDirection: "row", gap: 12 }}>
+              <View style={{ flex: 1, paddingRight: 6 }}>
+                 <Text style={styles.metricLabel}>Targets</Text>
+                 <Text style={styles.metricValue}>{formatPdfInline(data.techSpecs.targets)}</Text>
+              </View>
+              <View style={{ flex: 1, paddingRight: 6 }}>
+                 <Text style={styles.metricLabel}>Main industries</Text>
+                 <Text style={styles.metricValue}>{data.mainIndustries.join(", ")}</Text>
+              </View>
+              {showSensitivity ? (
+                <View style={{ flex: 1 }}>
+                   <Text style={styles.metricLabel}>Sensitivity</Text>
+                   <Text style={styles.metricValue}>{formatPdfInline(data.techSpecs.sensitivity)}</Text>
+                </View>
+              ) : null}
            </View>
         </View>
 
@@ -188,7 +190,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
              <Text style={styles.sectionTitle}>Technical Specifications</Text>
              <View style={styles.specContainer}>
                 <SpecRow label="Microorganisms" value={formatPdfInline(data.techSpecs.targets)} />
-                {showPerformance && <SpecRow label="Performance" value={formatPdfInline(data.techSpecs.performance)} />}
+                {showSensitivity && <SpecRow label="Sensitivity" value={formatPdfInline(data.techSpecs.sensitivity)} />}
                 <SpecRow label="Validated Matrices" value={formatPdfInline(data.techSpecs.matrices)} />
                 <SpecRow label="Time" value={formatPdfInline(data.techSpecs.time)} />
                 <SpecRow label="Technology" value={formatPdfInline(data.techSpecs.technology)} />

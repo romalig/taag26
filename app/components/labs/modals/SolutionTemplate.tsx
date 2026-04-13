@@ -7,10 +7,12 @@ import DatasheetDocument from "./DatasheetDocument";
 import { SolutionContent } from "./types";
 import { hasDisplayValue } from "@/app/lib/spec-values";
 import InlineFormattedText from "@/app/components/shared/InlineFormattedText";
+import { useCTA } from "@/app/components/CTAProvider";
 
 export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const showPerformance = hasDisplayValue(data.techSpecs.performance);
+  const { openMeeting } = useCTA();
+  const showSensitivity = hasDisplayValue(data.techSpecs.sensitivity);
   const showTargetType = hasDisplayValue(data.targetType);
 
   if (!data) return null;
@@ -85,25 +87,47 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           </div>
         </div>
 
-        {/* Metrics Grid */}
-        <div className={`grid grid-cols-2 gap-6 mb-12 border-b border-gray-100 pb-12 ${showPerformance ? "md:grid-cols-4" : "md:grid-cols-3"}`}>
-          <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight"><InlineFormattedText value={data.techSpecs.targets} /></span>
-          </div>
-          {showPerformance && (
+        {/* Metrics: row1 Targets | Main industries | Sensitivity (one row md+); row2 Matrices | Time */}
+        <div className="space-y-8 mb-12 border-b border-gray-100 pb-12">
+          <div
+            className={`grid grid-cols-1 gap-6 ${
+              showSensitivity ? "md:grid-cols-3" : "md:grid-cols-2"
+            }`}
+          >
             <div>
-                <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Performance</span>
-                <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight"><InlineFormattedText value={data.techSpecs.performance} /></span>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
+              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
+                <InlineFormattedText value={data.techSpecs.targets} />
+              </span>
             </div>
-          )}
-          <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Matrices</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight"><InlineFormattedText value={data.techSpecs.matrices} /></span>
+            <div>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Main industries</span>
+              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
+                {data.mainIndustries.join(", ")}
+              </span>
+            </div>
+            {showSensitivity ? (
+              <div>
+                <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Sensitivity</span>
+                <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
+                  <InlineFormattedText value={data.techSpecs.sensitivity} />
+                </span>
+              </div>
+            ) : null}
           </div>
-          <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Matrices</span>
+              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
+                <InlineFormattedText value={data.techSpecs.matrices} />
+              </span>
+            </div>
+            <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Time</span>
-              <span className="block text-lg md:text-xl font-bold text-[#FF270A] leading-tight"><InlineFormattedText value={data.techSpecs.time} /></span>
+              <span className="block text-lg md:text-xl font-bold text-[#FF270A] leading-tight">
+                <InlineFormattedText value={data.techSpecs.time} />
+              </span>
+            </div>
           </div>
         </div>
 
@@ -236,7 +260,11 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
               </>
             )}
          </button>
-         <button className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
+         <button
+           type="button"
+           onClick={openMeeting}
+           className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg"
+         >
             <Mail className="w-4 h-4" />
             Contact Sales Team
          </button>

@@ -72,8 +72,10 @@ export function formatPdfInline(value: string): React.ReactNode[] {
   cleaned = cleaned.replace(/<sup\b[^>]*>(.*?)<\/sup>/gi, (_, c: string) => toUnicodeSup(c));
   cleaned = cleaned.replace(/<sub\b[^>]*>(.*?)<\/sub>/gi, (_, c: string) => toUnicodeSub(c));
 
-  // Split only on <br> now
-  const segments = cleaned.split(/<br\s*\/?>/gi);
+  cleaned = cleaned.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+  // Split on explicit <br> or newline (e.g. from Excel Alt+Enter via API/DB)
+  const segments = cleaned.split(/<br\s*\/?>|\n/gi);
 
   const nodes: React.ReactNode[] = [];
 

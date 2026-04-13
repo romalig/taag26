@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 });
 
 export default function DatasheetDocument({ data }: { data: SolutionContent }) {
-  const showPerformance = hasDisplayValue(data.techSpecs.performance);
+  const showSensitivity = hasDisplayValue(data.techSpecs.sensitivity);
   const showTargetType = hasDisplayValue(data.targetType);
 
   return (
@@ -101,7 +101,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         {/* --- TWO COLUMNS LAYOUT --- */}
         <View style={{ flexDirection: "row", gap: 20, marginBottom: 10 }}>
             <View style={{ flex: 1 }}>
-                <Text style={styles.sectionTitle}>Main Industries</Text>
+                <Text style={styles.sectionTitle}>Main industries</Text>
                 {data.mainIndustries.map((ind, i) => <Text key={i} style={styles.listItem}>• {ind}</Text>)}
             </View>
             <View style={{ flex: 1 }}>
@@ -121,7 +121,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
              <Text style={styles.sectionTitle}>Technical Specifications</Text>
              <View style={styles.specContainer}>
                 <SpecRow label="Targets" value={formatPdfInline(data.techSpecs.targets)} />
-                {showPerformance && <SpecRow label="Performance" value={formatPdfInline(data.techSpecs.performance)} />}
+                {showSensitivity && <SpecRow label="Sensitivity" value={formatPdfInline(data.techSpecs.sensitivity)} />}
                 <SpecRow label="Validated Matrices" value={formatPdfInline(data.techSpecs.matrices)} />
                 <SpecRow label="Time to Results" value={formatPdfInline(data.techSpecs.time)} />
                 <SpecRow label="Technology" value={formatPdfInline(data.techSpecs.technology)} />

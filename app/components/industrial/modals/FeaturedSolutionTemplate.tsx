@@ -241,12 +241,13 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                       </span>
                    ))}
                 </div>
-                {/* Logo AOAC */}
+                {/* Logo AOAC — oculto temporalmente
                 {data.aoacLogo && (
                    <div className="relative w-32 h-16 opacity-90">
                       <Image src={data.aoacLogo} alt="AOAC Validated" fill className="object-contain object-left" />
                    </div>
                 )}
+                */}
              </div>
           )}
 
