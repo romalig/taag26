@@ -111,12 +111,12 @@ interface PcrKitFoodSolution {
 // Generic fetch helper — calls Laravel directly
 // ---------------------------------------------------------------------------
 async function fetchProductsApi<T>(path: string): Promise<T> {
-  if (!API.products.baseUrl) {
-    throw new Error("NEXT_PUBLIC_PRODUCTS_API_URL is not configured");
+  if (!API.apiwebsite.baseUrl) {
+    throw new Error("NEXT_PUBLIC_APIWEBSITE_URL is not configured");
   }
 
-  const response = await fetch(`${API.products.baseUrl}${path}`, {
-    headers: API.products.headers(),
+  const response = await fetch(`${API.apiwebsite.baseUrl}${path}`, {
+    headers: API.apiwebsite.headers(),
     cache: "no-store",
   });
 

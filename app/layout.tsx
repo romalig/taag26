@@ -3,6 +3,7 @@ import { Sora } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { LocaleProvider } from "./contexts/LocaleContext";
 import { CTAProvider } from "./components/CTAProvider";
 import BookMeetingModal from "./components/BookMeetingModal";
 import { ModalProvider } from "./components/industrial/ModalProvider";
@@ -30,15 +31,17 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${sora.className} antialiased`}>
-        <CTAProvider>
-          <ModalProvider>
-            <Header theme="dark" />
-            {children}
-            <Footer />
-            <BookMeetingModal />
-            <SolutionModal />
-          </ModalProvider>
-        </CTAProvider>
+        <LocaleProvider defaultLocale="en">
+          <CTAProvider>
+            <ModalProvider>
+              <Header theme="dark" />
+              {children}
+              <Footer />
+              <BookMeetingModal />
+              <SolutionModal />
+            </ModalProvider>
+          </CTAProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

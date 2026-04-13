@@ -13,8 +13,12 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 # NEXT_PUBLIC_* vars must be present at build time so Next.js inlines them
-ARG NEXT_PUBLIC_PRODUCTS_API_URL=""
-ARG NEXT_PUBLIC_PRODUCTS_SERVICE_KEY=""
+ARG NEXT_PUBLIC_APIWEBSITE_URL=""
+ARG NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY=""
+ARG NEXT_PUBLIC_TXALAB_LOGIN_URL="https://txalab.taag-genetics.com"
+ENV NEXT_PUBLIC_APIWEBSITE_URL=$NEXT_PUBLIC_APIWEBSITE_URL
+ENV NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY=$NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY
+ENV NEXT_PUBLIC_TXALAB_LOGIN_URL=$NEXT_PUBLIC_TXALAB_LOGIN_URL
 # Chat upstream — same as CI build-args; must exist at `next build` so server
 # routes (e.g. /bff/chat) see a non-empty URL in the compiled bundle.
 ARG CHAT_IA_WEBPAGE_API_URL=""
