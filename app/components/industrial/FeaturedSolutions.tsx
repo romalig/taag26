@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowRight, CheckCircle2, Clock, TrendingDown } from "lucide-react";
@@ -212,9 +213,9 @@ export default function FeaturedSolutions() {
                            </div>
                         </div>
                         <div className="relative mt-6 z-30 opacity-100 translate-y-0 md:absolute md:bottom-6 md:right-10 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
-                           <button onClick={() => handleOpenDetails(solution, idx)} className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
-                             Learn More <ArrowRight className="w-3 h-3" />
-                           </button>
+                          <Link href="/TxA" className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
+                          Learn More <ArrowRight className="w-3 h-3" />
+                          </Link>  
                         </div>
                       </div>
                   </div>

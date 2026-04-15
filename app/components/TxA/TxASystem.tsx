@@ -3,15 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { 
-  Sparkles,
-  MoreHorizontal, 
-  MousePointerClick, 
-  Map 
+  BarChart3, 
+  FileCheck2,
+  Sparkles 
 } from "lucide-react";
-// IMPORTANTE: Ruta de tu ModalProvider
+// Ajusta esta ruta según dónde tengas tu ModalProvider
 import { useModal } from "../industrial/ModalProvider"; 
 
-// --- DATOS EXACTOS PARA LOS MODALES TxA ---
+// --- DATOS PARA LOS MODALES TxA ---
 const TXA_MODAL_DATA = {
   app: {
     title: "TxA APP",
@@ -20,7 +19,7 @@ const TXA_MODAL_DATA = {
       {
         title: "Digital Field Sampling",
         text: "Replace paper logs and manual data entry with a streamlined digital workflow. Capture photos, detailed data, and the exact sampling point automatically. Track every sample's journey with immutable digital logs, ensuring 100% compliance and complete visibility over your operations.",
-        image: "/TxA_app_1.png"
+        image: "/TxA_app_1.png" 
       },
       {
         title: "All information in one click",
@@ -34,24 +33,45 @@ const TXA_MODAL_DATA = {
       }
     ]
   },
+  lab: {
+    title: "TxA LAB",
+    intro: "Streamline your workflows and automate process controls to guarantee error-free, fully confident laboratory results every single time.",
+    features: [
+      {
+        title: "Use it for any test… even your own developed test",
+        text: "The TxA Lab allows you to create and edit as many assays as you need, even different specialities such as microbiology testing, chemical testing or any other test you need to add.",
+        image: "/your-laboratory-assay.svg"
+      },
+      {
+        title: "Detailed information means better corrective actions",
+        text: "Add all the fields you want to your samples in order to get all information you need to apply the best corrective actions.",
+        image: "/create-products.svg"
+      },
+      {
+        title: "Meet your new and better laboratory report",
+        text: "Add the specific information you want to show in your reports to inform and share your laboratory results.",
+        image: "/laboratory-report.svg"
+      }
+    ]
+  },
   qa: {
     title: "TxA QA",
     intro: "Leverage predictive microbiology to anticipate risks and ensure comprehensive, proactive quality management across your entire facility.",
     features: [
       {
-        title: "Interactive Facility Heatmaps",
-        text: "Visualize pathogen occurrences and testing results across your entire production plant in real-time to spot historical problem areas.",
-        image: "/phone2.png"
+        title: "In-depth analysis to maximize food quality and safety",
+        text: "This platform is all about microbiological food safety management. Here you can easily analyze your laboratory results, statistics, warnings, smart and dynamic corrective action proposals, and much more.",
+        image: "/TxA_QA1.svg"
       },
       {
-        title: "AI Risk Prediction",
-        text: "Our proprietary AI models analyze live data to flag potential contamination events before they reach critical thresholds.",
-        image: "/phone2.png"
+        title: "Real time warnings for fast corrective actions",
+        text: "In the notification panel, you will get alerts with detailed information about positive results found in your plant. In case of positive results, TxA will propose an automated, dynamic and smart corrective action.",
+        image: "/TxA_QA2.svg"
       },
       {
-        title: "Automated Compliance Reporting",
-        text: "Generate verified quality certificates, trend analyses, and comprehensive compliance reports with just a single click.",
-        image: "/phone2.png"
+        title: "A new and better way of “seeing” microbiology",
+        text: "You will see all relevant information about your environmental monitoring plan on your food plant layout in a comprehensive and intuitive way.",
+        image: "/TxA_QA3.svg"
       }
     ]
   }
@@ -59,10 +79,11 @@ const TXA_MODAL_DATA = {
 
 type TxaModalKey = keyof typeof TXA_MODAL_DATA;
 
-// --- COMPONENTE DE CONTENIDO DEL MODAL ---
+// --- COMPONENTE DE CONTENIDO (Se inyecta dentro del SolutionModal) ---
 function TxAModalContent({ data }: { data: typeof TXA_MODAL_DATA['app'] }) {
   return (
     <div className="w-full p-8 md:p-14 pb-12">
+      {/* Cabecera del Modal */}
       <div className="max-w-3xl mb-16">
         <h2 className="text-4xl md:text-5xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
           {data.title}
@@ -72,10 +93,16 @@ function TxAModalContent({ data }: { data: typeof TXA_MODAL_DATA['app'] }) {
         </p>
       </div>
 
+      {/* Las 3 Secciones de Features (Estructura Vertical: Texto -> Imagen) */}
       <div className="space-y-16">
         {data.features.map((feature, idx) => (
-          <div key={idx} className="flex flex-col gap-8 items-start w-full border-b border-gray-100 pb-16 last:border-0 last:pb-0">
-            <div className="w-full max-w-4xl"> 
+          <div 
+            key={idx} 
+            // Usamos flex-col siempre para apilar verticalmente. Agregamos un borde inferior sutil.
+            className="flex flex-col gap-8 items-start w-full border-b border-gray-100 pb-16 last:border-0 last:pb-0"
+          >
+            {/* Texto (Título y descripción) */}
+            <div className="w-full max-w-4xl"> {/* Limitamos un poco el ancho del texto para lectura */}
               <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#111111] text-white font-bold text-sm mb-4">
                 {idx + 1}
               </div>
@@ -87,8 +114,16 @@ function TxAModalContent({ data }: { data: typeof TXA_MODAL_DATA['app'] }) {
               </p>
             </div>
             
+            {/* Imagen (Ancho completo) */}
+            {/* Aumentamos significativamente la altura (h-350px / md:h-550px) para impacto */}
             <div className="w-full bg-[#F5F5F7] rounded-[2.5rem] h-[350px] md:h-[550px] relative flex items-center justify-center overflow-hidden border border-gray-100 mt-2">
-              <Image src={feature.image} alt={feature.title} fill className="object-contain drop-shadow-2xl" />
+              <Image 
+                src={feature.image} 
+                alt={feature.title} 
+                fill 
+                // Quitamos el padding p-6 para que la imagen use más espacio
+                className="object-contain" 
+              />
             </div>
           </div>
         ))}
@@ -98,21 +133,13 @@ function TxAModalContent({ data }: { data: typeof TXA_MODAL_DATA['app'] }) {
 }
 
 // --- COMPONENTE PRINCIPAL ---
-export default function LabTxA() {
-  const { openModal } = useModal(); 
-
-  // Observer para el Logo TxA superior
+export default function TxASystem() {
   const [isVisible, setIsVisible] = useState(false);
   const logoRef = useRef<HTMLDivElement>(null);
+  
+  // Extraemos openModal del contexto global
+  const { openModal } = useModal(); 
 
-  // Estados 100% idénticos a TxAConversational.tsx para la tarjeta Chat
-  const [isCardVisible, setIsCardVisible] = useState(false);
-  const [showUserMessage, setShowUserMessage] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
-  const [showAiResponse, setShowAiResponse] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  // Observer del Logo
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -120,48 +147,20 @@ export default function LabTxA() {
       },
       { threshold: 0.1 }
     );
+
     if (logoRef.current) observer.observe(logoRef.current);
-    return () => observer.disconnect();
+    return () => {
+      if (logoRef.current) observer.unobserve(logoRef.current);
+    };
   }, []);
 
-  // Observer de la Tarjeta (Extraído de tu TxAConversational.tsx)
-  useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    // Bajamos un poco el threshold para asegurar que dispare en la grilla
-    const cardThreshold = isMobile ? 0.3 : 0.5; 
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsCardVisible(entry.isIntersecting);
-        if (!entry.isIntersecting) {
-            setShowUserMessage(false);
-            setIsTyping(false);
-            setShowAiResponse(false);
-        }
-      },
-      { threshold: cardThreshold } 
-    );
-
-    if (cardRef.current) observer.observe(cardRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  // Lógica de Tiempos del Chat (Extraído de tu TxAConversational.tsx)
-  useEffect(() => {
-    if (isCardVisible) {
-      const t1 = setTimeout(() => setShowUserMessage(true), 1000); 
-      const t2 = setTimeout(() => setIsTyping(true), 2000);
-      const t3 = setTimeout(() => { setIsTyping(false); setShowAiResponse(true); }, 4000);
-      return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
-    }
-  }, [isCardVisible]);
-
+  // Función para inyectar el contenido en el modal global
   const handleOpenModule = (key: TxaModalKey) => {
     openModal(<TxAModalContent data={TXA_MODAL_DATA[key]} />);
   };
 
   return (
-    <section className="relative w-full bg-[#f5f5f7] py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden border-t border-gray-200/50">
+    <div className="relative w-full bg-[#f5f5f7] -mt-px py-24 md:py-32 flex flex-col items-center justify-center overflow-hidden">
       
       {/* 1. LOGO TxA ANIMADO */}
       <div 
@@ -170,178 +169,184 @@ export default function LabTxA() {
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[150px] opacity-0'
         }`}
       >
-        <Image src="/LogoTxANB.png" alt="TAAG Xpert Assistant Logo" fill className="object-contain drop-shadow-sm" priority />
+        <Image
+          src="/LogoTxANB.png"
+          alt="TAAG Xpert Assistant Logo"
+          fill
+          className="object-contain drop-shadow-sm"
+          priority
+        />
       </div>
 
       {/* 2. CONTENEDOR PRINCIPAL */}
-      <div className="relative z-20 bg-[#f5f5f7] w-full mt-24 md:mt-32 pt-10 flex flex-col items-center">
+      <div className="relative z-20 bg-[#f5f5f7] w-full mt-24 md:mt-32 pt-10 flex flex-col items-center px-4">
         
-        {/* ENCABEZADO: Ajustado a max-w-7xl y px-6 para alinear con las otras secciones */}
-        <div className="text-center w-full max-w-7xl mx-auto px-6 mb-20 flex flex-col items-center">
+        {/* ENCABEZADO */}
+        <div className="text-center max-w-[800px] mx-auto mb-20">
           <h2 className="text-3xl md:text-5xl font-bold text-[#1d1d1f] mb-6 font-sora tracking-tight leading-[1.05]">
             TAAG Xpert Assistant. <br className="hidden md:block"/>
             <span className="text-[#86868b]">Your AI-powered ecosystem.</span>
           </h2>
-          <p className="text-[17px] leading-[1.4] text-[#86868b] font-medium max-w-2xl text-center">
-            By partnering with our lab, you get full access to TxA. A complete ecosystem built to manage your entire microbiology operation, from digital field sampling to real-time result analysis.
+
+          <p className="text-[17px] leading-[1.4] text-[#86868b] font-medium max-w-2xl mx-auto">
+            TxA is a complete ecosystem built to manage your entire microbiology operation. 
+            From digital field sampling to real-time result analysis.
           </p>
         </div>
 
-        {/* 3. GRILLA PRINCIPAL */}
-        <div className="w-full max-w-7xl px-6 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {/* 3. GRILLA EXACTA */}
+        <div className="w-full max-w-[1330px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
           
-          {/* COLUMNA IZQUIERDA (1/3) */}
-          <div className="flex flex-col gap-5 lg:col-span-1">
-            
-            {/* --- TARJETA 1: TxA APP --- */}
-            <div className="bg-white rounded-[2.5rem] p-8 h-[280px] lg:flex-1 relative flex flex-col justify-center">
-              <div className="absolute top-8 left-8">
-                <span className="text-sm font-bold tracking-widest text-purple-700 uppercase">TxA APP</span>
-              </div>
-              <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
-                Digitize your sampling process for total control and end-to-end traceability.
-              </p>
-              <button 
-                onClick={() => handleOpenModule('app')}
-                className="absolute bottom-8 left-8 z-30 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 cursor-pointer pointer-events-auto"
-              >
-                  learn more <span>&gt;</span>
-              </button>
+          {/* --- TARJETA 1: TxA APP --- */}
+          <div className="bg-white rounded-[32px] p-8 h-[280px] relative flex flex-col justify-center">
+            <div className="absolute top-8 left-8">
+              <span className="text-sm font-bold tracking-widest text-purple-700 uppercase">TxA APP</span>
             </div>
-
-            {/* --- TARJETA 2: TxA QA --- */}
-            <div className="bg-white rounded-[2.5rem] p-8 h-[280px] lg:flex-1 relative flex flex-col justify-center">
-              <div className="absolute top-8 left-8">
-                <span className="text-sm font-bold tracking-widest text-cyan-500 uppercase">TxA QA</span>
-              </div>
-              <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
-                Utilize predictive microbiology for comprehensive and preventive quality management.
-              </p>
-              <button 
-                onClick={() => handleOpenModule('qa')}
-                className="absolute bottom-8 left-8 z-30 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 cursor-pointer pointer-events-auto"
-              >
-                  learn more <span>&gt;</span>
-              </button>
-            </div>
-
+            <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
+              Digitize your sampling process for total control and end-to-end traceability.
+            </p>
+            <button 
+              onClick={() => handleOpenModule('app')}
+              className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group"
+            >
+                learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
+            </button>
           </div>
 
-          {/* COLUMNA DERECHA (2/3): CHAT AI (Directamente de TxAConversational) */}
-          <div 
-            ref={cardRef}
-            // Ajustamos h-[580px] en móvil para dar espacio, y en lg se adapta bien
-            className="lg:col-span-2 w-full h-[580px] lg:h-auto lg:min-h-[560px] rounded-[2.5rem] overflow-hidden relative group transition-all duration-500 bg-gradient-to-br from-indigo-600 to-blue-500 shadow-2xl shadow-indigo-600/20"
-          >
-            {/* Efecto de Brillo de la Tarjeta (Shine) */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 animate-shine pointer-events-none z-0" />
+          {/* --- TARJETA 2: TxA LAB --- */}
+          <div className="bg-white rounded-[32px] p-8 h-[280px] relative flex flex-col justify-center">
+            <div className="absolute top-8 left-8">
+              <span className="text-sm font-bold tracking-widest text-blue-700 uppercase">TxA LAB</span>
+            </div>
+            <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
+              Streamline workflows and automate process controls for fully confident lab results.
+            </p>
+            <button 
+              onClick={() => handleOpenModule('lab')}
+              className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group"
+            >
+                learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
+            </button>
+          </div>
+
+          {/* --- TARJETA 3: TxA QA --- */}
+          <div className="bg-white rounded-[32px] p-8 h-[280px] relative flex flex-col justify-center">
+            <div className="absolute top-8 left-8">
+              <span className="text-sm font-bold tracking-widest text-cyan-500 uppercase">TxA QA</span>
+            </div>
+            <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
+              Utilize predictive microbiology for comprehensive and preventive quality management.
+            </p>
+            <button 
+              onClick={() => handleOpenModule('qa')}
+              className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group"
+            >
+                learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
+            </button>
+          </div>
+
+          {/* --- TARJETA HORIZONTAL: Neural Core --- */}
+          <div className="md:col-span-3 bg-white rounded-[32px] relative overflow-hidden h-[450px] md:h-[400px]">
             
-            {/* Texto descriptivo interno */}
-            <div className="absolute top-0 left-0 w-full p-8 md:p-12 z-20 pointer-events-none flex flex-col items-start">
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 font-sora tracking-tight">Meet your new Expert.</h3>
-                <p 
-                    className={`text-sm md:text-base font-medium leading-relaxed text-indigo-100 max-w-[90%] md:max-w-[340px] transition-all duration-1000 transform ${isCardVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
-                    style={{ animationDelay: '100ms' }}
-                >
-                    Stop digging through spreadsheets. TxA identifies trends, anomalies, and emerging risks in plain language.
-                </p>
+            {/* 1. SECCIÓN DE TEXTO */}
+            <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-center px-6 pointer-events-none">
+              <span className="text-sm font-bold tracking-[0.2em] bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-400 bg-clip-text text-transparent mb-3 uppercase">
+                TxA Core
+              </span>
+              <p className="text-[24px] md:text-[32px] font-semibold text-[#1d1d1f] leading-[1.1] font-sora tracking-tight md:max-w-[500px]">
+                Proprietary AI algorithms connecting field data, lab results, and safety insights.
+              </p>
             </div>
 
-            {/* CONTENIDO VISUAL INFERIOR: CHAT ANIMADO */}
-            {/* h-[65%] en móvil garantiza que no se sobreponga al texto de arriba */}
-            <div className="absolute bottom-0 left-0 w-full h-[65%] md:h-full z-10 pointer-events-none overflow-hidden flex items-end justify-end">
-                <div className="w-full h-full flex items-end justify-end p-4 md:p-10">
-                    
-                    {/* scale-[0.85] en móvil reduce el tamaño para encajar perfecto */}
-                    <div className="w-full max-w-[480px] flex flex-col gap-3 md:gap-4 transform scale-[0.85] origin-bottom-right md:scale-100">
-                        
-                        {/* Mensaje del Usuario */}
-                        <div className={`self-end bg-white/10 backdrop-blur-md text-white px-5 py-3 rounded-2xl rounded-tr-sm max-w-[90%] border border-white/20 shadow-lg transition-all duration-500 transform ${showUserMessage ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                            <p className="text-sm font-medium">Any emerging trends in zone B?</p>
-                        </div>
-                        
-                        {/* Animación de "Escribiendo..." */}
-                        {isTyping && (
-                            <div className="self-start flex gap-3 animate-fade-in">
-                                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0 shadow-sm border border-white/10">
-                                    <Sparkles className="w-4 h-4 text-white" />
-                                </div>
-                                <div className="bg-white/10 backdrop-blur-sm p-3 rounded-2xl rounded-tl-sm border border-white/10">
-                                    <MoreHorizontal className="w-5 h-5 text-white animate-pulse" />
-                                </div>
-                            </div>
-                        )}
-                        
-                        {/* Respuesta de la IA */}
-                        <div className={`self-start flex flex-col gap-3 max-w-[95%] transition-all duration-500 transform ${showAiResponse ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 hidden'}`}>
-                            
-                            {/* Globo 1: Insight */}
-                            <div className="flex gap-3">
-                                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-indigo-900/20">
-                                    <Sparkles className="w-4 h-4 text-indigo-600" />
-                                </div>
-                                <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl">
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-indigo-600">TxA Insight</span>
-                                    </div>
-                                    <p className="text-sm leading-relaxed font-medium">
-                                        Detected a <span className="font-bold text-indigo-900">15% increase</span> in <span className="italic">Listeria spp.</span> positives near Line 4.
-                                    </p>
-                                </div>
-                            </div>
+            {/* 2. IMAGEN DEL CELULAR (Solo Desktop) */}
+            <div className="hidden md:flex absolute bottom-0 left-0 w-[400px] h-full items-end z-10">
+               <div className="relative w-full h-[90%] -ml-10">
+                 <Image 
+                   src="/phone2.png" 
+                   alt="TxA App on Phone" 
+                   fill 
+                   className="object-contain object-bottom-left"
+                 />
+               </div>
+            </div>
 
-                            {/* Globo 2: Call to Action (Sampling Scheme) */}
-                            <div className="flex gap-3">
-                                <div className="w-8 h-8 shrink-0" />
-                                <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl w-full pointer-events-auto">
-                                    <p className="text-sm leading-relaxed font-medium mb-3">
-                                        Based on recent <span className="italic">Listeria spp.</span> trends, I've generated an optimized targeted sampling map.
-                                    </p>
-                                    <div className="border border-indigo-100 rounded-xl p-3 bg-indigo-50/50 hover:bg-indigo-50 transition-colors cursor-pointer group/cta">
-                                        <div className="flex items-center justify-between mb-2">
-                                            <span className="text-[9px] md:text-[10px] font-extrabold text-indigo-900 uppercase tracking-wider">BEST SAMPLING SCHEME</span>
-                                            <MousePointerClick className="w-4 h-4 text-indigo-500 group-hover/cta:scale-110 transition-transform" />
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-6 h-6 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0">
-                                                <Map className="w-3 h-3 text-indigo-600" />
-                                            </div>
-                                            <p className="text-[10px] font-bold text-indigo-700 leading-tight">Click here to see the proposed sampling scheme.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            {/* 3. ICONOS FLOTANTES & FONDOS */}
+            <div className="absolute inset-0 md:left-auto md:right-0 md:w-[380px] h-full flex items-center justify-center pointer-events-none z-0">
+              
+              <div className="relative w-full h-full animate-float-slow">
 
-                    </div>
+                {/* FONDOS DE LUZ DIFUSA */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 md:w-40 md:h-40 bg-[#00C7FD]/10 rounded-full blur-2xl -z-10"></div>
+                <div className="absolute bottom-0 right-10 md:right-0 w-32 h-32 bg-[#A13ECD]/10 rounded-full blur-2xl -z-10"></div>
+
+                {/* --- ICONO 1: Risk Prediction --- */}
+                <div className="absolute top-8 left-4 md:top-4 md:left-12 bg-white p-3 rounded-2xl shadow-sm border border-purple-50 z-20 flex items-center gap-2 transform -rotate-2 scale-90 md:scale-100">
+                   <div className="w-8 h-8 bg-purple-50 rounded-full flex items-center justify-center relative">
+                     <Sparkles className="w-4 h-4 text-purple-600" />
+                   </div>
+                   <div>
+                     <p className="text-[10px] font-bold text-gray-800 leading-tight">Risk Prediction</p>
+                     <p className="text-[9px] text-purple-600 font-bold">High Probability</p>
+                   </div>
                 </div>
+
+                {/* --- ICONO 2: Warning Salmonella --- */}
+                <div className="absolute top-8 right-4 md:top-6 md:right-8 bg-white p-3 rounded-2xl shadow-sm border border-red-50 z-20 flex items-center gap-2 transform rotate-3 scale-90 md:scale-100">
+                   <div className="w-8 h-8 bg-red-50 rounded-full flex items-center justify-center">
+                     <Sparkles className="w-4 h-4 text-red-500" />
+                   </div>
+                   <div>
+                     <p className="text-[10px] font-bold text-gray-800 leading-tight">Sampling</p>
+                     <p className="text-[9px] text-red-500 font-medium">Optimized</p>
+                   </div>
+                </div>
+
+                {/* --- ICONO 3: Stats --- */}
+                <div className="absolute bottom-8 left-4 md:bottom-auto md:left-auto md:top-36 md:right-4 bg-white/70 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-white/40 z-10 w-[140px] transform scale-90 md:scale-100 origin-bottom-left md:origin-center">
+                  <div className="flex gap-1.5 items-end h-12 mb-2">
+                    <div className="w-1/3 h-[50%] bg-[#362482]/70 rounded-t-[4px]"></div>
+                    <div className="w-1/3 h-[80%] bg-[#00C7FD]/70 rounded-t-[4px]"></div>
+                    <div className="w-1/3 h-[30%] bg-[#A13ECD]/70 rounded-t-[4px]"></div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <BarChart3 className="w-3 h-3 text-gray-400" />
+                    <p className="text-[10px] font-semibold text-gray-600">Live Trends</p>
+                  </div>
+                </div>
+
+                {/* --- ICONO 4: Reports --- */}
+                <div className="absolute bottom-8 right-4 md:bottom-12 md:right-12 bg-white p-3 rounded-2xl shadow-sm border border-gray-50 z-30 flex items-center gap-2 transform -rotate-1 w-max scale-90 md:scale-100 origin-bottom-right md:origin-center">
+                   <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center">
+                     <FileCheck2 className="w-5 h-5 text-green-500" />
+                   </div>
+                   <div>
+                     <p className="text-xs font-bold text-gray-800 leading-tight">Automated Reports</p>
+                     <p className="text-[9px] text-gray-400">Full customized</p>
+                   </div>
+                </div>
+
+              </div>
             </div>
+
           </div>
 
         </div>
+
       </div>
 
-      {/* STYLES EXACTOS AL TXACONVERSATIONAL */}
       <style jsx>{`
-        .font-sora { font-family: var(--font-sora), sans-serif; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out forwards;
+        .font-sora { 
+          font-family: var(--font-sora), sans-serif; 
         }
 
-        @keyframes shine {
-            from { transform: translateX(-100%) skewX(12deg); }
-            to { transform: translateX(200%) skewX(12deg); }
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
         }
-        .animate-shine {
-            animation: shine 8s infinite linear;
+        .animate-float-slow {
+          animation: float-slow 5s ease-in-out infinite;
         }
       `}</style>
-
-    </section>
+    </div>
   );
 }
