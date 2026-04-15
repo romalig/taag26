@@ -106,7 +106,6 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
       )}
 
       {/* === 4. RESTO DEL CONTENIDO === */}
-      {/* Si tiene AiGOR añadimos espacio generoso arriba (pt-16/pt-24), si NO tiene, lo acercamos (pt-4/pt-8) */}
       <div className={`px-8 md:px-12 pb-12 md:pb-20 bg-white w-full ${data.hasAigorBanner ? 'pt-16 md:pt-24' : 'pt-4 md:pt-8'}`}>
         <div className="max-w-5xl mx-auto w-full">
           
@@ -120,7 +119,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
              </p>
           </div>
 
-          {/* PRODUCTO MULTIPLEX (Preventive Modal / Spoilage Modal / Salmonella E.coli Modal) */}
+          {/* PRODUCTO MULTIPLEX */}
           {data.preventiveProduct && (
              <div className="mb-24 w-full">
                 <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-4">
@@ -176,6 +175,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
+                   {/* Tarjetas Principales */}
                    {data.eleviaProducts.main.map((prod: any, i: number) => (
                      <div key={i} className="md:col-span-3 bg-[#121212] rounded-[2rem] relative flex flex-col overflow-hidden min-h-[400px] border border-black">
                         <div className="relative w-full h-[220px] md:h-[260px] z-0 pointer-events-none shrink-0">
@@ -184,21 +184,51 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                         </div>
                         <div className="relative z-10 flex flex-col flex-1 p-8 pt-4 md:p-10 md:pt-4">
                            <h3 className="text-2xl font-bold text-white tracking-tight mb-3">{prod.title}</h3>
-                           <p className="text-white/80 text-sm leading-relaxed">{prod.desc}</p>
+                           <p className="text-white/80 text-sm leading-relaxed mb-8">{prod.desc}</p>
+                           
+                           {/* BOTÓN LEARN MORE INTEGRADO */}
+                           <div className="mt-auto pt-6 border-t border-white/10">
+                              <Link 
+                                href={prod.link || "#"} 
+                                onClick={closeModal}
+                                className="inline-flex items-center gap-2 text-sm font-bold text-[#FFFFFF] hover:text-white transition-colors group"
+                              >
+                                Learn more
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                              </Link>
+                           </div>
                         </div>
                      </div>
                    ))}
 
+                   {/* Tarjetas Secundarias (Upcoming) */}
                    {data.eleviaProducts.upcoming && data.eleviaProducts.upcoming.map((prod: any, i: number) => (
                      <div key={i} className="md:col-span-2 bg-[#121212] rounded-[2rem] p-8 h-[260px] md:h-[280px] relative flex flex-col justify-between border border-black">
                         <div>
                            <h3 className="text-xl font-bold text-white mb-4">{prod.title}</h3>
-                           <p className="text-sm text-white/80 leading-relaxed">{prod.desc}</p>
+                           <p className="text-sm text-white/80 leading-relaxed mb-4">{prod.desc}</p>
                         </div>
-                        <div className="mt-auto">
-                           <span className="inline-block border border-white/20 bg-white/5 text-white/50 text-[10px] font-mono uppercase tracking-widest px-4 py-2 rounded-full">
-                             {prod.launch}
-                           </span>
+                        <div className="mt-auto flex flex-col items-start gap-4">
+                           
+                           {/* CONDICIONAL: Solo mostrar el botón "Learn More" en la primera tarjeta (índice 0) */}
+                           {i === 0 && (
+                             <Link 
+                               href={prod.link || "#"} 
+                               onClick={closeModal}
+                                className="inline-flex items-center gap-2 text-sm font-bold text-[#FFFFFF] hover:text-white transition-colors group"
+                             >
+                               Learn more
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                             </Link>
+                           )}
+
+                           {/* CONDICIONAL: Solo mostrar "LAUNCH 2Q 2026" en las demás tarjetas (índice mayor a 0) */}
+                           {i > 0 && prod.launch && (
+                             <span className="inline-block border border-white/20 bg-white/5 text-white/50 text-[10px] font-mono uppercase tracking-widest px-4 py-2 rounded-full">
+                               {prod.launch}
+                             </span>
+                           )}
+
                         </div>
                      </div>
                    ))}

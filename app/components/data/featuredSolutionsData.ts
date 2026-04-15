@@ -14,11 +14,11 @@ export const FEATURED_MODALS_DATA: Record<string, any> = {
     eleviaProducts: {
       intro: "Elevia is our premium suite of diagnostic products based on AiGOR technology. By targeting RNA, Elevia bypasses traditional biological limits to deliver extreme sensitivity and ultra-fast results across your testing matrices.",
       main: [
-        { title: "Elevia Salmonella", desc: "Ultra-fast Salmonella detection in as little as 3 hours, and 6 hours, for environmental and food samples, respectively.", image: "/Sal11.png" },
-        { title: "Elevia Salmonella + EB", desc: "Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours.", image: "/Sal_EB.png" }
+        { title: "Elevia Salmonella", desc: "Ultra-fast Salmonella detection in as little as 3 hours, and 7 hours, for environmental and food samples, respectively.", image: "/Sal11.png"},
+        { title: "Elevia Salmonella + Listeria spp.", desc: "Simultaneous identification of Salmonella and Listeria spp. in a single reaction, in as little as 3 hours, and 7 hours, for environmental and food samples, respectively.", image: "/Sal_EB.png" }
       ],
       upcoming: [
-        { title: "Elevia Salmonella + Listeria spp.", desc: "Simultaneous identification of Salmonella and Listeria spp in a single reaction, in as little as 3 hours.", launch: "Launch 2Q 2026" },
+        { title: "Elevia Salmonella + Enterobacteria", desc: "Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours."},
         { title: "Elevia Listeria spp + L. monocytogenes", desc: "Simultaneous identification of Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.", launch: "Launch 2Q 2026" },
         { title: "Elevia Salmonella + Listeria spp. + L. monocytogenes", desc: "Simultaneous identification of Salmonella + Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.", launch: "Launch 2Q 2026" }
       ]
