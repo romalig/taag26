@@ -1,14 +1,58 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Timer, Activity, Zap, Mail, CheckCircle2, ArrowRightLeft } from "lucide-react";
+import { ArrowRight, Timer, Activity, Zap, Mail, CheckCircle2, ArrowRightLeft, Loader2, WifiOff } from "lucide-react";
 import { useModal } from "../ModalProvider";
 import { useCTA } from "../../CTAProvider";
+import { getKitSolutionByTitle } from "@/app/lib/products-api";
+import SolutionTemplate from "./SolutionTemplate";
+import type { SolutionContent } from "./types";
 
 export default function FeaturedSolutionTemplate({ data }: { data: any }) {
-  const { closeModal } = useModal();
-  const { openMeeting } = useCTA(); 
+  const { closeModal, openModal } = useModal();
+  const { openMeeting } = useCTA();
+  const [loadingTitle, setLoadingTitle] = useState<string | null>(null);
+  const [errorTitle, setErrorTitle] = useState<string | null>(null);
+  const cacheRef = useRef<Record<string, SolutionContent>>({});
+  const promiseRef = useRef<Record<string, Promise<SolutionContent | null>>>({});
+
+  // Silently prefetch all Elevia product datasheets on mount
+  useEffect(() => {
+    const titles: string[] = [];
+    data?.eleviaProducts?.main?.forEach((p: { apiTitle?: string }) => { if (p.apiTitle) titles.push(p.apiTitle); });
+    data?.eleviaProducts?.upcoming?.forEach((p: { apiTitle?: string }) => { if (p.apiTitle) titles.push(p.apiTitle); });
+    titles.forEach((title) => {
+      const p = getKitSolutionByTitle(title)
+        .then((d) => { if (d) cacheRef.current[title] = d; return d; })
+        .catch(() => null);
+      promiseRef.current[title] = p;
+    });
+  }, [data]);
+
+  const handleLearnMore = (apiTitle: string) => {
+    if (!apiTitle) return;
+    const cached = cacheRef.current[apiTitle];
+    if (cached) {
+      openModal(<SolutionTemplate data={cached} />);
+      return;
+    }
+    setErrorTitle(null);
+    setLoadingTitle(apiTitle);
+    const p =
+      promiseRef.current[apiTitle] ??
+      getKitSolutionByTitle(apiTitle).then((d) => {
+        if (d) cacheRef.current[apiTitle] = d;
+        return d;
+      });
+    p.then((solution) => {
+        if (solution) openModal(<SolutionTemplate data={solution} />);
+        else setErrorTitle(apiTitle);
+      })
+      .catch(() => setErrorTitle(apiTitle))
+      .finally(() => setLoadingTitle((cur) => (cur === apiTitle ? null : cur)));
+  };
 
   if (!data) return null;
 
@@ -188,14 +232,17 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                            
                            {/* BOTÓN LEARN MORE INTEGRADO */}
                            <div className="mt-auto pt-6 border-t border-white/10">
-                              <Link 
-                                href={prod.link || "#"} 
-                                onClick={closeModal}
-                                className="inline-flex items-center gap-2 text-sm font-bold text-[#FFFFFF] hover:text-white transition-colors group"
+                              <button
+                                onClick={() => handleLearnMore(prod.apiTitle)}
+                                disabled={loadingTitle === prod.apiTitle || errorTitle === prod.apiTitle}
+                                className="inline-flex items-center gap-2 text-sm font-bold text-[#FFFFFF] hover:text-white/70 transition-colors group disabled:opacity-60"
                               >
-                                Learn more
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-                              </Link>
+                                {loadingTitle === prod.apiTitle
+                                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading…</>
+                                  : errorTitle === prod.apiTitle
+                                  ? <><WifiOff className="w-4 h-4" /> Unavailable</>
+                                  : <>Learn more <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" /></>}
+                              </button>
                            </div>
                         </div>
                      </div>
@@ -211,15 +258,18 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                         <div className="mt-auto flex flex-col items-start gap-4">
                            
                            {/* CONDICIONAL: Solo mostrar el botón "Learn More" en la primera tarjeta (índice 0) */}
-                           {i === 0 && (
-                             <Link 
-                               href={prod.link || "#"} 
-                               onClick={closeModal}
-                                className="inline-flex items-center gap-2 text-sm font-bold text-[#FFFFFF] hover:text-white transition-colors group"
+                           {i === 0 && prod.apiTitle && (
+                             <button
+                               onClick={() => handleLearnMore(prod.apiTitle)}
+                               disabled={loadingTitle === prod.apiTitle || errorTitle === prod.apiTitle}
+                               className="inline-flex items-center gap-2 text-sm font-bold text-[#FFFFFF] hover:text-white/70 transition-colors group disabled:opacity-60"
                              >
-                               Learn more
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-                             </Link>
+                               {loadingTitle === prod.apiTitle
+                                 ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading…</>
+                                 : errorTitle === prod.apiTitle
+                                 ? <><WifiOff className="w-4 h-4" /> Unavailable</>
+                                 : <>Learn more <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" /></>}
+                             </button>
                            )}
 
                            {/* CONDICIONAL: Solo mostrar "LAUNCH 2Q 2026" en las demás tarjetas (índice mayor a 0) */}

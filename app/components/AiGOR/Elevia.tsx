@@ -2,94 +2,33 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { useModal } from "../industrial/ModalProvider"; 
+import { Loader2, WifiOff } from "lucide-react";
+import { useModal } from "../industrial/ModalProvider";
+import SolutionTemplate from "../industrial/modals/SolutionTemplate";
+import { getKitSolutionByTitle } from "@/app/lib/products-api";
+import type { SolutionContent } from "../industrial/modals/types";
 
-// --- DATOS PARA LOS MODALES DE LOS PRODUCTOS ELEVIA ---
-const ELEVIA_MODAL_DATA = {
-  salmonella: {
-    title: "Elevia Salmonella",
-    intro: "The ultimate environmental monitoring solution powered by AiGOR. Identify active pathogens on plant surfaces in hours, not days.",
-    features: [
-      {
-        title: "Zero-Enrichment Swabbing",
-        text: "Swab and run. Our RNA technology allows you to detect 1 CFU per sample directly from the surface without a 24-hour growth phase.",
-        image: "/TxA_app_4.png" 
-      },
-      {
-        title: "Live Cell Differentiation",
-        text: "Avoid costly false positives caused by sanitizers or dead DNA. Elevia Env™ exclusively targets RNA, detecting only living, metabolically active cells.",
-        image: "/TxA_app_5.png" 
-      }
-    ]
-  },
-  salmonellaEB: {
-    title: "Elevia Salmonella + EB",
-    intro: "Simultaneous detection of Salmonella and Enterobacteria in a single reaction.",
-    features: [
-      {
-        title: "Multiplex Efficiency",
-        text: "Identify two critical targets in one single 3-hour workflow.",
-        image: "/TxA_app_4.png" 
-      }
-    ]
-  },
-  // Datos placeholder para los otros productos
-  food: { title: "Elevia Food™", intro: "Placeholder intro for Food.", features: [] },
-  water: { title: "Elevia Water™", intro: "Placeholder intro for Water.", features: [] },
-  rapid: { title: "Elevia Rapid ID™", intro: "Placeholder intro for Rapid ID.", features: [] }
-};
+// --- Títulos estables de los productos Elevia (se resuelven a UUID en runtime) ---
+const ELEVIA_TITLES = {
+  salmonella:   "Elevia 1.1 Salmonella spp.",
+  salmonellaLS: "Elevia 2.8 Salmonella spp. and Listeria spp.",
+  salmonellaEB: "Elevia 2.9 Salmonella spp. and Enterobacteria",
+} as const;
 
-type EleviaModalKey = keyof typeof ELEVIA_MODAL_DATA;
+type EleviaTitleKey = keyof typeof ELEVIA_TITLES;
 
-// --- COMPONENTE DE CONTENIDO DEL MODAL (MODO OSCURO) ---
-function EleviaModalContent({ data }: { data: typeof ELEVIA_MODAL_DATA['salmonella'] }) {
-  return (
-    <div className="w-full p-8 md:p-14 pb-12 bg-[#050505] text-white rounded-2xl md:rounded-[2rem] overflow-hidden">
-      <div className="max-w-3xl mb-16">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
-          {data.title}
-        </h2>
-        <p className="text-lg md:text-xl text-gray-400 font-medium leading-relaxed">
-          {data.intro}
-        </p>
-      </div>
-
-      <div className="space-y-16">
-        {data.features.map((feature, idx) => (
-          <div key={idx} className="flex flex-col gap-8 items-start w-full border-b border-white/10 pb-16 last:border-0 last:pb-0">
-            <div className="w-full max-w-4xl">
-              <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#FF270A] text-white font-bold text-sm mb-4">
-                {idx + 1}
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-4">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400 text-lg leading-relaxed">
-                {feature.text}
-              </p>
-            </div>
-            
-            <div className="w-full bg-[#111111] rounded-[2.5rem] h-[350px] md:h-[550px] relative flex items-center justify-center overflow-hidden border border-white/10 mt-2">
-              <Image 
-                src={feature.image} 
-                alt={feature.title} 
-                fill 
-                className="object-contain drop-shadow-2xl opacity-90" 
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+// ─── placeholder eliminado — los modales ahora usan SolutionTemplate desde la API
 
 // --- COMPONENTE PRINCIPAL DE LA SECCIÓN ---
 export default function Elevia() {
   const [isVisible, setIsVisible] = useState(false);
+  const [loadingKey, setLoadingKey] = useState<EleviaTitleKey | null>(null);
+  const [errorKey, setErrorKey] = useState<EleviaTitleKey | null>(null);
   const titleRef = useRef<HTMLDivElement>(null);
-  
-  const { openModal } = useModal(); 
+  const cacheRef = useRef<Partial<Record<EleviaTitleKey, SolutionContent>>>({});
+  const promiseRef = useRef<Partial<Record<EleviaTitleKey, Promise<SolutionContent | null>>>>({}); 
+
+  const { openModal } = useModal();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -108,8 +47,36 @@ export default function Elevia() {
     };
   }, []);
 
-  const handleOpenModule = (key: EleviaModalKey) => {
-    openModal(<EleviaModalContent data={ELEVIA_MODAL_DATA[key]} />);
+  // Prefetch all product datasheets silently on mount
+  useEffect(() => {
+    (Object.entries(ELEVIA_TITLES) as [EleviaTitleKey, string][]).forEach(([key, title]) => {
+      const p = getKitSolutionByTitle(title)
+        .then((data) => { if (data) cacheRef.current[key] = data; return data; })
+        .catch(() => null);
+      promiseRef.current[key] = p;
+    });
+  }, []);
+
+  const handleLearnMore = (key: EleviaTitleKey) => {
+    const cached = cacheRef.current[key];
+    if (cached) {
+      openModal(<SolutionTemplate data={cached} />);
+      return;
+    }
+    setErrorKey(null);
+    setLoadingKey(key);
+    const p =
+      promiseRef.current[key] ??
+      getKitSolutionByTitle(ELEVIA_TITLES[key]).then((d) => {
+        if (d) cacheRef.current[key] = d;
+        return d;
+      });
+    p.then((data) => {
+        if (data) openModal(<SolutionTemplate data={data} />);
+        else setErrorKey(key);
+      })
+      .catch(() => setErrorKey(key))
+      .finally(() => setLoadingKey((cur) => (cur === key ? null : cur)));
   };
 
   return (
@@ -165,11 +132,16 @@ export default function Elevia() {
                 Ultra-fast Salmonella detection in as little as 3 hours, and 7 hours, for environmental and food samples, respectively.
               </p>
               
-              <button 
-                onClick={() => handleOpenModule('salmonella')}
-                className="w-full md:w-max border border-white/20 bg-white/5 backdrop-blur-md text-white/90 px-8 py-3 rounded-full text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-auto"
+              <button
+                onClick={() => handleLearnMore('salmonella')}
+                disabled={loadingKey === 'salmonella' || errorKey === 'salmonella'}
+                className="w-full md:w-max border border-white/20 bg-white/5 backdrop-blur-md text-white/90 px-8 py-3 rounded-full text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-auto disabled:opacity-60"
               >
-                  Learn more <span className="transition-transform group-hover/btn:translate-x-1 text-white/40 group-hover/btn:text-white">&gt;</span>
+                {loadingKey === 'salmonella'
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading…</>
+                  : errorKey === 'salmonella'
+                  ? <><WifiOff className="w-4 h-4" /> Unavailable</>
+                  : <>Learn more <span className="transition-transform group-hover/btn:translate-x-1 text-white/40 group-hover/btn:text-white">&gt;</span></>}
               </button>
             </div>
           </div>
@@ -200,17 +172,19 @@ export default function Elevia() {
                 Simultaneous identification of Salmonella and Listeria spp. in a single reaction, in as little as 3 hours, and 6 hours, for environmental and food samples, respectively.
               </p>
               
-              <button 
-                onClick={() => handleOpenModule('salmonellaEB')}
-                className="w-full md:w-max border border-white/20 bg-white/5 backdrop-blur-md text-white/90 px-8 py-3 rounded-full text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-auto"
+              <button
+                onClick={() => handleLearnMore('salmonellaLS')}
+                disabled={loadingKey === 'salmonellaLS' || errorKey === 'salmonellaLS'}
+                className="w-full md:w-max border border-white/20 bg-white/5 backdrop-blur-md text-white/90 px-8 py-3 rounded-full text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-auto disabled:opacity-60"
               >
-                  Learn more <span className="transition-transform group-hover/btn:translate-x-1 text-white/40 group-hover/btn:text-white">&gt;</span>
+                {loadingKey === 'salmonellaLS'
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading…</>
+                  : errorKey === 'salmonellaLS'
+                  ? <><WifiOff className="w-4 h-4" /> Unavailable</>
+                  : <>Learn more <span className="transition-transform group-hover/btn:translate-x-1 text-white/40 group-hover/btn:text-white">&gt;</span></>}
               </button>
             </div>
           </div>
-
-          {/* ============================================== */}
-          {/* 3. TARJETAS INFERIORES SECUNDARIAS (3 Columnas) */}
           {/* ============================================== */}
           
           {/* INFERIOR 1: FOOD */}
@@ -221,11 +195,16 @@ export default function Elevia() {
                 Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours, in environmental samples.
               </p>
             </div>
-              <button 
-                onClick={() => handleOpenModule('salmonellaEB')}
-                className="w-full md:w-max border border-white/20 bg-white/5 backdrop-blur-md text-white/90 px-8 py-3 rounded-full text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-auto"
+              <button
+                onClick={() => handleLearnMore('salmonellaEB')}
+                disabled={loadingKey === 'salmonellaEB' || errorKey === 'salmonellaEB'}
+                className="w-full md:w-max border border-white/20 bg-white/5 backdrop-blur-md text-white/90 px-8 py-3 rounded-full text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group/btn mt-auto disabled:opacity-60"
               >
-                  Learn more <span className="transition-transform group-hover/btn:translate-x-1 text-white/40 group-hover/btn:text-white">&gt;</span>
+                {loadingKey === 'salmonellaEB'
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading…</>
+                  : errorKey === 'salmonellaEB'
+                  ? <><WifiOff className="w-4 h-4" /> Unavailable</>
+                  : <>Learn more <span className="transition-transform group-hover/btn:translate-x-1 text-white/40 group-hover/btn:text-white">&gt;</span></>}
               </button>
           </div>
 

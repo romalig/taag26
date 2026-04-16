@@ -280,6 +280,21 @@ export async function getCategoryCatalogItems(categoryUuid: string): Promise<Ind
   return enriched;
 }
 
+/**
+ * Resolves a product by its exact `title` string (as returned by the catalog),
+ * then fetches its full solution datasheet. Resilient to UUID changes after
+ * seeders because the lookup key is the stable product name.
+ */
+export async function getKitSolutionByTitle(title: string): Promise<SolutionContent | null> {
+  const result = await getAllProductsByCategory();
+  const all = Object.values(result.byCategory).flat();
+  const match = all.find(
+    (item) => item.title.trim().toLowerCase() === title.trim().toLowerCase()
+  );
+  if (!match) return null;
+  return getKitSolution(match.uuid);
+}
+
 export async function getKitSolution(uuid: string): Promise<SolutionContent> {
   const solution = await fetchProductsApi<PcrKitFoodSolution>(`/products/pcr-kit-food/${uuid}/solution`);
 
