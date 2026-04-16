@@ -1,6 +1,13 @@
 "use client";
 
+// 1. Importamos Link de Next.js y tu hook de CTA
+import Link from "next/link";
+import { useCTA } from "@/app/components/CTAProvider"; // Ajusta la ruta si es diferente
+
 export default function EleviaCaseStudy() {
+  // 2. Extraemos la función para abrir el modal de contacto
+  const { openMeeting } = useCTA();
+
   return (
     // Ajustamos el padding superior para que respire un poco pero siga viéndose como la misma sección
     <section className="w-full bg-[#121212] pt-16 md:pt-18 pb-32 flex flex-col items-center relative overflow-hidden">
@@ -121,18 +128,21 @@ export default function EleviaCaseStudy() {
 
           {/* ENLACES CTA: Learn more / Contact us (Movidos debajo de las ventajas) */}
           <div className="flex items-center gap-8 mt-20">
-            <a href="#" className="inline-flex items-center gap-1.5 text-base md:text-lg text-white hover:text-white/70 transition-colors font-medium group">
+            {/* 3. Reemplazamos <a> por <Link> apuntando a /emp-testing */}
+            <Link href="/emp-testing" className="inline-flex items-center gap-1.5 text-base md:text-lg text-white hover:text-white/70 transition-colors font-medium group">
               Learn more
               <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
-            </a>
-            <a href="#" className="inline-flex items-center gap-1.5 text-base md:text-lg text-white hover:text-white/70 transition-colors font-medium group">
+            </Link>
+            
+            {/* 4. Conectamos Contact us al Modal */}
+            <button onClick={openMeeting} className="inline-flex items-center gap-1.5 text-base md:text-lg text-white hover:text-white/70 transition-colors font-medium group">
               Contact us
               <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
-            </a>
+            </button>
           </div>
 
         </div>

@@ -5,6 +5,7 @@ import { Menu, X, Globe, User, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Sora } from "next/font/google";
+import { SITE_URLS } from "@/app/lib/api-config";
 
 const sora = Sora({ subsets: ["latin"], weight: ["400", "500", "700", "800"] });
 
@@ -108,7 +109,8 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
 
           <div className={`flex items-center gap-4 md:gap-6 relative z-[102] transition-colors duration-500 ${textColor}`}>
             <Link
-              href="/login"
+              href={SITE_URLS.txalabLogin}
+              prefetch={false}
               className="hidden md:flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest hover:opacity-70 transition-opacity"
             >
               <User className="w-4 h-4" />
@@ -145,7 +147,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
           <div className="flex items-center justify-between p-6 border-b border-black/5 shrink-0">
              <span className="text-xl font-bold text-[#111111]">Menu</span>
              <div className="flex items-center gap-4">
-                <Link href="/login" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <Link href={SITE_URLS.txalabLogin} prefetch={false} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                     <User className="w-5 h-5 text-[#111111]" />
                 </Link>
                 <button 

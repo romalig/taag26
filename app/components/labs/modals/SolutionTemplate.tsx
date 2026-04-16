@@ -5,9 +5,15 @@ import { CheckCircle2, FlaskConical, Download, Mail, ArrowRightLeft, Loader2 } f
 import { pdf } from "@react-pdf/renderer";
 import DatasheetDocument from "./DatasheetDocument";
 import { SolutionContent } from "./types";
+import { hasDisplayValue } from "@/app/lib/spec-values";
+import InlineFormattedText from "@/app/components/shared/InlineFormattedText";
+import { useCTA } from "@/app/components/CTAProvider";
 
 export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const { openMeeting } = useCTA();
+  const showSensitivity = hasDisplayValue(data.techSpecs.sensitivity);
+  const showTargetType = hasDisplayValue(data.targetType);
 
   if (!data) return null;
 
@@ -67,32 +73,61 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           <h2 className="text-3xl md:text-5xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
             {data.title}
           </h2>
-          <div className="flex flex-wrap gap-3 mb-10">
+          <div className="flex flex-wrap items-center gap-3 md:gap-4 mb-10">
             {data.chips.map((tech) => (
               <span key={tech} className="px-4 py-1.5 rounded-full bg-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600 border border-gray-200">
                 {tech}
               </span>
             ))}
+            {showTargetType && (
+              <span className="text-2xl md:text-[2.1rem] font-medium tracking-tight text-[#111111] leading-none md:ml-6">
+                {data.targetType}
+              </span>
+            )}
           </div>
         </div>
 
-        {/* Metrics Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 border-b border-gray-100 pb-12">
-          <div>
+        {/* Metrics: row1 Targets | Main industries | Sensitivity (one row md+); row2 Matrices | Time */}
+        <div className="space-y-8 mb-12 border-b border-gray-100 pb-12">
+          <div
+            className={`grid grid-cols-1 gap-6 ${
+              showSensitivity ? "md:grid-cols-3" : "md:grid-cols-2"
+            }`}
+          >
+            <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.targets}</span>
+              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
+                <InlineFormattedText value={data.techSpecs.targets} />
+              </span>
+            </div>
+            <div>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Main industries</span>
+              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
+                {data.mainIndustries.join(", ")}
+              </span>
+            </div>
+            {showSensitivity ? (
+              <div>
+                <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Sensitivity</span>
+                <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
+                  <InlineFormattedText value={data.techSpecs.sensitivity} />
+                </span>
+              </div>
+            ) : null}
           </div>
-          <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">LOD</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.lod}</span>
-          </div>
-          <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Matrices</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.matrices}</span>
-          </div>
-          <div>
+              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
+                <InlineFormattedText value={data.techSpecs.matrices} />
+              </span>
+            </div>
+            <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Time</span>
-              <span className="block text-lg md:text-xl font-bold text-[#FF270A] leading-tight">{data.techSpecs.time}</span>
+              <span className="block text-lg md:text-xl font-bold text-[#FF270A] leading-tight">
+                <InlineFormattedText value={data.techSpecs.time} />
+              </span>
+            </div>
           </div>
         </div>
 
@@ -130,7 +165,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
              ].map((row, i) => (
                 <div key={i} className="grid grid-cols-1 md:grid-cols-3 py-4 border-b border-gray-100">
                    <div className="text-sm font-semibold text-gray-500">{row.label}</div>
-                   <div className="md:col-span-2 text-sm font-medium text-[#111111]">{row.value}</div>
+                   <div className="md:col-span-2 text-sm font-medium text-[#111111]"><InlineFormattedText value={row.value} /></div>
                 </div>
              ))}
           </div>
@@ -225,7 +260,11 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
               </>
             )}
          </button>
-         <button className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
+         <button
+           type="button"
+           onClick={openMeeting}
+           className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg"
+         >
             <Mail className="w-4 h-4" />
             Contact Sales Team
          </button>

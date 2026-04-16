@@ -4,6 +4,11 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Zap, Activity, ShieldCheck, TrendingDown } from "lucide-react";
 
+// 1. IMPORTAMOS LAS HERRAMIENTAS DEL MODAL Y LOS DATOS
+import { useModal } from "../industrial/ModalProvider"; // Ajusta la ruta si es necesario
+import FeaturedSolutionTemplate from "../industrial/modals/FeaturedSolutionTemplate"; // Ajusta la ruta si es necesario
+import { FEATURED_MODALS_DATA } from "../data/featuredSolutionsData"; // Ajusta la ruta si es necesario
+
 // --- DATOS DEL CARRUSEL DE VENTAJAS ---
 const ENVIRONMENTAL_ADVANTAGES = [
   {
@@ -47,9 +52,7 @@ const ENVIRONMENTAL_ADVANTAGES = [
     title: "Universal sampling.",
     text: "Fully validated for both swabs and sponges. Seamlessly adapt Elevia to your existing environmental monitoring protocols.",
     visual: (
-      // Cambiamos justify-end por justify-center
       <div className="absolute inset-0 bg-black flex flex-col justify-center items-center overflow-hidden">
-           {/* Eliminamos mt-auto. Puedes ajustar el h-[50%] si quieres que la imagen sea más grande o chica */}
            <div className="relative w-full h-[50%]"> 
                <Image 
                  src="/prot3.png" 
@@ -67,10 +70,8 @@ const ENVIRONMENTAL_ADVANTAGES = [
     text: "It works with common qPCR machines and no need of incubators. Its easy protocol allows any analyst to run the kits effortlessly.",
     visual: (
       <div className="absolute inset-0 bg-black flex items-center justify-center overflow-hidden">
-        {/* Abstract PCR plate background */}
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.3)_1px,transparent_1px)] bg-[size:14px_14px]"></div>
         
-        {/* Glassmorphism open platform representation */}
         <div className="relative z-10 flex items-center justify-center w-24 h-24 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.02)] backdrop-blur-md">
            <div className="grid grid-cols-3 gap-2 p-1">
              {[...Array(9)].map((_, i) => (
@@ -79,7 +80,6 @@ const ENVIRONMENTAL_ADVANTAGES = [
            </div>
         </div>
         
-        {/* Ambient glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-[#FF270A]/10 blur-3xl rounded-full z-0"></div>
       </div>
     )
@@ -150,11 +150,13 @@ export default function EleviaEnvironmental() {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
+  // 2. EXTRAEMOS LA FUNCIÓN PARA ABRIR MODALES
+  const { openModal } = useModal();
+
   const checkScroll = () => {
     if (carouselRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
       setCanScrollLeft(scrollLeft > 0);
-      // Damos un pequeño margen de 5px para evitar problemas de redondeo de pixeles en móviles
       setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 5);
     }
   };
@@ -172,7 +174,14 @@ export default function EleviaEnvironmental() {
         left: direction === 'left' ? -scrollAmount : scrollAmount, 
         behavior: 'smooth' 
       });
-      // El evento onScroll actualizará el estado automáticamente
+    }
+  };
+
+  // 3. FUNCIÓN PARA ABRIR EL MODAL ESPECÍFICO DE EMP
+  const handleOpenEMPModal = () => {
+    const modalData = FEATURED_MODALS_DATA["zero-risk-emp"];
+    if (modalData) {
+      openModal(<FeaturedSolutionTemplate data={modalData} />);
     }
   };
 
@@ -218,11 +227,10 @@ export default function EleviaEnvironmental() {
       </div>
 
       {/* ========================================================= */}
-      {/* 2. CARRUSEL DE VENTAJAS (Alineado a max-w-[1200px])       */}
+      {/* 2. CARRUSEL DE VENTAJAS                                   */}
       {/* ========================================================= */}
       <div className="w-full relative">
         
-        {/* Padding pl ajustado a 600px para calzar exacto con la cuadrícula de Elevia.tsx */}
         <div 
           ref={carouselRef}
           onScroll={checkScroll}
@@ -248,15 +256,19 @@ export default function EleviaEnvironmental() {
           <div className="shrink-0 w-[max(1rem,calc(50vw_-_600px_+_1rem))]"></div>
         </div>
         
-        {/* Controles y Learn More limitados a max-w-[1200px] y px-4 */}
+        {/* Controles y Learn More */}
         <div className="flex items-center justify-between mt-4 px-4 max-w-[1200px] mx-auto w-full">
           
-          <a href="#" className="inline-flex items-center gap-1.5 text-sm md:text-base text-white hover:text-white/70 transition-colors font-medium group">
+          {/* 4. REEMPLAZAMOS EL ENLACE <a> POR UN BOTÓN CON onClick */}
+          <button 
+            onClick={handleOpenEMPModal}
+            className="inline-flex items-center gap-1.5 text-sm md:text-base text-white hover:text-white/70 transition-colors font-medium group"
+          >
             Learn more
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
-          </a>
+          </button>
 
           <div className="flex gap-3">
             <button 

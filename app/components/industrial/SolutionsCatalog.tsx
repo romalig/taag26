@@ -2,23 +2,53 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { ChevronRight, Search, X, Download, Zap, Target, Filter } from "lucide-react";
+import { ChevronRight, Search, X, Download, Zap, Target, Filter, Loader2 } from "lucide-react";
 import { useCTA } from "../CTAProvider";
-import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
+// Static fallback data commented out — categories now come from the API via target_type
+// import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
 import SolutionTemplate from "./modals/SolutionTemplate";
+import type { SolutionContent } from "./modals/types";
 
-// IMPORTAMOS TU BASE DE DATOS REAL
-import { SOLUTIONS_DATA } from "../data/solutionsData"; // <-- Ajusta esta ruta si es diferente
+import { SOLUTIONS_DATA } from "../data/solutionsData";
+import {
+  getAllProductsByCategory,
+  getKitSolution,
+} from "@/app/lib/products-api";
+
+interface CategoryTab {
+  id: string;
+  label: string;
+}
+
+interface CatalogItem {
+  uuid?: string;
+  id?: string;
+  title: string;
+  description: string;
+  targets: string;
+  technology?: string;
+}
+
+interface CatalogSearchEvent extends Event {
+  detail?: string;
+}
+
+const EMPTY_CATEGORIES: CategoryTab[] = [];
+const EMPTY_SOLUTIONS: Record<string, CatalogItem[]> = {};
 
 export default function SolutionsCatalog() {
   const { openMeeting } = useCTA();
   const { openModal } = useModal();
 
-  const [activePanelTab, setActivePanelTab] = useState("Pathogens");
+  const [categories, setCategories] = useState<CategoryTab[]>(EMPTY_CATEGORIES);
+  const [activePanelTab, setActivePanelTab] = useState("");
+  const [catalogByCategory, setCatalogByCategory] = useState<Record<string, CatalogItem[]>>(EMPTY_SOLUTIONS);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [detailsLoadingUuid, setDetailsLoadingUuid] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  
+
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [isToolbarVisible, setIsToolbarVisible] = useState(true);
 
@@ -27,26 +57,91 @@ export default function SolutionsCatalog() {
       ([entry]) => {
         setIsToolbarVisible(entry.isIntersecting);
       },
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" } 
+      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
     );
 
     if (toolbarRef.current) observer.observe(toolbarRef.current);
     return () => observer.disconnect();
   }, []);
 
+  /* ---------------------------------------------------------------
+     SINGLE API CALL: load all products + derive categories from it
+     --------------------------------------------------------------- */
+  const pendingSearchQuery = useRef<string | null>(null);
+
   useEffect(() => {
-    const handleSearchTrigger = (e: CustomEvent) => {
-        setSearchQuery(e.detail);
+    let isMounted = true;
+
+    // Check if there's a ?search= param to apply after loading
+    const params = new URLSearchParams(window.location.search);
+    const urlSearch = params.get("search");
+    if (urlSearch) pendingSearchQuery.current = urlSearch;
+
+    const loadAll = async () => {
+      setIsLoading(true);
+      try {
+        const result = await getAllProductsByCategory();
+        if (!isMounted) return;
+
+        // Derive categories from the data (unique, preserving order)
+        const seen = new Set<string>();
+        const derivedCategories: CategoryTab[] = [];
+        for (const [uuid, items] of Object.entries(result.byCategory)) {
+          if (!seen.has(uuid) && items.length > 0) {
+            seen.add(uuid);
+            derivedCategories.push({ id: uuid, label: result.categoryNames[uuid] || uuid });
+          }
+        }
+
+        if (derivedCategories.length > 0) {
+          setCategories(derivedCategories);
+          setActivePanelTab(derivedCategories[0].id);
+        }
+
+        setCatalogByCategory(result.byCategory);
+      } catch (error) {
+        console.error("Products API fallback:", error);
+        // Keep fallback data already set in initial state
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    loadAll();
+    return () => { isMounted = false; };
+  }, []);
+
+  /* Apply ?search= AFTER catalog data has loaded from API */
+  useEffect(() => {
+    if (isLoading || !pendingSearchQuery.current) return;
+    const query = pendingSearchQuery.current;
+    pendingSearchQuery.current = null;
+
+    setSearchQuery(query);
+
+    requestAnimationFrame(() => {
+      const element = document.getElementById("panel-start");
+      if (element) {
+        const pos = element.getBoundingClientRect().top + window.pageYOffset - 140;
+        window.scrollTo({ top: pos, behavior: "smooth" });
+      }
+    });
+  }, [isLoading]);
+
+  useEffect(() => {
+    const handleSearchTrigger = (event: Event) => {
+        const customEvent = event as CatalogSearchEvent;
+        setSearchQuery(customEvent.detail || "");
         const element = document.getElementById("panel-start");
         if (element) {
             const elementPosition = element.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - 140; 
+            const offsetPosition = elementPosition + window.pageYOffset - 140;
             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
         }
     };
 
-    window.addEventListener('trigger-catalog-search' as any, handleSearchTrigger as any);
-    return () => window.removeEventListener('trigger-catalog-search' as any, handleSearchTrigger as any);
+    window.addEventListener("trigger-catalog-search", handleSearchTrigger as EventListener);
+    return () => window.removeEventListener("trigger-catalog-search", handleSearchTrigger as EventListener);
   }, []);
 
   const scrollToTarget = (element: HTMLElement, offset = 140) => {
@@ -61,9 +156,13 @@ export default function SolutionsCatalog() {
     if (panelRef.current) scrollToTarget(panelRef.current, 200); 
   };
 
-  const allSolutions = Object.values(PANEL_SOLUTIONS).flat();
-  const categorySolutions = PANEL_SOLUTIONS[activePanelTab] || [];
-  const sourceList = searchQuery ? allSolutions : categorySolutions;
+  const allSolutions = Object.values(catalogByCategory).flat();
+  // Deduplicate by uuid when searching across all categories
+  const uniqueSolutions = searchQuery
+    ? Array.from(new Map(allSolutions.map((item) => [item.uuid || item.title, item])).values())
+    : allSolutions;
+  const categorySolutions = catalogByCategory[activePanelTab] || [];
+  const sourceList = searchQuery ? uniqueSolutions : categorySolutions;
 
   const filteredSolutions = sourceList.filter((item) => {
     const searchTerms = searchQuery.toLowerCase().split(" ").filter(term => term.length > 0);
@@ -71,7 +170,7 @@ export default function SolutionsCatalog() {
       ${item.title} 
       ${item.description} 
       ${item.targets} 
-      ${(item as any).technology || ""} 
+      ${item.technology || ""} 
     `.toLowerCase();
 
     return searchTerms.every((term) => itemText.includes(term));
@@ -80,23 +179,28 @@ export default function SolutionsCatalog() {
   // ===================================================================
   // FUNCIÓN CONECTADA A TU ARCHIVO SOLUTIONS_DATA REAL
   // ===================================================================
-  const handleOpenDetails = (item: any) => {
-    // 1. Buscamos el ID del kit seleccionado (Asumimos que el objeto item tiene una propiedad .id)
-    // Si no tiene .id, intentamos usar el título formateado.
-    const kitId = item.id || item.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+  const handleOpenDetails = (item: CatalogItem) => {
+    const fallbackId = item.id || item.title.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
+    const fallbackData = SOLUTIONS_DATA[fallbackId] || SOLUTIONS_DATA["tg-multiplex-pathogens"];
 
-    // 2. Buscamos la información en tu archivo solutionsData.ts
-    let data = SOLUTIONS_DATA[kitId];
-
-    // 3. FALLBACK: Si no encuentra el ID exacto, cargamos el "tg-multiplex-pathogens" por defecto
-    // Así el modal nunca falla, incluso si no has registrado todos los kits aún.
-    if (!data) {
-      console.warn(`No se encontró info para el kit con ID: "${kitId}". Cargando información por defecto.`);
-      data = SOLUTIONS_DATA["tg-multiplex-pathogens"]; 
+    if (!item.uuid) {
+      openModal(<SolutionTemplate data={fallbackData} />);
+      return;
     }
 
-    // 4. Abrimos el modal con la data final
-    openModal(<SolutionTemplate data={data} />);
+    setDetailsLoadingUuid(item.uuid);
+
+    getKitSolution(item.uuid)
+      .then((data) => {
+        openModal(<SolutionTemplate data={data || fallbackData} />);
+      })
+      .catch((error) => {
+        console.error("Industrial solution fallback:", error);
+        openModal(<SolutionTemplate data={fallbackData} />);
+      })
+      .finally(() => {
+        setDetailsLoadingUuid((current) => (current === item.uuid ? null : current));
+      });
   };
 
   return (
@@ -158,7 +262,7 @@ export default function SolutionsCatalog() {
                           <div className="flex items-center gap-3">
                              <Filter className="w-4 h-4 text-[#FF270A]" />
                              <span className="text-xs md:text-sm font-medium text-gray-600">
-                               Filtering by: <span className="font-bold text-[#111111]">"{searchQuery}"</span>
+                               Filtering by: <span className="font-bold text-[#111111]">&quot;{searchQuery}&quot;</span>
                              </span>
                           </div>
                           <button 
@@ -178,7 +282,7 @@ export default function SolutionsCatalog() {
                    ) : (
                       /* CASO 2: MOSTRAR TABS NORMALES */
                       <div className="flex flex-nowrap md:flex-wrap gap-3 overflow-x-auto md:overflow-visible p-2 no-scrollbar items-center justify-start w-full -ml-2">
-                          {PANEL_CATEGORIES.map((category) => (
+                          {categories.map((category) => (
                              <button
                                 key={category.id}
                                 onClick={() => handleTabClick(category.id)}
@@ -199,7 +303,12 @@ export default function SolutionsCatalog() {
                 </div>
 
                 <div className="flex flex-col mt-4 min-h-[300px]">
-                   {filteredSolutions.length > 0 ? (
+                   {isLoading ? (
+                     <div className="flex flex-col items-center justify-center py-20 text-center opacity-70">
+                        <Loader2 className="w-10 h-10 animate-spin text-[#FF270A] mb-4" />
+                        <p className="text-lg font-bold text-gray-500">Loading products...</p>
+                     </div>
+                   ) : filteredSolutions.length > 0 ? (
                      filteredSolutions.map((item, index) => (
                         <div key={index} className="flex flex-col md:flex-row justify-between items-start md:items-center py-8 px-4 -mx-4 rounded-2xl group hover:bg-gray-50/80 transition-all duration-300">
                            <div className="flex-1 pr-0 md:pr-12 mb-6 md:mb-0">
@@ -213,10 +322,10 @@ export default function SolutionsCatalog() {
                                       {item.targets}
                                    </span>
                                 )}
-                                {(item as any).technology && (
+                                {item.technology && (
                                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-md text-[10px] font-bold text-gray-600 tracking-wider border border-gray-200">
                                       <Zap className="w-3 h-3 text-[#FF270A]" />
-                                      {(item as any).technology}
+                                      {item.technology}
                                    </span>
                                 )}
                               </div>
@@ -229,9 +338,19 @@ export default function SolutionsCatalog() {
                               
                               <button 
                                 onClick={() => handleOpenDetails(item)}
+                                disabled={detailsLoadingUuid === item.uuid}
                                 className="px-5 py-3 bg-white border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors flex items-center gap-2 justify-center shadow-sm"
                               >
-                                 Details <ChevronRight className="w-3 h-3" />
+                                 {detailsLoadingUuid === item.uuid ? (
+                                   <>
+                                     <Loader2 className="w-3 h-3 animate-spin" />
+                                     Loading
+                                   </>
+                                 ) : (
+                                   <>
+                                     Details <ChevronRight className="w-3 h-3" />
+                                   </>
+                                 )}
                               </button>
                            </div>
                         </div>
@@ -248,7 +367,7 @@ export default function SolutionsCatalog() {
                        <div className="mb-4">
                           <Image src="/logo_mila.png" alt="MILA Logo" width={60} height={60} className="mx-auto opacity-80" />
                        </div>
-                       <h4 className="text-xl font-extrabold text-[#111111] mb-2">Didn't find what you're looking for?</h4>
+                       <h4 className="text-xl font-extrabold text-[#111111] mb-2">Didn&apos;t find what you&apos;re looking for?</h4>
                        <p className="text-gray-500 text-sm font-medium mb-6 max-w-lg leading-relaxed">
                           Powered by Mila, our R&D team turns unique challenges into custom solutions.
                        </p>

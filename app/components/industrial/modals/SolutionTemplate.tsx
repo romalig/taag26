@@ -5,9 +5,15 @@ import { CheckCircle2, FlaskConical, Download, Mail, ArrowRightLeft, Loader2, Al
 import { pdf } from "@react-pdf/renderer";
 import DatasheetDocument from "./DatasheetDocument";
 import { SolutionContent } from "./types";
+import { hasDisplayValue } from "@/app/lib/spec-values";
+import InlineFormattedText from "@/app/components/shared/InlineFormattedText";
+import { useCTA } from "@/app/components/CTAProvider";
 
 export default function SolutionTemplate({ data }: { data: SolutionContent }) {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const { openMeeting } = useCTA();
+  const showSensitivity = hasDisplayValue(data.techSpecs.sensitivity);
+  const showTargetType = hasDisplayValue(data.targetType);
 
   if (!data) return null;
 
@@ -67,34 +73,51 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             
             {/* VERSIÓN */}
             {data.version && (
-              <p className="text-sm font-medium text-gray-400 mt-3 mb-10">Rev. {data.version}</p>
+              <p className="text-sm font-medium text-gray-400 mt-3 mb-10">{data.version}</p>
             )}
             
-            <div className="flex flex-wrap gap-2 mb-14">
+            <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-14">
               {data.chips.map((tech) => (
                 <span key={tech} className="px-4 py-1.5 rounded-full bg-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600 border border-gray-200">
                   {tech}
                 </span>
               ))}
+              {showTargetType && (
+                <span className="px-4 py-1.5 rounded-full bg-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600 border border-gray-200">
+                  {data.targetType}
+                </span>
+              )}
             </div>
           </div>
         </div>
 
-        {/* === METRICS GRID === */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 border-b border-gray-100 pb-12">
-          <div>
+        {/* === METRICS: Targets | Main industries | Sensitivity (one row md+) === */}
+        <div className="mb-12 border-b border-gray-100 pb-12">
+          <div
+            className={`grid grid-cols-1 gap-8 ${
+              showSensitivity ? "md:grid-cols-3" : "md:grid-cols-2"
+            }`}
+          >
+            <div>
               <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.targets}</span>
-          </div>
-          <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">LOD</span>
-              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">{data.techSpecs.lod}</span>
-          </div>
-          <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Main Industries</span>
-              <span className="block text-base md:text-lg font-bold text-[#111111] leading-tight">
-                 {data.mainIndustries.slice(0, 3).join(", ")}
+              <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
+                <InlineFormattedText value={data.techSpecs.targets} />
               </span>
+            </div>
+            <div>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Main industries</span>
+              <span className="block text-base md:text-lg font-bold text-[#111111] leading-tight">
+                {data.mainIndustries.join(", ")}
+              </span>
+            </div>
+            {showSensitivity ? (
+              <div>
+                <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Sensitivity</span>
+                <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
+                  <InlineFormattedText value={data.techSpecs.sensitivity} />
+                </span>
+              </div>
+            ) : null}
           </div>
         </div>
 
@@ -132,7 +155,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         {/* === INDUSTRIES & LIMITATIONS === */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             <div>
-               <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-4">Industries</h3>
+               <h3 className="text-xl font-bold text-[#111111] mb-4">Industries</h3>
                <div className="flex flex-wrap gap-2">
                  {data.mainIndustries.map((ind, i) => (
                     <span key={i} className="px-3 py-1.5 bg-gray-50 text-gray-600 text-xs font-medium rounded-lg border border-gray-200">{ind}</span>
@@ -160,7 +183,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           <div className="border-t border-gray-200">
              {[
                { label: "Microorganisms", value: data.techSpecs.targets },
-               { label: "Performance (LOD)", value: data.techSpecs.lod },
+               ...(showSensitivity ? [{ label: "Sensitivity", value: data.techSpecs.sensitivity }] : []),
                { label: "Validated Matrices", value: data.techSpecs.matrices },
                { label: "Time", value: data.techSpecs.time },
                { label: "Technology", value: data.techSpecs.technology },
@@ -170,7 +193,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
              ].map((row, i) => (
                 <div key={i} className="grid grid-cols-1 md:grid-cols-4 py-4 border-b border-gray-100">
                    <div className="text-sm font-semibold text-gray-500">{row.label}</div>
-                   <div className="md:col-span-3 text-sm font-medium text-[#111111] leading-relaxed">{row.value}</div>
+                   <div className="md:col-span-3 text-sm font-medium text-[#111111] leading-relaxed"><InlineFormattedText value={row.value} /></div>
                 </div>
              ))}
           </div>
@@ -301,7 +324,11 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
               </>
             )}
          </button>
-         <button className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg">
+         <button
+           type="button"
+           onClick={openMeeting}
+           className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg"
+         >
             <Mail className="w-4 h-4" />
             Contact Sales Team
          </button>

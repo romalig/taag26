@@ -2,6 +2,7 @@
 
 export interface SolutionContent {
   title: string;
+  targetType?: string;
   chips: string[];
   description: string[];
   mainIndustries: string[];
@@ -10,7 +11,7 @@ export interface SolutionContent {
   limitations: string[];
   techSpecs: {
     targets: string;
-    lod: string;
+    sensitivity: string;
     matrices: string;
     time: string;
     technology: string;

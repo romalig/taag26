@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function ProductsSection() {
   return (
-    <section className="py-24 md:py-32 bg-[#111111] text-white border-t border-white/5">
+    <section data-header-theme="dark"  className="py-24 md:py-32 bg-[#111111] text-white border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* ============================================== */}
