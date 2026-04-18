@@ -21,7 +21,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative w-full bg-[#111111] overflow-hidden flex flex-col items-center justify-between pt-32 md:pt-60 pb-0 h-screen min-h-[100dvh]">
+    <section className="relative w-full bg-[#111111] overflow-hidden flex flex-col items-center justify-between pt-32 md:pt-40 xl:pt-60 pb-0 h-screen min-h-[100dvh]">
       
       {/* 1. LUZ DE FONDO */}
       <div className="absolute bottom-[-20%] left-1/2 -translate-x-1/2 w-[80%] h-[60%] bg-[#FF270A] opacity-[0.08] blur-[120px] rounded-full pointer-events-none z-0" />
@@ -30,7 +30,7 @@ export default function Hero() {
       <div className="relative z-20 flex flex-col items-center text-center px-6 w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
       
         {/* Titular */}
-        <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[4.5rem] font-extrabold tracking-tight text-white mb-10 md:mb-24 leading-[1.1] w-full max-w-[95%] md:max-w-3xl lg:max-w-4xl xl:max-w-6xl mx-auto">
+        <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[4.5rem] font-extrabold tracking-tight text-white mb-10 md:mb-12 xl:mb-24 leading-[1.1] w-full max-w-[95%] md:max-w-3xl lg:max-w-4xl xl:max-w-6xl mx-auto">
           Someday, every biological risk will be detected <br className="hidden md:block" />
           <span className="text-white/50">before it becomes a problem.</span>
         </h1>

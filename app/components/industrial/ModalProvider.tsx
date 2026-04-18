@@ -2,35 +2,47 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 
-// Definimos el tipo de contexto
 type ModalContextType = {
   isOpen: boolean;
-  modalContent: ReactNode | null; // Aceptamos componentes (archivos TSX)
+  canGoBack: boolean;
+  stackDepth: number;
+  modalContent: ReactNode | null;
   openModal: (content: ReactNode) => void;
+  /** Pops the top modal. If it was the last one, closes everything. */
   closeModal: () => void;
+  /** Closes the entire modal stack regardless of depth. */
+  closeAll: () => void;
 };
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 export function ModalProvider({ children }: { children: ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<ReactNode | null>(null);
+  const [stack, setStack] = useState<ReactNode[]>([]);
+
+  const isOpen = stack.length > 0;
+  const canGoBack = stack.length > 1;
+  const modalContent = stack.length > 0 ? stack[stack.length - 1] : null;
 
   const openModal = (content: ReactNode) => {
-    setModalContent(content);
-    setIsOpen(true);
-    document.body.style.overflow = "hidden"; // Bloquear scroll
+    setStack((prev) => [...prev, content]);
+    document.body.style.overflow = "hidden";
   };
 
   const closeModal = () => {
-    setIsOpen(false);
-    // Esperar a la animación para limpiar
-    setTimeout(() => setModalContent(null), 700); 
-    document.body.style.overflow = "unset"; 
+    setStack((prev) => {
+      const next = prev.slice(0, -1);
+      if (next.length === 0) document.body.style.overflow = "unset";
+      return next;
+    });
+  };
+
+  const closeAll = () => {
+    setStack([]);
+    document.body.style.overflow = "unset";
   };
 
   return (
-    <ModalContext.Provider value={{ isOpen, modalContent, openModal, closeModal }}>
+    <ModalContext.Provider value={{ isOpen, canGoBack, stackDepth: stack.length, modalContent, openModal, closeModal, closeAll }}>
       {children}
     </ModalContext.Provider>
   );

@@ -1,14 +1,75 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type React from "react";
 import { X } from "lucide-react";
 import { useModal } from "./ModalProvider";
 
 export default function SolutionModal() {
-  const { isOpen, modalContent, closeModal } = useModal();
+  const { isOpen, modalContent, stackDepth, closeModal, closeAll } = useModal();
   
   const [isRendered, setIsRendered] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  // Crossfade between modal levels
+  const [displayedContent, setDisplayedContent] = useState<React.ReactNode>(null);
+  const [contentVisible, setContentVisible] = useState(true);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const prevDepthRef = useRef(0);
+  const savedScrollRef = useRef<number[]>([]);
+  const isInitialContent = useRef(true);
+
+  // When modalContent changes, crossfade: fade-out → swap → fade-in
+  useEffect(() => {
+    if (modalContent === null) return;
+    if (isInitialContent.current) {
+      // First open: set immediately, no animation
+      setDisplayedContent(modalContent);
+      isInitialContent.current = false;
+      return;
+    }
+    // Navigation: fade out, swap, fade in
+    setContentVisible(false);
+    const swap = setTimeout(() => {
+      setDisplayedContent(modalContent);
+      setContentVisible(true);
+    }, 220);
+    return () => clearTimeout(swap);
+  }, [modalContent]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Reset flag when modal closes so next open is instant again
+  useEffect(() => {
+    if (!isOpen) isInitialContent.current = true;
+  }, [isOpen]);
+
+  // Direction-aware scroll management:
+  // push → save current position + reset to top (after fade-out)
+  // pop  → restore saved position (after fade-out)
+  useEffect(() => {
+    const prev = prevDepthRef.current;
+    const curr = stackDepth;
+    if (curr > prev) {
+      savedScrollRef.current.push(scrollRef.current?.scrollTop ?? 0);
+      // Delay scroll reset until content has faded out
+      const t = setTimeout(() => {
+        if (scrollRef.current) scrollRef.current.scrollTop = 0;
+      }, 220);
+      prevDepthRef.current = curr;
+      return () => clearTimeout(t);
+    } else if (curr < prev && curr > 0) {
+      const saved = savedScrollRef.current.pop() ?? 0;
+      // Delay restore until content has faded out
+      const t = setTimeout(() => {
+        if (scrollRef.current) scrollRef.current.scrollTop = saved;
+      }, 220);
+      prevDepthRef.current = curr;
+      return () => clearTimeout(t);
+    } else if (curr === 0) {
+      savedScrollRef.current = [];
+    }
+    prevDepthRef.current = curr;
+  }, [stackDepth]);
 
   useEffect(() => {
     if (isOpen) {
@@ -33,16 +94,17 @@ export default function SolutionModal() {
           fixed inset-0 bg-black/40 transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)]
           ${isAnimating ? 'backdrop-blur-xl opacity-100' : 'backdrop-blur-none opacity-0'}
         `}
-        onClick={closeModal} 
+        onClick={closeAll} 
       />
 
       {/* WRAPPER SCROLLEABLE */}
-      <div 
-        className="absolute inset-0 overflow-y-auto overflow-x-hidden scroll-smooth py-12 md:py-20 flex items-start justify-center"
-        onClick={closeModal} 
+      <div
+        ref={scrollRef}
+        className="absolute inset-0 overflow-y-auto overflow-x-hidden py-12 md:py-20 flex items-start justify-center"
+        onClick={closeAll}
       >
         
-        {/* TARJETA MODAL (Ajuste a 95vw en móvil y máximo ancho en Desktop) */}
+        {/* TARJETA MODAL */}
         <div 
           className={`
             relative 
@@ -54,8 +116,8 @@ export default function SolutionModal() {
           `}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* BOTÓN CERRAR "STICKY" */}
-          <div className="sticky top-6 z-50 flex justify-end h-0 overflow-visible pr-6">
+          {/* BOTÓN CERRAR */}
+          <div className="sticky top-6 z-50 flex justify-end items-center h-0 overflow-visible px-6">
             <button 
               onClick={closeModal}
               className="w-10 h-10 rounded-full bg-gray-100/80 hover:bg-gray-200 backdrop-blur-md flex items-center justify-center transition-all active:scale-90 shadow-sm border border-black/5"
@@ -65,8 +127,8 @@ export default function SolutionModal() {
           </div>
 
           {/* CONTENIDO */}
-          <div className="w-full">
-             {modalContent}
+          <div className={`w-full transition-opacity duration-300 ease-in-out ${contentVisible ? 'opacity-100' : 'opacity-0'}`}>
+             {displayedContent}
           </div>
           
         </div>
