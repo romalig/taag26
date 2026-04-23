@@ -74,10 +74,13 @@ export const TXA_MODAL_DATA = {
 
 export type TxaModalKey = keyof typeof TXA_MODAL_DATA;
 
+/** Union of app / lab / qa modal payloads — same shape, distinct literal titles. */
+export type TxaModalData = (typeof TXA_MODAL_DATA)[TxaModalKey];
+
 export function TxAModalContent({
   data,
 }: {
-  data: (typeof TXA_MODAL_DATA)["app"];
+  data: TxaModalData;
 }) {
   return (
     <div className="w-full p-8 md:p-14 pb-12">
