@@ -295,6 +295,27 @@ export async function getKitSolutionByTitle(title: string): Promise<SolutionCont
   return getKitSolution(match.uuid);
 }
 
+/** Rows for “Kits & Protocols” tables — GET /products/protocolos */
+export interface ProtocolMatrixRow {
+  uuid: string;
+  kit: string | null;
+  matrix: string | null;
+  quantity: string | null;
+  enrichmentTime: string | null;
+  protocolRef?: string | null;
+}
+
+/**
+ * Validated enrichment protocols from the Protocolos catalog.
+ *
+ * @param search Optional filter on related product nombre or code (substring).
+ */
+export async function getProtocols(search?: string): Promise<ProtocolMatrixRow[]> {
+  const qs = search !== undefined && search.trim() !== "" ? `?search=${encodeURIComponent(search.trim())}` : "";
+
+  return fetchProductsApi<ProtocolMatrixRow[]>(`/products/protocolos${qs}`);
+}
+
 export async function getKitSolution(uuid: string): Promise<SolutionContent> {
   const solution = await fetchProductsApi<PcrKitFoodSolution>(`/products/pcr-kit-food/${uuid}/solution`);
 

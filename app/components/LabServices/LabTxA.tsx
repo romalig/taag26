@@ -8,94 +8,12 @@ import {
   MousePointerClick, 
   Map 
 } from "lucide-react";
-// IMPORTANTE: Esta es la ruta exacta que viene de tu archivo TxASystem.tsx original
-import { useModal } from "../industrial/ModalProvider"; 
-
-// --- DATOS EXACTOS PARA LOS MODALES TxA ---
-const TXA_MODAL_DATA = {
-  app: {
-    title: "TxA APP",
-    intro: "Transform your field sampling with our intelligent mobile application. Digitize your entire process for total control and end-to-end traceability from the field directly to the lab.",
-    features: [
-      {
-        title: "Digital Field Sampling",
-        text: "Replace paper logs and manual data entry with a streamlined digital workflow. Capture photos, detailed data, and the exact sampling point automatically. Track every sample's journey with immutable digital logs, ensuring 100% compliance and complete visibility over your operations.",
-        image: "/TxA_app_1.png"
-      },
-      {
-        title: "All information in one click",
-        text: "Once you select the sampling point, you can add important information such as a picture from the site, laboratory analyses, sanitization status, and more.",
-        image: "/TxA_app_5.png"
-      },
-      {
-        title: "A flawless tracking system",
-        text: "If you use our TAAG S11 NeutroSampling kit to perform environmental swabbing, you can automatically link all digital information with the sample by scanning the QR code printed on TAAG S11 NeutroSampling swabs.",
-        image: "/TxA_app_4.png"
-      }
-    ]
-  },
-  qa: {
-    title: "TxA QA",
-    intro: "Leverage predictive microbiology to anticipate risks and ensure comprehensive, proactive quality management across your entire facility.",
-    features: [
-      {
-        title: "Interactive Facility Heatmaps",
-        text: "Visualize pathogen occurrences and testing results across your entire production plant in real-time to spot historical problem areas.",
-        image: "/phone2.png"
-      },
-      {
-        title: "AI Risk Prediction",
-        text: "Our proprietary AI models analyze live data to flag potential contamination events before they reach critical thresholds.",
-        image: "/phone2.png"
-      },
-      {
-        title: "Automated Compliance Reporting",
-        text: "Generate verified quality certificates, trend analyses, and comprehensive compliance reports with just a single click.",
-        image: "/phone2.png"
-      }
-    ]
-  }
-};
-
-type TxaModalKey = keyof typeof TXA_MODAL_DATA;
-
-// --- COMPONENTE DE CONTENIDO DEL MODAL ---
-function TxAModalContent({ data }: { data: typeof TXA_MODAL_DATA['app'] }) {
-  return (
-    <div className="w-full p-8 md:p-14 pb-12">
-      <div className="max-w-3xl mb-16">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
-          {data.title}
-        </h2>
-        <p className="text-lg md:text-xl text-gray-500 font-medium leading-relaxed">
-          {data.intro}
-        </p>
-      </div>
-
-      <div className="space-y-16">
-        {data.features.map((feature, idx) => (
-          <div key={idx} className="flex flex-col gap-8 items-start w-full border-b border-gray-100 pb-16 last:border-0 last:pb-0">
-            <div className="w-full max-w-4xl"> 
-              <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#111111] text-white font-bold text-sm mb-4">
-                {idx + 1}
-              </div>
-              <h3 className="text-3xl font-bold text-[#111111] mb-4">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 text-lg leading-relaxed">
-                {feature.text}
-              </p>
-            </div>
-            
-            <div className="w-full bg-[#F5F5F7] rounded-[2.5rem] h-[350px] md:h-[550px] relative flex items-center justify-center overflow-hidden border border-gray-100 mt-2">
-              <Image src={feature.image} alt={feature.title} fill className="object-contain drop-shadow-2xl" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+import { useModal } from "../industrial/ModalProvider";
+import {
+  TXA_MODAL_DATA,
+  TxAModalContent,
+  type TxaModalKey,
+} from "../TxA/TxAModalShared";
 
 // --- COMPONENTE PRINCIPAL ---
 export default function LabTxA() {
