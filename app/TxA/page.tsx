@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import TxAHero from "../components/TxA/TxAHero";
 import TxASystem from "../components/TxA/TxASystem";
 import TxAFeatures from "../components/TxA/TxAFeatures";
-import TxAConversational from "../components/TxA/TxAConversational";
+import TxAVisualShowcaseSection from "../components/TxA/TxAVisualShowcaseSection";
 import FeaturedStory from "../components/TxA/FeaturedStory";
 import FinalCTA from "../components/FinalCTA";
 import { ModalProvider } from "../components/industrial/ModalProvider"; 
@@ -26,7 +26,7 @@ export default function TxAPage() {
       <TxAHero />
       <TxASystem />
       <TxAFeatures />
-      <TxAConversational />
+      <TxAVisualShowcaseSection />
       <FeaturedStory />
       <FinalCTA />
       <SolutionModal /> 
