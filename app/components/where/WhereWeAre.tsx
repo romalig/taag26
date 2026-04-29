@@ -97,7 +97,6 @@ export default function WhereWeAre() {
   const [activeLanguage, setActiveLanguage] = useState(SUPPORTED_HUBS[0].languages[0]);
 
   const t = TRANSLATIONS[activeLanguage.label] || TRANSLATIONS["English"];
-  
   const currentCountryName = activeLanguage.translatedName || activeRegion.name;
 
   const handleSelect = (region: any, lang: any) => {
@@ -114,8 +113,8 @@ export default function WhereWeAre() {
 
       <div className="relative w-full pb-32 flex flex-col items-center">
         
-        {/* Glow Lines Header - Sticky (z-50) */}
-        <div key={`sticky-${activeRegion.id}`} className="sticky top-[56px] md:top-[60px] z-50 w-full h-0 transform-gpu">
+        {/* Glow Lines Header - CAPA 20: Queda bajo el Header de TAAG, pero sobre el contenido */}
+        <div key={`sticky-${activeRegion.id}`} className="sticky top-[56px] md:top-[60px] z-20 w-full h-0 transform-gpu">
           <div className="absolute top-0 inset-x-0 h-4 bg-white z-0"></div>
           <div className="absolute top-[1px] inset-x-0 flex flex-row h-4 opacity-50 blur-[6px] pointer-events-none z-10">
             {activeRegion.glowColors.map((color: string, i: number) => <div key={i} className={`flex-1 ${color}`}></div>)}
@@ -125,8 +124,8 @@ export default function WhereWeAre() {
           </div>
         </div>
 
-        {/* Global Button - AJUSTADO: z-[70] para estar SOBRE la línea */}
-        <div className="relative -mt-4 md:-mt-7 z-[70] transform-gpu flex justify-center w-full">
+        {/* Global Button - CAPA 30: Queda sobre la línea, pero pasará DEBAJO del Header de TAAG al hacer scroll */}
+        <div className="relative -mt-4 md:-mt-7 z-30 transform-gpu flex justify-center w-full">
           <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-3 md:gap-4 px-6 py-2.5 md:px-10 md:py-4 bg-white rounded-full border border-gray-200 transition-all hover:bg-gray-50 shadow-[0_4px_20px_rgba(0,0,0,0.06)] group">
             <Globe className="w-4 h-4 md:w-5 md:h-5 text-[#FF270A]" />
             <span className="text-sm md:text-xl font-bold text-[#111111]">
@@ -136,8 +135,8 @@ export default function WhereWeAre() {
           </button>
         </div>
 
-        {/* Content Section */}
-        <div className="relative z-20 w-full mt-16 md:mt-24">
+        {/* Content Section - CAPA 10: La capa más baja para que la línea pase por encima al bajar */}
+        <div className="relative z-10 w-full mt-16 md:mt-24">
           <LocalCarousel title={`${t.featuredSolutions} ${currentCountryName}`} items={activeLanguage.news} t={t} />
           
           <div className="max-w-7xl mx-auto px-6">
@@ -146,7 +145,7 @@ export default function WhereWeAre() {
         </div>
       </div>
 
-      {/* SELECTOR MODAL */}
+      {/* SELECTOR MODAL - CAPA 100: Asegura cubrir toda la pantalla, incluyendo el Header */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] bg-white overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
           <div className="max-w-[1200px] mx-auto px-6 py-12 md:py-20 relative">
