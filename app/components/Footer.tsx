@@ -16,7 +16,7 @@ export default function Footer() {
           <div className="lg:col-span-4 space-y-8">
             <div className="relative w-40 h-12">
               <Image
-                src="/logo-white.png"
+                src="/logo-white-1.png"
                 alt="TAAG Logo"
                 fill
                 className="object-contain object-left"
