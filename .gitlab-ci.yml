@@ -10,14 +10,16 @@ stages:
 variables:
   IMAGE_NAME: $REPGITLAB_REGISTRY_URL/comercial-pages/taag-bio/taag-site
   DOCKER_HOST: tcp://docker:2375/
-  DOCKER_TLS_CERTDIR: ""
+  DOCKER_TLS_CERTDIR: ''
 
 default:
   image: docker:26.1.1
   services:
     - docker:26.1.1-dind
   before_script:
-    - echo "$REPGIT_REGISTRY_PASS_GPOTAAGBIO" | docker login $REPGITLAB_REGISTRY_URL -u "$REPGIT_REGISTRY_USR_GPOTAAGBIO" --password-stdin
+    - echo "$REPGIT_REGISTRY_PASS_GPOTAAGBIO" | docker login
+      $REPGITLAB_REGISTRY_URL -u "$REPGIT_REGISTRY_USR_GPOTAAGBIO"
+      --password-stdin
 
 # ── Desarrollo ──────────────────────────────────────────
 
@@ -27,14 +29,14 @@ build_dev:
   environment:
     name: desarrollo
   variables:
-    IMG_TAG_FINAL: "$IMAGE_NAME:dev"
+    IMG_TAG_FINAL: $IMAGE_NAME:dev
   script:
     - echo "Building dev image with tag 'dev'"
-    - >-
-      docker build
-      --build-arg NEXT_PUBLIC_APIWEBSITE_URL="$NEXT_PUBLIC_APIWEBSITE_URL"
-      --build-arg NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY="$NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY"
-      --build-arg NEXT_PUBLIC_TXALAB_LOGIN_URL="${NEXT_PUBLIC_TXALAB_LOGIN_URL:-https://txalab.taag-genetics.com}"
+    - docker build --build-arg
+      NEXT_PUBLIC_APIWEBSITE_URL="$NEXT_PUBLIC_APIWEBSITE_URL" --build-arg
+      NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY="$NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY"
+      --build-arg
+      NEXT_PUBLIC_TXALAB_LOGIN_URL="${NEXT_PUBLIC_TXALAB_LOGIN_URL:-https://txalab.taag-genetics.com}"
       -t $IMG_TAG_FINAL . -f .docker/Dockerfile
     - docker push $IMG_TAG_FINAL
   only:
@@ -52,7 +54,8 @@ deploy_development:
     - echo "Triggering development deploy webhook"
     - apk add --no-cache curl
     - curl -k -X POST $REPGITT_WEBHOOK_URL_DEV
-  needs: ["build_dev"]
+  needs:
+    - build_dev
   when: manual
   only:
     - desarrollo
@@ -82,17 +85,17 @@ build_latest:
   environment:
     name: production
   variables:
-    IMG_TAG_FINAL: "$IMAGE_NAME:latest"
+    IMG_TAG_FINAL: $IMAGE_NAME:latest
   script:
     - echo "Building production image with tag 'latest'"
-    - >-
-      docker build
-      --build-arg NEXT_PUBLIC_APIWEBSITE_URL="$NEXT_PUBLIC_APIWEBSITE_URL"
-      --build-arg NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY="$NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY"
-      --build-arg NEXT_PUBLIC_TXALAB_LOGIN_URL="${NEXT_PUBLIC_TXALAB_LOGIN_URL:-https://txalab.taag-genetics.com}"
-      --build-arg CHAT_IA_WEBPAGE_API_URL="$CHAT_IA_WEBPAGE_API_URL"
-      --build-arg CHAT_IA_WEBPAGE_SERVICE_KEY="$CHAT_IA_WEBPAGE_SERVICE_KEY"
-      -t $IMG_TAG_FINAL . -f .docker/Dockerfile
+    - docker build --build-arg
+      NEXT_PUBLIC_APIWEBSITE_URL="$NEXT_PUBLIC_APIWEBSITE_URL" --build-arg
+      NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY="$NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY"
+      --build-arg
+      NEXT_PUBLIC_TXALAB_LOGIN_URL="${NEXT_PUBLIC_TXALAB_LOGIN_URL:-https://txalab.taag-genetics.com}"
+      --build-arg CHAT_IA_WEBPAGE_API_URL="$CHAT_IA_WEBPAGE_API_URL" --build-arg
+      CHAT_IA_WEBPAGE_SERVICE_KEY="$CHAT_IA_WEBPAGE_SERVICE_KEY" -t
+      $IMG_TAG_FINAL . -f .docker/Dockerfile
     - docker push $IMG_TAG_FINAL
   # needs: ["backup_latest"]
   only:
@@ -110,7 +113,8 @@ deploy_production:
     - echo "Triggering production deploy webhook"
     - apk add --no-cache curl
     - curl -k -X POST $REPGITT_WEBHOOK_URL_PROD
-  needs: ["build_latest"]
+  needs:
+    - build_latest
   when: manual
   only:
     - master

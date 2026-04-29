@@ -2,26 +2,42 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { Clock, ShieldAlert, CheckCircle2, Package, Mail } from "lucide-react";
+import { Clock, ShieldAlert, CheckCircle2, Package, Mail, Loader2 } from "lucide-react";
 
 // IMPORTAMOS LAS HERRAMIENTAS DEL MODAL Y EL CTA
 import { useModal } from "../industrial/ModalProvider"; // Ajusta la ruta si es diferente
 import { useCTA } from "@/app/components/CTAProvider"; // Ajusta la ruta si es diferente
+import { getProtocols, type ProtocolMatrixRow } from "@/app/lib/products-api";
 
-// --- DATOS INVENTADOS PARA LA TABLA DEL MODAL ---
-const FOOD_VALIDATIONS_DATA = [
-  { kit: "Elevia Salmonella", matrix: "Cocoa liquor & Chocolate", grammage: "375 g", time: "8 hours" },
-  { kit: "Elevia Salmonella", matrix: "Raw ground beef, 90% lean", grammage: "25 g", time: "6 hours" },
-  { kit: "Elevia Salmonella + EB", matrix: "Non-fat dry milk", grammage: "375 g", time: "7 hours" },
-  { kit: "Elevia Salmonella + Listeria spp.", matrix: "Ready-to-Eat (RTE) Meats", grammage: "25 g", time: "8 hours" },
-  { kit: "Elevia Listeria monocytogenes", matrix: "Soft Cheeses & Dairy", grammage: "25 g", time: "7 hours" },
-  { kit: "Elevia E. coli O157:H7", matrix: "Fresh Spinach & Leafy Greens", grammage: "200 g", time: "6 hours" },
-];
+/** Table rows come from `getProtocols()` — this stays empty so stale code / HMR cannot reference an undefined symbol. */
+const FOOD_VALIDATIONS_DATA: ProtocolMatrixRow[] = [];
 
 // --- COMPONENTE DEL MODAL (Estilo idéntico a FeaturedSolutionTemplate) ---
 function FoodModalContent() {
   const { closeModal } = useModal();
   const { openMeeting } = useCTA();
+  const [rows, setRows] = useState<ProtocolMatrixRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(false);
+    getProtocols("Elevia")
+      .then((data) => {
+        if (!cancelled) setRows(data);
+      })
+      .catch(() => {
+        if (!cancelled) setError(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="w-full bg-white rounded-[2.5rem] overflow-hidden flex flex-col">
@@ -68,14 +84,35 @@ function FoodModalContent() {
                  </tr>
                </thead>
                <tbody>
-                 {FOOD_VALIDATIONS_DATA.map((row, i) => (
-                   <tr key={i} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
-                     <td className="py-5 pr-4 font-bold text-[#111111] text-sm">{row.kit}</td>
-                     <td className="py-5 px-4 text-gray-600 text-sm leading-relaxed">{row.matrix}</td>
-                     <td className="py-5 px-4 text-gray-600 text-sm">{row.grammage}</td>
-                     <td className="py-5 pl-4 font-bold text-[#FF270A] text-sm">{row.time}</td>
+                 {loading ? (
+                   <tr>
+                     <td colSpan={4} className="py-12 text-center text-gray-500">
+                       <Loader2 className="inline-block w-6 h-6 animate-spin text-[#FF270A]" aria-hidden />
+                       <span className="sr-only">Loading protocols</span>
+                     </td>
                    </tr>
-                 ))}
+                 ) : error ? (
+                   <tr>
+                     <td colSpan={4} className="py-8 text-center text-gray-500 text-sm">
+                       Unable to load protocols. Please try again later.
+                     </td>
+                   </tr>
+                 ) : rows.length === 0 ? (
+                   <tr>
+                     <td colSpan={4} className="py-8 text-center text-gray-500 text-sm">
+                       No protocol data available.
+                     </td>
+                   </tr>
+                 ) : (
+                   rows.map((row) => (
+                     <tr key={row.uuid} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
+                       <td className="py-5 pr-4 font-bold text-[#111111] text-sm">{row.kit ?? "—"}</td>
+                       <td className="py-5 px-4 text-gray-600 text-sm leading-relaxed">{row.matrix ?? "—"}</td>
+                       <td className="py-5 px-4 text-gray-600 text-sm">{row.quantity ?? "—"}</td>
+                       <td className="py-5 pl-4 font-bold text-[#FF270A] text-sm">{row.enrichmentTime ?? "—"}</td>
+                     </tr>
+                   ))
+                 )}
                </tbody>
              </table>
            </div>
