@@ -12,14 +12,31 @@ import { TRANSLATIONS } from "./data/translations";
 import { generateMockNews, generateMockTeam } from "./data/mockData";
 
 // =========================================================
-// 1. LISTA DE HUBS
+// 1. IMPORTACIÓN DE DATOS REALES
+// =========================================================
+import usaEnNews from "./data/local-news/usa_en.json";
+
+// =========================================================
+// 2. LISTA DE HUBS (Configuración de Países Principales)
 // =========================================================
 const SUPPORTED_HUBS = [
   {
     id: "USA", name: "United States", glowColors: ["bg-blue-600", "bg-white", "bg-red-600"],
     languages: [
-      { label: "English", code: "en", translatedName: "United States", news: generateMockNews("United States"), team: generateMockTeam("NorthAm Distribution", "Sarah Jenkins", "usa-sales@taag.com", true) },
-      { label: "Español", code: "es", translatedName: "Estados Unidos", news: generateMockNews("Estados Unidos"), team: generateMockTeam("NorthAm Distribution", "Sarah Jenkins", "usa-sales@taag.com", true) }
+      { 
+        label: "English", 
+        code: "en", 
+        translatedName: "United States", 
+        news: usaEnNews, // <--- Conectado a tu archivo real
+        team: generateMockTeam("NorthAm Distribution", "Sarah Jenkins", "usa-sales@taag.com", true) 
+      },
+      { 
+        label: "Español", 
+        code: "es", 
+        translatedName: "Estados Unidos", 
+        news: generateMockNews("Estados Unidos"), 
+        team: generateMockTeam("NorthAm Distribution", "Sarah Jenkins", "usa-sales@taag.com", true) 
+      }
     ]
   },
   {
@@ -41,7 +58,7 @@ const SUPPORTED_HUBS = [
 ];
 
 // =========================================================
-// 2. LISTA DE PARTNERS
+// 3. LISTA DE PARTNERS (Distribuidores Locales)
 // =========================================================
 const SUPPORTED_PARTNERS = [
   { 
@@ -113,7 +130,7 @@ export default function WhereWeAre() {
 
       <div className="relative w-full pb-32 flex flex-col items-center">
         
-        {/* Glow Lines Header - CAPA 20: Queda bajo el Header de TAAG, pero sobre el contenido */}
+        {/* Glow Lines Header - Z-20: Bajo el Nav pero sobre el contenido */}
         <div key={`sticky-${activeRegion.id}`} className="sticky top-[56px] md:top-[60px] z-20 w-full h-0 transform-gpu">
           <div className="absolute top-0 inset-x-0 h-4 bg-white z-0"></div>
           <div className="absolute top-[1px] inset-x-0 flex flex-row h-4 opacity-50 blur-[6px] pointer-events-none z-10">
@@ -124,7 +141,7 @@ export default function WhereWeAre() {
           </div>
         </div>
 
-        {/* Global Button - CAPA 30: Queda sobre la línea, pero pasará DEBAJO del Header de TAAG al hacer scroll */}
+        {/* Global Selector Button - Z-30: Sobre la línea, bajo el Nav global */}
         <div className="relative -mt-4 md:-mt-7 z-30 transform-gpu flex justify-center w-full">
           <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-3 md:gap-4 px-6 py-2.5 md:px-10 md:py-4 bg-white rounded-full border border-gray-200 transition-all hover:bg-gray-50 shadow-[0_4px_20px_rgba(0,0,0,0.06)] group">
             <Globe className="w-4 h-4 md:w-5 md:h-5 text-[#FF270A]" />
@@ -135,7 +152,7 @@ export default function WhereWeAre() {
           </button>
         </div>
 
-        {/* Content Section - CAPA 10: La capa más baja para que la línea pase por encima al bajar */}
+        {/* Content - Z-10 */}
         <div className="relative z-10 w-full mt-16 md:mt-24">
           <LocalCarousel title={`${t.featuredSolutions} ${currentCountryName}`} items={activeLanguage.news} t={t} />
           
@@ -145,7 +162,7 @@ export default function WhereWeAre() {
         </div>
       </div>
 
-      {/* SELECTOR MODAL - CAPA 100: Asegura cubrir toda la pantalla, incluyendo el Header */}
+      {/* MODAL SELECTOR */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] bg-white overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
           <div className="max-w-[1200px] mx-auto px-6 py-12 md:py-20 relative">
