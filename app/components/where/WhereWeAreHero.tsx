@@ -31,7 +31,7 @@ export default function WhereWeAreHero() {
           </span>
         </h1>
         <p className="text-lg md:text-xl text-gray-600 font-medium max-w-3xl mx-auto leading-relaxed">
-          With operational TAAG Hubs and a network of partner labs and distributors, we bring the TAAG ecosystem directamente a tu instalación. Soporte en tu idioma, en tu zona horaria, justo a tu lado.
+          With operational TAAG Hubs and a network of partner labs and distributors, we bring the TAAG ecosystem directly to your facility. Support in your language, in your time zone, right by your side.
         </p>
       </div>
     </section>
