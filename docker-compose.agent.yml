@@ -1,0 +1,40 @@
+# docker-compose.agent.yml — Override para acceso del agente OpenClaw
+#
+# Uso:
+#   docker compose -f docker-compose.yml -f docker-compose.agent.yml up -d
+#   docker compose -f docker-compose.yml -f docker-compose.agent.yml --profile dev up -d
+#
+# El proxy escucha en 127.0.0.1:12376 (solo loopback del host).
+# El agente OpenClaw se conecta via DOCKER_HOST=tcp://127.0.0.1:12376.
+
+services:
+  web-taagbio-dev:
+    labels:
+      - "dev.project=taagbio-front"
+
+  web-taagbio:
+    labels:
+      - "dev.project=taagbio-front"
+
+  taagbio-front-proxy:
+    image: tecnativa/docker-socket-proxy:latest
+    container_name: taagbio-front-proxy
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:12376:2375"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      CONTAINERS: 1
+      IMAGES: 1
+      INFO: 1
+      EXEC: 1
+      LOGS: 1
+      POST: 1
+      DELETE: 0
+      BUILD: 0
+      COMMIT: 0
+      NETWORKS: 0
+      SECRETS: 0
+      SERVICES: 0
+      SWARM: 0
