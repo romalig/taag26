@@ -15,7 +15,6 @@ export default function IndustrialPage() {
         <Header/>
         <AboutUs/>
         <InnovationsTimeline/>
-        <OurValues/>
         <FinalCTA />
       </main>
       <SolutionModal /> {/* ← Este es el que faltaba: renderiza el modal en pantalla */}
