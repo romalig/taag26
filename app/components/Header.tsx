@@ -19,15 +19,20 @@ const NAV_LINKS = [
   { name: "About", href: "/AboutUs" },
 ];
 
-const HUBS_LIST = ["USA", "Belgium", "Mexico", "Chile"];
-const PARTNERS_LIST = ["Peru", "Colombia", "Argentina", "Brazil", "Spain"];
+const LANGUAGES = [
+  { name: "English", label: "English" },
+  { name: "Español", label: "Español" },
+  { name: "Français", label: "Français" },
+  { name: "Nederlands", label: "Nederlands" },
+  { name: "Português", label: "Português" },
+  { name: "Arabic", label: "العربية" }
+];
 
 export default function Header({ theme = "light" }: { theme?: "light" | "dark" | "hybrid" }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isGlobeOpen, setIsGlobeOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
   
-  // Estado dinámico para el color
   const [dynamicTheme, setDynamicTheme] = useState(theme);
 
   useEffect(() => {
@@ -35,31 +40,24 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
       const scrolled = window.scrollY > 50;
       setIsScrolled(scrolled);
       
-      // Si volvemos arriba de todo, vuelve siempre al tema original
       if (!scrolled) {
         setDynamicTheme(theme);
         return;
       }
 
-      // 1. Buscamos TODAS las secciones que tengan data-header-theme
       const sections = Array.from(document.querySelectorAll('[data-header-theme]'));
       
-      // 2. Buscamos cuál de esas secciones está chocando con el Header
       const activeSection = sections.find((section) => {
         const rect = section.getBoundingClientRect();
         return rect.top <= 100 && rect.bottom >= 100;
       });
 
-      // 3. Si encontramos la sección, le copiamos el color
       if (activeSection) {
         const newTheme = activeSection.getAttribute('data-header-theme');
         if (newTheme === 'dark' || newTheme === 'light' || newTheme === 'hybrid') {
           setDynamicTheme(newTheme);
         }
       } else {
-        // --- LA SOLUCIÓN ---
-        // Si estamos sobre una sección que NO tiene etiqueta (ej: el Hero), 
-        // reseteamos el Header al tema original con el que cargó la página.
         setDynamicTheme(theme);
       }
     };
@@ -71,21 +69,20 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
   }, [theme]);
 
   useEffect(() => {
-    if (isMenuOpen || isGlobeOpen) {
+    if (isMenuOpen || isLangOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
-  }, [isMenuOpen, isGlobeOpen]);
+  }, [isMenuOpen, isLangOpen]);
 
-  // --- ESTILOS VISUALES ---
   const headerBg = isScrolled 
     ? (dynamicTheme === "dark" 
         ? "bg-black/70 backdrop-blur-lg border-b border-white/10" 
         : "bg-white/100 backdrop-blur-md border-b border-black/5") 
     : "bg-transparent border-transparent";
 
-  const useWhiteForeground = !isMenuOpen && !isGlobeOpen && (dynamicTheme === "dark" || (dynamicTheme === "hybrid" && !isScrolled));
+  const useWhiteForeground = !isMenuOpen && !isLangOpen && (dynamicTheme === "dark" || (dynamicTheme === "hybrid" && !isScrolled));
 
   const textColor = useWhiteForeground ? "text-white" : "text-[#111111]";
   const logoClasses = useWhiteForeground ? "brightness-0 invert" : "";
@@ -95,7 +92,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
       <header className={`fixed top-0 left-0 right-0 z-[50] transition-all duration-500 ${headerBg} py-4`}>
         <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
           
-          <Link href="/" className="relative z-[102] shrink-0" onClick={() => {setIsMenuOpen(false); setIsGlobeOpen(false);}}>
+          <Link href="/" className="relative z-[102] shrink-0" onClick={() => {setIsMenuOpen(false); setIsLangOpen(false);}}>
             <div className="relative w-24 h-6 md:w-28 md:h-7 transition-opacity hover:opacity-80">
                <Image 
                  src="/logo-red1.png" 
@@ -118,16 +115,15 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
             </Link>
 
             <button 
-                onClick={() => {setIsGlobeOpen(!isGlobeOpen); setIsMenuOpen(false);}}
-                className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest hover:opacity-70 transition-opacity"
+                onClick={() => {setIsLangOpen(!isLangOpen); setIsMenuOpen(false);}}
+                className="p-1 hover:opacity-70 transition-transform duration-300 hover:scale-110"
             >
-              <Globe className="w-4 h-4" />
-              <span className="hidden md:inline">Locations</span>
+              <Globe className="w-6 h-6" />
             </button>
 
             <button
               className="p-1 transition-transform duration-300 hover:scale-110"
-              onClick={() => {setIsMenuOpen(!isMenuOpen); setIsGlobeOpen(false);}}
+              onClick={() => {setIsMenuOpen(!isMenuOpen); setIsLangOpen(false);}}
             >
               <Menu className="w-7 h-7" />
             </button>
@@ -135,7 +131,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
         </div>
       </header>
 
-      {/* --- DRAWER MENU LATERAL --- */}
+      {/* --- MENU LATERAL --- */}
       <div 
         className={`fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm transition-opacity duration-500 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
         onClick={() => setIsMenuOpen(false)}
@@ -150,33 +146,22 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
                 <Link href={SITE_URLS.txalabLogin} prefetch={false} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                     <User className="w-5 h-5 text-[#111111]" />
                 </Link>
-                <button 
-                  onClick={() => setIsMenuOpen(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
+                <button onClick={() => setIsMenuOpen(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                   <X className="w-6 h-6 text-[#111111]" />
                 </button>
              </div>
           </div>
 
           <div className="flex-1 overflow-y-auto">
-             
-             {/* --- AIGOR DESTACADO (Moviendo esta sección arriba) --- */}
              <div className="bg-[#F5F5F7] p-6 pb-8 border-b border-black/5">
                 <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-4">Featured Technology</p>
-                
-                <Link 
-                    href="/aigor" 
-                    onClick={() => setIsMenuOpen(false)}
-                    className="bg-white rounded-2xl p-4 shadow-sm border border-black/5 flex items-start gap-5 cursor-pointer hover:shadow-md transition-shadow group block"
-                >
+                <Link href="/aigor" onClick={() => setIsMenuOpen(false)} className="bg-white rounded-2xl p-4 shadow-sm border border-black/5 flex items-start gap-5 cursor-pointer hover:shadow-md transition-shadow group block">
                     <div className="w-24 h-24 relative flex items-center justify-center rounded-xl overflow-hidden shrink-0">
                         <div className="absolute inset-0 bg-gradient-to-br from-[#FF270A] via-purple-600 to-blue-600" />
                         <div className="absolute inset-[3px] bg-[#111111] rounded-[10px] flex flex-col items-center justify-center z-10 p-1 text-center">
                             <span className="text-xl font-extrabold text-white tracking-tight leading-none mb-1">AiGOR</span>
                             <span className="text-[7px] font-bold text-[#FF270A] uppercase tracking-widest leading-tight">RNA Technology</span>
                         </div>
-                        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity z-20" />
                     </div>
                     <div className="flex flex-col justify-center pt-1">
                         <h4 className="text-lg font-bold text-[#111111] leading-tight mb-1">AiGOR™</h4>
@@ -184,60 +169,43 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
                     </div>
                 </Link>
              </div>
-
-             {/* --- LINKS DE NAVEGACIÓN (Movidos abajo) --- */}
              <nav className="p-6">
                 <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-4">Explore</p>
                 <div className="flex flex-col">
                   {NAV_LINKS.map((link) => (
-                    <Link
-                        key={link.name}
-                        href={link.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="group flex items-center justify-between py-4 border-b border-black/5 text-lg font-medium text-[#111111] hover:text-[#FF270A] hover:pl-2 transition-all"
-                    >
+                    <Link key={link.name} href={link.href} onClick={() => setIsMenuOpen(false)} className="group flex items-center justify-between py-4 border-b border-black/5 text-lg font-medium text-[#111111] hover:text-[#FF270A] hover:pl-2 transition-all">
                         {link.name}
                         <ChevronRight className="w-5 h-5 text-black/20 group-hover:text-[#FF270A]" />
                     </Link>
                   ))}
                 </div>
              </nav>
-             
           </div>
       </div>
 
-      {/* --- GLOBE OVERLAY --- */}
-      {isGlobeOpen && (
-        <div className={`fixed inset-0 z-[99] bg-white/95 backdrop-blur-xl pt-24 px-6 animate-in zoom-in-95 duration-200 ${sora.className}`}>
-            <button 
-              onClick={() => setIsGlobeOpen(false)}
-              className="absolute top-6 right-6 p-2 bg-black/5 rounded-full hover:bg-black/10 transition-colors"
-            >
-              <X className="w-6 h-6 text-black" />
-            </button>
-            <div className="max-w-5xl mx-auto mt-10 h-full overflow-y-auto pb-20">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-bold text-[#111111] mb-4">Our Global Presence</h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 relative">
-                    <div className="flex flex-col items-center text-center">
-                        <h3 className="text-xs font-bold text-black/40 uppercase tracking-[0.2em] mb-8">Direct Hubs</h3>
-                        <ul className="space-y-6">
-                            {HUBS_LIST.map((country) => (
-                                <li key={country} className="text-3xl md:text-4xl font-bold text-[#111111]">{country}</li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="flex flex-col items-center text-center">
-                        <h3 className="text-xs font-bold text-black/40 uppercase tracking-[0.2em] mb-8">Partner Network</h3>
-                        <ul className="space-y-6">
-                            {PARTNERS_LIST.map((country) => (
-                                <li key={country} className="text-2xl md:text-3xl font-medium text-gray-400">{country}</li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            </div>
+      {/* --- SELECTOR DE IDIOMA PREMIUM & SIMPLE --- */}
+      {isLangOpen && (
+        <div className="fixed inset-0 z-[100] bg-white animate-in fade-in duration-500 flex items-center justify-center">
+          
+          <button 
+            onClick={() => setIsLangOpen(false)} 
+            className="absolute top-8 right-8 p-4 hover:opacity-50 transition-opacity"
+          >
+            <X className="w-10 h-10 text-[#111111]" strokeWidth={1} />
+          </button>
+
+          <div className="flex flex-col items-center gap-8 md:gap-12">
+            {LANGUAGES.map((lang) => (
+              <button 
+                key={lang.name} 
+                onClick={() => setIsLangOpen(false)}
+                className="text-3xl md:text-5xl font-bold text-[#111111] hover:text-[#FF270A] transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                {lang.label}
+              </button>
+            ))}
+          </div>
+
         </div>
       )}
     </div>

@@ -2,8 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { TrendingDown, Clock } from "lucide-react";
+// 1. Importamos el hook para el modal de contacto
+import { useCTA } from "@/app/components/CTAProvider"; 
 
 export default function EleviaROICalculator() {
+  // 2. Extraemos la función para abrir el modal
+  const { openMeeting } = useCTA();
+
   // Estados para los sliders
   const [dailyValue, setDailyValue] = useState<number>(50000);
   const [currentWaitDays, setCurrentWaitDays] = useState<number>(3);
@@ -197,14 +202,17 @@ export default function EleviaROICalculator() {
           </div>
         </div>
         
-        {/* CTA Final: Alineado a la izquierda, flecha blanca y ancho limitado en móvil */}
+        {/* 3. CTA Final: Cambiado de <a> a <button> y conectado a openMeeting */}
         <div className="mt-16 lg:mt-24 flex justify-start">
-           <a href="#" className="group inline-flex items-center gap-3 text-white hover:text-gray-300 transition-colors font-bold text-sm md:text-base tracking-wide max-w-[260px] md:max-w-none text-left">
+           <button 
+             onClick={openMeeting}
+             className="group inline-flex items-center gap-3 text-white hover:text-gray-300 transition-colors font-bold text-sm md:text-base tracking-wide max-w-[260px] md:max-w-none text-left cursor-pointer"
+            >
              <span>Request a personalized financial analysis for your facility</span>
              <svg className="w-4 h-4 md:w-5 md:h-5 shrink-0 group-hover:translate-x-1 transition-transform text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
-           </a>
+           </button>
         </div>
 
       </div>

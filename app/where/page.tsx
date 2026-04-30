@@ -13,14 +13,15 @@ export const metadata: Metadata = pageMetadata({
   keywords: ["TAAG locations", "lab partner", "global support", "distributors"],
 });
 
-export default function TxAPage() {
+// Cambié el nombre de TxAPage a WherePage por limpieza
+export default function WherePage() {
   return (
     <ModalProvider>
-    <main className="bg-white"> 
-    <Header theme="light" />
-      <WhereWeAre />
-      <SolutionModal /> 
-    </main>
-  </ModalProvider>
+      <main className="bg-white"> 
+        <Header theme="light" />
+        <WhereWeAre />
+        <SolutionModal /> 
+      </main>
+    </ModalProvider>
   );
 }
