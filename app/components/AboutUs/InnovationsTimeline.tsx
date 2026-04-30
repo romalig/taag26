@@ -143,7 +143,7 @@ export default function InnovationsTimeline() {
                     </h3>
                     
                     <p className="text-[15px] md:text-base text-gray-600 font-medium leading-relaxed">
-                      Based on <strong className="text-[#111111]">AiGOR</strong> and <strong className="text-[#111111]">MILA</strong>, we are currently developing the next generation of assays. Expect unprecedented capabilities: extremely fast (same-shift results), highly multiplexed, and fully quantitative results.
+                      Based on <strong className="text-[#111111]">AiGOR</strong> and <strong className="text-[#111111]">MILA</strong>, we are currently developing the next generation of assays. Expect unprecedented capabilities: extremely fast (same-shift results), multiplexed, and quantitative results.
                     </p>
 
                   </div>

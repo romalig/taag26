@@ -77,7 +77,7 @@ export default function LabLocations() {
     {
       city: "Mexico City",
       country: "Mexico",
-      image: "/hub_USA.png",
+      image: "/Lab_MX.png",
       address: "Av. Coyoacán 1622. Colonia del Valle Sur. CDMX, Mexico.",
       phone: "+52 55 52 003 250",
       email: "contacto_MX@taag-genetics.com"
@@ -85,7 +85,7 @@ export default function LabLocations() {
     {
       city: "Santiago",
       country: "Chile",
-      image: "/hub_USA.png",
+      image: "/Lab_CL.png",
       address: "Río Refugio 9663, Pudahuel. Santiago, Chile.",
       phone: "+56 229 353 216",
       email: "contacto_CL@taag-genetics.com"
@@ -93,7 +93,7 @@ export default function LabLocations() {
     {
       city: "Brussels",
       country: "Belgium",
-      image: "/hub_USA.png",
+      image: "/Lab_EU.png",
       address: "Excelsiorlaan 33, 1930 Zaventem, Brussels, Belgium.",
       phone: "+32 3 222 20 87",
       email: "info@taageurope.com"
