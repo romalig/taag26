@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, Globe, User, ChevronRight } from "lucide-react"; 
+import { Menu, X, User, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Sora } from "next/font/google";
@@ -13,25 +13,74 @@ const NAV_LINKS = [
   { name: "Industrial Microbiology", href: "/industrial" },
   { name: "Customized Molecular", href: "/customized" },
   { name: "Digital Transformation", href: "/TxA" },
-  { name: "Lab services", href: "/LabNetwork" },
+  { name: "Lab Services", href: "/LabNetwork" },
   { name: "Lab Partners", href: "/labs" },
   { name: "Where We Are", href: "/where" },
   { name: "About", href: "/AboutUs" },
 ];
 
-const LANGUAGES = [
-  { name: "English", label: "English" },
-  { name: "Español", label: "Español" },
-  { name: "Français", label: "Français" },
-  { name: "Nederlands", label: "Nederlands" },
-  { name: "Português", label: "Português" },
-  { name: "Arabic", label: "العربية" }
-];
+/*
+ * ---------------------------------------------------------------------------
+ * Language selector (Globe + full-screen picker) — DISABLED in the UI.
+ * To re-enable: restore the pieces marked ENABLE_LANG_SELECTOR below, and
+ * uncomment this block (then remove the slashes around const LANGUAGES only).
+ *
+ * import: add `Globe` next to Menu, X, User in the lucide-react import.
+ *
+ * const LANGUAGES = [
+ *   { name: "English", label: "English" },
+ *   { name: "Español", label: "Español" },
+ *   { name: "Français", label: "Français" },
+ *   { name: "Nederlands", label: "Nederlands" },
+ *   { name: "Português", label: "Português" },
+ *   { name: "Arabic", label: "العربية" },
+ * ];
+ *
+ * Inside Header():
+ *   const [isLangOpen, setIsLangOpen] = useState(false);
+ *
+ * Body scroll lock — include isLangOpen:
+ *   useEffect(() => {
+ *     if (isMenuOpen || isLangOpen) document.body.style.overflow = "hidden";
+ *     else document.body.style.overflow = "unset";
+ *   }, [isMenuOpen, isLangOpen]);
+ *
+ * Hero/logo contrast — include !isLangOpen:
+ *   const useWhiteForeground =
+ *     !isMenuOpen && !isLangOpen && (dynamicTheme === "dark" || ...);
+ *
+ * Logo Link onClick: also call setIsLangOpen(false) when closing overlays.
+ *
+ * Toolbar — Globe opens picker, closes menu:
+ *   <button onClick={() => { setIsLangOpen(!isLangOpen); setIsMenuOpen(false); }}>
+ *     <Globe className="w-6 h-6" />
+ *   </button>
+ *
+ * Hamburger — toggle menu and close language overlay:
+ *   onClick={() => { setIsMenuOpen(!isMenuOpen); setIsLangOpen(false); }}
+ *
+ * After the lateral menu panel, render overlay when isLangOpen (paste before closing </div> of outer wrapper):
+ *
+ *   {isLangOpen && (
+ *     <div className="fixed inset-0 z-[100] bg-white animate-in fade-in duration-500 flex items-center justify-center">
+ *       <button onClick={() => setIsLangOpen(false)} className="absolute top-8 right-8 p-4 hover:opacity-50 transition-opacity">
+ *         <X className="w-10 h-10 text-[#111111]" strokeWidth={1} />
+ *       </button>
+ *       <div className="flex flex-col items-center gap-8 md:gap-12">
+ *         {LANGUAGES.map((lang) => (
+ *           <button key={lang.name} onClick={() => setIsLangOpen(false)} className="text-3xl md:text-5xl font-bold text-[#111111] hover:text-[#FF270A] transition-all duration-300 hover:scale-105 active:scale-95">
+ *             {lang.label}
+ *           </button>
+ *         ))}
+ *       </div>
+ *     </div>
+ *   )}
+ * ---------------------------------------------------------------------------
+ */
 
 export default function Header({ theme = "light" }: { theme?: "light" | "dark" | "hybrid" }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLangOpen, setIsLangOpen] = useState(false);
   
   const [dynamicTheme, setDynamicTheme] = useState(theme);
 
@@ -69,12 +118,13 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
   }, [theme]);
 
   useEffect(() => {
-    if (isMenuOpen || isLangOpen) {
+    // ENABLE_LANG_SELECTOR: also lock scroll when `isLangOpen` is true (see comment block above).
+    if (isMenuOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
-  }, [isMenuOpen, isLangOpen]);
+  }, [isMenuOpen]);
 
   const headerBg = isScrolled 
     ? (dynamicTheme === "dark" 
@@ -82,7 +132,8 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
         : "bg-white/100 backdrop-blur-md border-b border-black/5") 
     : "bg-transparent border-transparent";
 
-  const useWhiteForeground = !isMenuOpen && !isLangOpen && (dynamicTheme === "dark" || (dynamicTheme === "hybrid" && !isScrolled));
+  // ENABLE_LANG_SELECTOR: add `&& !isLangOpen` so the hero logo stays correct when the lang overlay is open.
+  const useWhiteForeground = !isMenuOpen && (dynamicTheme === "dark" || (dynamicTheme === "hybrid" && !isScrolled));
 
   const textColor = useWhiteForeground ? "text-white" : "text-[#111111]";
   const logoClasses = useWhiteForeground ? "brightness-0 invert" : "";
@@ -92,7 +143,8 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
       <header className={`fixed top-0 left-0 right-0 z-[50] transition-all duration-500 ${headerBg} py-4`}>
         <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
           
-          <Link href="/" className="relative z-[102] shrink-0" onClick={() => {setIsMenuOpen(false); setIsLangOpen(false);}}>
+          {/* ENABLE_LANG_SELECTOR: onClick={() => { setIsMenuOpen(false); setIsLangOpen(false); }} */}
+          <Link href="/" className="relative z-[102] shrink-0" onClick={() => setIsMenuOpen(false)}>
             <div className="relative w-24 h-6 md:w-28 md:h-7 transition-opacity hover:opacity-80">
                <Image 
                  src="/logo-red1.png" 
@@ -114,16 +166,11 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
               <span>Log in</span>
             </Link>
 
-            <button 
-                onClick={() => {setIsLangOpen(!isLangOpen); setIsMenuOpen(false);}}
-                className="p-1 hover:opacity-70 transition-transform duration-300 hover:scale-110"
-            >
-              <Globe className="w-6 h-6" />
-            </button>
+            {/* ENABLE_LANG_SELECTOR: insert Globe button before the hamburger (see top-of-file comment block). */}
 
             <button
               className="p-1 transition-transform duration-300 hover:scale-110"
-              onClick={() => {setIsMenuOpen(!isMenuOpen); setIsLangOpen(false);}}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               <Menu className="w-7 h-7" />
             </button>
@@ -183,31 +230,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
           </div>
       </div>
 
-      {/* --- SELECTOR DE IDIOMA PREMIUM & SIMPLE --- */}
-      {isLangOpen && (
-        <div className="fixed inset-0 z-[100] bg-white animate-in fade-in duration-500 flex items-center justify-center">
-          
-          <button 
-            onClick={() => setIsLangOpen(false)} 
-            className="absolute top-8 right-8 p-4 hover:opacity-50 transition-opacity"
-          >
-            <X className="w-10 h-10 text-[#111111]" strokeWidth={1} />
-          </button>
-
-          <div className="flex flex-col items-center gap-8 md:gap-12">
-            {LANGUAGES.map((lang) => (
-              <button 
-                key={lang.name} 
-                onClick={() => setIsLangOpen(false)}
-                className="text-3xl md:text-5xl font-bold text-[#111111] hover:text-[#FF270A] transition-all duration-300 hover:scale-105 active:scale-95"
-              >
-                {lang.label}
-              </button>
-            ))}
-          </div>
-
-        </div>
-      )}
+      {/* ENABLE_LANG_SELECTOR: full-screen language overlay (`isLangOpen && (...)` — see comment block after NAV_LINKS). */}
     </div>
   );
 }
