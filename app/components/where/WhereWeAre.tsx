@@ -157,7 +157,13 @@ export default function WhereWeAre() {
           <LocalCarousel title={`${t.featuredSolutions} ${currentCountryName}`} items={activeLanguage.news} t={t} />
           
           <div className="max-w-7xl mx-auto px-6">
-            <SupportTeamSection teamData={activeLanguage.team} countryName={currentCountryName} t={t} />
+            <SupportTeamSection
+              teamData={activeLanguage.team}
+              countryName={currentCountryName}
+              t={t}
+              languageCode={activeLanguage.code}
+              regionId={activeRegion.id}
+            />
           </div>
         </div>
       </div>

@@ -4,21 +4,114 @@ import Image from "next/image";
 import { Phone, Mail, Send, ChevronDown, CheckCircle2 } from "lucide-react";
 import { useState, useRef } from "react";
 
-export default function SupportTeamSection({ teamData, countryName, t }: any) {
+import { getContactMessages } from "@/app/messages/contact";
+import type { ContactLocale } from "@/app/messages/contact";
+import { ContactApiError, submitContactMessage } from "@/app/lib/contact-api";
+
+export type WhereSupportCopy = {
+  localExperts: string;
+  supportTeamIn: string;
+  hubRole: string;
+  distributorRole: string;
+  labRole: string;
+  hubDesc: string;
+  distributorDesc: string;
+  labDesc: string;
+  needHelpTitle: string;
+  needHelpDesc: string;
+  whoCanHelp: string;
+  selectHelp: string;
+  techSupport: string;
+  salesLogistics: string;
+  labServices: string;
+  generalInquiry: string;
+  yourName: string;
+  workEmail: string;
+  tellUsMore: string;
+  sendRequest: string;
+  routing: string;
+  messageSent: string;
+  contactShortly: string;
+};
+
+type TeamMemberCard = {
+  image: string;
+  name: string;
+  entityName: string;
+  phone: string;
+  email: string;
+};
+
+export type WhereTeamData = {
+  hub?: TeamMemberCard;
+  distributor?: TeamMemberCard;
+  lab?: TeamMemberCard;
+};
+
+type SupportTeamSectionProps = {
+  teamData: WhereTeamData | null | undefined;
+  countryName: string;
+  t: WhereSupportCopy;
+  languageCode: string;
+  regionId: string;
+};
+
+export default function SupportTeamSection({
+  teamData,
+  countryName,
+  t,
+  languageCode,
+  regionId,
+}: SupportTeamSectionProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [helpType, setHelpType] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const formSectionRef = useRef<HTMLDivElement>(null);
 
-  const MY_TRACKING_EMAIL = "global-leads@taag.com";
+  const contactLocale: ContactLocale = languageCode === "es" ? "es" : "en";
+  const contactErr = getContactMessages(contactLocale);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSent(true);
-    setTimeout(() => setIsSent(false), 5000);
+    setErrorMessage(null);
+    const extra: Record<string, string> = {
+      help_type: helpType,
+      country: countryName,
+      region: regionId,
+    };
+    try {
+      await submitContactMessage({
+        name: name.trim(),
+        email: email.trim(),
+        message: message.trim(),
+        source: "where_support",
+        locale: contactLocale,
+        extra,
+        website,
+      });
+      setIsSent(true);
+      setTimeout(() => setIsSent(false), 5000);
+      setName("");
+      setEmail("");
+      setMessage("");
+      setHelpType("");
+    } catch (err) {
+      if (err instanceof ContactApiError && err.code === "duplicate_submission") {
+        setErrorMessage(contactErr.errorDuplicate);
+      } else if (err instanceof ContactApiError) {
+        setErrorMessage(err.message || contactErr.errorGeneric);
+      } else {
+        setErrorMessage(contactErr.errorGeneric);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleContactClick = (type: string) => {
@@ -140,7 +233,7 @@ export default function SupportTeamSection({ teamData, countryName, t }: any) {
                 <p className="text-gray-400">{t.contactShortly}</p>
              </div>
            ) : (
-             <form onSubmit={handleSubmit} className="bg-white/5 border border-white/10 p-8 md:p-10 rounded-[2.5rem] backdrop-blur-md flex flex-col gap-5">
+             <form onSubmit={handleSubmit} className="relative bg-white/5 border border-white/10 p-8 md:p-10 rounded-[2.5rem] backdrop-blur-md flex flex-col gap-5">
                 <div className="relative">
                    <select 
                     required 
@@ -158,11 +251,51 @@ export default function SupportTeamSection({ teamData, countryName, t }: any) {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                   <input type="text" placeholder={t.yourName} required className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/40 text-sm rounded-2xl px-6 py-4 outline-none focus:border-[#FF270A] transition-colors font-medium" />
-                   <input type="email" placeholder={t.workEmail} required className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/40 text-sm rounded-2xl px-6 py-4 outline-none focus:border-[#FF270A] transition-colors font-medium" />
+                   <input
+                     type="text"
+                     placeholder={t.yourName}
+                     required
+                     autoComplete="name"
+                     value={name}
+                     onChange={(e) => setName(e.target.value)}
+                     className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/40 text-sm rounded-2xl px-6 py-4 outline-none focus:border-[#FF270A] transition-colors font-medium"
+                   />
+                   <input
+                     type="email"
+                     placeholder={t.workEmail}
+                     required
+                     autoComplete="email"
+                     value={email}
+                     onChange={(e) => setEmail(e.target.value)}
+                     className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/40 text-sm rounded-2xl px-6 py-4 outline-none focus:border-[#FF270A] transition-colors font-medium"
+                   />
                 </div>
                 
-                <textarea placeholder={t.tellUsMore} rows={4} required className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/40 text-sm rounded-2xl px-6 py-4 outline-none focus:border-[#FF270A] transition-colors font-medium resize-none"></textarea>
+                <textarea
+                  placeholder={t.tellUsMore}
+                  rows={4}
+                  required
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/40 text-sm rounded-2xl px-6 py-4 outline-none focus:border-[#FF270A] transition-colors font-medium resize-none"
+                />
+
+                <div className="absolute left-[-9999px] w-px h-px overflow-hidden" aria-hidden>
+                  <label htmlFor="where-support-website">Website</label>
+                  <input
+                    id="where-support-website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                  />
+                </div>
+
+                {errorMessage ? (
+                  <p className="text-sm text-red-400 text-center" role="alert">
+                    {errorMessage}
+                  </p>
+                ) : null}
 
                 <button type="submit" disabled={isSubmitting} className="w-full bg-white text-[#111111] hover:bg-[#FF270A] hover:text-white font-bold text-sm uppercase tracking-widest py-5 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] disabled:opacity-50">
                    {isSubmitting ? t.routing : t.sendRequest} 
