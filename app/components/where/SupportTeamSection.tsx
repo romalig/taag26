@@ -56,6 +56,21 @@ type SupportTeamSectionProps = {
   regionId: string;
 };
 
+function labelForHelpType(helpType: string, copy: WhereSupportCopy): string {
+  switch (helpType) {
+    case "technical":
+      return copy.techSupport;
+    case "sales":
+      return copy.salesLogistics;
+    case "lab":
+      return copy.labServices;
+    case "other":
+      return copy.generalInquiry;
+    default:
+      return helpType;
+  }
+}
+
 export default function SupportTeamSection({
   teamData,
   countryName,
@@ -80,8 +95,14 @@ export default function SupportTeamSection({
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage(null);
+    const helpTypeLabel = labelForHelpType(helpType, t);
+    const inquiryBody = message.trim();
+    const messageForApi = inquiryBody
+      ? `${helpTypeLabel}\n\n${inquiryBody}`
+      : helpTypeLabel;
     const extra: Record<string, string> = {
       help_type: helpType,
+      help_type_label: helpTypeLabel,
       country: countryName,
       region: regionId,
     };
@@ -89,7 +110,7 @@ export default function SupportTeamSection({
       await submitContactMessage({
         name: name.trim(),
         email: email.trim(),
-        message: message.trim(),
+        message: messageForApi,
         source: "where_support",
         locale: contactLocale,
         extra,
