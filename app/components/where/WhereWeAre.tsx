@@ -19,10 +19,12 @@ export default function WhereWeAre() {
 
       {/* 3. Sección de Contacto (Formulario Negro) */}
       <div className="max-w-7xl mx-auto px-6 pb-32">
-        <SupportTeamSection 
-          t={t} 
-          countryName="Global" 
-          showOnlyForm={true} 
+        <SupportTeamSection
+          t={t}
+          countryName="Global"
+          showOnlyForm={true}
+          languageCode="en"
+          regionId="global"
         />
       </div>
     </div>

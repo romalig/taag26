@@ -69,7 +69,7 @@ export default function LabLocations() {
     {
       city: "Chicago",
       country: "United States",
-      image: "/hub_USA.png",
+      image: "/Lab_US.png",
       address: "3710 Illinois Avenue, Unit A, St. Charles, IL.60174 United States",
       phone: "(630) 246-7777",
       email: "contact_US@taag-genetics.com"
