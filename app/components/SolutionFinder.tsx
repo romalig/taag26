@@ -10,6 +10,7 @@ import {
   AlertCircle,
   RefreshCw,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { parseDifyResponse, looksLikeJson, DifyResponse } from "@/app/types/dify";
 import { CHAT_BFF_HEALTH_PATH, CHAT_BFF_PATH } from "@/app/lib/chat-bff-path";
 import { ProductCard } from "@/app/components/ProductCard";
@@ -20,6 +21,8 @@ import { getKitSolution } from "@/app/lib/products-api";
 type ServiceHealth = "checking" | "up" | "down" | "misconfigured";
 
 export default function SolutionFinder() {
+  const t = useTranslations("SolutionFinder");
+  const locale = useLocale();
   const [challenge, setChallenge] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [rawReply, setRawReply] = useState<string | null>(null);
@@ -32,13 +35,13 @@ export default function SolutionFinder() {
   const handleViewDatasheet = useCallback(
     async (uuid: string) => {
       try {
-        const data = await getKitSolution(uuid);
+        const data = await getKitSolution(uuid, locale);
         openModal(<SolutionTemplate data={data} />);
       } catch (err) {
         console.error("Failed to load datasheet:", err);
       }
     },
-    [openModal]
+    [locale, openModal]
   );
 
   useEffect(() => {
@@ -122,7 +125,7 @@ export default function SolutionFinder() {
       } catch {
         setStructuredReply({
           action: "error",
-          message: "Could not connect to the assistant. Please try again.",
+          message: t("connectionError"),
         });
         setRawReply(null);
       } finally {
@@ -157,13 +160,13 @@ export default function SolutionFinder() {
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/50 border border-black/5 rounded-full backdrop-blur-md mb-6 shadow-sm">
             <Terminal className="w-3 h-3 text-[#FF270A]" />
             <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#111111]">
-              AI Diagnostic Tool
+              {t("badge")}
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#111111] leading-tight">
-            Share your challenge.
+            {t("title")}
             <br />
-            <span className="text-gray-400">Discover your solution.</span>
+            <span className="text-gray-400">{t("subtitle")}</span>
           </h2>
         </div>
 
@@ -180,7 +183,7 @@ export default function SolutionFinder() {
 
               <label className="flex items-center gap-2 text-xs font-bold text-[#111111] uppercase tracking-widest mb-6 font-mono">
                 <Sparkles className="w-3 h-3 text-[#FF270A]" />
-                Input Parameters
+                {t("inputLabel")}
               </label>
 
               <textarea
@@ -192,7 +195,7 @@ export default function SolutionFinder() {
                     handleGenerate();
                   }
                 }}
-                placeholder="e.g. I need to detect Salmonella in cocoa powder in less than 24 hours to avoid shipment delays..."
+                placeholder={t("placeholder")}
                 className="w-full bg-transparent border-none text-xl md:text-2xl text-[#111111] placeholder:text-gray-300 focus:ring-0 p-0 resize-none flex-grow min-h-[160px] leading-relaxed font-medium"
               />
 
@@ -201,12 +204,12 @@ export default function SolutionFinder() {
                   className="hidden md:flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider font-mono"
                   title={
                     serviceHealth === "checking"
-                      ? "Checking connection to assistant…"
+                      ? t("health.checkingTitle")
                       : serviceHealth === "misconfigured"
-                        ? "Chat API URL or key is not configured on the server"
+                        ? t("health.misconfiguredTitle")
                         : serviceHealth === "down"
-                          ? "Assistant service is not reachable or returned an error"
-                          : "Assistant endpoint responded; ready to analyze"
+                          ? t("health.downTitle")
+                          : t("health.upTitle")
                   }
                   aria-live="polite"
                 >
@@ -222,10 +225,10 @@ export default function SolutionFinder() {
                     }`}
                     aria-hidden
                   />
-                  {serviceHealth === "checking" && "Checking connection…"}
-                  {serviceHealth === "up" && "System Active"}
-                  {serviceHealth === "down" && "Assistant unavailable"}
-                  {serviceHealth === "misconfigured" && "Assistant not configured"}
+                  {serviceHealth === "checking" && t("health.checking")}
+                  {serviceHealth === "up" && t("health.up")}
+                  {serviceHealth === "down" && t("health.down")}
+                  {serviceHealth === "misconfigured" && t("health.misconfigured")}
                 </div>
 
                 <button
@@ -234,7 +237,7 @@ export default function SolutionFinder() {
                   className="group/btn relative overflow-hidden flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 bg-[#111111] text-white rounded-full font-bold hover:bg-[#FF270A] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                 >
                   <span className="relative z-10 flex items-center gap-2">
-                    Analyze Request{" "}
+                    {t("analyze")}{" "}
                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                   </span>
                 </button>
@@ -254,7 +257,7 @@ export default function SolutionFinder() {
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-full border border-gray-100 shadow-sm self-start">
                       <Sparkles className="w-3 h-3 text-[#FF270A]" />
                       <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#111111]">
-                        AI Response
+                        {t("responseBadge")}
                       </span>
                     </div>
 
@@ -270,10 +273,10 @@ export default function SolutionFinder() {
                         </div>
                         <div className="text-center space-y-2">
                           <p className="text-sm font-bold text-[#111111] font-mono uppercase tracking-wider">
-                            Analyzing your request
+                            {t("loadingTitle")}
                           </p>
                           <p className="text-xs text-gray-400 max-w-xs">
-                            Searching our catalog for the best matching solutions...
+                            {t("loadingBody")}
                           </p>
                         </div>
                         <div className="w-full max-w-sm space-y-3 mt-4">
@@ -304,7 +307,7 @@ export default function SolutionFinder() {
                     {rawReply !== null && rawReply.length > 0 && !structuredReply && looksLikeJson(rawReply) && isAnalyzing && (
                       <div className="flex-1 flex items-center gap-2 text-gray-400">
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span className="text-sm">Processing response…</span>
+                        <span className="text-sm">{t("processing")}</span>
                       </div>
                     )}
 
@@ -314,7 +317,7 @@ export default function SolutionFinder() {
                         <div className="flex items-start gap-3 text-red-600 bg-red-50 border border-red-100 rounded-2xl p-4">
                           <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                           <p className="text-sm leading-relaxed">
-                            Could not process the response. Please try again.
+                            {t("parseError")}
                           </p>
                         </div>
                         <button
@@ -322,7 +325,7 @@ export default function SolutionFinder() {
                           className="self-start flex items-center gap-1.5 text-sm font-semibold text-[#111111] border border-gray-200 bg-white px-5 py-2 rounded-full hover:border-[#FF270A]/40 hover:text-[#FF270A] transition-colors"
                         >
                           <RefreshCw className="w-3.5 h-3.5" />
-                          Retry
+                          {t("retry")}
                         </button>
                       </div>
                     )}
@@ -382,7 +385,7 @@ export default function SolutionFinder() {
                           href="mailto:sales@taag.bio"
                           className="self-start text-sm font-semibold text-white bg-[#111111] px-5 py-2.5 rounded-full hover:bg-[#FF270A] transition-colors"
                         >
-                          Contact commercial team
+                          {t("contactCommercial")}
                         </a>
                       </div>
                     )}
@@ -408,7 +411,7 @@ export default function SolutionFinder() {
                           className="self-start flex items-center gap-1.5 text-sm font-semibold text-[#111111] border border-gray-200 bg-white px-5 py-2 rounded-full hover:border-[#FF270A]/40 hover:text-[#FF270A] transition-colors"
                         >
                           <RefreshCw className="w-3.5 h-3.5" />
-                          Retry
+                          {t("retry")}
                         </button>
                       </div>
                     )}

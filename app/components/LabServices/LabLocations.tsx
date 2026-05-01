@@ -3,9 +3,12 @@
 import { MapPin, Phone, Mail, ArrowRight, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 // --- COMPONENTE DEL FORMULARIO DE COTIZACIÓN (MODAL) ---
 function QuoteModal({ isOpen, onClose, city }: { isOpen: boolean; onClose: () => void; city: string }) {
+  const t = useTranslations("LabNetwork.Locations");
+
   if (!isOpen) return null;
 
   return (
@@ -17,19 +20,19 @@ function QuoteModal({ isOpen, onClose, city }: { isOpen: boolean; onClose: () =>
         </button>
 
         <div className="p-10 md:p-14">
-          <h3 className="text-3xl font-bold text-[#111111] mb-2 font-sora tracking-tight">Request a Quote</h3>
-          <p className="text-gray-500 font-medium mb-10">Requesting services for our <span className="text-[#FF270A] font-bold">{city} Hub</span>.</p>
+          <h3 className="text-3xl font-bold text-[#111111] mb-2 font-sora tracking-tight">{t("modalTitle")}</h3>
+          <p className="text-gray-500 font-medium mb-10">{t("modalBodyA")} <span className="text-[#FF270A] font-bold">{city} {t("modalBodyB")}</span></p>
 
           <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
             
             {/* Área de texto para Programa / Necesidades (Reemplaza al selector) */}
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                Microbiological Program / Testing Needs
+                {t("program")}
               </label>
               <textarea 
                 rows={4}
-                placeholder="Please describe your current environmental monitoring program, specific assays of interest, or volume requirements..." 
+                placeholder={t("programPlaceholder")}
                 className="w-full bg-[#F4F4F5] border-none rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-[#FF270A] resize-none" 
               />
             </div>
@@ -37,22 +40,22 @@ function QuoteModal({ isOpen, onClose, city }: { isOpen: boolean; onClose: () =>
             {/* Datos de contacto */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Full Name</label>
-                <input type="text" placeholder="John Doe" className="w-full bg-[#F4F4F5] border-none rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-[#FF270A]" />
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t("fullName")}</label>
+                <input type="text" placeholder={t("namePlaceholder")} className="w-full bg-[#F4F4F5] border-none rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-[#FF270A]" />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Corporate Email</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t("email")}</label>
                 <input type="email" placeholder="name@company.com" className="w-full bg-[#F4F4F5] border-none rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-[#FF270A]" />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Company Name</label>
-              <input type="text" placeholder="Your Biotech Co." className="w-full bg-[#F4F4F5] border-none rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-[#FF270A]" />
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t("company")}</label>
+              <input type="text" placeholder={t("companyPlaceholder")} className="w-full bg-[#F4F4F5] border-none rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-[#FF270A]" />
             </div>
 
             <button className="w-full py-5 bg-[#111111] text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-all duration-300 shadow-lg mt-4">
-              Submit Request
+              {t("submit")}
             </button>
           </form>
         </div>
@@ -63,6 +66,7 @@ function QuoteModal({ isOpen, onClose, city }: { isOpen: boolean; onClose: () =>
 
 // --- COMPONENTE PRINCIPAL ---
 export default function LabLocations() {
+  const t = useTranslations("LabNetwork.Locations");
   const [activeHub, setActiveHub] = useState<string | null>(null);
 
   const locations = [
@@ -106,10 +110,10 @@ export default function LabLocations() {
         
         <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
           <h2 className="text-3xl md:text-5xl font-bold text-[#111111] mb-6 tracking-tight leading-tight">
-            Strategic hubs to accelerate your results.
+            {t("title")}
           </h2>
           <p className="text-lg md:text-xl text-gray-500 font-medium leading-relaxed">
-            Our state-of-the-art laboratories are strategically located to provide rapid, high-quality microbiological testing services wherever you operate.
+            {t("body")}
           </p>
         </div>
 
@@ -147,13 +151,13 @@ export default function LabLocations() {
                     onClick={() => setActiveHub(loc.city)}
                     className="w-full py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2"
                   >
-                    Request a Quote <ArrowRight className="w-3 h-3" />
+                    {t("requestQuote")} <ArrowRight className="w-3 h-3" />
                   </button>
                   <a 
                     href={`mailto:${loc.email}`}
                     className="w-full py-3 bg-white border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors flex items-center justify-center"
                   >
-                    Contact Hub
+                    {t("contactHub")}
                   </a>
                 </div>
               </div>

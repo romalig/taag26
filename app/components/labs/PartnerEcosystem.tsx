@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { ArrowRight, CheckCircle2, Clock, Dna, GitMerge, Zap, Activity, BrainCircuit, ShieldCheck, TrendingUp, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link"; // Asegúrate de importar Link
+import { useTranslations } from "next-intl";
 import { useCTA } from "../CTAProvider";
 import { useModal } from "./ModalProvider";
 
@@ -15,59 +16,44 @@ import { SOLUTIONS_DATA } from "../data/solutionsData";
 const ECOSYSTEM_FEATURES = [
   {
     id: "intro",
-    title: "Instant scalability. Maximum profitability.",
-    description: "Upgrade your testing capabilities with our integrated ecosystem. We provide the advanced PCR kits, laboratory software, and efficient protocols you need to drastically reduce costs, accelerate turnaround times, and outpace the competition.",
   },
   {
     id: "pcr",
-    badge: "Cost Efficiency",
     badgeColor: "text-blue-600",
-    title: "Multiplex PCR Kits",
-    description: "Maximize your lab's profitability. Access our premium multiplex kits at the lowest market price, allowing you to increase margins and win more clients without compromising quality.",
     icon: Dna,
     color: "text-blue-500",
     bgGlow: "bg-blue-500/10"
   },
   {
     id: "elevia",
-    badge: "Competitive Edge",
     badgeColor: "text-gray-800",
-    title: "Elevia Line",
-    description: "Stand out from the competition. Offer your clients same-day results by bypassing traditional enrichment, giving your lab a unique selling proposition in a crowded market.",
     icon: Zap,
     color: "text-orange-500",
     bgGlow: "bg-orange-500/10"
   },
   {
     id: "txa",
-    badge: "Maximum Efficiency",
     badgeColor: "text-purple-600",
-    title: "TxA Ecosystem",
-    description: "Reduce overhead and eliminate human error. Automate your entire workflow to operate leaner, faster, and deliver a modern, digital experience to your customers.",
     icon: Activity,
     color: "text-purple-500",
     bgGlow: "bg-purple-500/10"
   },
   {
     id: "mila",
-    badge: "Effortless R&D",
     badgeColor: "text-[#FF270A]",
-    title: "MILA",
-    description: "Expand your testing menu in days, not months. Use our AI to develop custom multiplex panels without the need for an expensive internal R&D department.",
     icon: BrainCircuit,
     color: "text-yellow-500",
     bgGlow: "bg-yellow-500/10"
   },
   {
     id: "support",
-    title: "Technical support",
-    description: "Don't just buy products; gain a partner. We provide standardized workflows and expert support to ensure your lab runs smoothly.",
     icon: ShieldCheck,
     color: "green", 
   }
 ];
 
 export default function PartnerEcosystem() {
+  const t = useTranslations("Labs.Ecosystem");
   const { openMeeting } = useCTA();
   const { openModal } = useModal(); 
   
@@ -116,10 +102,17 @@ export default function PartnerEcosystem() {
     }
   };
 
+  const features = ECOSYSTEM_FEATURES.map((feature) => ({
+    ...feature,
+    title: t(`features.${feature.id}.title`),
+    description: t(`features.${feature.id}.description`),
+    badge: feature.id !== "intro" && feature.id !== "support" ? t(`features.${feature.id}.badge`) : undefined,
+  }));
+
   return (
     <section id="ecosystem" className="bg-white md:px-6 pt-16 pb-32 md:py-24 overflow-hidden relative">
       
-      <style dangerouslySetInnerHTML={{__html: `
+      <style jsx>{`
         @keyframes expandLine {
             0% { transform: scaleX(0.01); }
             100% { transform: scaleX(1); } 
@@ -156,7 +149,7 @@ export default function PartnerEcosystem() {
         .animate-pulse-ring {
             animation: pulse-ring 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-      `}} />
+      `}</style>
 
       <div className="max-w-7xl mx-auto">
         
@@ -174,15 +167,15 @@ export default function PartnerEcosystem() {
 
             <div className="text-center mb-16 max-w-3xl mx-auto px-4 md:px-0 mt-4 md:mt-0">
               <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
-                THE PARTNER ECOSYSTEM
+                {t("eyebrow")}
               </span>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] leading-tight tracking-tight pb-8">
-                The ultimate lab upgrade.
+                {t("title")}
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative w-full">
-              {ECOSYSTEM_FEATURES.map((solution, idx) => {
+              {features.map((solution, idx) => {
                 
                 // --- CARD 0: INTRODUCTORIA ---
                 if (idx === 0) {
@@ -210,8 +203,8 @@ export default function PartnerEcosystem() {
                                           <Clock className="w-5 h-5 text-purple-500" />
                                         </div>
                                         <div>
-                                          <p className="text-xs font-bold text-[#111111] leading-tight">Fastest Results</p>
-                                          <p className="text-[10px] text-gray-500 font-normal">In just hours</p>
+                                          <p className="text-xs font-bold text-[#111111] leading-tight">{t("badges.fastest.title")}</p>
+                                          <p className="text-[10px] text-gray-500 font-normal">{t("badges.fastest.text")}</p>
                                         </div>
                                     </div>
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
@@ -219,8 +212,8 @@ export default function PartnerEcosystem() {
                                           <Activity className="w-5 h-5 text-blue-500" />
                                         </div>
                                         <div>
-                                          <p className="text-xs font-bold text-[#111111] leading-tight">Efficient Operation</p>
-                                          <p className="text-[10px] text-gray-500 font-normal">Automated workflows</p>
+                                          <p className="text-xs font-bold text-[#111111] leading-tight">{t("badges.efficient.title")}</p>
+                                          <p className="text-[10px] text-gray-500 font-normal">{t("badges.efficient.text")}</p>
                                         </div>
                                     </div>
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
@@ -228,8 +221,8 @@ export default function PartnerEcosystem() {
                                           <TrendingUp className="w-5 h-5 text-green-500" />
                                         </div>
                                         <div>
-                                          <p className="text-xs font-bold text-[#111111] leading-tight">Higher Margins</p>
-                                          <p className="text-[10px] text-gray-500 font-normal">Maximized ROI</p>
+                                          <p className="text-xs font-bold text-[#111111] leading-tight">{t("badges.margins.title")}</p>
+                                          <p className="text-[10px] text-gray-500 font-normal">{t("badges.margins.text")}</p>
                                         </div>
                                     </div>
                                     <div className="bg-white p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 flex items-center gap-3 w-full">
@@ -237,14 +230,14 @@ export default function PartnerEcosystem() {
                                           <Sparkles className="w-5 h-5 text-red-500" />
                                         </div>
                                         <div>
-                                          <p className="text-xs font-bold text-[#111111] leading-tight">TxA Software</p>
-                                          <p className="text-[10px] text-gray-500 font-normal">Predictive Ai</p>
+                                          <p className="text-xs font-bold text-[#111111] leading-tight">{t("badges.txa.title")}</p>
+                                          <p className="text-[10px] text-gray-500 font-normal">{t("badges.txa.text")}</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <button onClick={openMeeting} className="py-3 md:py-2.5 px-6 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 w-full md:w-auto">
-                                  Become a Partner <ArrowRight className="w-3 h-3" />
+                                  {t("becomePartner")} <ArrowRight className="w-3 h-3" />
                                 </button>
                             </div>
 
@@ -257,8 +250,8 @@ export default function PartnerEcosystem() {
                                           <Clock className="w-4 h-4 md:w-5 md:h-5 text-purple-500" />
                                         </div>
                                         <div className="pr-2">
-                                          <p className="text-[11px] md:text-xs font-bold text-[#111111] leading-tight">Fastest Results</p>
-                                          <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">In just hours</p>
+                                          <p className="text-[11px] md:text-xs font-bold text-[#111111] leading-tight">{t("badges.fastest.title")}</p>
+                                          <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">{t("badges.fastest.text")}</p>
                                         </div>
                                      </div>
                                      <div className="absolute top-[18%] right-[0%] lg:right-[5%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '2deg'} as any}>
@@ -266,8 +259,8 @@ export default function PartnerEcosystem() {
                                           <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
                                         </div>
                                         <div className="pr-2">
-                                          <p className="text-[11px] md:text-xs font-bold text-[#111111] leading-tight">Higher Margins</p>
-                                          <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Maximized ROI</p>
+                                          <p className="text-[11px] md:text-xs font-bold text-[#111111] leading-tight">{t("badges.margins.title")}</p>
+                                          <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">{t("badges.margins.text")}</p>
                                         </div>
                                      </div>
                                      <div className="absolute top-[45%] left-[5%] lg:left-[15%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-40 flex items-center gap-3 animate-float-fast" style={{'--rot': '-1deg'} as any}>
@@ -275,8 +268,8 @@ export default function PartnerEcosystem() {
                                           <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
                                         </div>
                                         <div className="pr-2">
-                                          <p className="text-[11px] md:text-xs font-bold text-[#111111] leading-tight">TxA Software</p>
-                                          <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Predictive Ai</p>
+                                          <p className="text-[11px] md:text-xs font-bold text-[#111111] leading-tight">{t("badges.txa.title")}</p>
+                                          <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">{t("badges.txa.text")}</p>
                                         </div>
                                      </div>
                                      <div className="absolute top-[60%] right-[-5%] lg:right-[0%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-20 flex items-center gap-3 animate-float-slow" style={{'--rot': '3deg'} as any}>
@@ -284,8 +277,8 @@ export default function PartnerEcosystem() {
                                           <Activity className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
                                         </div>
                                         <div className="pr-2">
-                                          <p className="text-[11px] md:text-xs font-bold text-[#111111] leading-tight">Efficient Operation</p>
-                                          <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Automated workflows</p>
+                                          <p className="text-[11px] md:text-xs font-bold text-[#111111] leading-tight">{t("badges.efficient.title")}</p>
+                                          <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">{t("badges.efficient.text")}</p>
                                         </div>
                                      </div>
                                      <div className="absolute bottom-[5%] left-[30%] lg:left-[40%] bg-white p-2 md:p-3 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-50 z-30 flex items-center gap-3 animate-float-delayed" style={{'--rot': '-2deg'} as any}>
@@ -293,8 +286,8 @@ export default function PartnerEcosystem() {
                                           <Zap className="w-4 h-4 md:w-5 md:h-5 text-orange-500" />
                                         </div>
                                         <div className="pr-2">
-                                          <p className="text-[11px] md:text-xs font-bold text-[#111111] leading-tight">Plug & Play</p>
-                                          <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">Ready to scale</p>
+                                          <p className="text-[11px] md:text-xs font-bold text-[#111111] leading-tight">{t("badges.plug.title")}</p>
+                                          <p className="text-[9px] md:text-[10px] text-gray-500 font-normal">{t("badges.plug.text")}</p>
                                         </div>
                                      </div>
                                  </div>
@@ -362,7 +355,7 @@ export default function PartnerEcosystem() {
                           href={targetHref}
                           className="mt-auto text-[14px] md:text-[15px] text-[#0066cc] hover:underline font-medium flex items-center justify-center transition-colors"
                         >
-                          Learn more about {solution.title.replace('.', '')} <span className="text-[10px] ml-1 translate-y-[0.5px] font-bold">&gt;</span>
+                          {t("learnMore", {title: solution.title.replace(".", "")})} <span className="text-[10px] ml-1 translate-y-[0.5px] font-bold">&gt;</span>
                         </Link>
                     </div>
                   );

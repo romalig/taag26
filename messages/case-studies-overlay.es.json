@@ -1,0 +1,108 @@
+{
+  "CaseStudies": {
+    "cards": {
+      "danone-precision-probiotics": {
+        "company": "Danone",
+        "category": "MILA™ Custom Design",
+        "title": "Probióticos de precisión.",
+        "description": "Desarrollo de un kit qPCR triplex a medida para cuantificar cepas propias en yogures terminados.",
+        "heroMetric": "3× más rápido",
+        "challenge": "Danone necesitaba un método muy específico y rápido para cuantificar cepas probióticas propias en yogures terminados. Los métodos tradicionales por siembra eran lentos y carecían de la precisión para diferenciar cepas muy relacionadas, alargando los tiempos de liberación.",
+        "solution": "Con la plataforma MILA™ AI diseñamos un ensayo qPCR triplex a medida, adaptado a las secuencias genéticas propias de Danone. Permite detección multiplexada en una sola reacción.",
+        "results": [
+          "Tiempo de cuantificación reducido de días a menos de 4 horas.",
+          "100 % de especificidad frente a cepas en matrices lácteas complejas.",
+          "Integración fluida en los flujos de laboratorio existentes."
+        ]
+      },
+      "arca-continental-bottling-intelligence": {
+        "company": "Arca Continental",
+        "category": "TxA™ Digital Transformation",
+        "title": "Inteligencia en embotellado.",
+        "description": "Estandarización del control microbiológico en 35 plantas con nuestro software impulsado por IA.",
+        "heroMetric": "35 plantas",
+        "challenge": "Gestionar datos microbiológicos en 35 plantas de embotellado generaba silos de información. Los responsables de calidad carecían de visibilidad en tiempo real para rastrear focos de contaminación y predecir el riesgo en toda la cadena.",
+        "solution": "Implementamos la plataforma TxA™ para digitalizar y cartografiar el ecosistema microbiológico de las 35 instalaciones. Centralizamos los datos y desplegamos algoritmos de IA para evaluación predictiva del riesgo y mapeo por planta.",
+        "results": [
+          "Métricas de control de calidad homogéneas en todas las instalaciones internacionales.",
+          "Alertas en tiempo real sobre tendencias de contaminación antes de niveles críticos.",
+          "Reducción notable de liberaciones de producto retrasadas."
+        ]
+      },
+      "chocolate-leader-pathogen-safety": {
+        "company": "Líder mundial en chocolate",
+        "category": "AiGOR™ Pathogen Safety",
+        "title": "Seguridad a gran velocidad.",
+        "description": "Detección ultrarrápida de Salmonella en matrices de chocolate sin enriquecimientos complejos.",
+        "heroMetric": "0 enriquecimiento",
+        "challenge": "La detección de Salmonella en matrices grasas como el chocolate suele exigir pasos de enriquecimiento largos y complejos. Eso retrasa la liberación del producto y encarece el almacenamiento de producto terminado.",
+        "solution": "Desplegamos la tecnología ARN AiGOR™. Con una sensibilidad amplificada 10 000×, el cliente detecta Salmonella metabólicamente activa directamente en la muestra, sin los protocolos habituales de enriquecimiento.",
+        "results": [
+          "Eliminación de la fase de enriquecimiento de 24–48 horas.",
+          "Menor coste de almacenamiento al liberar producto en el mismo turno.",
+          "Cero falsos positivos gracias a la detección ARN de células vivas."
+        ]
+      },
+      "fast-salmonella-food": {
+        "company": "Industria alimentaria",
+        "category": "Food Safety",
+        "title": "Control rápido de Salmonella en la industria alimentaria",
+        "description": "Resultados accionables y liberación de producto en solo 6 horas, sin enriquecimientos de 24–48 h.",
+        "heroMetric": "6 horas",
+        "challenge": "Los ensayos clásicos de Salmonella pueden tardar 24–48 horas, generando cuellos de botella en almacén, retrasando la liberación y reduciendo la vida útil. Además, tratamientos térmicos o químicos dejan células muertas que provocan falsos positivos costosos en pruebas de ADN estándar.",
+        "solution": "Impulsado por AiGOR, este enfoque se dirige al ARN metabólicamente activo para detectar Salmonella en matrices complejas en una fracción del tiempo y diferenciar células vivas de muertas.",
+        "results": [
+          "Liberación positiva el mismo día: tiempos de retención muy reducidos con resultados en 6 horas.",
+          "Diferenciación de células vivas: la detección ARN evita falsos positivos por células muertas.",
+          "Matrices complejas: muy robusto frente a inhibidores en lácteos, carnes y ultraprocesados.",
+          "Máxima sensibilidad: detección consistente hasta 1 UFC/muestra."
+        ]
+      },
+      "full-preventive-control": {
+        "company": "Control de calidad",
+        "category": "Preventive Control",
+        "title": "Control microbiológico completo y preventivo",
+        "description": "Patógenos e indicadores en una sola reacción.",
+        "heroMetric": "Todo en uno",
+        "challenge": "Los kits PCR actuales son reactivos: solo alertan cuando la contaminación ya ocurrió. Ejecutar pruebas separadas para indicadores de higiene y patógenos es costoso, laborioso y retrasa la acción preventiva.",
+        "solution": "Nuestras soluciones multiplex de alta capacidad detectan patógenos críticos (Salmonella, L. mono) e indicadores clave en el mismo tubo, pasando de un enfoque reactivo a verdaderamente preventivo.",
+        "results": [
+          "Patógenos + indicadores en un solo tubo PCR.",
+          "Paradigma preventivo: usar indicadores para anticipar fallos de higiene.",
+          "Reducción de costes de reactivos, material y mano de obra hasta un 70 %.",
+          "Flujo simplificado: protocolo de enriquecimiento universal para varios objetivos."
+        ]
+      },
+      "broad-spectrum-spoilage": {
+        "company": "Industria de bebidas",
+        "category": "Spoilage Defense",
+        "title": "Defensa amplia frente al deterioro",
+        "description": "Detección de levaduras, mohos y bacterias deteriorantes en una sola corrida PCR.",
+        "heroMetric": "< 24 h",
+        "challenge": "Los métodos por siembra para organismos deteriorantes pueden tardar hasta 7 días, dejando la cadena en incertidumbre y la marca expuesta a hinchazón, turbidez y sabores extraños.",
+        "solution": "PCR multiplex de alta capacidad para los deteriorantes más críticos en una sola reacción. Identifica cientos de microorganismos antes de que comprometan la calidad y garantiza vida útil con precisión molecular.",
+        "results": [
+          "Cobertura amplia: más de 100 bacterias acidófilas y más de 100 levaduras y mohos.",
+          "Liberación rápida: de 5–7 días (siembra) a menos de 24 horas.",
+          "Resistencia a conservantes: identifica levaduras capaces de sobrevivir químicos.",
+          "Eficiencia multiplex: varios medios de cultivo en un solo flujo."
+        ]
+      },
+      "salmonella-ecoli-protection": {
+        "company": "Productos frescos y carne",
+        "category": "Pathogen Protection",
+        "title": "Protección frente a Salmonella y E. coli patógena",
+        "description": "Detección multiplex simultánea de Salmonella, E. coli O157:H7 y STEC.",
+        "heroMetric": "3 en 1",
+        "challenge": "Protocolos separados para Salmonella, E. coli O157:H7 y STEC consumen tiempo y dinero y retrasan la liberación de productos muy perecederos como hojas verdes, aves y carnes crudas.",
+        "solution": "Solución multiplex personalizada que detecta los tres objetivos desde una muestra enriquecida única. Mayor seguridad para el consumidor, liberación más rápida y menor huella en laboratorio.",
+        "results": [
+          "Detección simultánea de Salmonella, E. coli O157:H7 y STEC en el mismo tubo.",
+          "Enriquecimiento universal: un solo preparado y caldo para todos los patógenos.",
+          "Liberación rápida: resultados en menos de 24 h y menos cuellos de botella de inventario.",
+          "Eficiencia de costes: tres ensayos individuales consolidados en uno."
+        ]
+      }
+    }
+  }
+}

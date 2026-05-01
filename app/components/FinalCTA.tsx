@@ -2,9 +2,11 @@
 
 import { useCTA } from "./CTAProvider";
 import { Calendar, ArrowRight, MessageSquare } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function FinalCTA() {
   const { openMeeting } = useCTA();
+  const t = useTranslations("FinalCTA");
 
   return (
     // CAMBIO ESPACIADO: py-16 md:py-24
@@ -19,22 +21,22 @@ export default function FinalCTA() {
             {/* 1. TEXT CONTENT */}
             <div className="max-w-2xl">
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-[#111111] mb-6 leading-tight">
-                Learn more about how you can take your microbiology to the next level<br className="hidden md:block"/>
+                {t("title")}<br className="hidden md:block"/>
               </h2>
               
               <p className="text-lg text-black/60 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Let's coordinate a meeting to learn more about our products, technologies and laboratory services.
+                {t("body")}
               </p>
 
               {/* Badges de Confianza */}
               <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-4">
                  <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full text-xs font-bold text-black/70 shadow-sm border border-black/5">
                     <Calendar className="w-4 h-4 text-[#FF270A]" />
-                    <span>Next day availability</span>
+                    <span>{t("availability")}</span>
                  </div>
                  <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full text-xs font-bold text-black/70 shadow-sm border border-black/5">
                     <MessageSquare className="w-4 h-4 text-[#FF270A]" />
-                    <span>Expert consultation</span>
+                    <span>{t("consultation")}</span>
                  </div>
               </div>
             </div>
@@ -46,7 +48,7 @@ export default function FinalCTA() {
                 className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 text-sm font-extrabold tracking-widest uppercase bg-[#111111] text-white rounded-full overflow-hidden hover:bg-[#FF270A] transition-all duration-300 shadow-xl shadow-black/5 hover:shadow-red-500/30 transform hover:-translate-y-1"
               >
                 <span className="relative z-10 flex items-center gap-3">
-                  Book a Meeting <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform"/>
+                  {t("button")} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform"/>
                 </span>
               </button>
             </div>

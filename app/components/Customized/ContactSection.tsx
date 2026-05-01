@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 // Importamos el hook para el modal
 import { useCTA } from "@/app/components/CTAProvider";
 
 export default function ContactSection() {
+  const t = useTranslations("Customized.Contact");
   const { openMeeting } = useCTA();
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -50,10 +52,10 @@ export default function ContactSection() {
                 {/* TEXTO */}
                 <div className="text-center md:text-left max-w-3xl">
                     <h2 className="text-2xl md:text-4xl font-extrabold text-[#111111] mb-3 tracking-tight">
-                      Ready to launch?
+                      {t("title")}
                     </h2>
                     <p className="text-base md:text-lg text-gray-500 font-medium leading-relaxed">
-                      Start using ready-to-deploy kits developed with the power of MILA.
+                      {t("body")}
                     </p>
                 </div>
 
@@ -63,7 +65,7 @@ export default function ContactSection() {
                       onClick={openMeeting}
                       className="group/btn bg-[#111111] text-white text-base font-bold px-8 py-4 rounded-full flex items-center gap-3 hover:bg-[#FF270A] transition-all active:scale-95 shadow-lg shadow-black/10"
                     >
-                        Contact Us
+                        {t("button")}
                         <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                     </button>
                 </div>

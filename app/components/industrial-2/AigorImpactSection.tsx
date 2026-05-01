@@ -2,8 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Zap, Timer, Activity, ArrowRight, Layers } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function AigorImpactSection() {
+  const tHero = useTranslations("AiGOR.Hero");
+  const tImpact = useTranslations("Industrial.Impact");
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -100,24 +103,23 @@ export default function AigorImpactSection() {
         {/* 1. HERO VISUAL */}
         <div className="text-center flex flex-col items-center mb-24 md:mb-40 pt-20">
           <p className="text-xs md:text-base font-bold tracking-[0.2em] text-white/60 mb-4 md:mb-6 uppercase">
-            powered by AiGOR
+            {tHero("eyebrowPoweredBy")}
           </p>
 
           {/* AJUSTE TIPOGRAFÍA: text-4xl en móvil, text-8xl en desktop */}
           <h2 className="text-4xl md:text-8xl font-bold tracking-tighter leading-[1.1] md:leading-[0.9] mb-6 md:mb-6 drop-shadow-2xl">
-            The Next Generation <br />
-            of Microbiological <br />
-            Solutions.
+            {tHero("titleA")} <br />
+            {tHero("titleB")} <br />
+            {tHero("titleC")}
           </h2>
         </div>
 
         {/* 2. TEXTO DESCRIPTIVO */}
         <div className="text-center mb-16 md:mb-24 max-w-3xl">
           <p className="text-xl md:text-3xl font-medium text-white leading-relaxed drop-shadow-lg p-4 md:p-6 rounded-3xl backdrop-blur-sm">
-            <span className="text-white">Speed and accuracy like never before.</span>{" "} 
+            <span className="text-white">{tHero("introStrong")}</span>{" "}
             <br/>
-            <span className="text-white/70">AiGOR utilizes RNA-based detection to bypass biological limits,
-            delivering actionable results in hours, not days.</span>
+            <span className="text-white/70">{tHero("introBody")}</span>
           </p>
         </div>
 
@@ -129,26 +131,26 @@ export default function AigorImpactSection() {
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-4">
                 <Activity className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
               </div>
-              <h3 className="text-lg md:text-xl font-bold text-white mb-2">RNA Sensitivity.</h3>
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2">{tImpact("cards.rna.title")}</h3>
               <p className="text-xs md:text-sm text-gray-400 font-medium">
-                Detects active cells only. No false positives.
+                {tImpact("cards.rna.body")}
               </p>
             </div>
             <div className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-              10k<span className="text-xl md:text-2xl text-gray-500">x</span>
+              {tImpact("cards.rna.value")}<span className="text-xl md:text-2xl text-gray-500">{tImpact("cards.rna.suffix")}</span>
             </div>
           </div>
 
           {/* Card 2 */}
           <div className="bg-[#1c1c1e]/80 backdrop-blur-md rounded-[2rem] p-0 min-h-[280px] md:min-h-[320px] flex flex-col justify-between overflow-hidden relative group hover:scale-[1.02] transition-transform duration-300 border border-white/10 shadow-2xl">
             <div className="p-6 md:p-8 relative z-10">
-              <h3 className="text-lg md:text-xl font-bold text-white mb-2">Zero Enrichment.</h3>
-              <p className="text-xs md:text-sm text-gray-400 font-medium">Skip the 24h growth step.</p>
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2">{tImpact("cards.zero.title")}</h3>
+              <p className="text-xs md:text-sm text-gray-400 font-medium">{tImpact("cards.zero.body")}</p>
             </div>
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#FF270A]/20" />
             <div className="p-6 md:p-8 pt-0 relative z-10 mt-auto">
               <Zap className="w-8 h-8 md:w-10 md:h-10 text-[#FF270A] mb-2" />
-              <div className="text-2xl md:text-3xl font-bold text-white">Direct.</div>
+              <div className="text-2xl md:text-3xl font-bold text-white">{tImpact("cards.zero.value")}</div>
             </div>
           </div>
 
@@ -158,11 +160,11 @@ export default function AigorImpactSection() {
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-purple-500/20 flex items-center justify-center mb-4">
                 <Timer className="w-5 h-5 md:w-6 md:h-6 text-purple-400" />
               </div>
-              <h3 className="text-lg md:text-xl font-bold text-white mb-2">Speed redefined.</h3>
-              <p className="text-xs md:text-sm text-gray-400 font-medium">From sample to certificate.</p>
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2">{tImpact("cards.speed.title")}</h3>
+              <p className="text-xs md:text-sm text-gray-400 font-medium">{tImpact("cards.speed.body")}</p>
             </div>
             <div className="text-4xl md:text-5xl font-bold text-white">
-              3<span className="text-lg md:text-xl text-gray-500 ml-1">HOURS</span>
+              {tImpact("cards.speed.value")}<span className="text-lg md:text-xl text-gray-500 ml-1">{tImpact("cards.speed.suffix")}</span>
             </div>
           </div>
 
@@ -172,9 +174,9 @@ export default function AigorImpactSection() {
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
                 <Layers className="w-5 h-5 md:w-6 md:h-6 text-green-600" />
               </div>
-              <h3 className="text-lg md:text-xl font-bold mb-2">Seamless Fit.</h3>
+              <h3 className="text-lg md:text-xl font-bold mb-2">{tImpact("cards.fit.title")}</h3>
               <p className="text-xs md:text-sm text-gray-600 font-medium">
-                Integrates with standard LIMS.
+                {tImpact("cards.fit.body")}
               </p>
             </div>
             <div className="flex justify-end">

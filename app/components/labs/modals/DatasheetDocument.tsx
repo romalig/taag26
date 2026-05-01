@@ -6,6 +6,35 @@ import { SolutionContent } from "./types";
 import { hasDisplayValue } from "@/app/lib/spec-values";
 import { formatPdfInline } from "@/app/lib/pdf-inline-format";
 
+export type DatasheetPdfLabels = {
+  technicalDataSheet: string;
+  targetType: string;
+  mainIndustries: string;
+  intendedUse: string;
+  principle: string;
+  technicalSpecifications: string;
+  targets: string;
+  sensitivity: string;
+  validatedMatrices: string;
+  timeToResults: string;
+  technology: string;
+  validatedThermocyclers: string;
+  detectionChannels: string;
+  detectionChemistry: string;
+  storageConditions: string;
+  shelfLife: string;
+  certifications: string;
+  limitations: string;
+  orderInformation: string;
+  catNum: string;
+  name: string;
+  size: string;
+  format: string;
+  description: string;
+  orderInformationAdditionalSupplies: string;
+  pageOf: (page: number, total: number) => string;
+};
+
 // 1. REGISTRO DE FUENTE SORA (Localmente para evitar errores)
 Font.register({
   family: "Sora",
@@ -62,7 +91,7 @@ const styles = StyleSheet.create({
   footerText: { fontSize: 7, color: "#9CA3AF" }
 });
 
-export default function DatasheetDocument({ data }: { data: SolutionContent }) {
+export default function DatasheetDocument({ data, labels }: { data: SolutionContent; labels: DatasheetPdfLabels }) {
   const showSensitivity = hasDisplayValue(data.techSpecs.sensitivity);
   const showTargetType = hasDisplayValue(data.targetType);
 
@@ -74,7 +103,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         <View style={styles.header} fixed>
           <Image src="/logo-red1.png" style={styles.logoImage} /> 
           <View style={styles.headerMeta}>
-             <Text style={styles.headerTitle}>Technical Data Sheet</Text>
+             <Text style={styles.headerTitle}>{labels.technicalDataSheet}</Text>
              <Text style={{ fontSize: 7, color: "#D1D5DB", marginTop: 2, textAlign: "right" }}>{new Date().getFullYear()}.01</Text>
           </View>
         </View>
@@ -88,7 +117,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         {/* --- DESCRIPTION --- */}
         {showTargetType && (
           <View style={styles.section}>
-             <Text style={styles.sectionTitle}>Target Type</Text>
+             <Text style={styles.sectionTitle}>{labels.targetType}</Text>
              <Text style={styles.text}>{formatPdfInline(data.targetType ?? "")}</Text>
           </View>
         )}
@@ -101,54 +130,54 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         {/* --- TWO COLUMNS LAYOUT --- */}
         <View style={{ flexDirection: "row", gap: 20, marginBottom: 10 }}>
             <View style={{ flex: 1 }}>
-                <Text style={styles.sectionTitle}>Main industries</Text>
+                <Text style={styles.sectionTitle}>{labels.mainIndustries}</Text>
                 {data.mainIndustries.map((ind, i) => <Text key={i} style={styles.listItem}>• {ind}</Text>)}
             </View>
             <View style={{ flex: 1 }}>
-                <Text style={styles.sectionTitle}>Intended Use</Text>
+                <Text style={styles.sectionTitle}>{labels.intendedUse}</Text>
                 {data.intendedUse.map((use, i) => <Text key={i} style={styles.text}>{use}</Text>)}
             </View>
         </View>
 
         {/* --- PRINCIPLE --- */}
         <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Principle</Text>
+            <Text style={styles.sectionTitle}>{labels.principle}</Text>
             {data.principle.map((pr, i) => <Text key={i} style={styles.text}>{pr}</Text>)}
         </View>
 
         {/* --- SPECS --- */}
         <View style={styles.section} break>
-             <Text style={styles.sectionTitle}>Technical Specifications</Text>
+             <Text style={styles.sectionTitle}>{labels.technicalSpecifications}</Text>
              <View style={styles.specContainer}>
-                <SpecRow label="Targets" value={formatPdfInline(data.techSpecs.targets)} />
-                {showSensitivity && <SpecRow label="Sensitivity" value={formatPdfInline(data.techSpecs.sensitivity)} />}
-                <SpecRow label="Validated Matrices" value={formatPdfInline(data.techSpecs.matrices)} />
-                <SpecRow label="Time to Results" value={formatPdfInline(data.techSpecs.time)} />
-                <SpecRow label="Technology" value={formatPdfInline(data.techSpecs.technology)} />
-                <SpecRow label="Validated Thermocyclers" value={formatPdfInline(data.techSpecs.thermocyclers)} />
-                <SpecRow label="Detection Channels" value={formatPdfInline(data.techSpecs.channels)} />
-                <SpecRow label="Detection Chemistry" value={formatPdfInline(data.techSpecs.chemistry)} />
-                <SpecRow label="Storage Conditions" value={formatPdfInline(data.techSpecs.storage)} />
-                <SpecRow label="Shelf Life" value={formatPdfInline(data.techSpecs.shelfLife)} />
-                <SpecRow label="Certifications" value={formatPdfInline(data.techSpecs.certifications)} />
+                <SpecRow label={labels.targets} value={formatPdfInline(data.techSpecs.targets)} />
+                {showSensitivity && <SpecRow label={labels.sensitivity} value={formatPdfInline(data.techSpecs.sensitivity)} />}
+                <SpecRow label={labels.validatedMatrices} value={formatPdfInline(data.techSpecs.matrices)} />
+                <SpecRow label={labels.timeToResults} value={formatPdfInline(data.techSpecs.time)} />
+                <SpecRow label={labels.technology} value={formatPdfInline(data.techSpecs.technology)} />
+                <SpecRow label={labels.validatedThermocyclers} value={formatPdfInline(data.techSpecs.thermocyclers)} />
+                <SpecRow label={labels.detectionChannels} value={formatPdfInline(data.techSpecs.channels)} />
+                <SpecRow label={labels.detectionChemistry} value={formatPdfInline(data.techSpecs.chemistry)} />
+                <SpecRow label={labels.storageConditions} value={formatPdfInline(data.techSpecs.storage)} />
+                <SpecRow label={labels.shelfLife} value={formatPdfInline(data.techSpecs.shelfLife)} />
+                <SpecRow label={labels.certifications} value={formatPdfInline(data.techSpecs.certifications)} />
              </View>
         </View>
 
         {/* --- LIMITATIONS --- */}
         <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Limitations</Text>
+            <Text style={styles.sectionTitle}>{labels.limitations}</Text>
             {data.limitations.map((lim, i) => <Text key={i} style={styles.listItem}>• {lim}</Text>)}
         </View>
 
         {/* --- ORDER INFO --- */}
-        <Text style={[styles.sectionTitle, { marginTop: 10 }]} break>Order Information</Text>
+        <Text style={[styles.sectionTitle, { marginTop: 10 }]} break>{labels.orderInformation}</Text>
         <View style={styles.table}>
            <View style={styles.tableHeader} fixed>
-              <Text style={[styles.th, styles.colCat]}>Cat. Num</Text>
-              <Text style={[styles.th, styles.colName]}>Name</Text>
-              <Text style={[styles.th, styles.colSize]}>Size</Text>
-              <Text style={[styles.th, styles.colFormat]}>Format</Text>
-              <Text style={[styles.th, styles.colDesc]}>Description</Text>
+              <Text style={[styles.th, styles.colCat]}>{labels.catNum}</Text>
+              <Text style={[styles.th, styles.colName]}>{labels.name}</Text>
+              <Text style={[styles.th, styles.colSize]}>{labels.size}</Text>
+              <Text style={[styles.th, styles.colFormat]}>{labels.format}</Text>
+              <Text style={[styles.th, styles.colDesc]}>{labels.description}</Text>
            </View>
            {data.pcrKits.map((row, i) => (
              <View key={i} style={styles.tableRow} wrap={false}>
@@ -164,14 +193,14 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
         {/* --- SUPPLIES --- */}
         {data.supplies && data.supplies.length > 0 && (
             <View break={data.pcrKits.length > 5}> 
-              <Text style={styles.sectionTitle}>Order Information – Additional Supplies</Text>
+              <Text style={styles.sectionTitle}>{labels.orderInformationAdditionalSupplies}</Text>
               <View style={styles.table}>
                 <View style={styles.tableHeader} fixed>
-                    <Text style={[styles.th, styles.colCat]}>Cat. Num</Text>
-                    <Text style={[styles.th, styles.colName]}>Name</Text>
-                    <Text style={[styles.th, styles.colSize]}>Size</Text>
-                    <Text style={[styles.th, styles.colFormat]}>Format</Text>
-                    <Text style={[styles.th, styles.colDesc]}>Description</Text>
+                    <Text style={[styles.th, styles.colCat]}>{labels.catNum}</Text>
+                    <Text style={[styles.th, styles.colName]}>{labels.name}</Text>
+                    <Text style={[styles.th, styles.colSize]}>{labels.size}</Text>
+                    <Text style={[styles.th, styles.colFormat]}>{labels.format}</Text>
+                    <Text style={[styles.th, styles.colDesc]}>{labels.description}</Text>
                 </View>
                 {data.supplies.map((row, i) => (
                     <View key={i} style={styles.tableRow} wrap={false}>
@@ -193,7 +222,7 @@ export default function DatasheetDocument({ data }: { data: SolutionContent }) {
               <Text style={styles.footerText}>www.taag-genetics.com</Text>
            </View>
            <Text style={styles.footerText} render={({ pageNumber, totalPages }) => (
-              `Page ${pageNumber} of ${totalPages}`
+              labels.pageOf(pageNumber, totalPages)
             )} fixed />
         </View>
 

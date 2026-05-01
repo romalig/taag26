@@ -1,8 +1,11 @@
 "use client";
 
 import { Target, Lightbulb } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function AboutUs() {
+  const t = useTranslations("Pages.About");
+
   return (
     <main className="w-full bg-white min-h-screen">
       
@@ -15,10 +18,10 @@ export default function AboutUs() {
 
         <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-8 font-sora tracking-tight leading-[1.1]">
-            Hi, we’re TAAG.
+            {t("title")}
           </h1>
           <p className="text-lg md:text-2xl text-gray-500 font-medium leading-relaxed max-w-3xl mx-auto">
-            We help organizations manage microbiological risk through advanced molecular solutions and intelligent systems.
+            {t("intro")}
           </p>
         </div>
       </section>
@@ -30,7 +33,7 @@ export default function AboutUs() {
         <div className="max-w-[1000px] mx-auto px-6">
           
           <h2 className="text-3xl md:text-4xl font-bold text-[#111111] font-sora tracking-tight mb-10 md:mb-12">
-            Our story
+            {t("storyTitle")}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 text-[17px] md:text-lg text-gray-600 leading-relaxed font-medium">
@@ -38,20 +41,20 @@ export default function AboutUs() {
             {/* Columna Izquierda */}
             <div className="space-y-6">
               <p>
-                Founded in 2001, TAAG began as a highly specialized testing laboratory. Over the years, we steadily expanded our footprint, establishing operations across the United States, Belgium, Mexico, and Chile.
+                {t("story1")}
               </p>
               <p>
-                As the global demand for faster, more precise, and scalable diagnostics grew, we recognized the need to push beyond the boundaries of traditional service models.
+                {t("story2")}
               </p>
             </div>
 
             {/* Columna Derecha */}
             <div className="space-y-6">
               <p>
-                This realization drove our transformation from a regional service provider into a technology-driven biotechnology organization—seamlessly integrating expert laboratory services, advanced kit manufacturing, and software development into our core operations.
+                {t("story3")}
               </p>
               <p>
-                Today, our focus is firmly on advancing the standard of diagnostics. We design, manufacture, and distribute cutting-edge molecular solutions that empower our own hubs and a growing worldwide network of partner laboratories.
+                {t("story4")}
               </p>
             </div>
 
@@ -70,10 +73,10 @@ export default function AboutUs() {
             <div className="flex flex-col items-start">
               <Target className="w-12 h-12 text-[#FF270A] mb-6" strokeWidth={1.5} />
               <h3 className="text-2xl md:text-[28px] font-bold text-[#111111] mb-4 font-sora tracking-tight">
-                TAAG’s Mission
+                {t("missionTitle")}
               </h3>
               <p className="text-[17px] md:text-lg text-[#111111] font-medium leading-relaxed">
-                Make advanced biological testing accessible to every laboratory and organization, revolutionizing how biological entities are detected, identified, and managed.
+                {t("mission")}
               </p>
             </div>
 
@@ -81,10 +84,10 @@ export default function AboutUs() {
             <div className="flex flex-col items-start">
               <Lightbulb className="w-12 h-12 text-[#FF270A] mb-6" strokeWidth={1.5} />
               <h3 className="text-2xl md:text-[28px] font-bold text-[#111111] mb-4 font-sora tracking-tight">
-                TAAG’s Vision
+                {t("visionTitle")}
               </h3>
               <p className="text-[17px] md:text-lg text-[#111111] font-medium leading-relaxed">
-                To build a future where biological testing is fast, automated, predictive, and universally accessible, enabling every organization to protect health, optimize production, and unlock the full potential of biotechnology.
+                {t("vision")}
               </p>
             </div>
 

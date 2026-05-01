@@ -1,5 +1,6 @@
 import { API } from "@/app/lib/api-config";
-import type { ContactLocale } from "@/app/messages/contact";
+
+export type ContactLocale = "en" | "es";
 
 export type SubmitContactInput = {
   name: string;

@@ -3,8 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 // Eliminamos Layers ya que ahora usaremos texto para el 4to concepto
 import { Zap, Timer, Activity } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function AigorImpactSection() {
+  const t = useTranslations("AiGOR.Hero");
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -77,9 +79,9 @@ export default function AigorImpactSection() {
         <div className="text-center flex flex-col items-center mb-8 md:mb-10 animate-fade-in-up">
 
           <h2 className="text-3xl md:text-6xl font-bold tracking-tighter leading-[1.1] md:leading-[0.95] drop-shadow-2xl">
-            The Next Generation <br />
-            of Microbiological <br />
-            Solutions.
+            {t("titleA")} <br />
+            {t("titleB")} <br />
+            {t("titleC")}
           </h2>
         </div>
 
@@ -93,7 +95,7 @@ export default function AigorImpactSection() {
                     AiGOR
                   </h2>
                   <span className="mt-1.5 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.35em] text-[#FF270A]">
-                    RNA Technology
+                    {t("technology")}
                   </span>
                 </div>
             </div>
@@ -102,10 +104,9 @@ export default function AigorImpactSection() {
         {/* 3. TEXTO DESCRIPTIVO */}
         <div className="text-center mb-24 md:mb-32 max-w-2xl animate-fade-in-up" style={{ animationDelay: '400ms' }}>
           <p className="text-base md:text-xl font-medium text-white leading-relaxed drop-shadow-lg px-4">
-            <span className="text-white">Speed and accuracy like never before.</span>{" "} 
+            <span className="text-white">{t("introStrong")}</span>{" "} 
             <br className="hidden md:block" />
-            <span className="text-white/80 font-normal">AiGOR utilizes RNA-based detection to bypass biological limits,
-            delivering actionable results in hours.</span>
+            <span className="text-white/80 font-normal">{t("introBody")}</span>
           </p>
         </div>
 
@@ -116,7 +117,7 @@ export default function AigorImpactSection() {
           <div className="flex flex-col items-center text-center">
             <Timer className="w-6 h-6 md:w-8 md:h-8 text-white mb-3 md:mb-4" strokeWidth={1.5} />
             <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-[200px]">
-              <span className="font-bold text-white">Results as fast as 3 hours.</span> Skip the long enrichment steps.
+              <span className="font-bold text-white">{t("features.speed.strong")}</span> {t("features.speed.text")}
             </p>
           </div>
 
@@ -124,7 +125,7 @@ export default function AigorImpactSection() {
           <div className="flex flex-col items-center text-center">
             <Activity className="w-6 h-6 md:w-8 md:h-8 text-white mb-3 md:mb-4" strokeWidth={1.5} />
             <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-[200px]">
-              <span className="font-bold text-white">1 CFU/sample sensitivity.</span> Maximum precision and reliability.
+              <span className="font-bold text-white">{t("features.sensitivity.strong")}</span> {t("features.sensitivity.text")}
             </p>
           </div>
 
@@ -132,7 +133,7 @@ export default function AigorImpactSection() {
           <div className="flex flex-col items-center text-center">
             <Zap className="w-6 h-6 md:w-8 md:h-8 text-white mb-3 md:mb-4" strokeWidth={1.5} />
             <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-[200px]">
-              <span className="font-bold text-white">10,000x higher sensitivity.</span> Compared to traditional real-time PCR.
+              <span className="font-bold text-white">{t("features.amplified.strong")}</span> {t("features.amplified.text")}
             </p>
           </div>
 
@@ -142,7 +143,7 @@ export default function AigorImpactSection() {
               <span className="text-base md:text-lg text-white tracking-widest uppercase">RNA</span>
             </div>
             <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-[200px]">
-              <span className="font-bold text-white">RNA detection.</span> Targeting only active cells.
+              <span className="font-bold text-white">{t("features.rna.strong")}</span> {t("features.rna.text")}
             </p>
           </div>
 

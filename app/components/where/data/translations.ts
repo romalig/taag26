@@ -38,6 +38,9 @@ export const TRANSLATIONS: Record<string, any> = {
     routing: "Routing request...",
     messageSent: "Message Sent",
     contactShortly: "Our local team will contact you shortly.",
+    websiteLabel: "Website",
+    errorDuplicate: "You recently sent a very similar message. Please wait a few minutes before trying again.",
+    errorGeneric: "Something went wrong. Please try again.",
     // ADDED TRANSLATED DESCRIPTIONS (Turn 26 Logic fallbacks)
     hubDesc: "Scientific guidance, method selection, and technical troubleshooting.",
     distributorDesc: "Day-to-day commercial assistance, quoting, and fast on-the-ground logistics.",
@@ -74,6 +77,9 @@ export const TRANSLATIONS: Record<string, any> = {
     routing: "Enrutando solicitud...",
     messageSent: "Mensaje Enviado",
     contactShortly: "Nuestro equipo local te contactará en breve.",
+    websiteLabel: "Sitio web",
+    errorDuplicate: "Hace poco enviaste un mensaje muy similar. Espera unos minutos antes de intentar de nuevo.",
+    errorGeneric: "Algo salió mal. Inténtalo de nuevo.",
     // ADDED TRANSLATED DESCRIPTIONS (Español translation based on prev user request and professional tone)
     hubDesc: "Orientación científica, selección de métodos y resolución de problemas técnicos.",
     distributorDesc: "Asistencia comercial diaria, cotizaciones y logística rápida sobre el terreno.",

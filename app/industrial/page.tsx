@@ -10,11 +10,14 @@ import FinalCTA from "../components/FinalCTA";
 import Success from "../components/industrial/SuccessStories";
 import { ModalProvider } from "../components/industrial/ModalProvider"; 
 import SolutionModal from "../components/industrial/SolutionModal";
-import AigorImpactSection from '../components/industrial/AigorImpactSection'
 
 // import Footer from "../../components/Footer"; // Si tienes footer global
 
-export default function IndustrialPage() {
+interface IndustrialPageProps {
+  locale?: string;
+}
+
+export default function IndustrialPage({ locale }: IndustrialPageProps) {
   return (
     <ModalProvider> {/* 1. Wrapper */}
     <main className="bg-white min-h-screen font-sans selection:bg-[#FF270A] selection:text-white">
@@ -23,7 +26,7 @@ export default function IndustrialPage() {
       <FeaturedSolutions />
       <Equipment />
       <HowItWorks />
-      <SolutionsCatalog />
+      <SolutionsCatalog locale={locale} />
       <Success />
       <FinalCTA />
       <SolutionModal /> {/* 2. Renderizar Modal */}

@@ -2,15 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useModal } from "../industrial/ModalProvider";
 import {
-  TXA_MODAL_DATA,
   TxAModalContent,
   type TxaModalKey,
 } from "../TxA/TxAModalShared";
 import TxAVisualShowcasePanel from "../TxA/TxAVisualShowcasePanel";
 
 export default function LabTxA() {
+  const t = useTranslations("TxA.System");
+  const labT = useTranslations("LabNetwork.TxA");
   const { openModal } = useModal();
 
   const [isVisible, setIsVisible] = useState(false);
@@ -33,7 +35,7 @@ export default function LabTxA() {
   }, []);
 
   const handleOpenModule = (key: TxaModalKey) => {
-    openModal(<TxAModalContent data={TXA_MODAL_DATA[key]} />);
+    openModal(<TxAModalContent moduleKey={key} />);
   };
 
   return (
@@ -56,13 +58,11 @@ export default function LabTxA() {
       <div className="relative z-20 bg-[#f5f5f7] w-full mt-24 md:mt-32 pt-10 flex flex-col items-center">
         <div className="text-center w-full max-w-7xl mx-auto px-6 mb-20 flex flex-col items-center">
           <h2 className="text-3xl md:text-5xl font-bold text-[#1d1d1f] mb-6 font-sora tracking-tight leading-[1.05]">
-            TAAG Xpert Assistant. <br className="hidden md:block" />
-            <span className="text-[#86868b]">Your AI-powered ecosystem.</span>
+            {t("titleA")} <br className="hidden md:block" />
+            <span className="text-[#86868b]">{t("titleB")}</span>
           </h2>
           <p className="text-[17px] leading-[1.4] text-[#86868b] font-medium max-w-2xl text-center">
-            By partnering with our lab, you get full access to TxA. A complete ecosystem
-            built to manage your entire microbiology operation, from digital field sampling
-            to real-time result analysis.
+            {labT("body")}
           </p>
         </div>
 
@@ -75,14 +75,14 @@ export default function LabTxA() {
                 </span>
               </div>
               <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
-                Digitize your sampling process for total control and end-to-end traceability.
+                {t("cards.app")}
               </p>
               <button
                 type="button"
                 onClick={() => handleOpenModule("app")}
                 className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group z-50 cursor-pointer"
               >
-                learn more{" "}
+                {t("learnMore")}{" "}
                 <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
               </button>
             </div>
@@ -94,15 +94,14 @@ export default function LabTxA() {
                 </span>
               </div>
               <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
-                Utilize predictive microbiology for comprehensive and preventive quality
-                management.
+                {t("cards.qa")}
               </p>
               <button
                 type="button"
                 onClick={() => handleOpenModule("qa")}
                 className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group z-50 cursor-pointer"
               >
-                learn more{" "}
+                {t("learnMore")}{" "}
                 <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
               </button>
             </div>

@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { ReactNode, useEffect } from "react";
 
 interface ModalBaseLayoutProps {
@@ -15,6 +16,8 @@ export default function ModalBaseLayout({
   isOpen,
   onClose,
 }: ModalBaseLayoutProps) {
+  const t = useTranslations("Common");
+
   // Bloquear el scroll del body cuando el modal está abierto
   useEffect(() => {
     if (isOpen) {
@@ -59,7 +62,7 @@ export default function ModalBaseLayout({
                 <button
                   onClick={onClose}
                   className="w-10 h-10 bg-black/10 hover:bg-black/20 backdrop-blur-md rounded-full flex items-center justify-center transition-colors duration-200 group"
-                  aria-label="Close modal"
+                  aria-label={t("closeModal")}
                 >
                   <X className="w-5 h-5 text-gray-700/70 group-hover:text-gray-900 transition-colors" />
                 </button>

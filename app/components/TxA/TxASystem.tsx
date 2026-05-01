@@ -7,15 +7,16 @@ import {
   FileCheck2,
   Sparkles 
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useModal } from "../industrial/ModalProvider";
 import {
-  TXA_MODAL_DATA,
   TxAModalContent,
   type TxaModalKey,
 } from "./TxAModalShared";
 
 // --- COMPONENTE PRINCIPAL ---
 export default function TxASystem() {
+  const t = useTranslations("TxA.System");
   const [isVisible, setIsVisible] = useState(false);
   const logoRef = useRef<HTMLDivElement>(null);
   
@@ -38,7 +39,7 @@ export default function TxASystem() {
 
   // Función para inyectar el contenido en el modal global
   const handleOpenModule = (key: TxaModalKey) => {
-    openModal(<TxAModalContent data={TXA_MODAL_DATA[key]} />);
+    openModal(<TxAModalContent moduleKey={key} />);
   };
 
   return (
@@ -66,13 +67,12 @@ export default function TxASystem() {
         {/* ENCABEZADO */}
         <div className="text-center max-w-[800px] mx-auto mb-20">
           <h2 className="text-3xl md:text-5xl font-bold text-[#1d1d1f] mb-6 font-sora tracking-tight leading-[1.05]">
-            TAAG Xpert Assistant. <br className="hidden md:block"/>
-            <span className="text-[#86868b]">Your AI-powered ecosystem.</span>
+            {t("titleA")} <br className="hidden md:block"/>
+            <span className="text-[#86868b]">{t("titleB")}</span>
           </h2>
 
           <p className="text-[17px] leading-[1.4] text-[#86868b] font-medium max-w-2xl mx-auto">
-            TxA is a complete ecosystem built to manage your entire microbiology operation. 
-            From digital field sampling to real-time result analysis.
+            {t("body")}
           </p>
         </div>
 
@@ -85,13 +85,13 @@ export default function TxASystem() {
               <span className="text-sm font-bold tracking-widest text-purple-700 uppercase">TxA APP</span>
             </div>
             <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
-              Digitize your sampling process for total control and end-to-end traceability.
+              {t("cards.app")}
             </p>
             <button 
               onClick={() => handleOpenModule('app')}
               className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group"
             >
-                learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
+                {t("learnMore")} <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
             </button>
           </div>
 
@@ -101,13 +101,13 @@ export default function TxASystem() {
               <span className="text-sm font-bold tracking-widest text-blue-700 uppercase">TxA LAB</span>
             </div>
             <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
-              Streamline workflows and automate process controls for fully confident lab results.
+              {t("cards.lab")}
             </p>
             <button 
               onClick={() => handleOpenModule('lab')}
               className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group"
             >
-                learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
+                {t("learnMore")} <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
             </button>
           </div>
 
@@ -117,13 +117,13 @@ export default function TxASystem() {
               <span className="text-sm font-bold tracking-widest text-cyan-500 uppercase">TxA QA</span>
             </div>
             <p className="text-[19px] font-semibold text-[#1d1d1f] leading-tight max-w-[90%] font-sora">
-              Utilize predictive microbiology for comprehensive and preventive quality management.
+              {t("cards.qa")}
             </p>
             <button 
               onClick={() => handleOpenModule('qa')}
               className="absolute bottom-8 left-8 text-xs font-medium text-sky-500 hover:text-sky-600 transition-colors flex items-center gap-1 group"
             >
-                learn more <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
+                {t("learnMore")} <span className="transition-transform group-hover:translate-x-0.5">&gt;</span>
             </button>
           </div>
 
@@ -136,7 +136,7 @@ export default function TxASystem() {
                 TxA Core
               </span>
               <p className="text-[24px] md:text-[32px] font-semibold text-[#1d1d1f] leading-[1.1] font-sora tracking-tight md:max-w-[500px]">
-                Proprietary AI algorithms connecting field data, lab results, and safety insights.
+                {t("cards.core")}
               </p>
             </div>
 
@@ -167,8 +167,8 @@ export default function TxASystem() {
                      <Sparkles className="w-4 h-4 text-purple-600" />
                    </div>
                    <div>
-                     <p className="text-[10px] font-bold text-gray-800 leading-tight">Risk Prediction</p>
-                     <p className="text-[9px] text-purple-600 font-bold">High Probability</p>
+                     <p className="text-[10px] font-bold text-gray-800 leading-tight">{t("labels.risk")}</p>
+                     <p className="text-[9px] text-purple-600 font-bold">{t("labels.probability")}</p>
                    </div>
                 </div>
 
@@ -178,8 +178,8 @@ export default function TxASystem() {
                      <Sparkles className="w-4 h-4 text-red-500" />
                    </div>
                    <div>
-                     <p className="text-[10px] font-bold text-gray-800 leading-tight">Sampling</p>
-                     <p className="text-[9px] text-red-500 font-medium">Optimized</p>
+                     <p className="text-[10px] font-bold text-gray-800 leading-tight">{t("labels.sampling")}</p>
+                     <p className="text-[9px] text-red-500 font-medium">{t("labels.optimized")}</p>
                    </div>
                 </div>
 
@@ -192,7 +192,7 @@ export default function TxASystem() {
                   </div>
                   <div className="flex items-center gap-1">
                     <BarChart3 className="w-3 h-3 text-gray-400" />
-                    <p className="text-[10px] font-semibold text-gray-600">Live Trends</p>
+                    <p className="text-[10px] font-semibold text-gray-600">{t("labels.trends")}</p>
                   </div>
                 </div>
 
@@ -202,8 +202,8 @@ export default function TxASystem() {
                      <FileCheck2 className="w-5 h-5 text-green-500" />
                    </div>
                    <div>
-                     <p className="text-xs font-bold text-gray-800 leading-tight">Automated Reports</p>
-                     <p className="text-[9px] text-gray-400">Full customized</p>
+                     <p className="text-xs font-bold text-gray-800 leading-tight">{t("labels.reports")}</p>
+                     <p className="text-[9px] text-gray-400">{t("labels.customized")}</p>
                    </div>
                 </div>
 

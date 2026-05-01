@@ -3,61 +3,91 @@
 import { useState } from "react";
 import { CheckCircle2, FlaskConical, Download, Mail, ArrowRightLeft, Loader2 } from "lucide-react";
 import { pdf } from "@react-pdf/renderer";
-import DatasheetDocument from "./DatasheetDocument";
+import DatasheetDocument, { type DatasheetPdfLabels } from "./DatasheetDocument";
 import { SolutionContent } from "./types";
 import { hasDisplayValue } from "@/app/lib/spec-values";
 import InlineFormattedText from "@/app/components/shared/InlineFormattedText";
 import { useCTA } from "@/app/components/CTAProvider";
+import { useTranslations } from "next-intl";
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 
 export default function SolutionTemplate({ data }: { data: SolutionContent }) {
+  const tm = useTranslations("Industrial.DatasheetModal");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const { openMeeting } = useCTA();
   const showSensitivity = hasDisplayValue(data.techSpecs.sensitivity);
   const showTargetType = hasDisplayValue(data.targetType);
+  const pdfLabels: DatasheetPdfLabels = {
+    technicalDataSheet: tm("technicalDataSheet"),
+    targetType: tm("targetType"),
+    mainIndustries: tm("mainIndustries"),
+    intendedUse: tm("intendedUse"),
+    principle: tm("principle"),
+    technicalSpecifications: tm("technicalSpecifications"),
+    targets: tm("targets"),
+    sensitivity: tm("sensitivity"),
+    validatedMatrices: tm("validatedMatrices"),
+    timeToResults: tm("timeToResults"),
+    technology: tm("technology"),
+    validatedThermocyclers: tm("validatedThermocyclers"),
+    detectionChannels: tm("detectionChannels"),
+    detectionChemistry: tm("detectionChemistry"),
+    storageConditions: tm("storageConditions"),
+    shelfLife: tm("shelfLife"),
+    certifications: tm("certifications"),
+    limitations: tm("limitations"),
+    orderInformation: tm("orderInformation"),
+    catNum: tm("catNum"),
+    name: tm("name"),
+    size: tm("size"),
+    format: tm("format"),
+    description: tm("description"),
+    orderInformationAdditionalSupplies: tm("orderInformationAdditionalSupplies"),
+    pageOf: (page, total) => tm("pageOf", { page, total }),
+  };
 
   if (!data) return null;
 
   const handleDownloadPDF = async () => {
-    // 1. TRUCO PARA MÓVIL: Abrimos la ventana INMEDIATAMENTE (antes de cualquier await).
-    // Esto "reserva" la pestaña y evita que el bloqueador de popups la cierre.
-    const newWindow = window.open('', '_blank');
-    
-    // Comprobamos si el navegador la bloqueó de todas formas (raro, pero posible)
+    const newWindow = window.open("", "_blank");
+
     if (!newWindow) {
-        alert("Please allow popups for this website to view the PDF.");
-        return;
+      alert(tm("allowPopups"));
+      return;
     }
 
-    // Le ponemos un mensaje temporal mientras se genera el documento
-    newWindow.document.write(`
-      <html>
-        <head><title>Loading PDF...</title></head>
+    newWindow.document.write(
+      `<html>
+        <head><title>${escapeHtml(tm("loadingPdfTitle"))}</title></head>
         <body style="margin:0; display:flex; justify-content:center; align-items:center; height:100vh; background:#f4f4f5; font-family:sans-serif; color:#555;">
            <div style="text-align:center;">
-             <div style="margin-bottom:10px; font-weight:bold;">Generating Datasheet...</div>
-             <div style="font-size:12px;">Please wait moment.</div>
+             <div style="margin-bottom:10px; font-weight:bold;">${escapeHtml(tm("generatingDatasheetHtml"))}</div>
+             <div style="font-size:12px;">${escapeHtml(tm("pleaseWait"))}</div>
            </div>
         </body>
-      </html>
-    `);
+      </html>`
+    );
 
     setIsGeneratingPdf(true);
 
     try {
-      // 2. Generamos el PDF (esto es lo que toma tiempo)
-      const blob = await pdf(<DatasheetDocument data={data} />).toBlob();
+      const blob = await pdf(<DatasheetDocument data={data} labels={pdfLabels} />).toBlob();
       const url = URL.createObjectURL(blob);
-      
-      // 3. Una vez listo, redirigimos esa ventana que ya abrimos a la URL del PDF
-      newWindow.location.href = url;
-      
-      // Limpieza de memoria (un poco más de tiempo para asegurar carga en móvil)
-      setTimeout(() => URL.revokeObjectURL(url), 3000);
 
+      newWindow.location.href = url;
+
+      setTimeout(() => URL.revokeObjectURL(url), 3000);
     } catch (error) {
       console.error("PDF Error:", error);
-      newWindow.close(); // Si falla, cerramos la ventana para no dejarla colgada
-      alert("Error generating PDF. Please try again.");
+      newWindow.close();
+      alert(tm("pdfError"));
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -95,20 +125,20 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             }`}
           >
             <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{tm("targets")}</span>
               <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
                 <InlineFormattedText value={data.techSpecs.targets} />
               </span>
             </div>
             <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Main industries</span>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{tm("mainIndustries")}</span>
               <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
                 {data.mainIndustries.join(", ")}
               </span>
             </div>
             {showSensitivity ? (
               <div>
-                <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Sensitivity</span>
+                <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{tm("sensitivity")}</span>
                 <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
                   <InlineFormattedText value={data.techSpecs.sensitivity} />
                 </span>
@@ -117,13 +147,13 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Matrices</span>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{tm("matricesLabel")}</span>
               <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
                 <InlineFormattedText value={data.techSpecs.matrices} />
               </span>
             </div>
             <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Time</span>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{tm("time")}</span>
               <span className="block text-lg md:text-xl font-bold text-[#FF270A] leading-tight">
                 <InlineFormattedText value={data.techSpecs.time} />
               </span>
@@ -134,13 +164,13 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         {/* Description & Advantages */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
           <div className="md:col-span-2">
-              <h3 className="text-xl font-bold text-[#111111] mb-4">Description</h3>
+              <h3 className="text-xl font-bold text-[#111111] mb-4">{tm("descriptionHeading")}</h3>
               {data.description.map((p, idx) => (
                   <p key={idx} className="text-gray-600 leading-relaxed text-base mb-6 last:mb-0">{p}</p>
               ))}
           </div>
           <div className="md:col-span-1 bg-gray-50 rounded-2xl p-6 border border-gray-100">
-              <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-4">Key Advantages</h3>
+              <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-4">{tm("keyAdvantages")}</h3>
               <ul className="space-y-3">
                 {data.advantages.map((adv, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm font-medium text-gray-600">
@@ -154,14 +184,14 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
 
         {/* Specs Modal */}
         <div className="mb-16">
-          <h3 className="text-2xl font-bold text-[#111111] mb-6">Technical Specifications</h3>
+          <h3 className="text-2xl font-bold text-[#111111] mb-6">{tm("technicalSpecifications")}</h3>
           <div className="border-t border-gray-200">
              {[
-               { label: "Technology", value: data.techSpecs.technology },
-               { label: "Detection Chemistry", value: data.techSpecs.chemistry },
-               { label: "Channels Needed", value: data.techSpecs.channels },
-               { label: "Storage", value: data.techSpecs.storage },
-               { label: "Shelf Life", value: data.techSpecs.shelfLife },
+               { label: tm("technology"), value: data.techSpecs.technology },
+               { label: tm("detectionChemistry"), value: data.techSpecs.chemistry },
+               { label: tm("channelsNeeded"), value: data.techSpecs.channels },
+               { label: tm("storageShort"), value: data.techSpecs.storage },
+               { label: tm("shelfLife"), value: data.techSpecs.shelfLife },
              ].map((row, i) => (
                 <div key={i} className="grid grid-cols-1 md:grid-cols-3 py-4 border-b border-gray-100">
                    <div className="text-sm font-semibold text-gray-500">{row.label}</div>
@@ -173,18 +203,18 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
 
         {/* Order Info */}
         <div className="mb-12">
-          <h3 className="text-2xl font-bold text-[#111111] mb-2">Order Information</h3>
-          <p className="text-sm text-gray-500 mb-6">Select the appropriate kit size.</p>
+          <h3 className="text-2xl font-bold text-[#111111] mb-2">{tm("orderInformation")}</h3>
+          <p className="text-sm text-gray-500 mb-6">{tm("selectKitSize")}</p>
           
           <div className="overflow-x-auto pb-2">
             <table className="w-full text-left border-collapse min-w-[700px] table-fixed">
                 <thead>
                   <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                      <th className="py-4 pr-4 w-[18%]">Cat. Number</th>
-                      <th className="py-4 px-4 w-[22%]">Name</th>
-                      <th className="py-4 px-4 w-[15%]">Size</th>
-                      <th className="py-4 px-4 w-[15%]">Format</th>
-                      <th className="py-4 pl-4 w-[30%]">Description</th>
+                      <th className="py-4 pr-4 w-[18%]">{tm("catNumber")}</th>
+                      <th className="py-4 px-4 w-[22%]">{tm("name")}</th>
+                      <th className="py-4 px-4 w-[15%]">{tm("size")}</th>
+                      <th className="py-4 px-4 w-[15%]">{tm("format")}</th>
+                      <th className="py-4 pl-4 w-[30%]">{tm("description")}</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
@@ -201,7 +231,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             </table>
           </div>
           <p className="md:hidden text-xs text-gray-400 flex items-center gap-1.5 mt-2 pl-1">
-             <ArrowRightLeft className="w-3 h-3" /> Swipe left to view all columns
+             <ArrowRightLeft className="w-3 h-3" /> {tm("swipeForColumns")}
           </p>
         </div>
 
@@ -209,17 +239,17 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         {data.supplies && data.supplies.length > 0 && (
             <div className="mb-16">
               <h4 className="text-lg font-bold text-[#111111] mb-6 flex items-center gap-2">
-                  <FlaskConical className="w-5 h-5 text-gray-400" /> Additional Supplies
+                  <FlaskConical className="w-5 h-5 text-gray-400" /> {tm("additionalSupplies")}
               </h4>
               <div className="overflow-x-auto pb-2">
                 <table className="w-full text-left border-collapse min-w-[700px] table-fixed">
                     <thead>
                       <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                          <th className="py-4 pr-4 w-[18%]">Cat. Number</th>
-                          <th className="py-4 px-4 w-[22%]">Name</th>
-                          <th className="py-4 px-4 w-[15%]">Size</th>
-                          <th className="py-4 px-4 w-[15%]">Format</th>
-                          <th className="py-4 pl-4 w-[30%]">Description</th>
+                          <th className="py-4 pr-4 w-[18%]">{tm("catNumber")}</th>
+                          <th className="py-4 px-4 w-[22%]">{tm("product")}</th>
+                          <th className="py-4 px-4 w-[15%]">{tm("size")}</th>
+                          <th className="py-4 px-4 w-[15%]">{tm("format")}</th>
+                          <th className="py-4 pl-4 w-[30%]">{tm("description")}</th>
                       </tr>
                     </thead>
                     <tbody className="text-sm">
@@ -236,7 +266,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
                 </table>
               </div>
               <p className="md:hidden text-xs text-gray-400 flex items-center gap-1.5 mt-2 pl-1">
-                  <ArrowRightLeft className="w-3 h-3" /> Swipe left to view all columns
+                  <ArrowRightLeft className="w-3 h-3" /> {tm("swipeForColumns")}
               </p>
             </div>
         )}
@@ -251,12 +281,12 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
          >
             {isGeneratingPdf ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-gray-500" /> Generating PDF...
+                <Loader2 className="w-4 h-4 animate-spin text-gray-500" /> {tm("generatingPdf")}
               </>
             ) : (
               <>
                 <Download className="w-4 h-4 text-gray-500 group-hover:text-[#111111] transition-colors" />
-                View Datasheet (PDF)
+                {tm("viewDatasheetPdf")}
               </>
             )}
          </button>
@@ -266,7 +296,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
            className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg"
          >
             <Mail className="w-4 h-4" />
-            Contact Sales Team
+            {tm("contactSalesTeam")}
          </button>
       </div>
     </div>

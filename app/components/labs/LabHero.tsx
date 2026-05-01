@@ -1,11 +1,14 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 export default function IndustrialHero() {
+  const t = useTranslations("Pages.Labs");
+
   return (
     <section className="pt-40 pb-10 px-4 md:px-6 max-w-7xl mx-auto text-center relative overflow-hidden">
       
-      {/* INYECCIÓN CSS: DOBLE CAPA (ESTÁTICA + ANIMADA) */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style jsx>{`
         @keyframes fill-up-reveal {
           /* Movemos solo la capa 1 (colores) hacia arriba, la capa 2 (gris) se queda en 0% 0% */
           0% { background-position: 0% 0%, 0% 0%; }
@@ -42,7 +45,7 @@ export default function IndustrialHero() {
           
           animation: fill-up-reveal 4s ease-out 1s forwards;
         }
-      `}} />
+      `}</style>
 
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-b from-gray-50 to-transparent rounded-full blur-3xl -z-10 opacity-60" />
 
@@ -52,13 +55,14 @@ export default function IndustrialHero() {
          - Ajustado el leading (interlineado) para móvil.
       */}
       <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[4.5rem] font-extrabold text-[#111111] mb-12 md:mb-18 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
-        Your lab <br className="hidden md:block" />
+        {t("titleA")} <br className="hidden md:block" />
         {/* Aquí se aplica la clase con la nueva animación */}
-        <span className="text-liquid-animate inline-block pt-2">Fully optimized.</span>
+        <span className="text-liquid-animate inline-block pt-2">{t("titleB")}</span>
       </h1>
 
       <p className="text-lg md:text-2xl text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed px-2 mb-6">
-      Become a lab partner and unlock our entire ecosystem of technologies, software, products, and workflows. Unleash the true potential of your facility, driving unprecedented productivity, operational agility, and cost savings.      </p>
+        {t("body")}
+      </p>
     </section>
   );
 }

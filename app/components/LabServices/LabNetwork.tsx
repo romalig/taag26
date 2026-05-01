@@ -1,8 +1,11 @@
 "use client";
 
 import { Timer, Zap, Dna, FlaskConical } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function LaboratoryServicesHero() {
+  const t = useTranslations("LabNetwork.Hero");
+
   return (
     <main className="w-full bg-white">
       {/* Añadimos min-h-screen para que ocupe el 100% del monitor.
@@ -18,12 +21,12 @@ export default function LaboratoryServicesHero() {
           
           {/* Título y Bajada */}
           <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-12 md:mb-18 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
-            The future of <br className="hidden md:block" />
-            <span className="text-gray-400 inline-block">Laboratory Services.</span>
+            {t("titleA")} <br className="hidden md:block" />
+            <span className="text-gray-400 inline-block">{t("titleB")}</span>
           </h1>
 
           <p className="text-lg md:text-2xl text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed px-2 mb-16 md:mb-24">
-            Discover multiplex and ultra-fast microbiological detection solutions to accelerate decisions, reduce risks, and improve productivity.
+            {t("body")}
           </p>
 
           {/* ================================================================ */}
@@ -38,7 +41,7 @@ export default function LaboratoryServicesHero() {
                 strokeWidth={1.5} 
               />
               <p className="text-xs md:text-sm text-gray-500 leading-relaxed max-w-[200px] font-medium">
-                <span className="font-bold text-[#111111]">Same-day results.</span> For common pathogens.
+                <span className="font-bold text-[#111111]">{t("features.results.strong")}</span> {t("features.results.text")}
               </p>
             </div>
 
@@ -49,7 +52,7 @@ export default function LaboratoryServicesHero() {
                 strokeWidth={1.5} 
               />
               <p className="text-xs md:text-sm text-gray-500 leading-relaxed max-w-[200px] font-medium">
-                <span className="font-bold text-[#111111]">Fast detection.</span> Spoilage microorganisms.
+                <span className="font-bold text-[#111111]">{t("features.spoilage.strong")}</span> {t("features.spoilage.text")}
               </p>
             </div>
 
@@ -60,7 +63,7 @@ export default function LaboratoryServicesHero() {
                 strokeWidth={1.5} 
               />
               <p className="text-xs md:text-sm text-gray-500 leading-relaxed max-w-[200px] font-medium">
-                <span className="font-bold text-[#111111]">NGS.</span> Next-Generation Sequencing.
+                <span className="font-bold text-[#111111]">{t("features.ngs.strong")}</span> {t("features.ngs.text")}
               </p>
             </div>
 
@@ -71,7 +74,7 @@ export default function LaboratoryServicesHero() {
                 strokeWidth={1.5} 
               />
               <p className="text-xs md:text-sm text-gray-500 leading-relaxed max-w-[200px] font-medium">
-                <span className="font-bold text-[#111111]">Custom assays.</span> Bespoke assay development.
+                <span className="font-bold text-[#111111]">{t("features.custom.strong")}</span> {t("features.custom.text")}
               </p>
             </div>
 

@@ -5,9 +5,10 @@ import Image from "next/image";
 import { 
   MapPin, CheckCircle2, ChevronLeft, ChevronRight
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // --- SUB-COMPONENTE: TARJETA INDIVIDUAL ---
-const FeatureCard = ({ feature }: { feature: any }) => {
+const FeatureCard = ({ feature, labels }: { feature: any; labels: {aiAlgorithms: string; complete: string; dynamic: string; preventive: string} }) => {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -165,12 +166,12 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                         <div className="w-full h-full relative">
                             <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-500 ${aiState === 'analyzing' ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}>
                                 <div className="bg-white/95 backdrop-blur-xl border border-gray-200 shadow-xl rounded-2xl px-8 py-5 flex flex-col gap-3 min-w-[240px]">
-                                    <div className="text-center"><span className="block text-sm font-bold text-slate-900 tracking-tight">TxA AI algorithms</span></div>
+                                    <div className="text-center"><span className="block text-sm font-bold text-slate-900 tracking-tight">{labels.aiAlgorithms}</span></div>
                                     <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 w-[60%] animate-progress-load"></div></div>
                                 </div>
                             </div>
                             <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 transition-all duration-500 ${aiState === 'complete' && !showPins ? 'opacity-100 scale-100' : 'opacity-0 scale-110'}`}>
-                                <div className="bg-emerald-500 text-white shadow-lg rounded-full px-5 py-2 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /><span className="text-xs font-bold">Optimization Complete</span></div>
+                                <div className="bg-emerald-500 text-white shadow-lg rounded-full px-5 py-2 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /><span className="text-xs font-bold">{labels.complete}</span></div>
                             </div>
                             {showPins && (
                                 <>
@@ -190,19 +191,15 @@ const FeatureCard = ({ feature }: { feature: any }) => {
                             <div className="flex flex-row items-center gap-2 md:gap-4 flex-wrap justify-center">
                                 
                                 <h3 className={`text-5xl md:text-6xl font-extrabold text-indigo-600 tracking-tight ${isVisible ? 'is-visible' : ''}`}>
-                                    <span className="dynamic-letter let-1">D</span>
-                                    <span className="dynamic-letter let-2">y</span>
-                                    <span className="dynamic-letter let-3">n</span>
-                                    <span className="dynamic-letter let-4">a</span>
-                                    <span className="dynamic-letter let-5">m</span>
-                                    <span className="dynamic-letter let-6">i</span>
-                                    <span className="dynamic-letter let-7">c</span>
+                                    {labels.dynamic.split("").map((letter, idx) => (
+                                      <span key={idx} className={`dynamic-letter let-${Math.min(idx + 1, 7)}`}>{letter}</span>
+                                    ))}
                                 </h3>
                                 
                                 <span className="text-4xl md:text-5xl text-gray-400 font-light italic font-serif">&</span>
 
                                 <h3 className={`text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 tracking-tight ${isVisible ? 'animate-float-once' : ''}`}>
-                                    Preventive
+                                    {labels.preventive}
                                 </h3>
 
                             </div>
@@ -217,6 +214,7 @@ const FeatureCard = ({ feature }: { feature: any }) => {
 
 
 export default function TxAFeatures() {
+  const t = useTranslations("TxA.Features");
   const carouselRef = useRef<HTMLDivElement>(null);
   
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -268,35 +266,35 @@ export default function TxAFeatures() {
   const features = [
     {
       id: 1,
-      description: "TxA performs a true digitalization of your plant layout, accurately determining equipment, distances, and zones. This spatial awareness is key for our AI algorithms.",
+      description: t("items.1"),
       hasCustomVisual: true,
       cardBgClass: "bg-[#F5F5F7]", 
       textColorClass: "text-white",
     },
     {
       id: 2,
-      description: "Predictive Sampling. AI algorithms analyze historical data to pinpoint the best sampling locations, preventing risks before they arise.",
+      description: t("items.2"),
       hasCustomVisual: true,
       cardBgClass: "bg-[#F5F5F7]",
       textColorClass: "text-white", 
     },
     {
       id: 3,
-      description: "Power your fieldwork with the TxA App. Perform digital sampling with attached photos, detailed point information, and instant cloud syncing.",
+      description: t("items.3"),
       hasCustomVisual: false, 
       cardBgClass: "bg-[#F4F4F5]", 
       textColorClass: "text-[#111111]", 
     },
     {
       id: 4, // TARJETA 4 ACTUALIZADA
-      description: "TxA maps every data point directly into context of your plant, speeding up root-cause analysis and decision making.",
+      description: t("items.4"),
       hasCustomVisual: true,
       cardBgClass: "bg-[#F5F5F7]", // Fondo claro
       textColorClass: "text-[#111111]", // Texto oscuro (asumiendo que res.png es claro, al no tener filtro oscuro)
     },
     {
       id: 5, 
-      description: "TxA allows you to build dynamic, preventive programs that adapt in real-time to maximize food quality and safety.",
+      description: t("items.5"),
       hasCustomVisual: true,
       cardBgClass: "bg-[#F4F4F5]", 
       textColorClass: "text-[#111111]", 
@@ -304,6 +302,12 @@ export default function TxAFeatures() {
   ];
 
   const edgePadding = "max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem))";
+  const labels = {
+    aiAlgorithms: t("aiAlgorithms"),
+    complete: t("complete"),
+    dynamic: t("dynamic"),
+    preventive: t("preventive"),
+  };
 
   return (
     <section className="bg-white py-24 border-t border-gray-100 overflow-hidden relative">
@@ -311,11 +315,11 @@ export default function TxAFeatures() {
       {/* 1. ENCABEZADO */}
       <div className="max-w-[1280px] mx-auto px-6 md:px-10 mb-16"> 
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#111111] mb-10 md:mb-16 font-sora tracking-tight leading-[1.1] md:leading-tight">
-          Ai for automated, smart and <br className="hidden md:block"/>
-          dynamic microbiologycal programs.
+          {t("titleA")} <br className="hidden md:block"/>
+          {t("titleB")}
         </h2>
         <p className="text-[17px] md:text-xl text-gray-500 font-medium leading-relaxed max-w-2xl">
-          An important feature of TxA is the digitalization of your food plant. This will allow TxA algorithms to determine contaminated points in your plant and, according to them, automatically define the best next sampling points to track down contamination sources.
+          {t("body")}
         </p>
       </div>
 
@@ -333,7 +337,7 @@ export default function TxAFeatures() {
             }}
         >
             {features.map((feature) => (
-            <FeatureCard key={feature.id} feature={feature} />
+            <FeatureCard key={feature.id} feature={feature} labels={labels} />
             ))}
             
             <div className="shrink-0 w-[1px]" />

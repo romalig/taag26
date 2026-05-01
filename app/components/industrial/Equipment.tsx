@@ -3,25 +3,21 @@
 import { useState } from "react";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const EQUIPMENT_SCENARIOS = {
   simple: {
     id: "simple",
-    label: "Environmental & Food Samples",
     image: "/termo6.png", 
-    title: "Easy & Rapid Workflow",
-    description: "Ideal for environmental and normal food matrices. Skip the complex machinery with our rapid extraction protocols that get you to PCR results in record time.",
   },
   complex: {
     id: "complex",
-    label: "Complex Food Samples",
     image: "/auto3.png", 
-    title: "Automated High-Throughput",
-    description: "For complex matrices like chocolate or spices. We integrate automated magnetic-bead extraction robots to ensure maximum purity and efficiency without bottlenecks.",
   }
 };
 
 export default function EquipmentSection() {
+  const t = useTranslations("Industrial.Equipment");
   const [activeTab, setActiveTab] = useState<"simple" | "complex">("simple");
   const activeData = EQUIPMENT_SCENARIOS[activeTab];
 
@@ -35,14 +31,14 @@ export default function EquipmentSection() {
            
            <div className="max-w-3xl">
               <span className="text-[#FF270A] font-bold tracking-widest uppercase text-xs mb-3 block">
-                Infrastructure & Equipment
+                {t("eyebrow")}
               </span>
               <h2 className="text-3xl md:text-5xl font-bold text-[#111111] mb-4 md:mb-6 tracking-tight">
-                No specialized or complex equipment. Open platforms
+                {t("title")}
               </h2>
               <p className="text-base md:text-lg text-gray-500 leading-relaxed  mb-4 md:mb-6">
                  {/* We believe in simplicity. A normal real-time PCR machine Whether you need a simple manual setup or a fully automated robot, our kits adapt to your lab's reality. */} 
-                We believe in simplicity. Six square meters. One standard qPCR machine. <br className="hidden md:block"/> That’s all it takes.
+                {t("body")}
               </p>
            </div>
 
@@ -56,7 +52,7 @@ export default function EquipmentSection() {
                     : "text-gray-500 hover:text-[#111111]"
                 }`}
               >
-                Environmental & Food Samples
+                {t("scenarios.simple.label")}
               </button>
               <button
                 onClick={() => setActiveTab("complex")}
@@ -66,7 +62,7 @@ export default function EquipmentSection() {
                     : "text-gray-500 hover:text-[#111111]"
                 }`}
               >
-                Complex Food Samples
+                {t("scenarios.complex.label")}
               </button>
            </div>
         </div>
@@ -79,7 +75,7 @@ export default function EquipmentSection() {
               <div key={activeTab} className="relative w-full h-full animate-scaleFade">
                  <Image 
                    src={activeData.image}
-                   alt={activeData.title}
+                   alt={t(`scenarios.${activeData.id}.title`)}
                    fill
                    className="object-cover object-right transition-transform duration-700 scale-[1.01]"
                    priority
@@ -95,20 +91,20 @@ export default function EquipmentSection() {
                  
                  <div className="flex flex-wrap items-center gap-2 mb-4 md:mb-6">
                     <div className="px-3 py-1 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-white text-[10px] md:text-xs font-bold uppercase tracking-wider">
-                      qPCR machine
+                      {t("qPCR")}
                     </div>
                     <div className="flex items-center gap-1.5 text-white/80 text-[10px] md:text-xs font-medium">
                        <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4 text-[#FF270A]" />
-                       <span>Analytik Jena recommended</span>
+                       <span>{t("recommended")}</span>
                     </div>
                  </div>
 
                  <h3 className="text-2xl md:text-5xl font-bold text-white mb-4 md:mb-6 leading-tight">
-                    {activeData.title}
+                    {t(`scenarios.${activeData.id}.title`)}
                  </h3>
                  
                  <p className="text-gray-300 text-base md:text-xl leading-relaxed">
-                    {activeData.description}
+                    {t(`scenarios.${activeData.id}.description`)}
                  </p>
 
               </div>

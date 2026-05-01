@@ -41,6 +41,7 @@ interface PcrKitFoodSimple {
 }
 
 interface ProductNested {
+  description?: string | null;
   description_eng?: string | null;
   description_esp?: string | null;
 }
@@ -110,12 +111,43 @@ interface PcrKitFoodSolution {
 // ---------------------------------------------------------------------------
 // Generic fetch helper — calls Laravel directly
 // ---------------------------------------------------------------------------
-async function fetchProductsApi<T>(path: string): Promise<T> {
+type ProductsLocale = "en" | "es";
+
+function normalizeProductsLocale(locale?: string): ProductsLocale | undefined {
+  return locale === "en" || locale === "es" ? locale : undefined;
+}
+
+function withLocale(path: string, locale?: string): string {
+  const safeLocale = normalizeProductsLocale(locale);
+  if (!safeLocale) return path;
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}locale=${safeLocale}`;
+}
+
+function productFallback(locale: string | undefined, key: "uncategorized" | "technicalDetails" | "productDatasheet" | "technicalInfo" | "foodIndustry" | "intendedUse" | "principle" | "limitations" | "advantages"): string {
+  const es = normalizeProductsLocale(locale) === "es";
+  const copy = {
+    uncategorized: es ? "Todas las soluciones" : "All solutions",
+    technicalDetails: es
+      ? "Detalles técnicos disponibles en la hoja de datos del producto."
+      : "Technical details available in the product datasheet.",
+    productDatasheet: es ? "Hoja de datos del producto" : "Product datasheet",
+    technicalInfo: es ? "Información técnica del producto." : "Technical product information.",
+    foodIndustry: es ? "Industria alimentaria" : "Food industry",
+    intendedUse: es ? "Consulta la hoja de datos para el uso previsto." : "Consult the datasheet for intended use.",
+    principle: es ? "Consulta la hoja de datos para el principio del ensayo." : "Consult the datasheet for assay principle.",
+    limitations: es ? "Consulta la hoja de datos para las limitaciones del producto." : "Consult the datasheet for product limitations.",
+    advantages: es ? "Consulta la hoja de datos para las ventajas clave." : "Consult the datasheet for key advantages.",
+  };
+  return copy[key];
+}
+
+async function fetchProductsApi<T>(path: string, locale?: string): Promise<T> {
   if (!API.apiwebsite.baseUrl) {
     throw new Error("NEXT_PUBLIC_APIWEBSITE_URL is not configured");
   }
 
-  const response = await fetch(`${API.apiwebsite.baseUrl}${path}`, {
+  const response = await fetch(`${API.apiwebsite.baseUrl}${withLocale(path, locale)}`, {
     headers: API.apiwebsite.headers(),
     cache: "no-store",
   });
@@ -151,21 +183,20 @@ function toItems(items?: SolutionItemRef[] | null): SolutionContent["pcrKits"] {
   }));
 }
 
-function getCatalogDescription(detail: PcrKitFoodDetail): string {
+function getCatalogDescription(detail: PcrKitFoodDetail, locale?: string): string {
   return (
-    detail.producto?.description_eng?.trim() ||
-    detail.producto?.description_esp?.trim() ||
+    detail.producto?.description?.trim() ||
     detail.technical_principle?.trim() ||
     detail.sensitivity?.trim() ||
-    "Technical details available in the product datasheet."
+    productFallback(locale, "technicalDetails")
   );
 }
 
 // ---------------------------------------------------------------------------
 // Public API functions — called directly from components
 // ---------------------------------------------------------------------------
-export async function getIndustryCategories(): Promise<IndustryCategory[]> {
-  return fetchProductsApi<IndustryCategory[]>("/products/industry-categories");
+export async function getIndustryCategories(locale?: string): Promise<IndustryCategory[]> {
+  return fetchProductsApi<IndustryCategory[]>("/products/industry-categories", locale);
 }
 
 // ---------------------------------------------------------------------------
@@ -196,7 +227,6 @@ function wireCommercialCategories(kit: PcrKitFoodWithCategories): CommercialCate
 
 /** When commercial_categories is [] (empty pivot / no seed), still list kits under one tab */
 const UNCATEGORIZED_TAB_ID = "uncategorized";
-const UNCATEGORIZED_TAB_LABEL = "All solutions";
 
 export interface AllProductsResult {
   byCategory: Record<string, IndustrialCatalogItem[]>;
@@ -207,8 +237,8 @@ export interface AllProductsResult {
  * Single-call fetch of ALL products with their commercial categories (`commercial_categories` on each kit).
  * Returns products grouped by category UUID + a lookup of category names.
  */
-export async function getAllProductsByCategory(): Promise<AllProductsResult> {
-  const raw = await fetchProductsApi<unknown>("/products/pcr-kit-food/with-categories");
+export async function getAllProductsByCategory(locale?: string): Promise<AllProductsResult> {
+  const raw = await fetchProductsApi<unknown>("/products/pcr-kit-food/with-categories", locale);
   if (!Array.isArray(raw)) {
     throw new Error("Products API: with-categories expected `data` to be a JSON array of kits");
   }
@@ -223,7 +253,7 @@ export async function getAllProductsByCategory(): Promise<AllProductsResult> {
     const rawDesc = kit.description?.trim() || "";
     const shortDesc = rawDesc
       ? rawDesc.split(/\n/)[0].slice(0, 200) + (rawDesc.length > 200 ? "…" : "")
-      : "Technical details available in the product datasheet.";
+      : productFallback(locale, "technicalDetails");
 
     const item: IndustrialCatalogItem = {
       uuid: kit.uuid,
@@ -237,7 +267,7 @@ export async function getAllProductsByCategory(): Promise<AllProductsResult> {
     const categoriesForGrouping: CommercialCategory[] =
       wired.length > 0
         ? wired
-        : [{ uuid: UNCATEGORIZED_TAB_ID, nombre: UNCATEGORIZED_TAB_LABEL }];
+        : [{ uuid: UNCATEGORIZED_TAB_ID, nombre: productFallback(locale, "uncategorized") }];
 
     for (const cat of categoriesForGrouping) {
       if (!byCategory[cat.uuid]) byCategory[cat.uuid] = [];
@@ -249,19 +279,20 @@ export async function getAllProductsByCategory(): Promise<AllProductsResult> {
   return { byCategory, categoryNames };
 }
 
-export async function getCategoryCatalogItems(categoryUuid: string): Promise<IndustrialCatalogItem[]> {
+export async function getCategoryCatalogItems(categoryUuid: string, locale?: string): Promise<IndustrialCatalogItem[]> {
   const kits = await fetchProductsApi<PcrKitFoodSimple[]>(
-    `/products/industry-categories/${categoryUuid}/pcr-kit-food`
+    `/products/industry-categories/${categoryUuid}/pcr-kit-food`,
+    locale
   );
 
   const enriched = await Promise.all(
     kits.map(async (kit) => {
       try {
-        const detail = await fetchProductsApi<PcrKitFoodDetail>(`/products/pcr-kit-food/${kit.uuid}`);
+        const detail = await fetchProductsApi<PcrKitFoodDetail>(`/products/pcr-kit-food/${kit.uuid}`, locale);
         return {
           uuid: kit.uuid,
           title: kit.title,
-          description: getCatalogDescription(detail),
+          description: getCatalogDescription(detail, locale),
           targets: kit.targets || detail.microorganisms || "N/A",
           technology: kit.technology || detail.technology || detail.chip_technology || "N/A",
         };
@@ -269,7 +300,7 @@ export async function getCategoryCatalogItems(categoryUuid: string): Promise<Ind
         return {
           uuid: kit.uuid,
           title: kit.title,
-          description: "Technical details available in the product datasheet.",
+          description: productFallback(locale, "technicalDetails"),
           targets: kit.targets || "N/A",
           technology: kit.technology || "N/A",
         };
@@ -285,14 +316,14 @@ export async function getCategoryCatalogItems(categoryUuid: string): Promise<Ind
  * then fetches its full solution datasheet. Resilient to UUID changes after
  * seeders because the lookup key is the stable product name.
  */
-export async function getKitSolutionByTitle(title: string): Promise<SolutionContent | null> {
-  const result = await getAllProductsByCategory();
+export async function getKitSolutionByTitle(title: string, locale?: string): Promise<SolutionContent | null> {
+  const result = await getAllProductsByCategory(locale);
   const all = Object.values(result.byCategory).flat();
   const match = all.find(
     (item) => item.title.trim().toLowerCase() === title.trim().toLowerCase()
   );
   if (!match) return null;
-  return getKitSolution(match.uuid);
+  return getKitSolution(match.uuid, locale);
 }
 
 /** Rows for “Kits & Protocols” tables — GET /products/protocolos */
@@ -310,17 +341,17 @@ export interface ProtocolMatrixRow {
  *
  * @param search Optional filter on related product nombre or code (substring).
  */
-export async function getProtocols(search?: string): Promise<ProtocolMatrixRow[]> {
+export async function getProtocols(search?: string, locale?: string): Promise<ProtocolMatrixRow[]> {
   const qs = search !== undefined && search.trim() !== "" ? `?search=${encodeURIComponent(search.trim())}` : "";
 
-  return fetchProductsApi<ProtocolMatrixRow[]>(`/products/protocolos${qs}`);
+  return fetchProductsApi<ProtocolMatrixRow[]>(`/products/protocolos${qs}`, locale);
 }
 
-export async function getKitSolution(uuid: string): Promise<SolutionContent> {
-  const solution = await fetchProductsApi<PcrKitFoodSolution>(`/products/pcr-kit-food/${uuid}/solution`);
+export async function getKitSolution(uuid: string, locale?: string): Promise<SolutionContent> {
+  const solution = await fetchProductsApi<PcrKitFoodSolution>(`/products/pcr-kit-food/${uuid}/solution`, locale);
 
   return {
-    title: toText(solution.title, "Product datasheet"),
+    title: toText(solution.title, productFallback(locale, "productDatasheet")),
     targetType:
       solution.targetType?.trim() ||
       solution.target_type?.trim() ||
@@ -328,11 +359,11 @@ export async function getKitSolution(uuid: string): Promise<SolutionContent> {
       undefined,
     version: solution.version?.trim() || undefined,
     chips: solution.chips?.length ? solution.chips : ["PCR Kit Food"],
-    description: toSentenceList(solution.description, "Technical product information."),
-    mainIndustries: toSentenceList(solution.mainIndustries, "Food industry"),
-    intendedUse: toSentenceList(solution.intendedUse, "Consult the datasheet for intended use."),
-    principle: toSentenceList(solution.principle, "Consult the datasheet for assay principle."),
-    limitations: toSentenceList(solution.limitations, "Consult the datasheet for product limitations."),
+    description: toSentenceList(solution.description, productFallback(locale, "technicalInfo")),
+    mainIndustries: toSentenceList(solution.mainIndustries, productFallback(locale, "foodIndustry")),
+    intendedUse: toSentenceList(solution.intendedUse, productFallback(locale, "intendedUse")),
+    principle: toSentenceList(solution.principle, productFallback(locale, "principle")),
+    limitations: toSentenceList(solution.limitations, productFallback(locale, "limitations")),
     techSpecs: {
       targets: toText(solution.techSpecs?.targets),
       sensitivity: toText(solution.techSpecs?.sensitivity),
@@ -346,7 +377,7 @@ export async function getKitSolution(uuid: string): Promise<SolutionContent> {
       shelfLife: toText(solution.techSpecs?.shelfLife),
       certifications: toText(solution.techSpecs?.certifications),
     },
-    advantages: toSentenceList(solution.advantages, "Consult the datasheet for key advantages."),
+    advantages: toSentenceList(solution.advantages, productFallback(locale, "advantages")),
     pcrKits: toItems(solution.pcrKits),
     supplies: toItems(solution.supplies),
   };

@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react"; 
+import { useTranslations } from "next-intl";
 
 const CARD_IMG = "/2bacterias_verdes.png";
 const CARD_IMG1 = "/TxA.png";
@@ -18,9 +19,6 @@ const CARD_THEME = {
 // Definimos el tipo para asegurar que Typescript no se queje de la propiedad opcional
 type ModuleItem = {
   id: string;
-  tag: string;
-  title: string;
-  description: string;
   img: string;
   link: string;
   imgWidth?: string; // Propiedad opcional para controlar tamaños individuales
@@ -29,40 +27,30 @@ type ModuleItem = {
 const MODULES: ModuleItem[] = [
   {
     id: "industrial",
-    tag: "Speed",
-    title: "Industrial Microbiology",
-    description: "Decisions in as fast as 3 hours. Replace traditional holds with rapid RNA screening.",
     img: CARD_IMG,
     link: "/industrial",
   },
   {
     id: "custom",
-    tag: "Precision",
-    title: "Customized Molecular",
-    description: "AI-designed molecular assays for your specific needs.",
     img: CARD_IMG3, 
     link: "/customized",
     imgWidth: "w-[40%] md:w-[32%]", // <-- Ancho personalizado para achicar esta imagen
   },
   {
     id: "digital",
-    tag: "Intelligence",
-    title: "Digital Transformation",
-    description: "Trace contamination sources with TxA™ plant mapping.",
     img: CARD_IMG1, 
     link: "/TxA",
   },
   {
     id: "hubs",
-    tag: "Scale",
-    title: "Global Hubs",
-    description: "Local labs delivering advanced molecular services.",
     img: CARD_IMG2, 
     link: "/LabNetwork",
   }
 ];
 
 export default function SystemModules() {
+  const t = useTranslations("Home.Modules");
+
   return (
       <section id="solutions" className="bg-white py-24 lg:py-32 overflow-hidden">
         <div className="mx-auto max-w-7xl px-6">
@@ -70,13 +58,13 @@ export default function SystemModules() {
         {/* TEXTO HEADER */}
         <div className="max-w-4xl mx-auto mb-16 md:mb-24 text-center">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#111111] mb-8 leading-tight">
-              Beyond Testing. <br />
-              <span className="opacity-40">Microbiological Intelligence.</span>
+              {t("title")} <br />
+              <span className="opacity-40">{t("subtitle")}</span>
             </h2>
 
             <div className="max-w-3xl mx-auto space-y-6 text-lg md:text-xl text-gray-600 font-medium leading-relaxed mb-16">
               <p>
-                We are building a future where biological insight is fast, automated, and accessible.
+                {t("intro")}
               </p>
             </div>
         </div>
@@ -105,6 +93,8 @@ export default function SystemModules() {
 }
 
 function Card({ item }: { item: ModuleItem }) {
+  const t = useTranslations("Home.Modules");
+
   return (
     <a 
       href={item.link}
@@ -116,24 +106,24 @@ function Card({ item }: { item: ModuleItem }) {
         {/* Badge */}
         <div className="flex justify-center mb-6">
             <span className={`px-4 py-1.5 rounded-full ${CARD_THEME.badgeBg} backdrop-blur border ${CARD_THEME.badgeBorder} text-[10px] font-bold uppercase tracking-[0.2em] ${CARD_THEME.text}`}>
-               {item.tag}
+               {t(`items.${item.id}.tag`)}
             </span>
         </div>
 
         {/* Título */}
         <h3 className={`text-2xl md:text-3xl font-bold mb-4 ${CARD_THEME.text} tracking-tight leading-tight`}>
-          {item.title}
+          {t(`items.${item.id}.title`)}
         </h3>
         
         {/* Descripción */}
         <p className={`text-sm md:text-[15px] font-medium opacity-70 leading-relaxed max-w-xs mx-auto ${CARD_THEME.text}`}>
-          {item.description}
+          {t(`items.${item.id}.description`)}
         </p>
 
         {/* Link / Botón Hover */}
         <div className="mt-6 flex justify-center opacity-100 transform translate-y-0 lg:opacity-0 lg:translate-y-2 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-300">
            <div className={`flex items-center gap-2 px-6 py-2.5 rounded-full bg-white shadow-lg text-xs font-bold uppercase tracking-widest ${CARD_THEME.text}`}>
-              Explore <ArrowRight className="w-3 h-3" />
+              {t("explore")} <ArrowRight className="w-3 h-3" />
            </div>
         </div>
       </div>
@@ -142,7 +132,7 @@ function Card({ item }: { item: ModuleItem }) {
       <div className="relative mt-6 md:mt-8 w-full flex justify-center items-end">
         <img
           src={item.img}
-          alt={item.title}
+          alt={t(`items.${item.id}.title`)}
           // Usamos item.imgWidth si existe, si no, usa el tamaño normal más compacto que definimos (w-65% en móvil, w-55% en PC)
           className={`${item.imgWidth || "w-[65%] md:w-[55%]"} h-auto object-contain transform translate-y-0 lg:translate-y-4 transition-transform duration-700 lg:group-hover:scale-105 lg:group-hover:translate-y-0`}
         />

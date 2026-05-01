@@ -2,11 +2,13 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link"; // IMPORTAMOS NEXT LINK
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { SUCCESS_STORIES } from "../../industrial/industrialData";
 
 export default function SuccessStories() {
+  const t = useTranslations("Industrial.Success");
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -47,16 +49,16 @@ export default function SuccessStories() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="max-w-2xl">
             <span className="text-[#FF270A] font-bold tracking-widest uppercase text-xs mb-3 block">
-              Proven Impact
+              {t("eyebrow")}
             </span>
             <h2 className="text-4xl md:text-6xl font-extrabold text-[#111111] leading-[1.1] tracking-tight">
-              Real problems. <br />
-              <span className="text-gray-400">Real solutions.</span>
+              {t("titleA")} <br />
+              <span className="text-gray-400">{t("titleB")}</span>
             </h2>
           </div>
           <div className="max-w-md md:text-right pb-1">
             <p className="text-gray-500 text-lg font-medium leading-relaxed">
-              From improve productivity, reducing warehouse costs to preventing recalls. See how industry leaders are leveraging our ecosystem.
+              {t("body")}
             </p>
           </div>
         </div>
@@ -114,7 +116,7 @@ export default function SuccessStories() {
                     <div className="absolute inset-0 z-0">
                       <Image 
                         src={story.image} 
-                        alt={story.title} 
+                        alt={t(`stories.${story.id}.title`)} 
                         fill 
                         className="object-cover transition-transform duration-700 group-hover/card:scale-105"
                       />
@@ -125,27 +127,27 @@ export default function SuccessStories() {
                     <div className="relative z-20 h-full flex flex-col justify-between p-8 md:p-12 max-w-2xl">
                        <div className="flex justify-between items-start">
                          <span className="px-4 py-1.5 rounded-full bg-[#FF270A] text-white text-xs font-bold uppercase tracking-widest shadow-lg backdrop-blur-sm">
-                           Featured Business Case
+                           {t("featured")}
                          </span>
                        </div>
 
                        <div>
                          <div className="flex items-center gap-3 mb-4">
-                            <span className="text-white/90 font-bold uppercase tracking-widest text-sm drop-shadow-md">{story.client}</span>
+                            <span className="text-white/90 font-bold uppercase tracking-widest text-sm drop-shadow-md">{t(`stories.${story.id}.client`)}</span>
                          </div>
                          <h3 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
-                           {story.metric}
+                           {t(`stories.${story.id}.metric`)}
                          </h3>
                          <p className="text-lg md:text-xl font-bold text-white/95 mb-4 drop-shadow-md">
-                           {story.title}
+                           {t(`stories.${story.id}.title`)}
                          </p>
                          <p className="text-sm md:text-base font-medium leading-relaxed text-gray-200 mb-6 md:mb-8 line-clamp-3 drop-shadow-sm">
-                           {story.description}
+                           {"description" in story ? t(`stories.${story.id}.description`) : ""}
                          </p>
                          
                          <div className="pt-6 border-t border-white/20">
                             <div className="text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-white hover:text-[#FF270A] transition-colors">
-                                Read Case Study <ArrowRight className="w-4 h-4" />
+                                {t("readCase")} <ArrowRight className="w-4 h-4" />
                             </div>
                          </div>
                        </div>
@@ -157,7 +159,7 @@ export default function SuccessStories() {
                     <div className="absolute inset-0 z-0">
                       <Image 
                         src={story.image} 
-                        alt={story.title} 
+                        alt={t(`stories.${story.id}.title`)} 
                         fill 
                         className="object-cover transition-transform duration-700 group-hover/card:scale-105"
                       />
@@ -170,7 +172,7 @@ export default function SuccessStories() {
                         <div className="flex justify-between items-start mb-6">
                           <div className="flex flex-col">
                             <span className="text-[10px] font-bold uppercase tracking-widest text-[#FF270A] mb-1">
-                              {story.client}
+                              {t(`stories.${story.id}.client`)}
                             </span>
                             <div className="flex gap-2">
                               {story.tags.map(tag => (
@@ -185,21 +187,21 @@ export default function SuccessStories() {
                         {/* Métrica Central */}
                         <div className="flex-1 flex flex-col justify-center mb-4">
                           <span className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-2 drop-shadow-md">
-                            {story.metric}
+                            {t(`stories.${story.id}.metric`)}
                           </span>
                         </div>
 
                         {/* Footer con alturas mínimas fijas para garantizar alineación perfecta */}
                         <div className="flex flex-col justify-end">
                           <h4 className="text-2xl md:text-3xl font-bold text-white mb-3 leading-tight drop-shadow-sm line-clamp-3 min-h-[90px] md:min-h-[108px]">
-                            {story.title}
+                            {t(`stories.${story.id}.title`)}
                           </h4>
                           <p className="text-sm font-medium leading-relaxed text-gray-300 mb-6 md:mb-8 line-clamp-3 min-h-[66px] md:min-h-[68px]">
-                            {story.description}
+                            {t(`stories.${story.id}.description`)}
                           </p>
                           <div className="pt-6 border-t border-white/20 mt-auto">
                               <div className="text-xs font-bold uppercase tracking-widest flex items-center gap-2 text-white group-hover/card:text-[#FF270A] transition-colors">
-                                Read success story <ArrowRight className="w-3 h-3 group-hover/card:translate-x-1 transition-transform" />
+                                {t("readSuccess")} <ArrowRight className="w-3 h-3 group-hover/card:translate-x-1 transition-transform" />
                               </div>
                           </div>
                         </div>
@@ -218,7 +220,7 @@ export default function SuccessStories() {
              onClick={() => scroll("left")} 
              disabled={!canScrollLeft}
              className={`w-10 h-10 rounded-full bg-[#111111] text-white flex items-center justify-center transition-all active:scale-95 ${!canScrollLeft ? 'opacity-30 cursor-not-allowed' : 'opacity-100 shadow-lg'}`}
-             aria-label="Scroll left"
+             aria-label={t("scrollLeft")}
            >
              <ChevronLeft className="w-5 h-5" />
            </button>
@@ -226,7 +228,7 @@ export default function SuccessStories() {
              onClick={() => scroll("right")} 
              disabled={!canScrollRight}
              className={`w-10 h-10 rounded-full bg-[#111111] text-white flex items-center justify-center transition-all active:scale-95 ${!canScrollRight ? 'opacity-30 cursor-not-allowed' : 'opacity-100 shadow-lg'}`}
-             aria-label="Scroll right"
+             aria-label={t("scrollRight")}
            >
              <ChevronRight className="w-5 h-5" />
            </button>

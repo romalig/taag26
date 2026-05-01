@@ -12,16 +12,8 @@ import {
   ChevronDown,
   ArrowRight
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { WORKFLOW_STEPS } from "../../industrial/industrialData";
-
-const SHORT_LABELS = [
-  "AiGOR",
-  "Food testing",
-  "Environmental testing",
-  "Environmental protocols",
-  "Microorganisms",
-  "TxA Platform"
-];
 
 const IMAGE_CONFIG = {
   0: { desktop: "/onebacteria4.png", mobile: "/onebacteria5-mobile.png" },
@@ -38,6 +30,7 @@ const IMAGE_CONFIG = {
 type PcrVariant = 'ZERO' | 'XPRESS';
 
 export default function HowItWorks() {
+  const t = useTranslations("Industrial.How");
   const [activeStep, setActiveStep] = useState(0);
   const [prevStep, setPrevStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -119,7 +112,8 @@ export default function HowItWorks() {
   };
 
   const currentData = WORKFLOW_STEPS[activeStep];
-  const label = SHORT_LABELS[activeStep];
+  const label = t.raw("shortLabels")[activeStep];
+  const currentCopy = t.raw(`steps.${currentData.id}`) as {step: string; title: string; description: string};
   const currentImgs = getStepImages(activeStep, pcrVariant);
   const prevImgs = getStepImages(prevStep, prevPcrVariant);
 
@@ -161,9 +155,9 @@ export default function HowItWorks() {
         {/* HEADER SECTION */}
         <div className="px-10 md:px-20 mb-12 md:mb-26">
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight text-left leading-tight">
-            Take a closer look into the future, discover{" "}
+            {t("headline")}{" "}
             <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-[#FF270A] bg-clip-text text-transparent"> 
-              AiGOR solutions.
+              {t("headlineAccent")}
             </span>
           </h2>
         </div>
@@ -178,19 +172,19 @@ export default function HowItWorks() {
              {isAnimating && (
                <div key={`prev-${prevStep}-${prevPcrVariant}`} className="absolute inset-0 z-0 animate-slideOutLeft">
                   <div className="block md:hidden relative w-full h-full">
-                    <Image src={prevImgs.mobile} alt="Previous" fill className="object-cover object-center" priority />
+                    <Image src={prevImgs.mobile} alt={t("previousImage")} fill className="object-cover object-center" priority />
                   </div>
                   <div className="hidden md:block relative w-full h-full">
-                    <Image src={prevImgs.desktop} alt="Previous" fill className="object-cover object-center" priority />
+                    <Image src={prevImgs.desktop} alt={t("previousImage")} fill className="object-cover object-center" priority />
                   </div>
                </div>
              )}
              <div key={`current-${activeStep}-${pcrVariant}`} className="absolute inset-0 z-10 animate-slideInRight">
                 <div className="block md:hidden relative w-full h-full">
-                  <Image src={currentImgs.mobile} alt="Current" fill className="object-cover object-center" priority />
+                  <Image src={currentImgs.mobile} alt={t("currentImage")} fill className="object-cover object-center" priority />
                 </div>
                 <div className="hidden md:block relative w-full h-full">
-                  <Image src={currentImgs.desktop} alt="Current" fill className="object-cover object-center" priority />
+                  <Image src={currentImgs.desktop} alt={t("currentImage")} fill className="object-cover object-center" priority />
                   <div className="absolute inset-0 bg-black/10" />
                 </div>
              </div>
@@ -203,10 +197,10 @@ export default function HowItWorks() {
                 <div className="flex-1 flex flex-col items-center text-center">
                    <div className="mb-3">
                       <h3 className="text-lg font-bold text-white tracking-wide leading-tight">
-                        {label}. <span className="text-white/60 font-normal block mt-1 text-sm">{currentData.title}</span>
+                        {label}. <span className="text-white/60 font-normal block mt-1 text-sm">{currentCopy.title}</span>
                       </h3>
                    </div>
-                   <p className="text-sm text-gray-400 leading-relaxed line-clamp-4 px-2">{currentData.description}</p>
+                   <p className="text-sm text-gray-400 leading-relaxed line-clamp-4 px-2">{currentCopy.description}</p>
                    {activeStep === 3 && (
                      <div className="flex gap-4 mt-4 pt-4 border-t border-white/10 w-full justify-center">
                        <button onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('ZERO'); }} className={`text-xs font-bold tracking-widest uppercase transition-colors px-3 py-2 rounded-lg ${pcrVariant === 'ZERO' ? 'bg-[#FF270A]/10 text-[#FF270A]' : 'text-white/50 hover:bg-white/5'}`}>ZERO</button>
@@ -238,14 +232,15 @@ export default function HowItWorks() {
              <div className="flex flex-col gap-3 w-full pointer-events-auto">
                {WORKFLOW_STEPS.map((step, index) => {
                  const isActive = activeStep === index;
-                 const desktopLabel = SHORT_LABELS[index];
+                 const stepCopy = t.raw(`steps.${step.id}`) as {step: string; title: string; description: string};
+                 const desktopLabel = t.raw("shortLabels")[index];
                  return (
                    <div key={index} className="transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]">
                      {isActive ? (
                        <div className="bg-[#1D1D1F]/70 backdrop-blur-xl border border-white/10 rounded-[1.5rem] p-6 w-[380px] shadow-2xl animate-scaleIn origin-top-left">
                          <div className="flex flex-col gap-3">
-                           <h3 className="text-lg font-bold text-white tracking-wide">{desktopLabel}. <span className="text-white font-medium">{step.title}</span></h3>
-                           <p className="text-sm font-medium text-white leading-relaxed opacity-90">{step.description}</p>
+                           <h3 className="text-lg font-bold text-white tracking-wide">{desktopLabel}. <span className="text-white font-medium">{stepCopy.title}</span></h3>
+                           <p className="text-sm font-medium text-white leading-relaxed opacity-90">{stepCopy.description}</p>
                            {index === 3 && (
                              <div className="flex gap-6 mt-2 pt-4 border-t border-white/10">
                                <button onClick={(e) => { e.stopPropagation(); handlePcrVariantChange('ZERO'); }} className={`group/btn flex flex-col items-start gap-1 transition-all ${pcrVariant === 'ZERO' ? 'opacity-100' : 'opacity-50 hover:opacity-100'}`}>
@@ -287,11 +282,11 @@ export default function HowItWorks() {
         >
             <div className="relative z-10 max-w-2xl px-4">
                 <h3 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6 drop-shadow-2xl">
-                  Ready to explore the future?
+                  {t("futureTitle")}
                 </h3>
                 <p className="text-lg md:text-xl text-white/80 mb-10 leading-relaxed drop-shadow-md">
-                   Experience the power of RNA-based detection. <br className="hidden md:block"/>
-                   Sensitivity amplified. Time to results redefined.
+                   {t("futureBodyA")} <br className="hidden md:block"/>
+                   {t("futureBodyB")}
                 </p>
 
                 <button 
@@ -299,7 +294,7 @@ export default function HowItWorks() {
                   className="px-10 py-5 bg-white text-[#050505] rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-all shadow-[0_0_30px_-5px_rgba(255,255,255,0.2)] hover:shadow-[0_0_50px_-10px_#FF270A] flex items-center gap-3 mx-auto group scale-100 hover:scale-105 duration-300 relative overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center gap-3">
-                    Explore AiGOR Products
+                    {t("explore")}
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </button>

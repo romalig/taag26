@@ -3,8 +3,10 @@
 import Image from "next/image"; 
 import { Check, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function MilaSection() {
+  const t = useTranslations("Customized.Mila");
   
   // Estado y Ref para detectar si la tarjeta de "Barra" está visible
   const [isBarActive, setIsBarActive] = useState(false);
@@ -39,15 +41,14 @@ export default function MilaSection() {
         {/* Título */}
         <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-10 font-sora">
           <span className="text-aurora-clip inline-block">
-            Unlock the full spectrum of diagnostic potential.
+            {t("title")}
           </span>
         </h2>
 
         {/* Texto descriptivo: HOOK + TEXTO ORIGINAL */}
         <div className="space-y-6 text-lg md:text-xl text-[#111111]/70 font-medium leading-relaxed max-w-3xl mx-auto">
           <p>
-            MILA, our AI-driven platform navigates through millions of genomic combinations to design and select the precise primer and probe set for your targets.
-            For any application, MILA ensures the best PCR kits are achieved, fast and effortless.
+            {t("body")}
           </p>
         </div>
       </div>
@@ -69,9 +70,9 @@ export default function MilaSection() {
              </div>
           </div>
           <div className="px-2">
-            <h3 className="text-lg font-bold text-[#111111] mb-2 font-sora">Ai-Driven Intelligence.</h3>
+            <h3 className="text-lg font-bold text-[#111111] mb-2 font-sora">{t("cards.ai.title")}</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
-              MILA analyzes genomic data with a proprietary neural network, identifying patterns invisible to traditional design methods.
+              {t("cards.ai.body")}
             </p>
           </div>
         </div>
@@ -84,9 +85,9 @@ export default function MilaSection() {
             </div>
           </div>
           <div className="px-2">
-            <h3 className="text-lg font-bold text-[#111111] mb-2 font-sora">Precision Selection.</h3>
+            <h3 className="text-lg font-bold text-[#111111] mb-2 font-sora">{t("cards.precision.title")}</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
-              It doesn't just design; it selects. MILA filters through noise to find the single best primer/probe set for your target.
+              {t("cards.precision.body")}
             </p>
           </div>
         </div>
@@ -140,9 +141,9 @@ export default function MilaSection() {
 
           </div>
           <div className="px-2">
-            <h3 className="text-lg font-bold text-[#111111] mb-2 font-sora">Highly Multiplex Design.</h3>
+            <h3 className="text-lg font-bold text-[#111111] mb-2 font-sora">{t("cards.multiplex.title")}</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
-              Simultaneously detect multiple targets in a single reaction, maximizing efficiency without losing sensitivity.
+              {t("cards.multiplex.body")}
             </p>
           </div>
         </div>
@@ -164,16 +165,16 @@ export default function MilaSection() {
                         <Zap className="w-4 h-4 text-green-400 fill-current" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-[10px] text-white font-bold uppercase">Design Complete</span>
-                        <span className="text-[8px] text-white/50">100% accurate</span>
+                        <span className="text-[10px] text-white font-bold uppercase">{t("cards.fast.complete")}</span>
+                        <span className="text-[8px] text-white/50">{t("cards.fast.accurate")}</span>
                     </div>
                 </div>
             </div>
           </div>
           <div className="px-2">
-            <h3 className="text-lg font-bold text-[#111111] mb-2 font-sora">Fast & Effortless.</h3>
+            <h3 className="text-lg font-bold text-[#111111] mb-2 font-sora">{t("cards.fast.title")}</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
-              From concept to kit design in record time. Reduce months of R&D to a simple, streamlined process.
+              {t("cards.fast.body")}
             </p>
           </div>
         </div>

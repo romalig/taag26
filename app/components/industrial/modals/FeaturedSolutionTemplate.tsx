@@ -6,11 +6,25 @@ import Link from "next/link";
 import { ArrowRight, Timer, Activity, Zap, Mail, CheckCircle2, ArrowRightLeft, Loader2, WifiOff } from "lucide-react";
 import { useModal } from "../ModalProvider";
 import { useCTA } from "../../CTAProvider";
+import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { getKitSolutionByTitle } from "@/app/lib/products-api";
 import SolutionTemplate from "./SolutionTemplate";
 import type { SolutionContent } from "./types";
 
+function protocolComparisonColumnTitle(
+  rawTitle: string,
+  t: (key: string) => string
+): string {
+  if (rawTitle === "PROTOCOL ZERO") return t("empProtocolZero");
+  if (rawTitle === "PROTOCOL XPRESS") return t("empProtocolXpress");
+  return rawTitle;
+}
+
 export default function FeaturedSolutionTemplate({ data }: { data: any }) {
+  const tm = useTranslations("Industrial.FeaturedModal");
+  const tmBanner = useTranslations("Industrial.FeaturedModal.aigorBanner");
+  const locale = useLocale();
   const { closeModal, openModal } = useModal();
   const { openMeeting } = useCTA();
   const [loadingTitle, setLoadingTitle] = useState<string | null>(null);
@@ -24,12 +38,12 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
     data?.eleviaProducts?.main?.forEach((p: { apiTitle?: string }) => { if (p.apiTitle) titles.push(p.apiTitle); });
     data?.eleviaProducts?.upcoming?.forEach((p: { apiTitle?: string }) => { if (p.apiTitle) titles.push(p.apiTitle); });
     titles.forEach((title) => {
-      const p = getKitSolutionByTitle(title)
+      const p = getKitSolutionByTitle(title, locale)
         .then((d) => { if (d) cacheRef.current[title] = d; return d; })
         .catch(() => null);
       promiseRef.current[title] = p;
     });
-  }, [data]);
+  }, [data, locale]);
 
   const handleLearnMore = (apiTitle: string) => {
     if (!apiTitle) return;
@@ -42,7 +56,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
     setLoadingTitle(apiTitle);
     const p =
       promiseRef.current[apiTitle] ??
-      getKitSolutionByTitle(apiTitle).then((d) => {
+      getKitSolutionByTitle(apiTitle, locale).then((d) => {
         if (d) cacheRef.current[apiTitle] = d;
         return d;
       });
@@ -76,7 +90,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
       <div className={`px-8 md:px-12 pt-16 md:pt-24 bg-white w-full ${data.hasAigorBanner ? 'pb-12 md:pb-20' : 'pb-4 md:pb-8'}`}>
         <div className="max-w-5xl mx-auto w-full">
             <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs md:text-sm mb-6 block">
-               Featured Solution
+               {tm("featuredBadge")}
             </span>
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
                {data.title}
@@ -97,10 +111,10 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
             <div className="max-w-5xl mx-auto w-full flex flex-col items-center">
                 <div className="relative z-10 mb-14 text-center w-full max-w-3xl mx-auto flex flex-col items-center">
                    <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-[#d9467c] mb-4">
-                     Powered by AiGOR
+                     {tmBanner("eyebrow")}
                    </span>
                    <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-white leading-snug">
-                     Bypassing biological limits through advanced RNA-based detection.
+                     {tmBanner("headline")}
                    </h3>
                 </div>
 
@@ -112,7 +126,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                         AiGOR
                       </h2>
                       <span className="mt-3 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.25em] text-[#FF270A]">
-                        RNA TECHNOLOGY
+                        {tmBanner("chipSubtitle")}
                       </span>
                    </div>
                 </div>
@@ -120,21 +134,21 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 w-full z-10 mb-12">
                   <div className="flex flex-col items-center text-center">
                     <Timer className="w-8 h-8 md:w-10 md:h-10 text-white mb-5" strokeWidth={1.5} />
-                    <p className="text-sm text-white/70 leading-relaxed max-w-[160px]"><span className="font-bold text-white block mb-1">Results in 3 hours.</span> Skip long enrichments.</p>
+                    <p className="text-sm text-white/70 leading-relaxed max-w-[160px]"><span className="font-bold text-white block mb-1">{tmBanner("statTimeStrong")}</span> {tmBanner("statTimeRest")}</p>
                   </div>
                   <div className="flex flex-col items-center text-center">
                     <Activity className="w-8 h-8 md:w-10 md:h-10 text-white mb-5" strokeWidth={1.5} />
-                    <p className="text-sm text-white/70 leading-relaxed max-w-[160px]"><span className="font-bold text-white block mb-1">1 CFU/sample.</span> Maximum precision.</p>
+                    <p className="text-sm text-white/70 leading-relaxed max-w-[160px]"><span className="font-bold text-white block mb-1">{tmBanner("statCfuStrong")}</span> {tmBanner("statCfuRest")}</p>
                   </div>
                   <div className="flex flex-col items-center text-center">
                     <Zap className="w-8 h-8 md:w-10 md:h-10 text-white mb-5" strokeWidth={1.5} />
-                    <p className="text-sm text-white/70 leading-relaxed max-w-[160px]"><span className="font-bold text-white block mb-1">10,000x sensitivity.</span> vs. real-time PCR.</p>
+                    <p className="text-sm text-white/70 leading-relaxed max-w-[160px]"><span className="font-bold text-white block mb-1">{tmBanner("statSensStrong")}</span> {tmBanner("statSensRest")}</p>
                   </div>
                   <div className="flex flex-col items-center text-center">
                     <div className="flex items-center justify-center h-8 md:h-10 mb-5">
                       <span className="text-base md:text-lg font-bold text-white tracking-widest uppercase">RNA</span>
                     </div>
-                    <p className="text-sm text-white/70 leading-relaxed max-w-[160px]"><span className="font-bold text-white block mb-1">RNA detection.</span> Targets active cells.</p>
+                    <p className="text-sm text-white/70 leading-relaxed max-w-[160px]"><span className="font-bold text-white block mb-1">{tmBanner("statRnaStrong")}</span> {tmBanner("statRnaRest")}</p>
                   </div>
                 </div>
 
@@ -143,7 +157,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                   onClick={closeModal}
                   className="inline-flex items-center gap-3 text-sm md:text-base font-semibold text-white hover:text-[#FF270A] transition-colors z-10 py-2"
                 >
-                  Explore AiGOR Technology <ArrowRight className="w-5 h-5" />
+                  {tmBanner("exploreLink")} <ArrowRight className="w-5 h-5" />
                 </Link>
             </div>
          </div>
@@ -156,7 +170,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
           {/* SOLUTION OVERVIEW */}
           <div className="mb-20 w-full">
              <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
-               Solution Overview
+               {tm("solutionOverview")}
              </h3>
              <p className="text-base md:text-lg text-gray-600 leading-relaxed max-w-4xl">
                {data.description}
@@ -179,7 +193,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                    <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
                       <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
                          <h4 className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-6 flex items-center gap-3">
-                            <Zap className="w-5 h-5" /> {data.preventiveProduct.list1Title || "Pathogens Detected"}
+                            <Zap className="w-5 h-5" /> {data.preventiveProduct.list1Title || tm("fallbackPathogens")}
                          </h4>
                          <ul className="space-y-4">
                             {data.preventiveProduct.list1.map((item: string, i: number) => (
@@ -191,7 +205,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                       </div>
                       <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
                          <h4 className="text-blue-400 font-bold uppercase tracking-widest text-xs mb-6 flex items-center gap-3">
-                            <Activity className="w-5 h-5" /> {data.preventiveProduct.list2Title || "Indicators Detected"}
+                            <Activity className="w-5 h-5" /> {data.preventiveProduct.list2Title || tm("fallbackIndicators")}
                          </h4>
                          <ul className="space-y-4">
                             {data.preventiveProduct.list2.map((item: string, i: number) => (
@@ -211,7 +225,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
              <div className="mb-24 w-full">
                 <div className="mb-10 max-w-4xl">
                    <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">
-                     Welcome to the future.<br/>Meet Elevia Products.
+                     {tm("welcomeTitleA")}<br/>{tm("welcomeTitleB")}
                    </h3>
                    <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                      {data.eleviaProducts.intro}
@@ -238,10 +252,10 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                                 className="inline-flex items-center gap-2 text-sm font-bold text-[#FFFFFF] hover:text-white/70 transition-colors group disabled:opacity-60"
                               >
                                 {loadingTitle === prod.apiTitle
-                                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading…</>
+                                  ? <><Loader2 className="w-4 h-4 animate-spin" /> {tm("loading")}</>
                                   : errorTitle === prod.apiTitle
-                                  ? <><WifiOff className="w-4 h-4" /> Unavailable</>
-                                  : <>Learn more <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" /></>}
+                                  ? <><WifiOff className="w-4 h-4" /> {tm("unavailable")}</>
+                                  : <>{tm("learnMore")} <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" /></>}
                               </button>
                            </div>
                         </div>
@@ -265,10 +279,10 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                                className="inline-flex items-center gap-2 text-sm font-bold text-[#FFFFFF] hover:text-white/70 transition-colors group disabled:opacity-60"
                              >
                                {loadingTitle === prod.apiTitle
-                                 ? <><Loader2 className="w-4 h-4 animate-spin" /> Loading…</>
+                                 ? <><Loader2 className="w-4 h-4 animate-spin" /> {tm("loading")}</>
                                  : errorTitle === prod.apiTitle
-                                 ? <><WifiOff className="w-4 h-4" /> Unavailable</>
-                                 : <>Learn more <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" /></>}
+                                 ? <><WifiOff className="w-4 h-4" /> {tm("unavailable")}</>
+                                 : <>{tm("learnMore")} <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" /></>}
                              </button>
                            )}
 
@@ -289,7 +303,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
           {/* KEY ADVANTAGES */}
           <div className="mb-24 w-full">
              <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-8">
-               Key Advantages
+               {tm("keyAdvantages")}
              </h3>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {data.advantages.map((adv: string, i: number) => {
@@ -312,7 +326,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
           {data.matrices && data.matrices.length > 0 && (
              <div className="mb-16 w-full pt-8 border-t border-gray-100">
                 <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-8">
-                  Validated Matrices
+                  {tm("validatedMatrices")}
                 </h3>
                 <div className="flex flex-wrap gap-3 mb-10">
                    {data.matrices.map((mat: string, i: number) => (
@@ -344,20 +358,34 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                         <th className="py-4 pr-4 w-[25%]"></th>
                         <th className="py-4 px-4 w-[37.5%]">
                           <div className="flex items-center gap-3">
-                            <span className="font-bold text-[#111111] text-sm tracking-wide">{data.table.col1.title}</span>
+                            <span className="font-bold text-[#111111] text-sm tracking-wide">
+                              {protocolComparisonColumnTitle(data.table.col1.title, tm)}
+                            </span>
                             {data.table.col1.image && (
                               <div className="relative w-16 h-6 shrink-0">
-                                 <Image src={data.table.col1.image} alt="Col 1 Logo" fill className="object-contain object-left" />
+                                 <Image
+                                   src={data.table.col1.image}
+                                   alt=""
+                                   fill
+                                   className="object-contain object-left"
+                                 />
                               </div>
                             )}
                           </div>
                         </th>
                         <th className="py-4 pl-4 w-[37.5%]">
                           <div className="flex items-center gap-3">
-                            <span className="font-bold text-[#111111] text-sm tracking-wide">{data.table.col2.title}</span>
+                            <span className="font-bold text-[#111111] text-sm tracking-wide">
+                              {protocolComparisonColumnTitle(data.table.col2.title, tm)}
+                            </span>
                             {data.table.col2.image && (
                               <div className="relative w-20 h-6 shrink-0">
-                                 <Image src={data.table.col2.image} alt="Col 2 Logo" fill className="object-contain object-left" />
+                                 <Image
+                                   src={data.table.col2.image}
+                                   alt=""
+                                   fill
+                                   className="object-contain object-left"
+                                 />
                               </div>
                             )}
                           </div>
@@ -376,7 +404,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                   </table>
                 </div>
                 <p className="md:hidden text-xs text-gray-400 flex items-center gap-1.5 mt-2 pl-1">
-                   <ArrowRightLeft className="w-3 h-3" /> Swipe left to view all columns
+                   <ArrowRightLeft className="w-3 h-3" /> {tm("swipeColumns")}
                 </p>
              </div>
           )}
@@ -385,17 +413,17 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
           {data.orderingInfo && data.orderingInfo.length > 0 && (
              <div className="mb-6 w-full pt-8 border-t border-gray-100">
                 <h3 className="text-3xl md:text-4xl font-extrabold text-[#111111] tracking-tight leading-tight mb-8">
-                  Ordering Information
+                  {tm("orderingTitle")}
                 </h3>
                 <div className="overflow-x-auto pb-4">
                   <table className="w-full text-left border-collapse min-w-[850px]">
                     <thead>
                       <tr className="border-b-2 border-[#111111]">
-                        <th className="py-4 pr-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[12%]">Cat. No</th>
-                        <th className="py-4 px-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[25%]">Product</th>
-                        <th className="py-4 px-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[12%]">Size</th>
-                        <th className="py-4 px-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[12%]">Format</th>
-                        <th className="py-4 pl-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[39%]">Description</th>
+                        <th className="py-4 pr-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[12%]">{tm("orderingCatNo")}</th>
+                        <th className="py-4 px-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[25%]">{tm("orderingProduct")}</th>
+                        <th className="py-4 px-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[12%]">{tm("orderingSize")}</th>
+                        <th className="py-4 px-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[12%]">{tm("orderingFormat")}</th>
+                        <th className="py-4 pl-4 font-bold text-[#111111] text-[10px] uppercase tracking-widest w-[39%]">{tm("orderingDescription")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -412,7 +440,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
                   </table>
                 </div>
                 <p className="md:hidden text-xs text-gray-400 flex items-center gap-1.5 mt-2 pl-1">
-                   <ArrowRightLeft className="w-3 h-3" /> Swipe left to view all columns
+                   <ArrowRightLeft className="w-3 h-3" /> {tm("swipeColumns")}
                 </p>
              </div>
           )}
@@ -454,7 +482,7 @@ export default function FeaturedSolutionTemplate({ data }: { data: any }) {
            className="w-full md:w-auto py-4 px-8 bg-[#111111] hover:bg-[#FF270A] text-white rounded-full text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-1"
          >
             <Mail className="w-5 h-5" />
-            Contact Us
+            {tm("contactUs")}
          </button>
       </div>
 

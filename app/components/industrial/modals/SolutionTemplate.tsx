@@ -3,17 +3,52 @@
 import { useState } from "react";
 import { CheckCircle2, FlaskConical, Download, Mail, ArrowRightLeft, Loader2, AlertCircle } from "lucide-react";
 import { pdf } from "@react-pdf/renderer";
-import DatasheetDocument from "./DatasheetDocument";
+import DatasheetDocument, { type DatasheetPdfLabels } from "./DatasheetDocument";
 import { SolutionContent } from "./types";
 import { hasDisplayValue } from "@/app/lib/spec-values";
 import InlineFormattedText from "@/app/components/shared/InlineFormattedText";
 import { useCTA } from "@/app/components/CTAProvider";
+import { useTranslations } from "next-intl";
 
 export default function SolutionTemplate({ data }: { data: SolutionContent }) {
+  const tm = useTranslations("Industrial.DatasheetModal");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const { openMeeting } = useCTA();
   const showSensitivity = hasDisplayValue(data.techSpecs.sensitivity);
   const showTargetType = hasDisplayValue(data.targetType);
+  const pdfLabels: DatasheetPdfLabels = {
+    technicalDataSheet: tm("technicalDataSheet"),
+    targets: tm("targets"),
+    mainIndustries: tm("mainIndustries"),
+    sensitivity: tm("sensitivity"),
+    intendedUse: tm("intendedUse"),
+    keyAdvantages: tm("keyAdvantages"),
+    principle: tm("principle"),
+    industries: tm("industries"),
+    limitations: tm("limitations"),
+    technicalSpecifications: tm("technicalSpecifications"),
+    microorganisms: tm("microorganisms"),
+    validatedMatrices: tm("validatedMatrices"),
+    time: tm("time"),
+    technology: tm("technology"),
+    validatedThermocyclers: tm("validatedThermocyclers"),
+    detectionChemistry: tm("detectionChemistry"),
+    detectionChannel: tm("detectionChannel"),
+    storageConditions: tm("storageConditions"),
+    temperature: tm("temperature"),
+    shelfLife: tm("shelfLife"),
+    certifications: tm("certifications"),
+    orderInformation: tm("orderInformation"),
+    catNo: tm("catNo"),
+    name: tm("name"),
+    size: tm("size"),
+    format: tm("format"),
+    kitContent: tm("kitContent"),
+    additionalSupplies: tm("additionalSupplies"),
+    product: tm("product"),
+    description: tm("description"),
+    pageOf: (page, total) => tm("pageOf", { page, total }),
+  };
 
   if (!data) return null;
 
@@ -25,7 +60,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
     
     try {
       // 1. Generamos el PDF en memoria
-      const blob = await pdf(<DatasheetDocument data={data} />).toBlob();
+      const blob = await pdf(<DatasheetDocument data={data} labels={pdfLabels} />).toBlob();
       const url = URL.createObjectURL(blob);
       
       // 2. Creamos un enlace HTML "invisible"
@@ -46,7 +81,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
 
     } catch (error) {
       console.error("PDF Error:", error);
-      alert("Error generating PDF. Please try again.");
+      alert(tm("pdfError"));
     } finally {
       setIsGeneratingPdf(false);
     }
@@ -63,7 +98,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             {/* ETIQUETA ROJA */}
             <div className="mb-4">
               <span className="text-[#FF270A] font-bold uppercase tracking-widest text-[10px] md:text-xs">
-                Technical Data Sheet
+                {tm("technicalDataSheet")}
               </span>
             </div>
             
@@ -99,20 +134,20 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             }`}
           >
             <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Targets</span>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{tm("targets")}</span>
               <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
                 <InlineFormattedText value={data.techSpecs.targets} />
               </span>
             </div>
             <div>
-              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Main industries</span>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{tm("mainIndustries")}</span>
               <span className="block text-base md:text-lg font-bold text-[#111111] leading-tight">
                 {data.mainIndustries.join(", ")}
               </span>
             </div>
             {showSensitivity ? (
               <div>
-                <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Sensitivity</span>
+                <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{tm("sensitivity")}</span>
                 <span className="block text-lg md:text-xl font-bold text-[#111111] leading-tight">
                   <InlineFormattedText value={data.techSpecs.sensitivity} />
                 </span>
@@ -124,13 +159,13 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         {/* === INTENDED USE & ADVANTAGES === */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           <div className="md:col-span-2">
-              <h3 className="text-xl font-bold text-[#111111] mb-4">Intended Use</h3>
+              <h3 className="text-xl font-bold text-[#111111] mb-4">{tm("intendedUse")}</h3>
               {data.intendedUse.map((p, idx) => (
                   <p key={idx} className="text-gray-600 leading-relaxed text-base mb-6 last:mb-0">{p}</p>
               ))}
           </div>
           <div className="md:col-span-1 bg-gray-50 rounded-2xl p-6 border border-gray-100">
-              <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-4">Key Advantages</h3>
+              <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-4">{tm("keyAdvantages")}</h3>
               <ul className="space-y-3">
                 {data.advantages.map((adv, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm font-medium text-gray-600">
@@ -144,7 +179,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
 
         {/* === PRINCIPLE === */}
         <div className="mb-12 border-t border-gray-100 pt-12">
-           <h3 className="text-xl font-bold text-[#111111] mb-4">Principle</h3>
+           <h3 className="text-xl font-bold text-[#111111] mb-4">{tm("principle")}</h3>
            <div className="max-w-4xl">
               {data.principle.map((p, idx) => (
                   <p key={idx} className="text-gray-600 leading-relaxed text-base mb-4 last:mb-0">{p}</p>
@@ -155,7 +190,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         {/* === INDUSTRIES & LIMITATIONS === */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             <div>
-               <h3 className="text-xl font-bold text-[#111111] mb-4">Industries</h3>
+               <h3 className="text-xl font-bold text-[#111111] mb-4">{tm("industries")}</h3>
                <div className="flex flex-wrap gap-2">
                  {data.mainIndustries.map((ind, i) => (
                     <span key={i} className="px-3 py-1.5 bg-gray-50 text-gray-600 text-xs font-medium rounded-lg border border-gray-200">{ind}</span>
@@ -164,7 +199,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             </div>
             <div className="bg-orange-50/30 rounded-2xl p-6 border border-orange-100/50">
                <h3 className="text-sm font-bold text-orange-600 uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <AlertCircle className="w-4 h-4" /> Limitations
+                 <AlertCircle className="w-4 h-4" /> {tm("limitations")}
                </h3>
                <ul className="space-y-2">
                  {data.limitations.map((lim, i) => (
@@ -179,17 +214,17 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
 
         {/* === TECHNICAL SPECIFICATIONS === */}
         <div className="mb-12">
-          <h3 className="text-2xl font-bold text-[#111111] mb-6">Technical Specifications</h3>
+          <h3 className="text-2xl font-bold text-[#111111] mb-6">{tm("technicalSpecifications")}</h3>
           <div className="border-t border-gray-200">
              {[
-               { label: "Microorganisms", value: data.techSpecs.targets },
-               ...(showSensitivity ? [{ label: "Sensitivity", value: data.techSpecs.sensitivity }] : []),
-               { label: "Validated Matrices", value: data.techSpecs.matrices },
-               { label: "Time", value: data.techSpecs.time },
-               { label: "Technology", value: data.techSpecs.technology },
-               { label: "Validated Thermocyclers", value: data.techSpecs.thermocyclers },
-               { label: "Detection Chemistry", value: data.techSpecs.chemistry },
-               { label: "Detection Channel", value: data.techSpecs.channels }
+               { label: tm("microorganisms"), value: data.techSpecs.targets },
+               ...(showSensitivity ? [{ label: tm("sensitivity"), value: data.techSpecs.sensitivity }] : []),
+               { label: tm("validatedMatrices"), value: data.techSpecs.matrices },
+               { label: tm("time"), value: data.techSpecs.time },
+               { label: tm("technology"), value: data.techSpecs.technology },
+               { label: tm("validatedThermocyclers"), value: data.techSpecs.thermocyclers },
+               { label: tm("detectionChemistry"), value: data.techSpecs.chemistry },
+               { label: tm("detectionChannel"), value: data.techSpecs.channels }
              ].map((row, i) => (
                 <div key={i} className="grid grid-cols-1 md:grid-cols-4 py-4 border-b border-gray-100">
                    <div className="text-sm font-semibold text-gray-500">{row.label}</div>
@@ -203,14 +238,14 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 items-start">
             {/* Storage */}
             <div className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 w-full">
-               <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-6">Storage Conditions</h3>
+               <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-6">{tm("storageConditions")}</h3>
                <div className="space-y-5">
                   <div>
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Temperature</p>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">{tm("temperature")}</p>
                     <p className="text-sm font-medium text-gray-700 mt-1">{data.techSpecs.storage}</p>
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Shelf Life</p>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">{tm("shelfLife")}</p>
                     <p className="text-sm font-medium text-gray-700 mt-1 whitespace-pre-line leading-relaxed">{data.techSpecs.shelfLife}</p>
                   </div>
                </div>
@@ -218,14 +253,14 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             
             {/* Certifications */}
             <div className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 flex flex-col justify-center w-full">
-               <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-6">Certifications</h3>
+               <h3 className="text-sm font-bold text-[#111111] uppercase tracking-widest mb-6">{tm("certifications")}</h3>
                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                   <div className="text-sm font-medium text-gray-700 leading-relaxed flex-1 whitespace-pre-line text-center sm:text-left">
                      {data.techSpecs.certifications}
                   </div>
                   {data.certImage && (
                      <div className="w-32 h-32 md:w-40 md:h-40 relative shrink-0">
-                        <img src={data.certImage} alt="Certification" className="w-full h-full object-contain mix-blend-multiply" />
+                        <img src={data.certImage} alt={tm("certificationImageAlt")} className="w-full h-full object-contain mix-blend-multiply" />
                      </div>
                   )}
                </div>
@@ -234,16 +269,16 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
 
         {/* === ORDER INFO (KITS) === */}
         <div className="mb-12">
-          <h3 className="text-2xl font-bold text-[#111111] mb-6">Order Information</h3>
+          <h3 className="text-2xl font-bold text-[#111111] mb-6">{tm("orderInformation")}</h3>
           <div className="overflow-x-auto pb-2">
             <table className="w-full text-left border-collapse min-w-[900px] table-fixed">
                 <thead>
                   <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                      <th className="py-4 pr-4 w-[15%]">Cat. No</th>
-                      <th className="py-4 px-4 w-[20%]">Name</th>
-                      <th className="py-4 px-4 w-[15%]">Size</th>
-                      <th className="py-4 px-4 w-[12%]">Format</th>
-                      <th className="py-4 pl-4 w-[38%]">Kit Content</th>
+                      <th className="py-4 pr-4 w-[15%]">{tm("catNo")}</th>
+                      <th className="py-4 px-4 w-[20%]">{tm("name")}</th>
+                      <th className="py-4 px-4 w-[15%]">{tm("size")}</th>
+                      <th className="py-4 px-4 w-[12%]">{tm("format")}</th>
+                      <th className="py-4 pl-4 w-[38%]">{tm("kitContent")}</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
@@ -262,7 +297,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
             </table>
           </div>
           <p className="md:hidden text-xs text-gray-400 flex items-center gap-1.5 mt-2 pl-1">
-             <ArrowRightLeft className="w-3 h-3" /> Swipe left to view all columns
+             <ArrowRightLeft className="w-3 h-3" /> {tm("swipeForColumns")}
           </p>
         </div>
 
@@ -270,17 +305,17 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
         {data.supplies && data.supplies.length > 0 && (
             <div className="mb-16">
               <h4 className="text-lg font-bold text-[#111111] mb-6 flex items-center gap-2">
-                  <FlaskConical className="w-5 h-5 text-gray-400" /> Additional Supplies
+                  <FlaskConical className="w-5 h-5 text-gray-400" /> {tm("additionalSupplies")}
               </h4>
               <div className="overflow-x-auto pb-2">
                 <table className="w-full text-left border-collapse min-w-[900px] table-fixed">
                     <thead>
                       <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
-                          <th className="py-4 pr-4 w-[15%]">Cat. No</th>
-                          <th className="py-4 px-4 w-[20%]">Product</th>
-                          <th className="py-4 px-4 w-[15%]">Size</th>
-                          <th className="py-4 px-4 w-[12%]">Format</th>
-                          <th className="py-4 pl-4 w-[38%]">Description</th>
+                          <th className="py-4 pr-4 w-[15%]">{tm("catNo")}</th>
+                          <th className="py-4 px-4 w-[20%]">{tm("product")}</th>
+                          <th className="py-4 px-4 w-[15%]">{tm("size")}</th>
+                          <th className="py-4 px-4 w-[12%]">{tm("format")}</th>
+                          <th className="py-4 pl-4 w-[38%]">{tm("description")}</th>
                       </tr>
                     </thead>
                     <tbody className="text-sm">
@@ -299,7 +334,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
                 </table>
               </div>
               <p className="md:hidden text-xs text-gray-400 flex items-center gap-1.5 mt-2 pl-1">
-                  <ArrowRightLeft className="w-3 h-3" /> Swipe left to view all columns
+                  <ArrowRightLeft className="w-3 h-3" /> {tm("swipeForColumns")}
               </p>
             </div>
         )}
@@ -315,12 +350,12 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
          >
             {isGeneratingPdf ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-gray-500" /> Generating PDF...
+                <Loader2 className="w-4 h-4 animate-spin text-gray-500" /> {tm("generatingPdf")}
               </>
             ) : (
               <>
                 <Download className="w-4 h-4 text-gray-500 group-hover:text-[#111111] transition-colors" />
-                Download Datasheet (PDF)
+                {tm("downloadDatasheet")}
               </>
             )}
          </button>
@@ -330,7 +365,7 @@ export default function SolutionTemplate({ data }: { data: SolutionContent }) {
            className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg"
          >
             <Mail className="w-4 h-4" />
-            Contact Sales Team
+            {tm("contactSalesTeam")}
          </button>
       </div>
     </div>

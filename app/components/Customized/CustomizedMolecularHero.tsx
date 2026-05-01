@@ -1,8 +1,10 @@
 "use client";
 
 import { ChevronDown } from "lucide-react"; 
+import { useTranslations } from "next-intl";
 
 export default function CustomizedMolecularHero() {
+  const t = useTranslations("Pages.Customized");
   
   // Función para hacer scroll a la siguiente sección
   const handleScrollDown = () => {
@@ -44,7 +46,7 @@ export default function CustomizedMolecularHero() {
                 textAnchor="middle" 
                 // @ts-ignore
                 side="right"              >
-                 Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays • Ai-Designed Assays •
+                 {Array.from({length: 9}, () => t("arc")).join(" • ")} •
                  <animate 
                    attributeName="startOffset" 
                    from="50%" 
@@ -79,15 +81,15 @@ export default function CustomizedMolecularHero() {
             {/* Título Principal */}
             {/* Compactamos el margen (mb-3) para mantener el bloque unido al subirlo */}
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-3 md:mb-8 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
-                Imagine your dream <br className="hidden md:block" />
+                {t("titleA")} <br className="hidden md:block" />
                 <span className="inline-block text-aurora-clip">
-                  molecular microbiological assay.
+                  {t("titleB")}
                 </span>
             </h1>
 
             {/* Subtítulo */}
             <span className="text-sm md:text-base text-[#111111]/70 font-bold uppercase tracking-[0.2em] mb-3 md:mb-6 block font-sora">
-                Now start using it.
+                {t("subtitle")}
             </span>
 
             {/* Flecha Clickeable */}
@@ -95,7 +97,7 @@ export default function CustomizedMolecularHero() {
                 <button 
                     onClick={handleScrollDown}
                     className="group p-2 hover:bg-black/5 rounded-full transition-all cursor-pointer"
-                    aria-label="Scroll down"
+                    aria-label={t("scroll")}
                 >
                     <ChevronDown className="w-8 h-8 md:w-10 md:h-10 animate-bounce text-[#111111] group-hover:text-black/70 transition-colors" />
                 </button>

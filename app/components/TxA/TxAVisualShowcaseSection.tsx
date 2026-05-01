@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import TxAVisualShowcasePanel from "./TxAVisualShowcasePanel";
 
 /**
@@ -8,6 +9,7 @@ import TxAVisualShowcasePanel from "./TxAVisualShowcasePanel";
  * used on /TxA. Same panel as /LabNetwork — no chat, visual only.
  */
 export default function TxAVisualShowcaseSection() {
+  const t = useTranslations("TxA.VisualSection");
   const [isLineVisible, setIsLineVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -35,15 +37,13 @@ export default function TxAVisualShowcaseSection() {
 
       <div className="max-w-[1280px] mx-auto px-6 md:px-10 mb-16 text-center flex flex-col items-center relative z-10 pt-4">
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#111111] mb-6 font-sora tracking-tight leading-[1.1] md:leading-tight">
-          Meet your new <br className="hidden md:block" />
+          {t("titleA")} <br className="hidden md:block" />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-400">
-            Microbiology Expert.
+            {t("titleB")}
           </span>
         </h2>
         <p className="text-[17px] md:text-xl text-gray-500 font-medium leading-relaxed max-w-3xl">
-          Stop digging through complex spreadsheets. Talk to your food safety data in plain language.
-          TxA instantly identifies trends, anomalies, and emerging risks, giving you actionable
-          insights in seconds.
+          {t("body")}
         </p>
       </div>
 

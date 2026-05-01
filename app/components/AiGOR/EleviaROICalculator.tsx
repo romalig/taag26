@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { TrendingDown, Clock } from "lucide-react";
-// 1. Importamos el hook para el modal de contacto
-import { useCTA } from "@/app/components/CTAProvider"; 
+import { useLocale, useTranslations } from "next-intl";
+import { useCTA } from "@/app/components/CTAProvider";
 
 export default function EleviaROICalculator() {
-  // 2. Extraemos la función para abrir el modal
   const { openMeeting } = useCTA();
+  const t = useTranslations("EmpTesting.EleviaROI");
+  const locale = useLocale();
 
   // Estados para los sliders
   const [dailyValue, setDailyValue] = useState<number>(50000);
@@ -32,14 +33,18 @@ export default function EleviaROICalculator() {
     setWarehouseReduction(calculatedReduction);
   }, [dailyValue, currentWaitDays]);
 
-  // Formateador de moneda
+  const numberLocale = locale === "es" ? "es-ES" : "en-US";
+
   const formatCurrency = (value: number, compact = false) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    const formatted = new Intl.NumberFormat(numberLocale, {
+      style: "currency",
+      currency: "USD",
+      currencyDisplay: "narrowSymbol",
       maximumFractionDigits: 0,
-      notation: compact ? 'compact' : 'standard',
+      notation: compact ? "compact" : "standard",
     }).format(value);
+    // es-ES compact USD can render a redundant " US" before the symbol (e.g. "133.500 US$")
+    return formatted.replace(/\sUS(?=\s*$|\s*\$)/i, "").trim();
   };
 
   return (
@@ -78,14 +83,13 @@ export default function EleviaROICalculator() {
         {/* ENCABEZADO MINIMALISTA */}
         <div className="max-w-3xl mb-12 md:mb-16">
           <span className="text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-6 block">
-            ROI Calculator
+            {t("eyebrow")}
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-[64px] font-black text-white tracking-tighter leading-[1.05] mb-6">
-            Calculate the value of speed.
+            {t("title")}
           </h2>
-          {/* TEXTO BLANCO PURO */}
           <p className="text-lg text-white font-medium leading-relaxed max-w-xl">
-            See how much capital you can free up by switching to same-day release with Elevia.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -102,7 +106,7 @@ export default function EleviaROICalculator() {
                 <div className="flex justify-between items-baseline">
                   {/* TEXTO BLANCO PURO */}
                   <label className="text-white text-sm md:text-base font-bold tracking-wide uppercase">
-                    Daily production value
+                    {t("dailyProductionLabel")}
                   </label>
                   <span className="text-[#FF270A] font-black text-2xl md:text-3xl tracking-tight tabular-nums">
                     {formatCurrency(dailyValue, true)}
@@ -118,8 +122,8 @@ export default function EleviaROICalculator() {
                 </div>
                 {/* TEXTO BLANCO PURO */}
                 <div className="flex justify-between text-[10px] font-bold text-white uppercase tracking-[0.15em]">
-                  <span>$5K</span>
-                  <span>$1M</span>
+                  <span>{t("rangeMin")}</span>
+                  <span>{t("rangeMax")}</span>
                 </div>
               </div>
 
@@ -128,10 +132,11 @@ export default function EleviaROICalculator() {
                 <div className="flex justify-between items-baseline">
                   {/* TEXTO BLANCO PURO */}
                   <label className="text-white text-sm md:text-base font-bold tracking-wide uppercase">
-                    Current wait time
+                    {t("currentWaitLabel")}
                   </label>
                   <span className="text-[#FF270A] font-black text-2xl md:text-3xl tracking-tight tabular-nums">
-                    {currentWaitDays} <span className="text-lg font-bold text-[#FF270A]/80">Days</span>
+                    {currentWaitDays}{" "}
+                    <span className="text-lg font-bold text-[#FF270A]/80">{t("daysSuffix")}</span>
                   </span>
                 </div>
                 <div className="relative py-2">
@@ -144,8 +149,8 @@ export default function EleviaROICalculator() {
                 </div>
                 {/* TEXTO BLANCO PURO */}
                 <div className="flex justify-between text-[10px] font-bold text-white uppercase tracking-[0.15em]">
-                  <span>1 Day</span>
-                  <span>2 Weeks</span>
+                  <span>{t("rangeOneDay")}</span>
+                  <span>{t("rangeTwoWeeks")}</span>
                 </div>
               </div>
 
@@ -158,14 +163,14 @@ export default function EleviaROICalculator() {
               <div className="mb-16 lg:mb-20 w-full">
                  {/* TEXTO BLANCO PURO */}
                  <span className="text-xs md:text-sm font-bold tracking-[0.2em] text-white uppercase mb-4 block">
-                   Total Freed-up Capital
+                   {t("totalFreedCapital")}
                  </span>
                  <div className="text-[56px] md:text-[80px] lg:text-[100px] font-black text-white tracking-tighter leading-none mb-6 break-words tabular-nums">
                     {formatCurrency(freedCapital)}
                  </div>
                  {/* TEXTO BLANCO PURO */}
                  <p className="text-white text-sm md:text-base font-medium max-w-md lg:ml-auto leading-relaxed">
-                   Capital currently tied up in warehouse holds that Elevia can release back into your cash flow immediately.
+                   {t("freedCapitalDescription")}
                  </p>
               </div>
 
@@ -176,7 +181,7 @@ export default function EleviaROICalculator() {
                 <div className="flex flex-col lg:items-end">
                    <span className="flex items-center lg:justify-end gap-2 text-[10px] md:text-xs font-bold tracking-[0.15em] text-emerald-400 uppercase mb-2">
                      <TrendingDown className="w-3 h-3" />
-                     Warehouse Cost Reduction
+                     {t("warehouseReduction")}
                    </span>
                    <div className="text-3xl md:text-4xl lg:text-5xl font-black text-emerald-400 tracking-tighter tabular-nums">
                      {warehouseReduction.toFixed(0)}%
@@ -188,7 +193,7 @@ export default function EleviaROICalculator() {
                    {/* TEXTO BLANCO PURO */}
                    <span className="flex items-center lg:justify-end gap-2 text-[10px] md:text-xs font-bold tracking-[0.15em] text-white uppercase mb-2">
                      <Clock className="w-3 h-3" />
-                     Days Gained per batch
+                     {t("daysGainedPerBatch")}
                    </span>
                    <div className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tighter tabular-nums">
                      {(Math.max(0, currentWaitDays - 0.33)).toFixed(1)}
@@ -208,7 +213,7 @@ export default function EleviaROICalculator() {
              onClick={openMeeting}
              className="group inline-flex items-center gap-3 text-white hover:text-gray-300 transition-colors font-bold text-sm md:text-base tracking-wide max-w-[260px] md:max-w-none text-left cursor-pointer"
             >
-             <span>Request a personalized financial analysis for your facility</span>
+             <span>{t("cta")}</span>
              <svg className="w-4 h-4 md:w-5 md:h-5 shrink-0 group-hover:translate-x-1 transition-transform text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>

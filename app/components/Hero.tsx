@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useCTA } from "./CTAProvider";
+import { useTranslations } from "next-intl";
 
 export default function Hero() {
   const { openMeeting } = useCTA();
+  const t = useTranslations("Home.Hero");
   
   // Estado para controlar cuándo mostrar la bacteria
   const [showBacteria, setShowBacteria] = useState(false);
@@ -31,8 +33,8 @@ export default function Hero() {
       
         {/* Titular */}
         <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-[4.5rem] font-extrabold tracking-tight text-white mb-10 md:mb-12 xl:mb-24 leading-[1.1] w-full max-w-[95%] md:max-w-3xl lg:max-w-4xl xl:max-w-6xl mx-auto">
-          Someday, every biological risk will be detected <br className="hidden md:block" />
-          <span className="text-white/50">before it becomes a problem.</span>
+          {t("title")} <br className="hidden md:block" />
+          <span className="text-white/50">{t("subtitle")}</span>
         </h1>
 
         {/* Botones Centrados */}
@@ -41,7 +43,7 @@ export default function Hero() {
             onClick={openMeeting}
             className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#FF270A] text-white text-sm font-bold uppercase tracking-widest hover:bg-[#d92008] transition-all shadow-[0_0_20px_rgba(255,39,10,0.3)] hover:-translate-y-1 w-full sm:w-auto"
           >
-            Talk to an Expert
+            {t("primary")}
             <ArrowRight className="w-4 h-4" />
           </button>
           
@@ -49,7 +51,7 @@ export default function Hero() {
             href="#solutions"
             className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white text-sm font-bold uppercase tracking-widest hover:bg-white/5 transition-all backdrop-blur-sm w-full sm:w-auto cursor-pointer"
           >
-            Go to Our Solutions
+            {t("secondary")}
           </a>
         </div>
       </div>
@@ -58,7 +60,7 @@ export default function Hero() {
       <div className="relative z-10 w-full h-[40vh] md:h-[55vh] mt-auto">
         <Image
           src="/bacteria6.png" 
-          alt="Hyper-realistic bacteria visualization"
+          alt={t("imageAlt")}
           fill
           quality={100}
           priority

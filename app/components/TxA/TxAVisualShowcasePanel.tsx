@@ -7,12 +7,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Sparkles, MoreHorizontal, MousePointerClick, Map } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export type TxAVisualShowcasePanelProps = {
   className?: string;
 };
 
 export default function TxAVisualShowcasePanel({ className = "" }: TxAVisualShowcasePanelProps) {
+  const t = useTranslations("TxA.VisualPanel");
   const [isCardVisible, setIsCardVisible] = useState(false);
   const [showUserMessage, setShowUserMessage] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -60,7 +62,7 @@ export default function TxAVisualShowcasePanel({ className = "" }: TxAVisualShow
 
       <div className="absolute top-0 left-0 w-full p-6 sm:p-8 md:p-12 z-20 pointer-events-none flex flex-col items-start">
         <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 md:mb-3 font-sora tracking-tight">
-          Meet your new Expert.
+          {t("title")}
         </h3>
         <p
           className={`text-[13px] md:text-base font-medium leading-relaxed text-indigo-100 max-w-[90%] md:max-w-[340px] transition-all duration-1000 transform ${
@@ -68,8 +70,7 @@ export default function TxAVisualShowcasePanel({ className = "" }: TxAVisualShow
           }`}
           style={{ animationDelay: "100ms" }}
         >
-          Stop digging through spreadsheets. TxA identifies trends, anomalies, and emerging risks in
-          plain language.
+          {t("body")}
         </p>
       </div>
 
@@ -81,7 +82,7 @@ export default function TxAVisualShowcasePanel({ className = "" }: TxAVisualShow
                 showUserMessage ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
-              <p className="text-[13px] md:text-sm font-medium">Any emerging trends in zone B?</p>
+              <p className="text-[13px] md:text-sm font-medium">{t("question")}</p>
             </div>
 
             <div
@@ -109,12 +110,12 @@ export default function TxAVisualShowcasePanel({ className = "" }: TxAVisualShow
                 <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-wider text-indigo-600">
-                      TxA Insight
+                      {t("insight")}
                     </span>
                   </div>
                   <p className="text-[13px] md:text-sm leading-relaxed font-medium">
-                    Detected a <span className="font-bold text-indigo-900">15% increase</span> in{" "}
-                    <span className="italic">Listeria spp.</span> positives near Line 4.
+                    {t("detectedPrefix")} <span className="font-bold text-indigo-900">{t("detectedHighlight")}</span> {t("detectedSuffix")}{" "}
+                    <span className="italic">Listeria spp.</span> {t("detectedEnd")}
                   </p>
                 </div>
               </div>
@@ -123,13 +124,12 @@ export default function TxAVisualShowcasePanel({ className = "" }: TxAVisualShow
                 <div className="w-8 h-8 shrink-0" />
                 <div className="bg-white text-slate-800 p-4 rounded-2xl rounded-tl-sm shadow-xl w-full pointer-events-auto">
                   <p className="text-[13px] md:text-sm leading-relaxed font-medium mb-3">
-                    Based on recent <span className="italic">Listeria spp.</span> trends, I&apos;ve
-                    generated an optimized targeted sampling map.
+                    {t("map")} <span className="italic">Listeria spp.</span> {t("mapEnd")}
                   </p>
                   <div className="border border-indigo-100 rounded-xl p-3 bg-indigo-50/50 hover:bg-indigo-50 transition-colors cursor-pointer group/cta">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-[9px] md:text-[10px] font-extrabold text-indigo-900 uppercase tracking-wider">
-                        BEST SAMPLING SCHEME
+                        {t("scheme")}
                       </span>
                       <MousePointerClick className="w-4 h-4 text-indigo-500 group-hover/cta:scale-110 transition-transform" />
                     </div>
@@ -138,7 +138,7 @@ export default function TxAVisualShowcasePanel({ className = "" }: TxAVisualShow
                         <Map className="w-3 h-3 text-indigo-600" />
                       </div>
                       <p className="text-[9px] md:text-[10px] font-bold text-indigo-700 leading-tight">
-                        Click here to see the proposed sampling scheme.
+                        {t("cta")}
                       </p>
                     </div>
                   </div>

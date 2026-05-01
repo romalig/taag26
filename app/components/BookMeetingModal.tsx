@@ -1,7 +1,6 @@
 "use client";
 
-import { useLocale } from "@/app/contexts/LocaleContext";
-import { getContactMessages } from "@/app/messages/contact";
+import { useLocale, useTranslations } from "next-intl";
 import { ContactApiError, submitContactMessage } from "@/app/lib/contact-api";
 import { useCTA } from "./CTAProvider";
 import { X, Check, ShieldCheck, ArrowRight, Loader2 } from "lucide-react";
@@ -9,8 +8,8 @@ import { useState, useEffect } from "react";
 
 export default function BookMeetingModal() {
   const { isMeetingOpen, closeMeeting } = useCTA();
-  const { locale } = useLocale();
-  const t = getContactMessages(locale);
+  const locale = useLocale() === "es" ? "es" : "en";
+  const t = useTranslations("Contact");
 
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
@@ -65,11 +64,11 @@ export default function BookMeetingModal() {
       setStep(2);
     } catch (err) {
       if (err instanceof ContactApiError && err.code === "duplicate_submission") {
-        setErrorMessage(t.errorDuplicate);
+        setErrorMessage(t("errorDuplicate"));
       } else if (err instanceof ContactApiError) {
-        setErrorMessage(err.message || t.errorGeneric);
+        setErrorMessage(err.message || t("errorGeneric"));
       } else {
-        setErrorMessage(t.errorGeneric);
+        setErrorMessage(t("errorGeneric"));
       }
     } finally {
       setIsSubmitting(false);
@@ -97,24 +96,24 @@ export default function BookMeetingModal() {
 
             <div className="relative z-10">
               <h2 className="text-2xl md:text-4xl font-bold tracking-tight mb-4 leading-tight">
-                Let&apos;s engineer your solution.
+                {t("modalTitle")}
               </h2>
               <p className="text-white/60 text-sm leading-relaxed mb-8">
-                Speak directly with our technical team. No sales scripts, just science and strategy.
+                {t("modalSubtitle")}
               </p>
 
               <ul className="space-y-4 mb-8 md:mb-0">
                 <li className="flex items-start gap-3 text-sm font-medium text-white/80">
                   <Check className="w-5 h-5 text-[#FF270A] shrink-0" />
-                  <span>Expert technical support</span>
+                  <span>{t("support")}</span>
                 </li>
                 <li className="flex items-start gap-3 text-sm font-medium text-white/80">
                   <Check className="w-5 h-5 text-[#FF270A] shrink-0" />
-                  <span>Kits & advanced laboratory services</span>
+                  <span>{t("kits")}</span>
                 </li>
                 <li className="flex items-start gap-3 text-sm font-medium text-white/80">
                   <Check className="w-5 h-5 text-[#FF270A] shrink-0" />
-                  <span>Custom molecular solutions</span>
+                  <span>{t("custom")}</span>
                 </li>
               </ul>
             </div>
@@ -129,7 +128,7 @@ export default function BookMeetingModal() {
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-bold text-white group-hover:text-[#FF270A] transition-colors truncate">
-                    Technical Support
+                    {t("technicalSupport")}
                   </div>
                   <div className="text-[10px] text-white/50 uppercase tracking-wider truncate">
                     support@taag.bio
@@ -145,12 +144,12 @@ export default function BookMeetingModal() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">
-                      {t.nameLabel}
+                      {t("nameLabel")}
                     </label>
                     <input
                       required
                       type="text"
-                      placeholder="Jane Doe"
+                      placeholder={t("namePlaceholder")}
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       autoComplete="name"
@@ -159,11 +158,11 @@ export default function BookMeetingModal() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">
-                      Company
+                      {t("companyLabel")}
                     </label>
                     <input
                       type="text"
-                      placeholder="Global Foods Inc."
+                      placeholder={t("companyPlaceholder")}
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       autoComplete="organization"
@@ -174,12 +173,12 @@ export default function BookMeetingModal() {
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">
-                    {t.emailLabel}
+                    {t("emailLabel")}
                   </label>
                   <input
                     required
                     type="email"
-                    placeholder="jane@company.com"
+                    placeholder={t("emailPlaceholder")}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
@@ -189,21 +188,21 @@ export default function BookMeetingModal() {
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">
-                    {t.messageLabel}
+                    {t("messageLabel")}
                   </label>
                   <textarea
                     required
-                    placeholder="Tell us about your detection targets..."
+                    placeholder={t("challengePlaceholder")}
                     value={challenge}
                     onChange={(e) => setChallenge(e.target.value)}
                     className="w-full bg-[#F5F5F7] border-none rounded-xl px-4 py-3 text-sm font-medium text-[#111111] focus:ring-2 focus:ring-[#FF270A]/20 focus:bg-white transition-all outline-none min-h-[100px] resize-none"
                   />
                 </div>
 
-                <p className="text-[10px] text-black/40 leading-relaxed">{t.disclaimer}</p>
+                <p className="text-[10px] text-black/40 leading-relaxed">{t("disclaimer")}</p>
 
                 <div className="absolute left-[-9999px] w-px h-px overflow-hidden" aria-hidden>
-                  <label htmlFor="meeting-website">Website</label>
+                  <label htmlFor="meeting-website">{t("websiteLabel")}</label>
                   <input
                     id="meeting-website"
                     tabIndex={-1}
@@ -226,18 +225,18 @@ export default function BookMeetingModal() {
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" /> {t.submitting}
+                      <Loader2 className="w-4 h-4 animate-spin" /> {t("submitting")}
                     </>
                   ) : (
                     <>
-                      {t.submit} <ArrowRight className="w-4 h-4" />
+                      {t("submit")} <ArrowRight className="w-4 h-4" />
                     </>
                   )}
                 </button>
 
                 <div className="flex items-center justify-center gap-2 text-[10px] text-black/30 font-medium pt-2">
                   <ShieldCheck className="w-3 h-3" />
-                  <span>Encrypted & Confidential.</span>
+                  <span>{t("secure")}</span>
                 </div>
               </form>
             ) : (
@@ -245,13 +244,13 @@ export default function BookMeetingModal() {
                 <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
                   <Check className="w-10 h-10" />
                 </div>
-                <h3 className="text-2xl font-bold text-[#111111] mb-2">{t.successTitle}</h3>
-                <p className="text-black/60 max-w-xs mx-auto mb-8 text-sm">{t.successBody}</p>
+                <h3 className="text-2xl font-bold text-[#111111] mb-2">{t("successTitle")}</h3>
+                <p className="text-black/60 max-w-xs mx-auto mb-8 text-sm">{t("successBody")}</p>
                 <button
                   onClick={closeMeeting}
                   className="inline-flex items-center justify-center px-8 py-3 bg-[#F5F5F7] text-[#111111] text-xs font-bold uppercase tracking-widest rounded-full hover:bg-gray-200 transition-colors"
                 >
-                  Close Window
+                  {t("close")}
                 </button>
               </div>
             )}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowRight, CheckCircle2, Clock, TrendingDown } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useCTA } from "../CTAProvider";
 import { FEATURED_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
@@ -11,7 +12,95 @@ import { useModal } from "./ModalProvider";
 import FeaturedSolutionTemplate from "./modals/FeaturedSolutionTemplate";
 import { FEATURED_MODALS_DATA } from "../data/featuredSolutionsData"; 
 
+type FeaturedModalKey =
+  | "zeroRiskEmp"
+  | "fastSalmonellaFood"
+  | "fullPreventiveControl"
+  | "broadSpectrumSpoilage"
+  | "salmonellaEcoliProtection";
+
+const FEATURED_MODAL_KEY_BY_INDEX: Record<number, FeaturedModalKey> = {
+  0: "zeroRiskEmp",
+  1: "fastSalmonellaFood",
+  2: "fullPreventiveControl",
+  3: "broadSpectrumSpoilage",
+  4: "salmonellaEcoliProtection",
+};
+
+function localizeFeaturedModalData(data: any, key: FeaturedModalKey, tData: ReturnType<typeof useTranslations>) {
+  const localized = {
+    ...data,
+    title: tData(`${key}.title`),
+    subtitle: tData(`${key}.subtitle`),
+    description: tData(`${key}.description`),
+    advantages: tData.raw(`${key}.advantages`) as string[],
+    matrices: tData.raw(`${key}.matrices`) as string[],
+    table: data.table
+      ? {
+          ...data.table,
+          title: tData(`${key}.table.title`),
+          rows: tData.raw(`${key}.table.rows`) as any[],
+        }
+      : data.table,
+    orderingInfo: data.orderingInfo?.map((item: any, index: number) => {
+      const descriptions = tData.raw(`${key}.orderingDescriptions`) as string[];
+      return {
+        ...item,
+        description: descriptions[index] ?? item.description,
+      };
+    }),
+    txaSection: data.txaSection
+      ? {
+          ...data.txaSection,
+          title: tData(`${key}.txaSection.title`),
+          desc: tData(`${key}.txaSection.desc`),
+          linkText: tData(`${key}.txaSection.linkText`),
+        }
+      : data.txaSection,
+  };
+
+  if (data.eleviaProducts) {
+    const mainDescriptions = tData.raw(`${key}.eleviaProducts.main`) as string[];
+    const upcoming = tData.has(`${key}.eleviaProducts.upcoming`)
+      ? (tData.raw(`${key}.eleviaProducts.upcoming`) as { desc: string; launch?: string }[])
+      : [];
+    localized.eleviaProducts = {
+      ...data.eleviaProducts,
+      intro: tData(`${key}.eleviaProducts.intro`),
+      main: data.eleviaProducts.main?.map((product: any, index: number) => ({
+        ...product,
+        desc: mainDescriptions[index] ?? product.desc,
+      })),
+      upcoming: data.eleviaProducts.upcoming?.map((product: any, index: number) => ({
+        ...product,
+        desc: upcoming[index]?.desc ?? product.desc,
+        launch: upcoming[index]?.launch ?? product.launch,
+      })),
+    };
+  }
+
+  if (data.preventiveProduct) {
+    localized.preventiveProduct = {
+      ...data.preventiveProduct,
+      title: tData(`${key}.preventiveProduct.title`),
+      desc: tData(`${key}.preventiveProduct.desc`),
+      list1Title: tData(`${key}.preventiveProduct.list1Title`),
+      list2Title: tData(`${key}.preventiveProduct.list2Title`),
+      list1: tData.has(`${key}.preventiveProduct.list1`)
+        ? (tData.raw(`${key}.preventiveProduct.list1`) as string[])
+        : data.preventiveProduct.list1,
+      list2: tData.raw(`${key}.preventiveProduct.list2`) as string[],
+    };
+  }
+
+  return localized;
+}
+
 export default function FeaturedSolutions() {
+  const t = useTranslations("Industrial.Featured");
+  const tIndustrialModalData = useTranslations("Industrial.FeaturedModalData");
+  const tHomeModuleData = useTranslations("Home.Modules");
+  const locale = useLocale();
   const { openMeeting } = useCTA();
   const { openModal } = useModal(); 
   const [isImageVisible, setIsImageVisible] = useState(false);
@@ -49,15 +138,19 @@ export default function FeaturedSolutions() {
     } else {
       // Fallback
       finalData = {
-        title: solution.title,
-        subtitle: solution.descriptionLeft || solution.description,
-        description: "Contenido pendiente. Se cargará cuando construyamos este modal.",
+        title: t(`solutions.${solution.id}.title`),
+        subtitle: t.has(`solutions.${solution.id}.descriptionLeft`) ? t(`solutions.${solution.id}.descriptionLeft`) : t(`solutions.${solution.id}.description`),
+        description: t("modalFallbackDescription"),
         hasAigorBanner: false 
       };
     }
 
-    if (finalData && (idx === 0 || idx === 1 || idx === 2 || idx === 3 || idx === 4)) {
-       finalData = { ...finalData, title: solution.title };
+    const modalKey = FEATURED_MODAL_KEY_BY_INDEX[idx];
+    if (finalData && modalKey && locale === "es") {
+       const modalCopy = modalKey === "zeroRiskEmp" ? tIndustrialModalData : tHomeModuleData;
+       finalData = localizeFeaturedModalData(finalData, modalKey, modalCopy);
+    } else if (finalData && modalKey) {
+       finalData = { ...finalData, title: t(`solutions.${solution.id}.title`) };
     }
 
     openModal(<FeaturedSolutionTemplate data={finalData} />);
@@ -75,10 +168,10 @@ export default function FeaturedSolutions() {
 
           <div className="relative z-10 text-center mb-8 max-w-2xl mx-auto">
             <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
-              Featured SOLUTIONS
+              {t("eyebrow")}
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-[#111111]">
-              This is how the future looks like
+              {t("title")}
             </h2>
           </div>
 
@@ -88,7 +181,7 @@ export default function FeaturedSolutions() {
               isImageVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-24"
             }`}
           >
-            <Image src="/2bacterias_verdes3.png" alt="Microbiology Hero" fill className="object-contain" priority />
+            <Image src="/2bacterias_verdes3.png" alt={t("title")} fill className="object-contain" priority />
           </div>
 
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 w-full -mt-26 md:-mt-28">
@@ -98,8 +191,8 @@ export default function FeaturedSolutions() {
                 return (
                   <div key={solution.id} className="md:col-span-2 group bg-[#FDF6E3] rounded-[2.5rem] p-0 md:px-8 md:pt-8 md:pb-0 flex flex-col md:grid md:grid-cols-3 gap-0 md:gap-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-yellow-300 overflow-hidden relative">
                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-10 px-10 md:px-0 md:pt-8 pb-6 md:pb-8">
-                        <h3 className="text-4xl font-bold text-[#111111] mb-6 leading-tight">{solution.title}</h3>
-                        <p className="text-gray-600 text-base leading-relaxed font-medium">{solution.descriptionLeft}</p>
+                        <h3 className="text-4xl font-bold text-[#111111] mb-6 leading-tight">{t(`solutions.${solution.id}.title`)}</h3>
+                        <p className="text-gray-600 text-base leading-relaxed font-medium">{t(`solutions.${solution.id}.descriptionLeft`)}</p>
                       </div>
 
                       <div className="order-2 relative w-full h-auto min-h-[340px] md:min-h-[400px] flex flex-col items-center pt-8 pb-8 md:pt-8 md:pb-8 px-8 md:px-6 mb-6 md:mb-0">
@@ -110,7 +203,7 @@ export default function FeaturedSolutions() {
                         <div className="w-full max-w-[280px] md:max-w-none mx-auto flex flex-col h-full justify-between gap-6 md:gap-0">
                            <div className="flex items-center justify-center md:justify-start gap-2">
                               <Clock className="w-5 h-5 text-yellow-700" />
-                              <span className="text-[11px] font-bold uppercase tracking-widest text-yellow-700">Time to Result</span>
+                              <span className="text-[11px] font-bold uppercase tracking-widest text-yellow-700">{t("timeToResult")}</span>
                            </div>
                            <div className="flex-1 flex items-end justify-center gap-6 md:gap-10 relative z-10 min-h-[240px] mb-10 md:mb-20 mt-6">
                               <div className="flex flex-col items-center gap-3 w-16 group">
@@ -118,8 +211,8 @@ export default function FeaturedSolutions() {
                                     <div className="w-full bg-gray-300 rounded-t-full" style={{height: '85%', animation: 'grow-up-slow 2s ease-out forwards'}}></div>
                                  </div>
                                  <div className="text-center">
-                                    <div className="text-[10px] font-bold text-gray-400 uppercase leading-tight">External Lab</div>
-                                    <div className="text-[10px] font-medium text-gray-400 mt-1">3-5 Days</div>
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase leading-tight">{t("externalLab")}</div>
+                                    <div className="text-[10px] font-medium text-gray-400 mt-1">{t("days")}</div>
                                  </div>
                               </div>
                               <div className="flex flex-col items-center gap-3 w-16 group">
@@ -129,15 +222,15 @@ export default function FeaturedSolutions() {
                                     </div>
                                  </div>
                                  <div className="text-center">
-                                    <div className="text-[10px] font-bold text-[#111111] uppercase leading-tight">AiGOR Tech</div>
-                                    <div className="text-[10px] font-bold text-[#FF270A] mt-1">&lt; 3 Hours</div>
+                                    <div className="text-[10px] font-bold text-[#111111] uppercase leading-tight">{t("aigorTech")}</div>
+                                    <div className="text-[10px] font-bold text-[#FF270A] mt-1">{t("hours")}</div>
                                  </div>
                               </div>
                            </div>
                            <div className="flex justify-center md:justify-center">
                               <div className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-50 border border-emerald-100 rounded-full w-full justify-center">
                                 <TrendingDown className="w-4 h-4 text-emerald-600" />
-                                <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Significant Cost Savings</span>
+                                <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">{t("savings")}</span>
                               </div>
                            </div>
                         </div>
@@ -145,11 +238,11 @@ export default function FeaturedSolutions() {
 
                       <div className="order-3 text-left flex flex-col justify-start md:justify-between relative z-20 px-10 pb-8 md:px-0 md:pb-8 md:pt-8">
                         <div className="mb-8">
-                           <h4 className="text-[#111111] font-bold text-sm uppercase tracking-widest mb-6">Advantages</h4>
-                           <p className="text-gray-600 text-sm leading-relaxed mb-4 font-medium">{solution.description}</p>
+                           <h4 className="text-[#111111] font-bold text-sm uppercase tracking-widest mb-6">{t("advantages")}</h4>
+                           <p className="text-gray-600 text-sm leading-relaxed mb-4 font-medium">{t(`solutions.${solution.id}.description`)}</p>
                            {solution.advantages && (
                              <ul className="flex flex-col gap-3">
-                               {solution.advantages.map((adv, i) => {
+                               {t.raw(`solutions.${solution.id}.advantages`).map((adv: string, i: number) => {
                                  const [title, ...rest] = adv.split(":");
                                  const description = rest.join(":");
                                  return (
@@ -164,14 +257,14 @@ export default function FeaturedSolutions() {
                         </div>
                          <div className="flex gap-3 mt-auto md:mt-6">
                            <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md">
-                           Contact <ArrowRight className="w-3 h-3" />
+                           {t("contact")} <ArrowRight className="w-3 h-3" />
                            </button>
                            
                             <button 
                               onClick={() => handleOpenDetails(solution, idx)}
                               className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm flex items-center justify-center"
                             >
-                              Details
+                              {t("details")}
                             </button>
                           </div>
                         </div>
@@ -184,15 +277,15 @@ export default function FeaturedSolutions() {
                   <div key={solution.id} className="md:col-span-2 group relative rounded-[2.5rem] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-[#111111] flex flex-col md:flex-row h-auto md:h-[200px] border border-[#FF270A] shadow-[0_0_15px_rgba(255,39,10,0.2)] md:border-none md:shadow-none">
                      <div className="absolute inset-0 z-0 hidden md:block">
                          {solution.image && (
-                             <Image src={solution.image} alt={solution.title} fill className="object-cover object-center" />
+                             <Image src={solution.image} alt={t(`solutions.${solution.id}.title`)} fill className="object-cover object-center" />
                          )}
                          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/30 to-transparent z-10"></div>
                       </div>
 
                       <div className="relative z-20 w-full h-full flex flex-col md:flex-row items-start md:items-center justify-between p-10 md:px-12">
                         <div className="max-w-[260px] z-20">
-                            <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-sm">{solution.title}</h3>
-                            <p className="text-gray-200 text-sm font-medium leading-relaxed drop-shadow-sm">{solution.description}</p>
+                            <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-sm">{t(`solutions.${solution.id}.title`)}</h3>
+                            <p className="text-gray-200 text-sm font-medium leading-relaxed drop-shadow-sm">{t(`solutions.${solution.id}.description`)}</p>
                         </div>
                         <div className="absolute left-[380px] top-1/2 -translate-y-1/2 hidden md:block z-20 select-none">
                            <div className="relative w-40 h-40 scale-90">
@@ -202,19 +295,19 @@ export default function FeaturedSolutions() {
                                   <path d="M35 130 A 70 70 0 0 1 100 30" stroke="#86EFAC" strokeDasharray="6 6" opacity="0.9" />
                               </svg>
                               <div className="absolute top-2 left-1/2 -translate-x-1/2 text-center">
-                                  <span className="block text-[9px] font-medium text-[#FDE047] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#FDE047]/20">Results</span>
+                                  <span className="block text-[9px] font-medium text-[#FDE047] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#FDE047]/20">{t("labels.results")}</span>
                               </div>
                               <div className="absolute bottom-8 right-0 text-center">
-                                  <span className="block text-[9px] font-medium text-[#FCA5A5] uppercase tracking-widest bg-black/70 px-4 py-1 rounded-full backdrop-blur-sm border border-[#FCA5A5]/20">Ai</span>
+                                  <span className="block text-[9px] font-medium text-[#FCA5A5] uppercase tracking-widest bg-black/70 px-4 py-1 rounded-full backdrop-blur-sm border border-[#FCA5A5]/20">{t("labels.ai")}</span>
                               </div>
                               <div className="absolute bottom-8 left-0 text-center">
-                                  <span className="block text-[9px] font-medium text-[#86EFAC] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#86EFAC]/20 leading-none">Improve<br/>EMP</span>
+                                  <span className="block text-[9px] font-medium text-[#86EFAC] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#86EFAC]/20 leading-none">{t("labels.improveEmp")}</span>
                               </div>
                            </div>
                         </div>
                         <div className="relative mt-6 z-30 opacity-100 translate-y-0 md:absolute md:bottom-6 md:right-10 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
                           <Link href="/TxA" className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
-                          Learn More <ArrowRight className="w-3 h-3" />
+                          {t("learnMore")} <ArrowRight className="w-3 h-3" />
                           </Link>  
                         </div>
                       </div>
@@ -225,14 +318,14 @@ export default function FeaturedSolutions() {
               return (
                 <div key={solution.id} className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[520px] md:h-[480px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center">
                    <div className="relative z-10 w-full max-w-[400px] flex flex-col items-center">
-                      <h3 className="text-2xl font-bold text-[#111111] mb-4 leading-tight">{solution.title}</h3>
-                      <p className="text-gray-500 text-sm leading-relaxed">{solution.description}</p>
+                      <h3 className="text-2xl font-bold text-[#111111] mb-4 leading-tight">{t(`solutions.${solution.id}.title`)}</h3>
+                      <p className="text-gray-500 text-sm leading-relaxed">{t(`solutions.${solution.id}.description`)}</p>
                     </div>
 
                     {solution.image && (
                       <div className="absolute bottom-24 md:bottom-0 left-0 right-0 h-[220px] z-0 flex items-end justify-center">
                          <div className="relative w-full h-full">
-                           <Image src={solution.image} alt={solution.title} fill className="object-contain object-bottom" />
+                           <Image src={solution.image} alt={t(`solutions.${solution.id}.title`)} fill className="object-contain object-bottom" />
                          </div>
                       </div>
                     )}
@@ -241,14 +334,14 @@ export default function FeaturedSolutions() {
 
                     <div className="absolute bottom-6 left-10 right-10 flex gap-2 z-30 transition-opacity duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                       <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111]/90 backdrop-blur text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-xl">
-                        Contact <ArrowRight className="w-3 h-3" />
+                        {t("contact")} <ArrowRight className="w-3 h-3" />
                       </button>
                       
                       <button 
                         onClick={() => handleOpenDetails(solution, idx)}
                         className="flex-1 py-3 bg-white/90 backdrop-blur border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors shadow-xl"
                       >
-                        Details
+                        {t("details")}
                       </button>
                     </div>
                 </div>

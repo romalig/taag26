@@ -11,6 +11,7 @@ import {
   ChevronRight,
   ArrowRight 
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 // 1. Importamos el proveedor del CTA (Modal de contacto)
 import { useCTA } from "@/app/components/CTAProvider";
 
@@ -19,8 +20,6 @@ const CARDS = [
   {
     id: "intro",
     type: "intro",
-    title: "Advanced molecular assay development as a service.",
-    description: "Whether you are a biotech company or a testing laboratory, TAAG provides outsourced molecular assay development through MILA, helping increase productivity while reducing development time and costs.",
   },
   {
     id: "manufacturer",
@@ -30,9 +29,6 @@ const CARDS = [
     bgIcon: "bg-purple-50",
     hoverColor: "hover:text-purple-600", 
     groupHoverColor: "group-hover:bg-purple-50", 
-    label: "Kit Manufacturer",
-    title: "Expand your portfolio",
-    description: "Support multiple models, from supplying primer mixes to delivering fully branded, validated finished kits globally."
   },
   {
     id: "distributor",
@@ -42,9 +38,6 @@ const CARDS = [
     bgIcon: "bg-blue-50",
     hoverColor: "hover:text-blue-600",
     groupHoverColor: "group-hover:bg-blue-50",
-    label: "Distributor",
-    title: "Private label launch",
-    description: "Develop exclusive, high-performance kits distributed under your brand. Differentiate yourself with unique products."
   },
   {
     id: "third-party-lab",
@@ -54,9 +47,6 @@ const CARDS = [
     bgIcon: "bg-teal-50",
     hoverColor: "hover:text-teal-600",
     groupHoverColor: "group-hover:bg-teal-50",
-    label: "Third-party Lab",
-    title: "Increase margins",
-    description: "Replace rigid commercial kits with custom, highly multiplexed assays tailored to your specific workflow and throughput."
   },
   {
     id: "internal-lab",
@@ -66,9 +56,6 @@ const CARDS = [
     bgIcon: "bg-orange-50",
     hoverColor: "hover:text-orange-600",
     groupHoverColor: "group-hover:bg-orange-50",
-    label: "Internal Lab",
-    title: "Solve contamination",
-    description: "Detect facility-specific spoilage organisms or rare pathogens that generic kits miss, ensuring precise internal QC."
   },
   {
     id: "outsourcer",
@@ -78,13 +65,11 @@ const CARDS = [
     bgIcon: "bg-indigo-50",
     hoverColor: "hover:text-indigo-600",
     groupHoverColor: "group-hover:bg-indigo-50",
-    label: "Using a 3rd-party Lab",
-    title: "Managed Service",
-    description: "We design the assay and run it for you at our strategic TAAG Hubs. Get bespoke testing without the infrastructure."
   }
 ];
 
 export default function ClientProfileTabs() {
+  const t = useTranslations("Customized.Profiles");
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -129,15 +114,13 @@ export default function ClientProfileTabs() {
         
         {/* Título */}
         <h2 className="text-3xl md:text-5xl font-extrabold text-[#111111] mb-6 font-sora tracking-tight leading-tight mb-10">
-          Custom Assay Development, <br className="hidden md:block" />
-          <span className="text-gray-400">Powered by MILA.</span>
+          {t("titleA")} <br className="hidden md:block" />
+          <span className="text-gray-400">{t("titleB")}</span>
         </h2>
         
         {/* Bajada */}
         <p className="text-lg text-gray-500 font-medium leading-relaxed max-w-3xl">
-          Leverage our proprietary AI to bypass the complexity of traditional R&D. 
-          From concept to commercialization, we design and validate bespoke molecular 
-          solutions tailored to your exact business model.
+          {t("body")}
         </p>
       </div>
 
@@ -200,15 +183,15 @@ export default function ClientProfileTabs() {
                      {/* 2. Contenido (Texto pequeño y aireado) */}
                      <div className="relative z-10 h-full flex flex-col justify-center">
                         <span className="inline-block px-3 py-1 rounded-full bg-white/10 border border-white/10 text-white/70 text-[10px] font-bold uppercase tracking-widest mb-8 w-fit backdrop-blur-md">
-                           Service Overview
+                           {t("serviceOverview")}
                         </span>
                         
                         <h3 className="text-2xl md:text-3xl font-bold mb-8 leading-snug font-sora text-white">
-                          {card.title}
+                          {t(`cards.${card.id}.title`)}
                         </h3>
                         
                         <p className="text-sm text-gray-400 font-medium leading-relaxed">
-                          {card.description}
+                          {t(`cards.${card.id}.description`)}
                         </p>
                      </div>
                   </>
@@ -224,17 +207,17 @@ export default function ClientProfileTabs() {
                       
                       {/* Badge (Label) */}
                       <span className={`inline-block text-[10px] font-bold uppercase tracking-wider mb-3 ${card.color}`}>
-                        {card.label}
+                        {t(`cards.${card.id}.label`)}
                       </span>
 
                       {/* Título */}
                       <h3 className="text-2xl font-bold text-[#111111] mb-3 font-sora leading-tight">
-                        {card.title}
+                        {t(`cards.${card.id}.title`)}
                       </h3>
 
                       {/* Descripción */}
                       <p className="text-sm text-gray-500 leading-relaxed font-medium mb-6">
-                        {card.description}
+                        {t(`cards.${card.id}.description`)}
                       </p>
                     </div>
 
@@ -244,7 +227,7 @@ export default function ClientProfileTabs() {
                           onClick={openMeeting}
                           className={`group/btn w-full flex items-center justify-between text-sm font-bold text-[#111111] transition-colors ${card.hoverColor}`}
                         >
-                            <span>Get Started</span>
+                            <span>{t("getStarted")}</span>
                             <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center transition-colors group-hover/btn:bg-gray-200">
                                 <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
                             </div>

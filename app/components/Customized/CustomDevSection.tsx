@@ -1,8 +1,11 @@
 "use client";
 
 import { Zap, TrendingDown, DollarSign } from "lucide-react"; // Importamos DollarSign
+import { useTranslations } from "next-intl";
 
 export default function CustomDevSection() {
+  const t = useTranslations("Customized.CustomDev");
+
   return (
     // SECCIÓN: Aumentado el padding inferior (pb-40 en móvil, md:pb-48 en escritorio) para más aire al final
     <section className="bg-[#F5F5F7] pt-32 pb-40 md:pt-40 md:pb-48 px-6 md:px-10 overflow-hidden">
@@ -13,15 +16,12 @@ export default function CustomDevSection() {
         <div className="mb-32 max-w-4xl">
           {/* Título elegido: "Your vision. Engineered by Ai." */}
           <h2 className="text-4xl md:text-6xl font-extrabold text-[#111111] mb-10 font-sora tracking-tight leading-tight">
-            Your vision. <br className="hidden md:block" />
-            <span className="text-gray-400">Engineered by Ai.</span>
+            {t("titleA")} <br className="hidden md:block" />
+            <span className="text-gray-400">{t("titleB")}</span>
           </h2>
           
           <p className="text-lg md:text-xl text-gray-500 font-medium leading-relaxed max-w-3xl">
-            Leveraging MILA's AI, TAAG delivers a comprehensive custom assay development service. 
-            We design and validate bespoke molecular solutions on your behalf—offering a 
-            superior alternative to in-house R&D with faster timelines, simplified workflows, 
-            and significantly lower costs.
+            {t("body")}
           </p>
         </div>
 
@@ -36,14 +36,14 @@ export default function CustomDevSection() {
             {/* Título con altura mínima para alineación */}
             <div className="mb-3 min-h-[64px]">
                 <h3 className="text-xl md:text-2xl font-bold text-[#111111] font-sora leading-tight">
-                  From concept to kit <br />
-                  <span className="text-purple-600">5X faster.</span>
+                  {t("cards.speed.titleA")} <br />
+                  <span className="text-purple-600">{t("cards.speed.titleB")}</span>
                 </h3>
             </div>
             
             {/* Bajada */}
             <p className="text-sm text-gray-500 leading-relaxed font-medium">
-              MILA targets the optimal design instantly, bypassing iterative failures to drastically shorten your time-to-market.
+              {t("cards.speed.body")}
             </p>
           </div>
 
@@ -53,13 +53,13 @@ export default function CustomDevSection() {
             
             <div className="mb-3 min-h-[64px]">
                 <h3 className="text-xl md:text-2xl font-bold text-[#111111] font-sora leading-tight">
-                  <span className="text-orange-500">Up to 50%</span> reduction <br />
-                  in development costs.
+                  <span className="text-orange-500">{t("cards.cost.titleA")}</span> <br />
+                  {t("cards.cost.titleB")}
                 </h3>
             </div>
             
             <p className="text-sm text-gray-500 leading-relaxed font-medium">
-              Outsourcing to TAAG eliminates internal R&D overhead, reducing your total investment and operational risk.
+              {t("cards.cost.body")}
             </p>
           </div>
 
@@ -70,13 +70,13 @@ export default function CustomDevSection() {
             
             <div className="mb-3 min-h-[64px]">
                 <h3 className="text-xl md:text-2xl font-bold text-[#111111] font-sora leading-tight">
-                  <span className="text-teal-500">Lowest cost</span> <br />
-                  per reaction.
+                  <span className="text-teal-500">{t("cards.reaction.titleA")}</span> <br />
+                  {t("cards.reaction.titleB")}
                 </h3>
             </div>
             
             <p className="text-sm text-gray-500 leading-relaxed font-medium">
-              Advanced multiplexing and design optimization minimize reagent usage, ensuring the most competitive price per test.
+              {t("cards.reaction.body")}
             </p>
           </div>
 

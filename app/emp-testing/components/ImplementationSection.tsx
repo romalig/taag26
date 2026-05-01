@@ -1,8 +1,11 @@
 "use client";
 
 import { Maximize, Users, Server, Wrench, CheckCircle2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function ImplementationSection() {
+  const t = useTranslations("EmpTesting.Implementation");
+
   return (
     <section className="py-24 md:py-32 bg-white text-[#111111]">
       {/* Contenedor alineado milimétricamente con el Header */}
@@ -12,10 +15,10 @@ export default function ImplementationSection() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 max-w-5xl">
            <div>
               <span className="text-[#FF270A] font-bold tracking-widest uppercase text-xs mb-4 block">
-                TURNKEY IMPLEMENTATION
+                {t("eyebrow")}
               </span>
               <h2 className="text-3xl md:text-5xl font-black leading-tight tracking-tighter">
-                Minimal footprint.<br /> <span className="text-gray-400">Maximum capability.</span>
+                {t("titleA")}<br /> <span className="text-gray-400">{t("titleB")}</span>
               </h2>
            </div>
         </div>
@@ -28,7 +31,7 @@ export default function ImplementationSection() {
             {/* Texto Descriptivo Principal */}
             <div className="space-y-6 text-base md:text-lg text-gray-600 leading-relaxed font-medium">
               <p>
-                Because AiGOR™ eliminates traditional enrichment steps and doesn’t require autoclaves or specialized bulky equipment, deploying an internal molecular laboratory is faster and more accessible than ever.
+                {t("body")}
               </p>
             </div>
 
@@ -40,10 +43,10 @@ export default function ImplementationSection() {
                   </div>
                   <div>
                     <h4 className="text-4xl font-black text-[#111111] tracking-tighter mb-1">≈ 16 m²</h4>
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Footprint</p>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">{t("footprint")}</p>
                   </div>
                   <p className="text-sm font-medium text-gray-600 leading-relaxed mt-2">
-                    For a fully equipped in-house molecular testing laboratory.
+                    {t("footprintBody")}
                   </p>
                </div>
 
@@ -53,28 +56,28 @@ export default function ImplementationSection() {
                   </div>
                   <div>
                     <h4 className="text-4xl font-black text-[#111111] tracking-tighter mb-1">200</h4>
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Samples / Day</p>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">{t("samples")}</p>
                   </div>
                   <p className="text-sm font-medium text-gray-600 leading-relaxed mt-2">
-                    Processing capacity managed by just one single lab analyst.
+                    {t("samplesBody")}
                   </p>
                </div>
             </div>
 
             {/* TAAG Support & TxA Software */}
             <div className="pt-8 border-t border-gray-100">
-               <h4 className="text-xl font-black text-[#111111] mb-6">End-to-End Partnership</h4>
+               <h4 className="text-xl font-black text-[#111111] mb-6">{t("partnership")}</h4>
                <ul className="space-y-5">
                  <li className="flex gap-4 items-start">
                     <Wrench className="w-6 h-6 text-[#FF270A] shrink-0 mt-0.5" />
                     <span className="text-gray-700 font-medium text-base">
-                      <strong className="text-[#111111]">Installation & Validation:</strong> TAAG oversees the entire setup process and trains your laboratory analyst on both the AiGOR™ protocol and instrument operation.
+                      <strong className="text-[#111111]">{t("installationTitle")}</strong> {t("installationBody")}
                     </span>
                  </li>
                  <li className="flex gap-4 items-start">
                     <Server className="w-6 h-6 text-[#FF270A] shrink-0 mt-0.5" />
                     <span className="text-gray-700 font-medium text-base">
-                      <strong className="text-[#111111]">TxA™ Software Integration:</strong> Our suite takes control of the entire workflow—from smart sampling to automated data interpretation and publication of results.
+                      <strong className="text-[#111111]">{t("txaTitle")}</strong> {t("txaBody")}
                     </span>
                  </li>
                </ul>
@@ -90,14 +93,14 @@ export default function ImplementationSection() {
                 <div className="absolute top-0 right-0 w-64 h-64 bg-[#FF270A]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
 
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#FF270A] mb-8 relative z-10">
-                  Capital Investment (CAPEX)
+                  {t("capex")}
                 </span>
                 
                 <h3 className="text-6xl md:text-7xl font-black tracking-tighter mb-4 leading-none relative z-10">
                   ~ €40k
                 </h3>
                 <p className="text-sm font-bold text-gray-400 mb-10 relative z-10">
-                  Total Estimated Setup Cost
+                  {t("setup")}
                 </p>
                 
                 <div className="w-full h-px bg-white/10 mb-8 relative z-10" />
@@ -109,7 +112,7 @@ export default function ImplementationSection() {
                      <div>
                         <div className="text-lg font-bold text-white mb-1">~ €25,000</div>
                         <div className="text-sm text-gray-400 font-medium leading-relaxed">
-                          Open-platform real-time PCR instrument & open-platform RNA extraction robot.
+                          {t("instrument")}
                         </div>
                      </div>
                   </li>
@@ -118,7 +121,7 @@ export default function ImplementationSection() {
                      <div>
                         <div className="text-lg font-bold text-white mb-1">~ €15,000</div>
                         <div className="text-sm text-gray-400 font-medium leading-relaxed">
-                          Cabinets and standard minor laboratory equipment.
+                          {t("cabinets")}
                         </div>
                      </div>
                   </li>
@@ -126,7 +129,7 @@ export default function ImplementationSection() {
 
                 <div className="mt-12 pt-8 border-t border-white/10 relative z-10">
                    <p className="text-[10px] text-gray-500 font-medium leading-relaxed">
-                     Based on average market pricing in Europe. Actual costs may vary by region and final equipment provider selection.
+                     {t("note")}
                    </p>
                 </div>
 

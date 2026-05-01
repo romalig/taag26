@@ -1,15 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Sora } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import { LocaleProvider } from "./contexts/LocaleContext";
-import { CTAProvider } from "./components/CTAProvider";
-import BookMeetingModal from "./components/BookMeetingModal";
-import { ModalProvider } from "./components/industrial/ModalProvider";
-import SolutionModal from "./components/industrial/SolutionModal";
 import OrganizationJsonLd from "./seo/OrganizationJsonLd";
 import { getMetadataBase, siteUrl } from "./seo/site";
+import { CTAProvider } from "./components/CTAProvider";
+import { ModalProvider } from "./components/industrial/ModalProvider";
+import { NextIntlClientProvider } from "next-intl";
+import enMessages from "@/messages/en.json";
 
 const sora = Sora({ 
   subsets: ["latin"],
@@ -83,17 +80,11 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`${sora.className} antialiased`}>
         <OrganizationJsonLd />
-        <LocaleProvider defaultLocale="en">
+        <NextIntlClientProvider locale="en" messages={enMessages}>
           <CTAProvider>
-            <ModalProvider>
-              <Header theme="dark" />
-              {children}
-              <Footer />
-              <BookMeetingModal />
-              <SolutionModal />
-            </ModalProvider>
+            <ModalProvider>{children}</ModalProvider>
           </CTAProvider>
-        </LocaleProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

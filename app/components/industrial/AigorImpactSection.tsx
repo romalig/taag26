@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Zap, Timer, Activity, ArrowRight, Layers } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function AigorImpactSection() {
+  const t = useTranslations("Industrial.Impact");
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -97,13 +99,13 @@ export default function AigorImpactSection() {
         {/* 1. HERO VISUAL (Título + Imagen) */}
         <div className="text-center flex flex-col items-center mb-40 pt-20">
           <p className="text-sm md:text-base font-bold tracking-[0.2em] text-white/60 mb-6 uppercase animate-fadeIn">
-            Hyper-Fast EMP
+            {t("eyebrow")}
           </p>
 
           <h2 className="text-5xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-16 drop-shadow-2xl">
-            A completely <br />
-            transformed <br />
-            workflow.
+            {t("titleA")} <br />
+            {t("titleB")} <br />
+            {t("titleC")}
           </h2>
 
           {/* IMAGEN CENTRAL */}
@@ -125,10 +127,9 @@ export default function AigorImpactSection() {
         {/* 2. TEXTO DESCRIPTIVO (Aparece al bajar) */}
         <div className="text-center mb-24 max-w-3xl">
           <p className="text-2xl md:text-3xl font-medium text-white leading-relaxed drop-shadow-lg p-6 rounded-3xl backdrop-blur-sm border border-white/5">
-            <span className="text-white/50">Immersive speed like never before.</span>{" "}
+            <span className="text-white/50">{t("introA")}</span>{" "}
             <br />
-            AiGOR utilizes RNA-based detection to bypass biological limits,
-            delivering actionable results in hours, not days.
+            {t("introB")}
           </p>
         </div>
 
@@ -140,26 +141,26 @@ export default function AigorImpactSection() {
               <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-4">
                 <Activity className="w-6 h-6 text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">RNA Sensitivity.</h3>
+              <h3 className="text-xl font-bold text-white mb-2">{t("cards.rna.title")}</h3>
               <p className="text-sm text-gray-400 font-medium">
-                Detects active cells only. No false positives from dead DNA.
+                {t("cards.rna.body")}
               </p>
             </div>
             <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-              10k<span className="text-2xl text-gray-500">x</span>
+              {t("cards.rna.value")}<span className="text-2xl text-gray-500">{t("cards.rna.suffix")}</span>
             </div>
           </div>
 
           {/* Card 2 */}
           <div className="bg-[#1c1c1e]/80 backdrop-blur-md rounded-[2rem] p-0 min-h-[320px] flex flex-col justify-between overflow-hidden relative group hover:scale-[1.02] transition-transform duration-300 border border-white/10 shadow-2xl">
             <div className="p-8 relative z-10">
-              <h3 className="text-xl font-bold text-white mb-2">Zero Enrichment.</h3>
-              <p className="text-sm text-gray-400 font-medium">Skip the 24h growth step.</p>
+              <h3 className="text-xl font-bold text-white mb-2">{t("cards.zero.title")}</h3>
+              <p className="text-sm text-gray-400 font-medium">{t("cards.zero.body")}</p>
             </div>
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#FF270A]/20" />
             <div className="p-8 pt-0 relative z-10 mt-auto">
               <Zap className="w-10 h-10 text-[#FF270A] mb-2" />
-              <div className="text-3xl font-bold text-white">Direct.</div>
+              <div className="text-3xl font-bold text-white">{t("cards.zero.value")}</div>
             </div>
           </div>
 
@@ -169,11 +170,11 @@ export default function AigorImpactSection() {
               <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mb-4">
                 <Timer className="w-6 h-6 text-purple-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Speed redefined.</h3>
-              <p className="text-sm text-gray-400 font-medium">From sample to certificate.</p>
+              <h3 className="text-xl font-bold text-white mb-2">{t("cards.speed.title")}</h3>
+              <p className="text-sm text-gray-400 font-medium">{t("cards.speed.body")}</p>
             </div>
             <div className="text-5xl font-bold text-white">
-              3<span className="text-xl text-gray-500 ml-1">HOURS</span>
+              {t("cards.speed.value")}<span className="text-xl text-gray-500 ml-1">{t("cards.speed.suffix")}</span>
             </div>
           </div>
 
@@ -183,9 +184,9 @@ export default function AigorImpactSection() {
               <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
                 <Layers className="w-6 h-6 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Seamless Fit.</h3>
+              <h3 className="text-xl font-bold mb-2">{t("cards.fit.title")}</h3>
               <p className="text-sm text-gray-600 font-medium">
-                Integrates with standard LIMS and existing lab workflows.
+                {t("cards.fit.body")}
               </p>
             </div>
             <div className="flex justify-end">

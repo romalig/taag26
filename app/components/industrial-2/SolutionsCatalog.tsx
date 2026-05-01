@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ChevronRight, Search, X, Download, Zap, Target, Filter } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCTA } from "../CTAProvider";
 import { PANEL_CATEGORIES, PANEL_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
@@ -10,6 +11,7 @@ import SolutionTemplate from "./modals/SolutionTemplate";
 import { SOLUTIONS_DATA } from "../data/solutionsData";
 
 export default function SolutionsCatalog() {
+  const t = useTranslations("Industrial.Catalog");
   const { openMeeting } = useCTA();
   const { openModal } = useModal();
 
@@ -101,12 +103,12 @@ export default function SolutionsCatalog() {
           
           {/* HERO DEL CATALOGO */}
           <div className="relative h-[420px] md:h-[500px] rounded-t-[3rem] overflow-hidden">
-            <Image src="/hero16.png" alt="TAAG Solutions Ecosystem" fill className="object-cover object-right md:object-center" priority />
+            <Image src="/hero16.png" alt={t("title")} fill className="object-cover object-right md:object-center" priority />
              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/10" />
              
              <div className="relative z-10 h-full flex items-start pt-20 md:pt-24">
                <div className="px-10 md:px-20 max-w-3xl">
-                 <h2 className="text-white text-4xl md:text-6xl font-extrabold leading-tight">Explore all our solutions</h2>
+                 <h2 className="text-white text-4xl md:text-6xl font-extrabold leading-tight">{t("title")}</h2>
                </div>
              </div>
              <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
@@ -122,7 +124,7 @@ export default function SolutionsCatalog() {
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#FF270A] transition-colors" />
                       <input 
                         type="text" 
-                        placeholder={searchQuery ? "Searching in all categories..." : "Search across all solutions..."}
+                        placeholder={searchQuery ? t("searching") : t("searchAll")}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full bg-gray-50 border border-gray-200 rounded-full py-3 pl-10 pr-10 text-sm font-medium text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#FF270A]/20 focus:border-[#FF270A] transition-all placeholder:text-gray-400"
@@ -142,7 +144,7 @@ export default function SolutionsCatalog() {
                         <Download className="w-4 h-4" />
                      </div>
                      <span className="leading-relaxed md:whitespace-nowrap text-left">
-                        Download Product<br className="block md:hidden"/> Selection Guide
+                        {t("download")}
                      </span>
                    </a>
                 </div>
@@ -156,7 +158,7 @@ export default function SolutionsCatalog() {
                           <div className="flex items-center gap-3">
                              <Filter className="w-4 h-4 text-[#FF270A]" />
                              <span className="text-xs md:text-sm font-medium text-gray-600">
-                               Filtering by: <span className="font-bold text-[#111111]">"{searchQuery}"</span>
+                               {t("filtering")} <span className="font-bold text-[#111111]">"{searchQuery}"</span>
                              </span>
                           </div>
                           <button 
@@ -225,14 +227,14 @@ export default function SolutionsCatalog() {
                            {/* Botones */}
                            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 transition-all duration-300">
                               <button onClick={openMeeting} className="px-6 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors shadow-md min-w-[100px]">
-                                 Contact
+                                 {t("contact")}
                               </button>
                               
                               <button 
                                 onClick={() => handleOpenDetails(item)}
                                 className="px-5 py-3 bg-white border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors flex items-center gap-2 justify-center shadow-sm"
                               >
-                                 Details <ChevronRight className="w-3 h-3" />
+                                 {t("details")} <ChevronRight className="w-3 h-3" />
                               </button>
                            </div>
                         </div>
@@ -240,8 +242,8 @@ export default function SolutionsCatalog() {
                    ) : (
                      <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
                         <Search className="w-12 h-12 text-gray-300 mb-4" />
-                        <p className="text-lg font-bold text-gray-400">No matching solutions found.</p>
-                        <p className="text-sm text-gray-400">Try searching for a target, technology, or name.</p>
+                        <p className="text-lg font-bold text-gray-400">{t("noResults")}</p>
+                        <p className="text-sm text-gray-400">{t("trySearch")}</p>
                      </div>
                    )}
 
@@ -250,12 +252,12 @@ export default function SolutionsCatalog() {
                        <div className="mb-4">
                           <Image src="/logo_mila.png" alt="MILA Logo" width={60} height={60} className="mx-auto opacity-80" />
                        </div>
-                       <h4 className="text-xl font-extrabold text-[#111111] mb-2">Didn't find what you're looking for?</h4>
+                       <h4 className="text-xl font-extrabold text-[#111111] mb-2">{t("customTitle")}</h4>
                        <p className="text-gray-500 text-sm font-medium mb-6 max-w-lg leading-relaxed">
-                          Powered by Mila, our R&D team turns unique challenges into custom solutions.
+                          {t("customBody")}
                        </p>
                        <button onClick={openMeeting} className="px-6 py-2.5 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors shadow-lg">
-                          Contact Us
+                          {t("contactUs")}
                        </button>
                    </div>
                 </div>

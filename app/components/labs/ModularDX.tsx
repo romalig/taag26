@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Plug, Users, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // =========================================================
 // COMPONENTE INTERNO: Animación Inteligente de Scalable
@@ -69,14 +70,28 @@ const ScalableVisual = () => {
   );
 };
 
+const ProductivityVisual = () => {
+  const t = useTranslations("Labs.ModularDX");
+
+  return (
+    <div className="absolute inset-0 bg-white flex flex-col items-center justify-center overflow-hidden">
+      <div className="flex items-center gap-2 relative z-10 mb-2">
+        <Users className="w-7 h-7 text-[#FF270A]" />
+        <span className="text-xl font-bold text-gray-800">x 2</span>
+      </div>
+      <div className="px-3 py-1 bg-red-50 border border-red-100 text-[#FF270A] font-bold rounded-full text-[11px] tracking-wide relative z-10">
+        {t("samples")}
+      </div>
+    </div>
+  );
+};
+
 
 // --- DATOS DEL CARRUSEL DE MODULAR DX ---
 const MODULAR_ADVANTAGES = [
   {
     id: 1,
     isWide: true,
-    title: "Plug & Play.",
-    text: "Arrives fully equipped and ready to operate. Skip the months of construction and start running molecular diagnostics from day one.",
     visual: (
       <Image 
         src="/modularDX2.png" 
@@ -89,8 +104,6 @@ const MODULAR_ADVANTAGES = [
   },
   {
     id: 2,
-    title: "Implement anywhere.",
-    text: "Requires only a standard electrical connection. Set up your molecular lab in remote locations or within existing facilities effortlessly.",
     visual: (
       <div className="absolute inset-0 bg-white flex items-center justify-center overflow-hidden">
           <div className="absolute w-36 h-36 bg-emerald-500/25 blur-2xl rounded-full"></div>
@@ -104,8 +117,6 @@ const MODULAR_ADVANTAGES = [
   },
   {
     id: 3,
-    title: "TxA Integrated.",
-    text: "Pre-wired and synchronized with our AI software ecosystem. Automate workflows, reporting, and data analysis instantly.",
     visual: (
       <div className="absolute inset-0 bg-white flex items-center justify-center overflow-hidden">
           <div className="absolute w-32 h-32 bg-purple-500/10 blur-3xl rounded-full"></div>
@@ -123,30 +134,14 @@ const MODULAR_ADVANTAGES = [
   },
   {
     id: 4,
-    title: "Scalable footprint.",
-    text: "Start with the exact capacity you need today. ModularDX allows you to seamlessly add new modules as your testing volume grows.",
     visual: <ScalableVisual /> 
   },
   {
     id: 5,
-    title: "Massive productivity.",
-    text: "Achieve maximum efficiency with minimal staff. A compact two-person team can comfortably process over 300 PCR samples per day.",
-    visual: (
-      <div className="absolute inset-0 bg-white flex flex-col items-center justify-center overflow-hidden">
-          <div className="flex items-center gap-2 relative z-10 mb-2">
-             <Users className="w-7 h-7 text-[#FF270A]" />
-             <span className="text-xl font-bold text-gray-800">x 2</span>
-          </div>
-          <div className="px-3 py-1 bg-red-50 border border-red-100 text-[#FF270A] font-bold rounded-full text-[11px] tracking-wide relative z-10">
-             300+ SAMPLES / DAY
-          </div>
-      </div>
-    )
+    visual: <ProductivityVisual />
   },
   {
     id: 6,
-    title: "ISO Compliant.",
-    text: "Built to meet the most stringent international molecular biology standards, ensuring absolute reliability and quality control.",
     visual: (
       <div className="absolute inset-0 bg-white flex items-center justify-center overflow-hidden">
           <div className="relative w-28 h-28 flex items-center justify-center">
@@ -160,6 +155,13 @@ const MODULAR_ADVANTAGES = [
 ];
 
 export default function ModularDX() {
+  const t = useTranslations("Labs.ModularDX");
+  const translations = t.raw("advantages") as Array<{title: string; text: string}>;
+  const modularAdvantages = MODULAR_ADVANTAGES.map((adv, index) => ({
+    ...adv,
+    title: translations[index]?.title ?? "",
+    text: translations[index]?.text ?? "",
+  }));
   const carouselRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -190,7 +192,7 @@ export default function ModularDX() {
 
   return (
     <section className="relative w-full bg-[#F4F4F5] pt-24 pb-8 md:pt-32 md:pb-16 flex flex-col items-center justify-center overflow-hidden">      
-      <style dangerouslySetInnerHTML={{__html: `
+      <style jsx>{`
         .hide-scroll::-webkit-scrollbar {
           display: none !important;
         }
@@ -214,7 +216,7 @@ export default function ModularDX() {
         .animate-merge-right {
           animation: slideBlockRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-      `}} />
+      `}</style>
 
       {/* ========================================================= */}
       {/* 1. TARJETA PRINCIPAL (Hero ModularDX Responsivo)          */}
@@ -247,16 +249,16 @@ export default function ModularDX() {
             
             <div className="w-full max-w-[380px] flex flex-col items-start mt-2 md:mt-0">
               <span className="text-left text-xs md:text-sm font-bold tracking-[0.2em] text-[#FF270A] uppercase mb-4 block w-full drop-shadow-md">
-                Turnkey Laboratory
+                {t("eyebrow")}
               </span>
               <h2 className="text-left text-3xl md:text-3xl lg:text-4xl font-bold text-white mb-2 md:mb-5 tracking-tight leading-tight w-full drop-shadow-lg">
-                Your lab. <br className="hidden md:block" /> Anywhere. Instantly.
+                {t("title")} <br className="hidden md:block" /> {t("titleB")}
               </h2>
             </div>
 
             <div className="w-full max-w-[380px] flex flex-col items-start mb-2 md:mb-0">
               <p className="text-left text-sm md:text-base text-white/90 font-medium leading-relaxed w-full drop-shadow-md">
-                ModularDX is a fully equipped, plug-and-play molecular diagnostics laboratory. Designed to deploy rapidly and scale effortlessly, bringing the entire TAAG ecosystem to any location.
+                {t("body")}
               </p>
             </div>
 
@@ -275,7 +277,7 @@ export default function ModularDX() {
           onScroll={checkScroll}
           className="flex gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory hide-scroll pb-6 pl-[max(1rem,calc(50vw_-_600px_+_2rem))] scroll-pl-[max(1rem,calc(50vw_-_600px_+_2rem))]"
         >
-          {MODULAR_ADVANTAGES.map((adv) => (
+          {modularAdvantages.map((adv) => (
             <div 
               key={adv.id} 
               className={`snap-start shrink-0 flex flex-col ${
@@ -320,7 +322,7 @@ export default function ModularDX() {
                   ? "bg-[#111111] hover:bg-gray-800 text-white cursor-pointer shadow-md" 
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
-              aria-label="Previous slide"
+              aria-label={t("previous")}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </button>
@@ -332,7 +334,7 @@ export default function ModularDX() {
                   ? "bg-[#111111] hover:bg-gray-800 text-white cursor-pointer shadow-md" 
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
-              aria-label="Next slide"
+              aria-label={t("next")}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </button>

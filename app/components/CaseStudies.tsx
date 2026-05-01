@@ -2,12 +2,17 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link"; // 1. IMPORTAMOS LINK DE NEXT.JS
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // 2. IMPORTAMOS NUESTRA BASE DE DATOS CENTRAL
 // (Asegúrate de que la ruta coincida con donde guardaste el archivo)
 import { CASE_STUDIES } from "@/app/components/data/caseStudies";
+import {
+  getLocalizedCaseStudy,
+  type CaseStudiesTranslator,
+} from "@/app/lib/case-study-i18n";
 
 // CONFIGURACIÓN DE TAMAÑOS (Logos)
 const CLIENTS = [
@@ -18,6 +23,7 @@ const CLIENTS = [
 ];
 
 export default function CaseStudies() {
+  const t = useTranslations("CaseStudies");
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -57,16 +63,16 @@ export default function CaseStudies() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
           <div className="max-w-2xl">
             <span className="text-[#FF270A] font-bold tracking-widest uppercase text-xs mb-3 block">
-              Proven Impact
+              {t("eyebrow")}
             </span>
             <h2 className="text-4xl md:text-6xl font-extrabold text-[#111111] leading-[1.1] tracking-tight">
-              Real solutions. <br />
-              <span className="text-gray-400">Real impact.</span>
+              {t("title")} <br />
+              <span className="text-gray-400">{t("subtitle")}</span>
             </h2>
           </div>
           <div className="max-w-md md:text-right pb-1">
             <p className="text-gray-500 text-lg font-medium leading-relaxed">
-              Trusted by global leaders to protect their brands and optimize their production.
+              {t("description")}
             </p>
           </div>
         </div>
@@ -74,7 +80,7 @@ export default function CaseStudies() {
         <div className="flex items-center gap-4 mb-6">
            <div className="h-8 w-[3px] bg-[#FF270A] rounded-full"></div>
            <span className="text-xs font-bold uppercase tracking-widest text-[#111111]/40">
-             Some of our partners
+             {t("partners")}
            </span>
         </div>
         
@@ -102,7 +108,7 @@ export default function CaseStudies() {
         <div className="flex items-center gap-4">
            <div className="h-8 w-[3px] bg-[#FF270A] rounded-full"></div>
            <span className="text-xs font-bold uppercase tracking-widest text-[#111111]/40">
-             Successful Cases
+             {t("successfulCases")}
            </span>
         </div>
       </div>
@@ -134,6 +140,7 @@ export default function CaseStudies() {
         >
           {/* 3. MAPEAMOS USANDO CASE_STUDIES Y USAMOS <Link> */}
           {CASE_STUDIES.map((item) => {
+            const loc = getLocalizedCaseStudy(item, t as unknown as CaseStudiesTranslator);
             return (
               <Link 
                 href={`/cases/${item.slug}`} // Ruta dinámica conectada
@@ -144,7 +151,7 @@ export default function CaseStudies() {
                 <div className="absolute inset-0 z-0">
                   <Image 
                     src={item.image} 
-                    alt={item.title} 
+                    alt={loc.title} 
                     fill 
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
@@ -160,11 +167,11 @@ export default function CaseStudies() {
                    <div className="flex justify-between items-start mb-6">
                      <div className="flex flex-col">
                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#FF270A] mb-2">
-                         {item.company}
+                         {loc.company}
                        </span>
                        <div className="flex gap-2">
                           <span className="text-[10px] font-bold text-gray-300 uppercase tracking-wider border border-white/20 px-2 py-0.5 rounded-full backdrop-blur-sm">
-                            {item.category}
+                            {loc.category}
                           </span>
                        </div>
                      </div>
@@ -173,19 +180,19 @@ export default function CaseStudies() {
                    {/* Métrica Central / Título Grande */}
                    <div className="flex-1 flex flex-col justify-center mb-4">
                      <span className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2 drop-shadow-md leading-tight">
-                       {item.title}
+                       {loc.title}
                      </span>
                    </div>
 
                    {/* Footer */}
                    <div>
                      <p className="text-sm font-medium leading-relaxed text-gray-300 mb-6 md:mb-8 line-clamp-3">
-                       {item.description}
+                       {loc.description}
                      </p>
                      <div className="pt-6 border-t border-white/20">
                          {/* Convertido de button a div porque ya estamos dentro de un <Link> */}
                          <div className="text-xs font-bold uppercase tracking-widest flex items-center gap-2 text-white group-hover:text-[#FF270A] transition-colors">
-                           Read case study <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                           {t("read")} <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                          </div>
                      </div>
                    </div>

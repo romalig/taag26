@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowRight, CheckCircle2, Clock, TrendingDown } from "lucide-react";
 import { useCTA } from "../CTAProvider";
+import { useTranslations } from "next-intl";
 import { FEATURED_SOLUTIONS } from "../../industrial/industrialData";
 import { useModal } from "./ModalProvider";
 
@@ -12,6 +13,7 @@ import SolutionTemplate from "./modals/SolutionTemplate";
 import { SOLUTIONS_DATA } from "../data/solutionsData"; // Ruta corregida para consistencia
 
 export default function FeaturedSolutions() {
+  const tf = useTranslations("Industrial.Featured");
   const { openMeeting } = useCTA();
   const { openModal } = useModal(); 
   const [isImageVisible, setIsImageVisible] = useState(false);
@@ -74,10 +76,10 @@ export default function FeaturedSolutions() {
 
           <div className="relative z-10 text-center mb-8 max-w-2xl mx-auto">
             <span className="text-[#FF270A] font-bold uppercase tracking-widest text-xs mb-4 block">
-              Featured SOLUTIONS
+              {tf("eyebrow")}
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-[#111111]">
-              This is how the future looks like
+              {tf("title")}
             </h2>
           </div>
 
@@ -91,7 +93,7 @@ export default function FeaturedSolutions() {
           >
             <Image
               src="/2bacterias_verdes3.png"
-              alt="Microbiology Hero"
+              alt={tf("title")}
               fill
               className="object-contain"
               priority
@@ -106,8 +108,8 @@ export default function FeaturedSolutions() {
                 return (
                   <div key={solution.id} className="md:col-span-2 group bg-[#FDF6E3] rounded-[2.5rem] p-0 md:px-8 md:pt-8 md:pb-0 flex flex-col md:grid md:grid-cols-3 gap-0 md:gap-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-yellow-300 overflow-hidden relative">
                      <div className="order-1 text-left relative z-20 flex flex-col justify-start pt-10 px-10 md:px-0 md:pt-8 pb-6 md:pb-8">
-                        <h3 className="text-4xl font-bold text-[#111111] mb-6 leading-tight">{solution.title}</h3>
-                        <p className="text-gray-600 text-base leading-relaxed font-medium">{solution.descriptionLeft}</p>
+                        <h3 className="text-4xl font-bold text-[#111111] mb-6 leading-tight">{tf(`solutions.${solution.id}.title`)}</h3>
+                        <p className="text-gray-600 text-base leading-relaxed font-medium">{tf(`solutions.${solution.id}.descriptionLeft`)}</p>
                       </div>
 
                       <div className="order-2 relative w-full h-auto min-h-[340px] md:min-h-[400px] flex flex-col items-center pt-8 pb-8 md:pt-8 md:pb-8 px-8 md:px-6 mb-6 md:mb-0">
@@ -118,7 +120,7 @@ export default function FeaturedSolutions() {
                         <div className="w-full max-w-[280px] md:max-w-none mx-auto flex flex-col h-full justify-between gap-6 md:gap-0">
                            <div className="flex items-center justify-center md:justify-start gap-2">
                               <Clock className="w-5 h-5 text-yellow-700" />
-                              <span className="text-[11px] font-bold uppercase tracking-widest text-yellow-700">Time to Result</span>
+                              <span className="text-[11px] font-bold uppercase tracking-widest text-yellow-700">{tf("timeToResult")}</span>
                            </div>
                            <div className="flex-1 flex items-end justify-center gap-6 md:gap-10 relative z-10 min-h-[240px] mb-10 md:mb-20 mt-6">
                               <div className="flex flex-col items-center gap-3 w-16 group">
@@ -126,8 +128,8 @@ export default function FeaturedSolutions() {
                                     <div className="w-full bg-gray-300 rounded-t-full" style={{height: '85%', animation: 'grow-up-slow 2s ease-out forwards'}}></div>
                                  </div>
                                  <div className="text-center">
-                                    <div className="text-[10px] font-bold text-gray-400 uppercase leading-tight">External Lab</div>
-                                    <div className="text-[10px] font-medium text-gray-400 mt-1">3-5 Days</div>
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase leading-tight">{tf("externalLab")}</div>
+                                    <div className="text-[10px] font-medium text-gray-400 mt-1">{tf("days")}</div>
                                  </div>
                               </div>
                               <div className="flex flex-col items-center gap-3 w-16 group">
@@ -137,15 +139,15 @@ export default function FeaturedSolutions() {
                                     </div>
                                  </div>
                                  <div className="text-center">
-                                    <div className="text-[10px] font-bold text-[#111111] uppercase leading-tight">AiGOR Tech</div>
-                                    <div className="text-[10px] font-bold text-[#FF270A] mt-1">&lt; 3 Hours</div>
+                                    <div className="text-[10px] font-bold text-[#111111] uppercase leading-tight">{tf("aigorTech")}</div>
+                                    <div className="text-[10px] font-bold text-[#FF270A] mt-1">{tf("hours")}</div>
                                  </div>
                               </div>
                            </div>
                            <div className="flex justify-center md:justify-center">
                               <div className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-50 border border-emerald-100 rounded-full w-full justify-center">
                                 <TrendingDown className="w-4 h-4 text-emerald-600" />
-                                <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Significant Cost Savings</span>
+                                <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">{tf("savings")}</span>
                               </div>
                            </div>
                         </div>
@@ -153,11 +155,11 @@ export default function FeaturedSolutions() {
 
                       <div className="order-3 text-left flex flex-col justify-start md:justify-between relative z-20 px-10 pb-8 md:px-0 md:pb-8 md:pt-8">
                         <div className="mb-8">
-                           <h4 className="text-[#111111] font-bold text-sm uppercase tracking-widest mb-6">Advantages</h4>
-                           <p className="text-gray-600 text-sm leading-relaxed mb-4 font-medium">{solution.description}</p>
+                           <h4 className="text-[#111111] font-bold text-sm uppercase tracking-widest mb-6">{tf("advantages")}</h4>
+                           <p className="text-gray-600 text-sm leading-relaxed mb-4 font-medium">{tf(`solutions.${solution.id}.description`)}</p>
                            {solution.advantages && (
                              <ul className="flex flex-col gap-3">
-                               {solution.advantages.map((adv, i) => {
+                               {(tf.raw(`solutions.${solution.id}.advantages`) as string[]).map((adv, i) => {
                                  const [title, ...rest] = adv.split(":");
                                  const description = rest.join(":");
                                  return (
@@ -172,7 +174,7 @@ export default function FeaturedSolutions() {
                         </div>
                          <div className="flex gap-3 mt-auto md:mt-6">
                            <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111] text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-md">
-                           Contact <ArrowRight className="w-3 h-3" />
+                           {tf("contact")} <ArrowRight className="w-3 h-3" />
                            </button>
                            
                             {/* BOTÓN DETAILS CONECTADO AL SISTEMA DE DATOS */}
@@ -180,7 +182,7 @@ export default function FeaturedSolutions() {
                               onClick={() => handleOpenDetails(solution.id)}
                               className="flex-1 py-3 bg-white border border-yellow-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-50 transition-colors shadow-sm flex items-center justify-center"
                             >
-                              Details
+                              {tf("details")}
                             </button>
                           </div>
                         </div>
@@ -196,7 +198,7 @@ export default function FeaturedSolutions() {
                          {solution.image && (
                              <Image
                                src={solution.image} 
-                               alt={solution.title}
+                               alt={tf(`solutions.${solution.id}.title`)}
                                fill
                                className="object-cover object-center" 
                              />
@@ -206,8 +208,8 @@ export default function FeaturedSolutions() {
 
                       <div className="relative z-20 w-full h-full flex flex-col md:flex-row items-start md:items-center justify-between p-10 md:px-12">
                         <div className="max-w-[260px] z-20">
-                            <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-sm">{solution.title}</h3>
-                            <p className="text-gray-200 text-sm font-medium leading-relaxed drop-shadow-sm">{solution.description}</p>
+                            <h3 className="text-2xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-sm">{tf(`solutions.${solution.id}.title`)}</h3>
+                            <p className="text-gray-200 text-sm font-medium leading-relaxed drop-shadow-sm">{tf(`solutions.${solution.id}.description`)}</p>
                         </div>
                         <div className="absolute left-[380px] top-1/2 -translate-y-1/2 hidden md:block z-20 select-none">
                            <div className="relative w-40 h-40 scale-90">
@@ -217,19 +219,19 @@ export default function FeaturedSolutions() {
                                   <path d="M35 130 A 70 70 0 0 1 100 30" stroke="#86EFAC" strokeDasharray="6 6" opacity="0.9" />
                               </svg>
                               <div className="absolute top-2 left-1/2 -translate-x-1/2 text-center">
-                                  <span className="block text-[9px] font-medium text-[#FDE047] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#FDE047]/20">Results</span>
+                                  <span className="block text-[9px] font-medium text-[#FDE047] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#FDE047]/20">{tf("labels.results")}</span>
                               </div>
                               <div className="absolute bottom-8 right-0 text-center">
-                                  <span className="block text-[9px] font-medium text-[#FCA5A5] uppercase tracking-widest bg-black/70 px-4 py-1 rounded-full backdrop-blur-sm border border-[#FCA5A5]/20">Ai</span>
+                                  <span className="block text-[9px] font-medium text-[#FCA5A5] uppercase tracking-widest bg-black/70 px-4 py-1 rounded-full backdrop-blur-sm border border-[#FCA5A5]/20">{tf("labels.ai")}</span>
                               </div>
                               <div className="absolute bottom-8 left-0 text-center">
-                                  <span className="block text-[9px] font-medium text-[#86EFAC] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#86EFAC]/20 leading-none">Improve<br/>EMP</span>
+                                  <span className="block text-[9px] font-medium text-[#86EFAC] uppercase tracking-widest bg-black/70 px-3 py-1 rounded-full backdrop-blur-sm border border-[#86EFAC]/20 leading-none">{tf("labels.improveEmp")}</span>
                               </div>
                            </div>
                         </div>
                         <div className="relative mt-6 z-30 opacity-100 translate-y-0 md:absolute md:bottom-6 md:right-10 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
                            <button onClick={openMeeting} className="py-3 px-6 bg-white text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] hover:text-white transition-colors flex items-center gap-2 shadow-md">
-                             Learn More <ArrowRight className="w-3 h-3" />
+                             {tf("learnMore")} <ArrowRight className="w-3 h-3" />
                            </button>
                         </div>
                       </div>
@@ -241,14 +243,14 @@ export default function FeaturedSolutions() {
               return (
                 <div key={solution.id} className="md:col-span-1 group bg-white rounded-[2.5rem] pt-10 px-6 flex flex-col h-[520px] md:h-[480px] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden text-center items-center">
                    <div className="relative z-10 w-full max-w-[400px] flex flex-col items-center">
-                      <h3 className="text-2xl font-bold text-[#111111] mb-4 leading-tight">{solution.title}</h3>
-                      <p className="text-gray-500 text-sm leading-relaxed">{solution.description}</p>
+                      <h3 className="text-2xl font-bold text-[#111111] mb-4 leading-tight">{tf(`solutions.${solution.id}.title`)}</h3>
+                      <p className="text-gray-500 text-sm leading-relaxed">{tf(`solutions.${solution.id}.description`)}</p>
                     </div>
 
                     {solution.image && (
                       <div className="absolute bottom-24 md:bottom-0 left-0 right-0 h-[220px] z-0 flex items-end justify-center">
                          <div className="relative w-full h-full">
-                           <Image src={solution.image} alt={solution.title} fill className="object-contain object-bottom" />
+                           <Image src={solution.image} alt={tf(`solutions.${solution.id}.title`)} fill className="object-contain object-bottom" />
                          </div>
                       </div>
                     )}
@@ -257,7 +259,7 @@ export default function FeaturedSolutions() {
 
                     <div className="absolute bottom-6 left-10 right-10 flex gap-2 z-30 transition-opacity duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100">
                       <button onClick={openMeeting} className="flex-1 py-3 bg-[#111111]/90 backdrop-blur text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-2 shadow-xl">
-                        Contact <ArrowRight className="w-3 h-3" />
+                        {tf("contact")} <ArrowRight className="w-3 h-3" />
                       </button>
                       
                       {/* BOTÓN DETAILS CONECTADO AL SISTEMA DE DATOS */}
@@ -265,7 +267,7 @@ export default function FeaturedSolutions() {
                         onClick={() => handleOpenDetails(solution.id)}
                         className="flex-1 py-3 bg-white/90 backdrop-blur border border-gray-200 text-[#111111] rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors shadow-xl"
                       >
-                        Details
+                        {tf("details")}
                       </button>
                     </div>
                 </div>

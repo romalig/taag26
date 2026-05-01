@@ -1,8 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function HeroSection() {
+  const t = useTranslations("EmpTesting.Hero");
+
   return (
     <section className="w-full pt-24 pb-12 px-4 md:px-8 bg-white">
       {/* Contenedor de la tarjeta (más ancho que el texto para respirar) */}
@@ -12,7 +15,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 z-0">
           <Image 
             src="/env.png" 
-            alt="Environmental Testing Business Case" 
+            alt={t("imageAlt")}
             fill 
             className="object-cover"
             priority
@@ -29,16 +32,16 @@ export default function HeroSection() {
             
             <div className="flex items-start">
                <span className="text-[#FF270A] font-bold uppercase tracking-widest text-sm drop-shadow-md">
-                 BUSINESS CASE
+                 {t("eyebrow")}
                </span>
             </div>
 
             <div className="mb-4 max-w-4xl">
                <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-[1.05] drop-shadow-lg tracking-tight">
-                 Transforming EMP into a Profit Center.
+                 {t("title")}
                </h1>
                <p className="text-base md:text-xl text-white/90 font-medium leading-relaxed drop-shadow-md max-w-3xl">
-                 How moving environmental pathogen testing in-house generates six-figure annual savings while eliminating 72 hours of production bottlenecks.
+                 {t("body")}
                </p>
             </div>
 

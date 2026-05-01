@@ -4,8 +4,7 @@ import Image from "next/image";
 import { Phone, Mail, Send, ChevronDown, CheckCircle2 } from "lucide-react";
 import { useState, useRef } from "react";
 
-import { getContactMessages } from "@/app/messages/contact";
-import type { ContactLocale } from "@/app/messages/contact";
+import type { ContactLocale } from "@/app/lib/contact-api";
 import { ContactApiError, submitContactMessage } from "@/app/lib/contact-api";
 
 export type WhereSupportCopy = {
@@ -32,6 +31,9 @@ export type WhereSupportCopy = {
   routing: string;
   messageSent: string;
   contactShortly: string;
+  websiteLabel: string;
+  errorDuplicate: string;
+  errorGeneric: string;
 };
 
 type TeamMemberCard = {
@@ -94,8 +96,6 @@ export default function SupportTeamSection({
   const formSectionRef = useRef<HTMLDivElement>(null);
 
   const contactLocale: ContactLocale = languageCode === "es" ? "es" : "en";
-  const contactErr = getContactMessages(contactLocale);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -127,11 +127,11 @@ export default function SupportTeamSection({
       setHelpType("");
     } catch (err) {
       if (err instanceof ContactApiError && err.code === "duplicate_submission") {
-        setErrorMessage(contactErr.errorDuplicate);
+        setErrorMessage(t.errorDuplicate);
       } else if (err instanceof ContactApiError) {
-        setErrorMessage(err.message || contactErr.errorGeneric);
+        setErrorMessage(err.message || t.errorGeneric);
       } else {
-        setErrorMessage(contactErr.errorGeneric);
+        setErrorMessage(t.errorGeneric);
       }
     } finally {
       setIsSubmitting(false);
@@ -314,7 +314,7 @@ export default function SupportTeamSection({
               />
 
               <div className="absolute left-[-9999px] w-px h-px overflow-hidden" aria-hidden>
-                <label htmlFor="where-support-website">Website</label>
+                <label htmlFor="where-support-website">{t.websiteLabel}</label>
                 <input
                   id="where-support-website"
                   tabIndex={-1}
