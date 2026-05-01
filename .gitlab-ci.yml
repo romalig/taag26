@@ -37,6 +37,8 @@ build_dev:
       NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY="$NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY"
       --build-arg
       NEXT_PUBLIC_TXALAB_LOGIN_URL="${NEXT_PUBLIC_TXALAB_LOGIN_URL:-https://txalab.taag-genetics.com}"
+      --build-arg
+      NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://www.taag.bio}"
       -t $IMG_TAG_FINAL . -f .docker/Dockerfile
     - docker push $IMG_TAG_FINAL
   only:
@@ -93,6 +95,8 @@ build_latest:
       NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY="$NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY"
       --build-arg
       NEXT_PUBLIC_TXALAB_LOGIN_URL="${NEXT_PUBLIC_TXALAB_LOGIN_URL:-https://txalab.taag-genetics.com}"
+      --build-arg
+      NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-https://www.taag.bio}"
       --build-arg CHAT_IA_WEBPAGE_API_URL="$CHAT_IA_WEBPAGE_API_URL" --build-arg
       CHAT_IA_WEBPAGE_SERVICE_KEY="$CHAT_IA_WEBPAGE_SERVICE_KEY" -t
       $IMG_TAG_FINAL . -f .docker/Dockerfile

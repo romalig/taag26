@@ -16,9 +16,12 @@ WORKDIR /app
 ARG NEXT_PUBLIC_APIWEBSITE_URL=""
 ARG NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY=""
 ARG NEXT_PUBLIC_TXALAB_LOGIN_URL="https://txalab.taag-genetics.com"
+# Public site URL (seo/site.ts, proxy hreflang). Override per env in CI / docker build.
+ARG NEXT_PUBLIC_SITE_URL=""
 ENV NEXT_PUBLIC_APIWEBSITE_URL=$NEXT_PUBLIC_APIWEBSITE_URL
 ENV NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY=$NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY
 ENV NEXT_PUBLIC_TXALAB_LOGIN_URL=$NEXT_PUBLIC_TXALAB_LOGIN_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 # Chat upstream — same as CI build-args; must exist at `next build` so server
 # routes (e.g. /bff/chat) see a non-empty URL in the compiled bundle.
 ARG CHAT_IA_WEBPAGE_API_URL=""
