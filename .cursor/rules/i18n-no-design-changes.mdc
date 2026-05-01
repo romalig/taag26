@@ -1,0 +1,16 @@
+---
+description: TAAG front — i18n and logic without altering layout or visual design
+globs: front.taag.bio/**/*.{tsx,ts,css}
+alwaysApply: false
+---
+
+# No design changes unless explicitly requested
+
+When editing `front.taag.bio` (especially i18n, copy, or messages):
+
+- **Do not** add, remove, or reorder sections/components on pages unless the user explicitly asks for a layout or UX change.
+- **Do not** change structure, spacing, typography, colors, breakpoints, or `className` trees except what is strictly required to swap hardcoded strings for `t(...)` / equivalent (same DOM structure and classes).
+- **Do not** mount optional/demo sections (e.g. strips, hero variants) “to show translations”; wire copy only inside existing UI.
+- **Allowed:** `messages/en.json`, `messages/es.json`, `useTranslations` / `getTranslations`, replacing string literals with keys, `alt`/`aria-*` text, metadata strings, and minimal JSX edits that preserve markup and styling.
+
+If copy changes might imply design impact, ask before proceeding.

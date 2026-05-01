@@ -142,47 +142,97 @@
       "TxA": {
         "title": "TxA — smart microbiology software",
         "description": "TxA turns isolated lab results into predictive risk insight, surfacing correlations before contamination becomes an outbreak.",
-        "keywords": ["TxA", "microbiology software", "LIMS", "predictive risk", "TAAG"]
+        "keywords": [
+          "TxA",
+          "microbiology software",
+          "LIMS",
+          "predictive risk",
+          "TAAG"
+        ]
       },
       "Where": {
         "title": "Global science, local support",
         "description": "TAAG hubs, partner labs, and distributors worldwide—support in your language and time zone for kits, TxA, MILA, and lab services.",
-        "keywords": ["TAAG locations", "lab partner", "global support", "distributors"]
+        "keywords": [
+          "TAAG locations",
+          "lab partner",
+          "global support",
+          "distributors"
+        ]
       },
       "Customized": {
         "title": "MILA — AI-designed molecular assays",
         "description": "Design custom multiplex microbiological assays with MILA™: from target sequences to production-ready panels for your lab.",
-        "keywords": ["MILA", "custom PCR", "multiplex assay", "AI diagnostics", "TAAG"]
+        "keywords": [
+          "MILA",
+          "custom PCR",
+          "multiplex assay",
+          "AI diagnostics",
+          "TAAG"
+        ]
       },
       "Aigor": {
         "title": "AiGOR — RNA-powered microbiology",
         "description": "AiGOR™ RNA technology for a new generation of microbiological solutions: sensitive, fast pathogen and spoilage detection.",
-        "keywords": ["AiGOR", "RNA detection", "Salmonella", "food safety", "TAAG"]
+        "keywords": [
+          "AiGOR",
+          "RNA detection",
+          "Salmonella",
+          "food safety",
+          "TAAG"
+        ]
       },
       "Labs": {
         "title": "Lab Partners — TAAG molecular ecosystem",
         "description": "Join TAAG's partner lab network: multiplex PCR, Elevia rapid workflows, TxA integration, and scalable molecular services.",
-        "keywords": ["TAAG lab partner", "multiplex PCR", "Elevia", "laboratory network"]
+        "keywords": [
+          "TAAG lab partner",
+          "multiplex PCR",
+          "Elevia",
+          "laboratory network"
+        ]
       },
       "LabNetwork": {
         "title": "Laboratory Services — TAAG",
         "description": "ISO-accredited microbiology testing: pathogens, spoilage, NGS, and custom assays—with TxA integration for end-to-end insight.",
-        "keywords": ["TAAG laboratory services", "microbiology testing", "ISO 17025", "contract lab"]
+        "keywords": [
+          "TAAG laboratory services",
+          "microbiology testing",
+          "ISO 17025",
+          "contract lab"
+        ]
       },
       "AboutUs": {
         "title": "About TAAG",
         "description": "TAAG delivers advanced molecular diagnostics, lab services, and intelligent software to detect microbiological risk before it spreads.",
-        "keywords": ["TAAG", "about", "biotechnology", "molecular diagnostics"]
+        "keywords": [
+          "TAAG",
+          "about",
+          "biotechnology",
+          "molecular diagnostics"
+        ]
       },
       "Industrial": {
         "title": "Industrial Microbiology — TAAG",
         "description": "Ultra-fast RNA screening, multiplex EMP workflows, and AiGOR technology for manufacturing quality and food safety teams.",
-        "keywords": ["industrial microbiology", "EMP", "AiGOR", "food safety", "TAAG"]
+        "keywords": [
+          "industrial microbiology",
+          "EMP",
+          "AiGOR",
+          "food safety",
+          "TAAG"
+        ]
       },
       "EmpTesting": {
         "title": "In-house EMP molecular testing — TAAG",
         "description": "Turnkey AiGOR elevia implementation: footprint, throughput, and ROI for internal pathogen and indicator testing.",
-        "keywords": ["EMP testing", "AiGOR", "in-house lab", "food manufacturing", "TAAG"]
+        "keywords": [
+          "EMP testing",
+          "AiGOR",
+          "in-house lab",
+          "food manufacturing",
+          "TAAG"
+        ]
       }
     }
   },
@@ -236,6 +286,110 @@
       "MILA": "MILA",
       "TxA": "TxA",
       "Lab": "Lab Services"
+    },
+    "cards": {
+      "danone-precision-probiotics": {
+        "company": "Danone",
+        "category": "MILA™ Custom Design",
+        "title": "Precision Probiotics.",
+        "description": "Developing a custom triplex qPCR kit to quantify proprietary strains in finished yogurt products.",
+        "heroMetric": "3x Faster",
+        "challenge": "Danone needed a highly specific and rapid method to quantify proprietary probiotic strains in their finished yogurt products. Traditional plating methods were too slow and lacked the necessary precision to differentiate closely related strains, slowing down release times.",
+        "solution": "Using the MILA™ AI platform, we designed a custom triplex qPCR assay specifically tailored to Danone's proprietary genetic sequences. This allowed for multiplexed detection in a single reaction.",
+        "results": [
+          "Quantification time reduced from days to under 4 hours.",
+          "100% strain specificity achieved in complex dairy matrices.",
+          "Seamless integration into their existing laboratory workflows."
+        ]
+      },
+      "arca-continental-bottling-intelligence": {
+        "company": "Arca Continental",
+        "category": "TxA™ Digital Transformation",
+        "title": "Bottling Intelligence.",
+        "description": "Standardizing microbiological control across 35 production plants with our AI-driven software.",
+        "heroMetric": "35 Plants",
+        "challenge": "Managing microbiological data across 35 different bottling plants created information silos. Quality managers lacked real-time visibility to trace contamination sources and predict risk across the entire supply chain efficiently.",
+        "solution": "We implemented the TxA™ platform to digitize and map the microbiological ecosystem of all 35 facilities. This centralized the data and deployed AI algorithms for predictive risk assessment and plant mapping.",
+        "results": [
+          "Standardized quality control metrics across all international facilities.",
+          "Real-time alerts for contamination trends before they reach critical levels.",
+          "Significant reduction in delayed product releases."
+        ]
+      },
+      "chocolate-leader-pathogen-safety": {
+        "company": "Global Chocolate Leader",
+        "category": "AiGOR™ Pathogen Safety",
+        "title": "Safety at Speed.",
+        "description": "Ultra-fast Salmonella detection in chocolate matrices without complex enrichment.",
+        "heroMetric": "0 Enrichment",
+        "challenge": "Testing for Salmonella in complex, high-fat matrices like chocolate traditionally requires long and complex enrichment steps. This delayed product release times and drastically increased warehousing costs for finished goods.",
+        "solution": "We deployed our AiGOR™ RNA technology. Utilizing its 10,000x amplified sensitivity, the client can now detect metabolically active Salmonella directly from the sample, bypassing traditional enrichment protocols entirely.",
+        "results": [
+          "Eliminated the 24-48 hour enrichment phase.",
+          "Reduced warehousing costs by enabling same-shift product release.",
+          "Zero false positives thanks to RNA-based live-cell detection."
+        ]
+      },
+      "fast-salmonella-food": {
+        "company": "Food Industry",
+        "category": "Food Safety",
+        "title": "Fast control of Salmonella in the food industry",
+        "description": "Achieve actionable results and product release in just 6 hours, bypassing 24-48h enrichments.",
+        "heroMetric": "6 Hours",
+        "challenge": "Traditional food testing for Salmonella can take up to 24 to 48 hours, causing massive warehousing bottlenecks, delaying product release, and reducing shelf life. Furthermore, thermal or chemical interventions often leave dead cells that cause costly false positives in standard DNA tests.",
+        "solution": "Powered by our revolutionary AiGOR technology, this solution targets metabolically active RNA to detect Salmonella in complex food matrices in a fraction of the time. It differentiates live cells from dead ones seamlessly.",
+        "results": [
+          "Same-Day Positive Release: Cut holding times drastically with results in just 6 hours.",
+          "Live Cell Differentiation: RNA-based detection avoids false positives caused by dead cells.",
+          "Complex Matrix Ready: Highly robust against inhibitors in dairy, meats, and processed foods.",
+          "Maximum Sensitivity: Consistently detect down to 1 CFU/sample."
+        ]
+      },
+      "full-preventive-control": {
+        "company": "Quality Control",
+        "category": "Preventive Control",
+        "title": "Full and Preventive Microbiological Control",
+        "description": "Detect pathogens and indicator microorganisms simultaneously in a single reaction.",
+        "heroMetric": "All-in-One",
+        "challenge": "Current PCR kits are strictly reactive—they only alert you to a pathogen once the contamination has already occurred. Running separate tests for hygiene indicators and pathogens is expensive, labor-intensive, and delays preventive action.",
+        "solution": "Our high-capacity multiplex PCR solutions simultaneously detect dangerous pathogens (Salmonella, L. mono) and key indicator microorganisms in the exact same reaction tube, shifting the paradigm from reactive to truly preventive.",
+        "results": [
+          "Pathogens + Indicators: Detect both types simultaneously in one single PCR tube.",
+          "Preventive Paradigm: Use indicator data to predict hygiene failures proactively.",
+          "Cost Reduction: Lower reagent, plasticware, and labor costs by up to 70%.",
+          "Simplified Workflow: Utilize a universal enrichment protocol for multiple targets."
+        ]
+      },
+      "broad-spectrum-spoilage": {
+        "company": "Beverage Industry",
+        "category": "Spoilage Defense",
+        "title": "Broad-Spectrum Spoilage Defense",
+        "description": "Screen for spoilage yeast, mold, and bacteria in a single PCR run.",
+        "heroMetric": "< 24 Hrs",
+        "challenge": "Traditional plating methods for spoilage organisms can take up to 7 days, leaving your supply chain in limbo and your brand exposed to severe risks like package swelling, turbidity, and off-flavors.",
+        "solution": "Utilizes high-capacity multiplex PCR to detect the most critical beverage spoilers in a single reaction. By identifying hundreds of spoilage microorganisms before they compromise product quality, you guarantee shelf-life with molecular precision.",
+        "results": [
+          "Comprehensive Coverage: Detects 100+ acidophilic bacteria and 100+ yeasts and molds.",
+          "Rapid Release: Cut wait times from 5-7 days (plating) to under 24 hours.",
+          "Preservative Resistance: Identifies yeast strains capable of surviving chemical preservatives.",
+          "Multiplex Efficiency: Consolidate multiple culture media tests into one single workflow."
+        ]
+      },
+      "salmonella-ecoli-protection": {
+        "company": "Fresh Produce & Meat",
+        "category": "Pathogen Protection",
+        "title": "Protection against Salmonella and Pathogenic E. coli",
+        "description": "Simultaneous multiplex detection of Salmonella, E. coli O157:H7, and STEC.",
+        "heroMetric": "3-in-1",
+        "challenge": "Running separate testing protocols for Salmonella, E. coli O157:H7, and STEC is time-consuming, expensive, and delays product release for highly perishable goods like leafy greens, poultry, and raw meats.",
+        "solution": "A customized multiplex PCR solution that detects all three critical targets simultaneously from a single enriched sample. Ensure absolute consumer safety while accelerating positive release and drastically reducing your laboratory footprint.",
+        "results": [
+          "Simultaneous Detection: Identify Salmonella, E. coli O157:H7, and STEC in the same tube.",
+          "Universal Enrichment: One single sample preparation and enrichment broth for all pathogens.",
+          "Rapid Product Release: Get accurate results under 24 hours, preventing inventory bottlenecks.",
+          "Cost Efficiency: Slash costs by consolidating three individual pathogen tests into one."
+        ]
+      }
     }
   },
   "FinalCTA": {
@@ -320,12 +474,30 @@
       "vision": "To build a future where biological testing is fast, automated, predictive, and universally accessible, enabling every organization to protect health, optimize production, and unlock the full potential of biotechnology.",
       "valuesTitle": "Our Values",
       "values": [
-        {"title": "Embrace honesty", "description": "Transparency builds trust. We communicate openly with our clients, partners, and each other. We don't hide behind jargon; we present data and facts exactly as they are. Absolute honesty is the foundation of our scientific rigor."},
-        {"title": "Push the boundaries", "description": "Innovation is in our DNA. We are constantly exploring new technologies and methodologies to solve complex microbiological challenges that others consider impossible. We don't just follow the standard; we invent what comes next."},
-        {"title": "Be world-class", "description": "We are hyper-focused on doing better, and being better, at every single thing we do. We don't settle for good enough when it comes to protecting global food safety and health. If we want to be known for excellence, we must embody it daily."},
-        {"title": "Never settle", "description": "Continuous improvement drives us forward. We believe that no matter how advanced our current solutions are, there is always room to optimize, accelerate, and refine. We challenge the status quo to deliver faster and more accurate results."},
-        {"title": "Team over titles", "description": "Hard work and a collaborative spirit matter more than hierarchy. Everyone plays a uniquely important role. Our impact is maximized when we roll up our sleeves, support each other, and put the team first."},
-        {"title": "Fail forward", "description": "Operating at the cutting edge of biotechnology means taking risks. We are unafraid to make mistakes, provided we own them, learn from them, and iterate quickly. Every failure is just data that helps us build a stronger, smarter solution."}
+        {
+          "title": "Embrace honesty",
+          "description": "Transparency builds trust. We communicate openly with our clients, partners, and each other. We don't hide behind jargon; we present data and facts exactly as they are. Absolute honesty is the foundation of our scientific rigor."
+        },
+        {
+          "title": "Push the boundaries",
+          "description": "Innovation is in our DNA. We are constantly exploring new technologies and methodologies to solve complex microbiological challenges that others consider impossible. We don't just follow the standard; we invent what comes next."
+        },
+        {
+          "title": "Be world-class",
+          "description": "We are hyper-focused on doing better, and being better, at every single thing we do. We don't settle for good enough when it comes to protecting global food safety and health. If we want to be known for excellence, we must embody it daily."
+        },
+        {
+          "title": "Never settle",
+          "description": "Continuous improvement drives us forward. We believe that no matter how advanced our current solutions are, there is always room to optimize, accelerate, and refine. We challenge the status quo to deliver faster and more accurate results."
+        },
+        {
+          "title": "Team over titles",
+          "description": "Hard work and a collaborative spirit matter more than hierarchy. Everyone plays a uniquely important role. Our impact is maximized when we roll up our sleeves, support each other, and put the team first."
+        },
+        {
+          "title": "Fail forward",
+          "description": "Operating at the cutting edge of biotechnology means taking risks. We are unafraid to make mistakes, provided we own them, learn from them, and iterate quickly. Every failure is just data that helps us build a stronger, smarter solution."
+        }
       ],
       "timeline": {
         "titleLine1": "A history of firsts.",
@@ -333,11 +505,26 @@
         "intro": "We don't just use technology, we invent it. Discover the milestones that have redefined microbiological testing over the years.",
         "innovationBadge": "Innovation",
         "items": [
-          {"title": "Multiplex PCR Integration", "description": "First PCR kit to simultaneously detect Salmonella spp., L. monocytogenes, E. coli, and S. aureus in one single reaction and workflow."},
-          {"title": "Extreme Multiplexing", "description": "First extreme highly multiplex PCR kit (proprietary technology) capable of detecting and identifying over 50 spoilage microorganisms in a single PCR reaction."},
-          {"title": "TxA Platform", "description": "First AI algorithm capable of dynamically modifying the microbiological testing program based on real-time risk assessment."},
-          {"title": "MILA Platform", "description": "Development of MILA (proprietary technology): the first AI software able to predict the best molecules for highly multiplexed PCR kits."},
-          {"title": "AiGOR Technology", "description": "Development of AiGOR (proprietary technology): a revolutionary RNA detection technology delivering over 10,000 times more sensitivity than standard real-time PCR."}
+          {
+            "title": "Multiplex PCR Integration",
+            "description": "First PCR kit to simultaneously detect Salmonella spp., L. monocytogenes, E. coli, and S. aureus in one single reaction and workflow."
+          },
+          {
+            "title": "Extreme Multiplexing",
+            "description": "First extreme highly multiplex PCR kit (proprietary technology) capable of detecting and identifying over 50 spoilage microorganisms in a single PCR reaction."
+          },
+          {
+            "title": "TxA Platform",
+            "description": "First AI algorithm capable of dynamically modifying the microbiological testing program based on real-time risk assessment."
+          },
+          {
+            "title": "MILA Platform",
+            "description": "Development of MILA (proprietary technology): the first AI software able to predict the best molecules for highly multiplexed PCR kits."
+          },
+          {
+            "title": "AiGOR Technology",
+            "description": "Development of AiGOR (proprietary technology): a revolutionary RNA detection technology delivering over 10,000 times more sensitivity than standard real-time PCR."
+          }
         ],
         "future": {
           "badge": "Under Active Development",
@@ -360,9 +547,17 @@
             "Simultaneous identification of Salmonella and Listeria spp. in a single reaction, in as little as 3 hours, and 7 hours, for environmental and food samples, respectively."
           ],
           "upcoming": [
-            {"desc": "Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours."},
-            {"desc": "Simultaneous identification of Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.", "launch": "Launch 2Q 2026"},
-            {"desc": "Simultaneous identification of Salmonella + Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.", "launch": "Launch 2Q 2026"}
+            {
+              "desc": "Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours."
+            },
+            {
+              "desc": "Simultaneous identification of Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.",
+              "launch": "Launch 2Q 2026"
+            },
+            {
+              "desc": "Simultaneous identification of Salmonella + Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.",
+              "launch": "Launch 2Q 2026"
+            }
           ]
         },
         "advantages": [
@@ -381,13 +576,41 @@
         "table": {
           "title": "Protocol zero vs. Protocol xpress: the right strategy for every situation",
           "rows": [
-            {"feature": "Strategy", "col1": "Ultrafast screening", "col2": "Routine monitoring with added flexibility"},
-            {"feature": "Enrichment time", "col1": "No enrichment", "col2": "3 hours"},
-            {"feature": "Total Time to results", "col1": "3 hours", "col2": "6 hours"},
-            {"feature": "Intended use", "col1": "Post-sanitation Zone 1 and Zone 2", "col2": "Pre and post-sanitation Zone 1, 2, and 3"},
-            {"feature": "Sampling device", "col1": "Swab", "col2": "Swabs and Sponges"},
-            {"feature": "Limit of detection", "col1": "1 CFU/sample", "col2": "1 CFU/sample"},
-            {"feature": "Downstream applications", "col1": "None, destructive method. The whole sample must be processed", "col2": "Yes. Additional sample for downstream applications, ie. confirmation, WGS, etc."}
+            {
+              "feature": "Strategy",
+              "col1": "Ultrafast screening",
+              "col2": "Routine monitoring with added flexibility"
+            },
+            {
+              "feature": "Enrichment time",
+              "col1": "No enrichment",
+              "col2": "3 hours"
+            },
+            {
+              "feature": "Total Time to results",
+              "col1": "3 hours",
+              "col2": "6 hours"
+            },
+            {
+              "feature": "Intended use",
+              "col1": "Post-sanitation Zone 1 and Zone 2",
+              "col2": "Pre and post-sanitation Zone 1, 2, and 3"
+            },
+            {
+              "feature": "Sampling device",
+              "col1": "Swab",
+              "col2": "Swabs and Sponges"
+            },
+            {
+              "feature": "Limit of detection",
+              "col1": "1 CFU/sample",
+              "col2": "1 CFU/sample"
+            },
+            {
+              "feature": "Downstream applications",
+              "col1": "None, destructive method. The whole sample must be processed",
+              "col2": "Yes. Additional sample for downstream applications, ie. confirmation, WGS, etc."
+            }
           ]
         },
         "orderingDescriptions": [
@@ -479,14 +702,45 @@
     "How": {
       "headline": "Take a closer look into the future, discover",
       "headlineAccent": "AiGOR solutions.",
-      "shortLabels": ["AiGOR", "Food testing", "Environmental testing", "Environmental protocols", "Microorganisms", "TxA Platform"],
+      "shortLabels": [
+        "AiGOR",
+        "Food testing",
+        "Environmental testing",
+        "Environmental protocols",
+        "Microorganisms",
+        "TxA Platform"
+      ],
       "steps": {
-        "intro": {"step": "The Ecosystem", "title": "Ultra-fast RNA detection technology", "description": "Same-shift results. Absolute confidence. Full productivity."},
-        "sample": {"step": "Step 01", "title": "", "description": "Deliver every product with absolute confidence."},
-        "extraction": {"step": "Step 02", "title": "", "description": "Obtain ultra-fast results from swabs and sponges, whether pre- or post-sanitization."},
-        "pcr": {"step": "Step 03", "title": "Select your choice", "description": "ZERO or XPRESS protocol."},
-        "interpretation": {"step": "Step 04", "title": "", "description": "Fast detection of Salmonella spp, Listeria spp, Enterobacteria, L. monocytogenes and more."},
-        "management": {"step": "Step 05", "title": "Fast results for fast actions", "description": "All our kits integrate seamlessly with TxA for advanced, AI-based protection."}
+        "intro": {
+          "step": "The Ecosystem",
+          "title": "Ultra-fast RNA detection technology",
+          "description": "Same-shift results. Absolute confidence. Full productivity."
+        },
+        "sample": {
+          "step": "Step 01",
+          "title": "",
+          "description": "Deliver every product with absolute confidence."
+        },
+        "extraction": {
+          "step": "Step 02",
+          "title": "",
+          "description": "Obtain ultra-fast results from swabs and sponges, whether pre- or post-sanitization."
+        },
+        "pcr": {
+          "step": "Step 03",
+          "title": "Select your choice",
+          "description": "ZERO or XPRESS protocol."
+        },
+        "interpretation": {
+          "step": "Step 04",
+          "title": "",
+          "description": "Fast detection of Salmonella spp, Listeria spp, Enterobacteria, L. monocytogenes and more."
+        },
+        "management": {
+          "step": "Step 05",
+          "title": "Fast results for fast actions",
+          "description": "All our kits integrate seamlessly with TxA for advanced, AI-based protection."
+        }
       },
       "futureTitle": "Ready to explore the future?",
       "futureBodyA": "Experience the power of RNA-based detection.",
@@ -540,10 +794,27 @@
       "introA": "Immersive speed like never before.",
       "introB": "AiGOR utilizes RNA-based detection to bypass biological limits, delivering actionable results in hours, not days.",
       "cards": {
-        "rna": {"title": "RNA Sensitivity.", "body": "Detects active cells only. No false positives from dead DNA.", "value": "10k", "suffix": "x"},
-        "zero": {"title": "Zero Enrichment.", "body": "Skip the 24h growth step.", "value": "Direct."},
-        "speed": {"title": "Speed redefined.", "body": "From sample to certificate.", "value": "3", "suffix": "HOURS"},
-        "fit": {"title": "Seamless Fit.", "body": "Integrates with standard LIMS and existing lab workflows."}
+        "rna": {
+          "title": "RNA Sensitivity.",
+          "body": "Detects active cells only. No false positives from dead DNA.",
+          "value": "10k",
+          "suffix": "x"
+        },
+        "zero": {
+          "title": "Zero Enrichment.",
+          "body": "Skip the 24h growth step.",
+          "value": "Direct."
+        },
+        "speed": {
+          "title": "Speed redefined.",
+          "body": "From sample to certificate.",
+          "value": "3",
+          "suffix": "HOURS"
+        },
+        "fit": {
+          "title": "Seamless Fit.",
+          "body": "Integrates with standard LIMS and existing lab workflows."
+        }
       }
     },
     "Catalog": {
@@ -563,9 +834,9 @@
       "contactUs": "Contact Us"
     },
     "DatasheetModal": {
-    "technicalDataSheet": "Technical Data Sheet",
-    "targetType": "Target Type",
-    "targets": "Targets",
+      "technicalDataSheet": "Technical Data Sheet",
+      "targetType": "Target Type",
+      "targets": "Targets",
       "mainIndustries": "Main industries",
       "sensitivity": "Sensitivity",
       "intendedUse": "Intended Use",
@@ -575,33 +846,33 @@
       "limitations": "Limitations",
       "technicalSpecifications": "Technical Specifications",
       "microorganisms": "Microorganisms",
-    "validatedMatrices": "Validated Matrices",
-    "timeToResults": "Time to Results",
-    "time": "Time",
+      "validatedMatrices": "Validated Matrices",
+      "timeToResults": "Time to Results",
+      "time": "Time",
       "technology": "Technology",
       "validatedThermocyclers": "Validated Thermocyclers",
-    "detectionChemistry": "Detection Chemistry",
-    "detectionChannel": "Detection Channel",
-    "detectionChannels": "Detection Channels",
+      "detectionChemistry": "Detection Chemistry",
+      "detectionChannel": "Detection Channel",
+      "detectionChannels": "Detection Channels",
       "storageConditions": "Storage Conditions",
       "temperature": "Temperature",
       "shelfLife": "Shelf Life",
       "certifications": "Certifications",
       "certificationImageAlt": "Certification",
       "orderInformation": "Order Information",
-    "catNo": "Cat. No",
-    "catNum": "Cat. Num",
+      "catNo": "Cat. No",
+      "catNum": "Cat. Num",
       "name": "Name",
       "size": "Size",
       "format": "Format",
       "kitContent": "Kit Content",
       "swipeForColumns": "Swipe left to view all columns",
-    "additionalSupplies": "Additional Supplies",
-    "orderInformationAdditionalSupplies": "Order Information - Additional Supplies",
-    "product": "Product",
-    "description": "Description",
-    "pageOf": "Page {page} of {total}",
-    "generatingPdf": "Generating PDF...",
+      "additionalSupplies": "Additional Supplies",
+      "orderInformationAdditionalSupplies": "Order Information - Additional Supplies",
+      "product": "Product",
+      "description": "Description",
+      "pageOf": "Page {page} of {total}",
+      "generatingPdf": "Generating PDF...",
       "downloadDatasheet": "Download Datasheet (PDF)",
       "contactSalesTeam": "Contact Sales Team",
       "pdfError": "Error generating PDF. Please try again.",
@@ -615,7 +886,7 @@
       "generatingDatasheetHtml": "Generating Datasheet...",
       "catNumber": "Cat. Number",
       "allowPopups": "Please allow popups for this website to view the PDF.",
-    "viewDatasheetPdf": "View Datasheet (PDF)"
+      "viewDatasheetPdf": "View Datasheet (PDF)"
     },
     "LabInstallation": {
       "eyebrow": "Installation",
@@ -665,11 +936,35 @@
       "scrollLeft": "Scroll left",
       "scrollRight": "Scroll right",
       "stories": {
-        "hero-case": {"client": "Environmental Testing", "title": ">$200k savings/year per facility", "metric": "In-house EMP testing powered by AiGOR technology"},
-        "fast-salmonella-food": {"client": "Food Industry", "title": "Fast control of Salmonella in the food industry", "metric": "6 Hours", "description": "Achieve actionable results and product release in just 6 hours, bypassing 24-48h enrichments."},
-        "full-preventive-control": {"client": "Quality Control", "title": "Full and Preventive Microbiological Control", "metric": "All-in-One", "description": "The world's only multiplex PCR solution that detects both pathogens and indicator microorganisms in a single reaction."},
-        "broad-spectrum-spoilage": {"client": "Beverage Industry", "title": "Broad-Spectrum Spoilage Defense", "metric": "< 24 Hrs", "description": "Screen for spoilage yeast, mold, and bacteria in a single PCR run. Secure shelf-life with absolute molecular precision."},
-        "salmonella-ecoli-protection": {"client": "Fresh Produce & Meat", "title": "Protection against Salmonella and Pathogenic E. coli", "metric": "3-in-1", "description": "Simultaneous multiplex detection of Salmonella, E. coli O157:H7, and STEC in a single reaction."}
+        "hero-case": {
+          "client": "Environmental Testing",
+          "title": ">$200k savings/year per facility",
+          "metric": "In-house EMP testing powered by AiGOR technology"
+        },
+        "fast-salmonella-food": {
+          "client": "Food Industry",
+          "title": "Fast control of Salmonella in the food industry",
+          "metric": "6 Hours",
+          "description": "Achieve actionable results and product release in just 6 hours, bypassing 24-48h enrichments."
+        },
+        "full-preventive-control": {
+          "client": "Quality Control",
+          "title": "Full and Preventive Microbiological Control",
+          "metric": "All-in-One",
+          "description": "The world's only multiplex PCR solution that detects both pathogens and indicator microorganisms in a single reaction."
+        },
+        "broad-spectrum-spoilage": {
+          "client": "Beverage Industry",
+          "title": "Broad-Spectrum Spoilage Defense",
+          "metric": "< 24 Hrs",
+          "description": "Screen for spoilage yeast, mold, and bacteria in a single PCR run. Secure shelf-life with absolute molecular precision."
+        },
+        "salmonella-ecoli-protection": {
+          "client": "Fresh Produce & Meat",
+          "title": "Protection against Salmonella and Pathogenic E. coli",
+          "metric": "3-in-1",
+          "description": "Simultaneous multiplex detection of Salmonella, E. coli O157:H7, and STEC in a single reaction."
+        }
       }
     }
   },
@@ -678,10 +973,24 @@
       "title": "Unlock the full spectrum of diagnostic potential.",
       "body": "MILA, our AI-driven platform navigates through millions of genomic combinations to design and select the precise primer and probe set for your targets. For any application, MILA ensures the best PCR kits are achieved, fast and effortless.",
       "cards": {
-        "ai": {"title": "AI-Driven Intelligence.", "body": "MILA analyzes genomic data with a proprietary neural network, identifying patterns invisible to traditional design methods."},
-        "precision": {"title": "Precision Selection.", "body": "It doesn't just design; it selects. MILA filters through noise to find the single best primer/probe set for your target."},
-        "multiplex": {"title": "Highly Multiplex Design.", "body": "Simultaneously detect multiple targets in a single reaction, maximizing efficiency without losing sensitivity."},
-        "fast": {"title": "Fast & Effortless.", "body": "From concept to kit design in record time. Reduce months of R&D to a simple, streamlined process.", "complete": "Design Complete", "accurate": "100% accurate"}
+        "ai": {
+          "title": "AI-Driven Intelligence.",
+          "body": "MILA analyzes genomic data with a proprietary neural network, identifying patterns invisible to traditional design methods."
+        },
+        "precision": {
+          "title": "Precision Selection.",
+          "body": "It doesn't just design; it selects. MILA filters through noise to find the single best primer/probe set for your target."
+        },
+        "multiplex": {
+          "title": "Highly Multiplex Design.",
+          "body": "Simultaneously detect multiple targets in a single reaction, maximizing efficiency without losing sensitivity."
+        },
+        "fast": {
+          "title": "Fast & Effortless.",
+          "body": "From concept to kit design in record time. Reduce months of R&D to a simple, streamlined process.",
+          "complete": "Design Complete",
+          "accurate": "100% accurate"
+        }
       }
     },
     "CustomDev": {
@@ -689,9 +998,21 @@
       "titleB": "Engineered by AI.",
       "body": "Leveraging MILA's AI, TAAG delivers a comprehensive custom assay development service. We design and validate bespoke molecular solutions on your behalf, offering a superior alternative to in-house R&D with faster timelines, simplified workflows, and significantly lower costs.",
       "cards": {
-        "speed": {"titleA": "From concept to kit", "titleB": "5X faster.", "body": "MILA targets the optimal design instantly, bypassing iterative failures to drastically shorten your time-to-market."},
-        "cost": {"titleA": "Up to 50% reduction", "titleB": "in development costs.", "body": "Outsourcing to TAAG eliminates internal R&D overhead, reducing your total investment and operational risk."},
-        "reaction": {"titleA": "Lowest cost", "titleB": "per reaction.", "body": "Advanced multiplexing and design optimization minimize reagent usage, ensuring the most competitive price per test."}
+        "speed": {
+          "titleA": "From concept to kit",
+          "titleB": "5X faster.",
+          "body": "MILA targets the optimal design instantly, bypassing iterative failures to drastically shorten your time-to-market."
+        },
+        "cost": {
+          "titleA": "Up to 50% reduction",
+          "titleB": "in development costs.",
+          "body": "Outsourcing to TAAG eliminates internal R&D overhead, reducing your total investment and operational risk."
+        },
+        "reaction": {
+          "titleA": "Lowest cost",
+          "titleB": "per reaction.",
+          "body": "Advanced multiplexing and design optimization minimize reagent usage, ensuring the most competitive price per test."
+        }
       }
     },
     "Profiles": {
@@ -701,12 +1022,35 @@
       "serviceOverview": "Service Overview",
       "getStarted": "Get Started",
       "cards": {
-        "intro": {"title": "Advanced molecular assay development as a service.", "description": "Whether you are a biotech company or a testing laboratory, TAAG provides outsourced molecular assay development through MILA, helping increase productivity while reducing development time and costs."},
-        "manufacturer": {"label": "Kit Manufacturer", "title": "Expand your portfolio", "description": "Support multiple models, from supplying primer mixes to delivering fully branded, validated finished kits globally."},
-        "distributor": {"label": "Distributor", "title": "Private label launch", "description": "Develop exclusive, high-performance kits distributed under your brand. Differentiate yourself with unique products."},
-        "third-party-lab": {"label": "Third-party Lab", "title": "Increase margins", "description": "Replace rigid commercial kits with custom, highly multiplexed assays tailored to your specific workflow and throughput."},
-        "internal-lab": {"label": "Internal Lab", "title": "Solve contamination", "description": "Detect facility-specific spoilage organisms or rare pathogens that generic kits miss, ensuring precise internal QC."},
-        "outsourcer": {"label": "Using a 3rd-party Lab", "title": "Managed Service", "description": "We design the assay and run it for you at our strategic TAAG Hubs. Get bespoke testing without the infrastructure."}
+        "intro": {
+          "title": "Advanced molecular assay development as a service.",
+          "description": "Whether you are a biotech company or a testing laboratory, TAAG provides outsourced molecular assay development through MILA, helping increase productivity while reducing development time and costs."
+        },
+        "manufacturer": {
+          "label": "Kit Manufacturer",
+          "title": "Expand your portfolio",
+          "description": "Support multiple models, from supplying primer mixes to delivering fully branded, validated finished kits globally."
+        },
+        "distributor": {
+          "label": "Distributor",
+          "title": "Private label launch",
+          "description": "Develop exclusive, high-performance kits distributed under your brand. Differentiate yourself with unique products."
+        },
+        "third-party-lab": {
+          "label": "Third-party Lab",
+          "title": "Increase margins",
+          "description": "Replace rigid commercial kits with custom, highly multiplexed assays tailored to your specific workflow and throughput."
+        },
+        "internal-lab": {
+          "label": "Internal Lab",
+          "title": "Solve contamination",
+          "description": "Detect facility-specific spoilage organisms or rare pathogens that generic kits miss, ensuring precise internal QC."
+        },
+        "outsourcer": {
+          "label": "Using a 3rd-party Lab",
+          "title": "Managed Service",
+          "description": "We design the assay and run it for you at our strategic TAAG Hubs. Get bespoke testing without the infrastructure."
+        }
       }
     },
     "Story": {
@@ -735,12 +1079,30 @@
       "next": "Next slide",
       "samples": "300+ SAMPLES / DAY",
       "advantages": [
-        {"title": "Plug & Play.", "text": "Arrives fully equipped and ready to operate. Skip the months of construction and start running molecular diagnostics from day one."},
-        {"title": "Implement anywhere.", "text": "Requires only a standard electrical connection. Set up your molecular lab in remote locations or within existing facilities effortlessly."},
-        {"title": "TxA Integrated.", "text": "Pre-wired and synchronized with our AI software ecosystem. Automate workflows, reporting, and data analysis instantly."},
-        {"title": "Scalable footprint.", "text": "Start with the exact capacity you need today. ModularDX allows you to seamlessly add new modules as your testing volume grows."},
-        {"title": "Massive productivity.", "text": "Achieve maximum efficiency with minimal staff. A compact two-person team can comfortably process over 300 PCR samples per day."},
-        {"title": "ISO Compliant.", "text": "Built to meet the most stringent international molecular biology standards, ensuring absolute reliability and quality control."}
+        {
+          "title": "Plug & Play.",
+          "text": "Arrives fully equipped and ready to operate. Skip the months of construction and start running molecular diagnostics from day one."
+        },
+        {
+          "title": "Implement anywhere.",
+          "text": "Requires only a standard electrical connection. Set up your molecular lab in remote locations or within existing facilities effortlessly."
+        },
+        {
+          "title": "TxA Integrated.",
+          "text": "Pre-wired and synchronized with our AI software ecosystem. Automate workflows, reporting, and data analysis instantly."
+        },
+        {
+          "title": "Scalable footprint.",
+          "text": "Start with the exact capacity you need today. ModularDX allows you to seamlessly add new modules as your testing volume grows."
+        },
+        {
+          "title": "Massive productivity.",
+          "text": "Achieve maximum efficiency with minimal staff. A compact two-person team can comfortably process over 300 PCR samples per day."
+        },
+        {
+          "title": "ISO Compliant.",
+          "text": "Built to meet the most stringent international molecular biology standards, ensuring absolute reliability and quality control."
+        }
       ]
     },
     "PartnerPaths": {
@@ -764,17 +1126,50 @@
         "mobileBuild": "Rapid & Cost Effective Setup"
       },
       "rows": [
-        {"feature": "Smart Lab Design", "description": "Custom layout and workflow optimization for your facility."},
-        {"feature": "Hardware Advisory", "description": "Unbiased guidance on selecting the exact instruments you need."},
-        {"feature": "Next-Gen Assays", "description": "Upgrade to Multiplex PCR and 3-6 hours Elevia results."},
-        {"feature": "Comprehensive Training", "description": "Hands-on education for your team on all TAAG products and protocols."},
-        {"feature": "Custom Validations", "description": "Tailored matrix validations and verifications to ensure absolute accuracy and quality compliance."},
-        {"feature": "Software Integration", "description": "Seamlessly connect our laboratory management and predictive AI software to your existing operations."},
-        {"feature": "Continuous Expert Support", "description": "Dedicated TAAG Expert for scientific and technical assistance."},
-        {"feature": "Commercial Enablement", "description": "Sales support related to TAAG products."},
-        {"feature": "Growth Partnership", "description": "Co-branded campaigns fully designed and executed by TAAG to accelerate your growth."},
-        {"feature": "R&D on Demand", "description": "Consider us your private R&D division. We design and validate proprietary multiplex panels exclusively for your lab's unique demands."},
-        {"feature": "Authorized Processing Lab", "description": "Join our lab network. Receive inflow of samples from our customer base."}
+        {
+          "feature": "Smart Lab Design",
+          "description": "Custom layout and workflow optimization for your facility."
+        },
+        {
+          "feature": "Hardware Advisory",
+          "description": "Unbiased guidance on selecting the exact instruments you need."
+        },
+        {
+          "feature": "Next-Gen Assays",
+          "description": "Upgrade to Multiplex PCR and 3-6 hours Elevia results."
+        },
+        {
+          "feature": "Comprehensive Training",
+          "description": "Hands-on education for your team on all TAAG products and protocols."
+        },
+        {
+          "feature": "Custom Validations",
+          "description": "Tailored matrix validations and verifications to ensure absolute accuracy and quality compliance."
+        },
+        {
+          "feature": "Software Integration",
+          "description": "Seamlessly connect our laboratory management and predictive AI software to your existing operations."
+        },
+        {
+          "feature": "Continuous Expert Support",
+          "description": "Dedicated TAAG Expert for scientific and technical assistance."
+        },
+        {
+          "feature": "Commercial Enablement",
+          "description": "Sales support related to TAAG products."
+        },
+        {
+          "feature": "Growth Partnership",
+          "description": "Co-branded campaigns fully designed and executed by TAAG to accelerate your growth."
+        },
+        {
+          "feature": "R&D on Demand",
+          "description": "Consider us your private R&D division. We design and validate proprietary multiplex panels exclusively for your lab's unique demands."
+        },
+        {
+          "feature": "Authorized Processing Lab",
+          "description": "Join our lab network. Receive inflow of samples from our customer base."
+        }
       ]
     },
     "Ecosystem": {
@@ -783,11 +1178,26 @@
       "becomePartner": "Become a Partner",
       "learnMore": "Learn more about {title}",
       "badges": {
-        "fastest": {"title": "Fastest Results", "text": "In just hours"},
-        "efficient": {"title": "Efficient Operation", "text": "Automated workflows"},
-        "margins": {"title": "Higher Margins", "text": "Maximized ROI"},
-        "txa": {"title": "TxA Software", "text": "Predictive AI"},
-        "plug": {"title": "Plug & Play", "text": "Ready to scale"}
+        "fastest": {
+          "title": "Fastest Results",
+          "text": "In just hours"
+        },
+        "efficient": {
+          "title": "Efficient Operation",
+          "text": "Automated workflows"
+        },
+        "margins": {
+          "title": "Higher Margins",
+          "text": "Maximized ROI"
+        },
+        "txa": {
+          "title": "TxA Software",
+          "text": "Predictive AI"
+        },
+        "plug": {
+          "title": "Plug & Play",
+          "text": "Ready to scale"
+        }
       },
       "features": {
         "intro": {
@@ -859,9 +1269,21 @@
       "impact": "Core Business Impact",
       "savings": "Documented Annual Savings (Per Facility)",
       "metrics": [
-        {"label": "Time to Result", "value": "< 3 Hours", "change": "was 72h"},
-        {"label": "Enrichment time", "value": "Zero", "change": "was 24h"},
-        {"label": "Corrective Action", "value": "Same-Day", "change": "was 3 days"}
+        {
+          "label": "Time to Result",
+          "value": "< 3 Hours",
+          "change": "was 72h"
+        },
+        {
+          "label": "Enrichment time",
+          "value": "Zero",
+          "change": "was 24h"
+        },
+        {
+          "label": "Corrective Action",
+          "value": "Same-Day",
+          "change": "was 3 days"
+        }
       ]
     },
     "CTA": {
@@ -881,13 +1303,33 @@
       "loading": "Loading...",
       "unavailable": "Unavailable",
       "products": {
-        "salmonella": {"title": "Elevia Salmonella", "desc": "Ultra-fast Salmonella detection in as little as 3 hours in environmental samples.", "longDesc": "Ultra-fast Salmonella detection in as little as 3 hours, and 7 hours, for environmental and food samples, respectively."},
-        "salmonellaLS": {"title": "Elevia Salmonella + Listeria spp", "desc": "Simultaneous identification of Salmonella and Listeria spp in a single reaction, in as little as 3 hours.", "longDesc": "Simultaneous identification of Salmonella and Listeria spp. in a single reaction, in as little as 3 hours, and 6 hours, for environmental and food samples, respectively."},
-        "salmonellaEB": {"title": "Elevia Salmonella + Enterobacteria.", "desc": "Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours.", "longDesc": "Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours, in environmental samples."}
+        "salmonella": {
+          "title": "Elevia Salmonella",
+          "desc": "Ultra-fast Salmonella detection in as little as 3 hours in environmental samples.",
+          "longDesc": "Ultra-fast Salmonella detection in as little as 3 hours, and 7 hours, for environmental and food samples, respectively."
+        },
+        "salmonellaLS": {
+          "title": "Elevia Salmonella + Listeria spp",
+          "desc": "Simultaneous identification of Salmonella and Listeria spp in a single reaction, in as little as 3 hours.",
+          "longDesc": "Simultaneous identification of Salmonella and Listeria spp. in a single reaction, in as little as 3 hours, and 6 hours, for environmental and food samples, respectively."
+        },
+        "salmonellaEB": {
+          "title": "Elevia Salmonella + Enterobacteria.",
+          "desc": "Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours.",
+          "longDesc": "Simultaneous identification of Salmonella and Enterobacteria in a single reaction, in as little as 3 hours, in environmental samples."
+        }
       },
       "upcoming": [
-        {"title": "Elevia Listeria spp + L. monocytogenes", "desc": "Simultaneous identification of Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.", "launch": "Launch 2Q 2026"},
-        {"title": "Elevia Salmonella + Listeria spp. + L. mono.", "desc": "Simultaneous identification of Salmonella + Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.", "launch": "Launch 2Q 2026"}
+        {
+          "title": "Elevia Listeria spp + L. monocytogenes",
+          "desc": "Simultaneous identification of Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.",
+          "launch": "Launch 2Q 2026"
+        },
+        {
+          "title": "Elevia Salmonella + Listeria spp. + L. mono.",
+          "desc": "Simultaneous identification of Salmonella + Listeria spp. and L. monocytogenes in a single reaction, in as little as 3 hours.",
+          "launch": "Launch 2Q 2026"
+        }
       ]
     },
     "EleviaEnvironmental": {
@@ -1072,10 +1514,22 @@
       "introStrong": "Speed and accuracy like never before.",
       "introBody": "AiGOR utilizes RNA-based detection to bypass biological limits, delivering actionable results in hours.",
       "features": {
-        "speed": {"strong": "Results as fast as 3 hours.", "text": "Skip the long enrichment steps."},
-        "sensitivity": {"strong": "1 CFU/sample sensitivity.", "text": "Maximum precision and reliability."},
-        "amplified": {"strong": "10,000x higher sensitivity.", "text": "Compared to traditional real-time PCR."},
-        "rna": {"strong": "RNA detection.", "text": "Targeting only active cells."}
+        "speed": {
+          "strong": "Results as fast as 3 hours.",
+          "text": "Skip the long enrichment steps."
+        },
+        "sensitivity": {
+          "strong": "1 CFU/sample sensitivity.",
+          "text": "Maximum precision and reliability."
+        },
+        "amplified": {
+          "strong": "10,000x higher sensitivity.",
+          "text": "Compared to traditional real-time PCR."
+        },
+        "rna": {
+          "strong": "RNA detection.",
+          "text": "Targeting only active cells."
+        }
       }
     }
   },
@@ -1085,10 +1539,22 @@
       "titleB": "Laboratory Services.",
       "body": "Discover multiplex and ultra-fast microbiological detection solutions to accelerate decisions, reduce risks, and improve productivity.",
       "features": {
-        "results": {"strong": "Same-day results.", "text": "For common pathogens."},
-        "spoilage": {"strong": "Fast detection.", "text": "Spoilage microorganisms."},
-        "ngs": {"strong": "NGS.", "text": "Next-Generation Sequencing."},
-        "custom": {"strong": "Custom assays.", "text": "Bespoke assay development."}
+        "results": {
+          "strong": "Same-day results.",
+          "text": "For common pathogens."
+        },
+        "spoilage": {
+          "strong": "Fast detection.",
+          "text": "Spoilage microorganisms."
+        },
+        "ngs": {
+          "strong": "NGS.",
+          "text": "Next-Generation Sequencing."
+        },
+        "custom": {
+          "strong": "Custom assays.",
+          "text": "Bespoke assay development."
+        }
       }
     },
     "Capabilities": {
@@ -1106,15 +1572,42 @@
       "ctaStrongB": "improve your turnaround times",
       "ctaButton": "Contact Our Experts",
       "items": [
-        {"title": "Same day detection of common pathogens", "body": "Leverage molecular technology to rapidly detect Salmonella, Listeria, and E. coli, enabling faster product release and reducing warehousing costs."},
-        {"title": "High-capacity multiplex screening", "body": "Identify multiple targets in a single test. Our multiplexing approach significantly reduces your analytical costs while streamlining workflow efficiency."},
-        {"title": "Rapid molecular detection of spoilage microorganisms", "body": "Identify yeasts, molds, and acidophilic bacteria to prevent off-flavors and package swelling before distribution."},
-        {"title": "Next Generation Sequencing (NGS)", "body": "Deep genomic insights for strain confirmation, facility traceability, and definitive root-cause analysis of contamination events."},
-        {"title": "Routine microbiology and classical testing", "body": "Reliable, ISO-certified traditional plating methods for regulatory compliance and hygiene monitoring."},
-        {"title": "TxA Integration", "body": "Automate your environmental monitoring program. Connect your results with our AI ecosystem to optimize sampling plans."},
-        {"title": "Technical and scientific support", "body": "Partner with our expert microbiologists for method selection, complex result interpretation, and troubleshooting."},
-        {"title": "Custom molecular solutions", "body": "Harness MILA to design highly specific, non-interacting primers for your unique, high-capacity multiplex challenges."},
-        {"title": "Advanced microbiological services", "body": "Offload complex workflows, like challenge studies, that are not easily executed at the plant level."}
+        {
+          "title": "Same day detection of common pathogens",
+          "body": "Leverage molecular technology to rapidly detect Salmonella, Listeria, and E. coli, enabling faster product release and reducing warehousing costs."
+        },
+        {
+          "title": "High-capacity multiplex screening",
+          "body": "Identify multiple targets in a single test. Our multiplexing approach significantly reduces your analytical costs while streamlining workflow efficiency."
+        },
+        {
+          "title": "Rapid molecular detection of spoilage microorganisms",
+          "body": "Identify yeasts, molds, and acidophilic bacteria to prevent off-flavors and package swelling before distribution."
+        },
+        {
+          "title": "Next Generation Sequencing (NGS)",
+          "body": "Deep genomic insights for strain confirmation, facility traceability, and definitive root-cause analysis of contamination events."
+        },
+        {
+          "title": "Routine microbiology and classical testing",
+          "body": "Reliable, ISO-certified traditional plating methods for regulatory compliance and hygiene monitoring."
+        },
+        {
+          "title": "TxA Integration",
+          "body": "Automate your environmental monitoring program. Connect your results with our AI ecosystem to optimize sampling plans."
+        },
+        {
+          "title": "Technical and scientific support",
+          "body": "Partner with our expert microbiologists for method selection, complex result interpretation, and troubleshooting."
+        },
+        {
+          "title": "Custom molecular solutions",
+          "body": "Harness MILA to design highly specific, non-interacting primers for your unique, high-capacity multiplex challenges."
+        },
+        {
+          "title": "Advanced microbiological services",
+          "body": "Offload complex workflows, like challenge studies, that are not easily executed at the plant level."
+        }
       ]
     },
     "Locations": {
@@ -1181,27 +1674,63 @@
         "title": "TxA APP",
         "intro": "Transform your field sampling with our intelligent mobile application. Digitize your entire process for total control and end-to-end traceability from the field directly to the lab.",
         "features": [
-          {"title": "Digital Field Sampling", "text": "Replace paper logs and manual data entry with a streamlined digital workflow. Capture photos, detailed data, and the exact sampling point automatically. Track every sample's journey with immutable digital logs, ensuring 100% compliance and complete visibility over your operations.", "image": "/TxA_app_1.png"},
-          {"title": "All information in one click", "text": "Once you select the sampling point, you can add important information such as a picture from the site, laboratory analyses, sanitization status, and more.", "image": "/TxA_app_5.png"},
-          {"title": "A flawless tracking system", "text": "If you use our TAAG S11 NeutroSampling kit to perform environmental swabbing, you can automatically link all digital information with the sample by scanning the QR code printed on TAAG S11 NeutroSampling swabs.", "image": "/TxA_app_4.png"}
+          {
+            "title": "Digital Field Sampling",
+            "text": "Replace paper logs and manual data entry with a streamlined digital workflow. Capture photos, detailed data, and the exact sampling point automatically. Track every sample's journey with immutable digital logs, ensuring 100% compliance and complete visibility over your operations.",
+            "image": "/TxA_app_1.png"
+          },
+          {
+            "title": "All information in one click",
+            "text": "Once you select the sampling point, you can add important information such as a picture from the site, laboratory analyses, sanitization status, and more.",
+            "image": "/TxA_app_5.png"
+          },
+          {
+            "title": "A flawless tracking system",
+            "text": "If you use our TAAG S11 NeutroSampling kit to perform environmental swabbing, you can automatically link all digital information with the sample by scanning the QR code printed on TAAG S11 NeutroSampling swabs.",
+            "image": "/TxA_app_4.png"
+          }
         ]
       },
       "lab": {
         "title": "TxA LAB",
         "intro": "Streamline your workflows and automate process controls to guarantee error-free, fully confident laboratory results every single time.",
         "features": [
-          {"title": "Use it for any test... even your own developed test", "text": "TxA Lab allows you to create and edit as many assays as you need, including different specialties such as microbiology testing, chemical testing, or any other test you need to add.", "image": "/your-laboratory-assay.svg"},
-          {"title": "Detailed information means better corrective actions", "text": "Add all the fields you want to your samples in order to get all the information you need to apply the best corrective actions.", "image": "/create-products.svg"},
-          {"title": "Meet your new and better laboratory report", "text": "Add the specific information you want to show in your reports to inform and share your laboratory results.", "image": "/laboratory-report.svg"}
+          {
+            "title": "Use it for any test... even your own developed test",
+            "text": "TxA Lab allows you to create and edit as many assays as you need, including different specialties such as microbiology testing, chemical testing, or any other test you need to add.",
+            "image": "/your-laboratory-assay.svg"
+          },
+          {
+            "title": "Detailed information means better corrective actions",
+            "text": "Add all the fields you want to your samples in order to get all the information you need to apply the best corrective actions.",
+            "image": "/create-products.svg"
+          },
+          {
+            "title": "Meet your new and better laboratory report",
+            "text": "Add the specific information you want to show in your reports to inform and share your laboratory results.",
+            "image": "/laboratory-report.svg"
+          }
         ]
       },
       "qa": {
         "title": "TxA QA",
         "intro": "Leverage predictive microbiology to anticipate risks and ensure comprehensive, proactive quality management across your entire facility.",
         "features": [
-          {"title": "In-depth analysis to maximize food quality and safety", "text": "This platform is all about microbiological food safety management. Easily analyze your laboratory results, statistics, warnings, smart and dynamic corrective action proposals, and much more.", "image": "/TxA_QA1.svg"},
-          {"title": "Real-time warnings for fast corrective actions", "text": "In the notification panel, you get alerts with detailed information about positive results found in your plant. When positives appear, TxA proposes an automated, dynamic, and smart corrective action.", "image": "/TxA_QA2.svg"},
-          {"title": "A new and better way of seeing microbiology", "text": "See all relevant information about your environmental monitoring plan on your food plant layout in a comprehensive and intuitive way.", "image": "/TxA_QA3.svg"}
+          {
+            "title": "In-depth analysis to maximize food quality and safety",
+            "text": "This platform is all about microbiological food safety management. Easily analyze your laboratory results, statistics, warnings, smart and dynamic corrective action proposals, and much more.",
+            "image": "/TxA_QA1.svg"
+          },
+          {
+            "title": "Real-time warnings for fast corrective actions",
+            "text": "In the notification panel, you get alerts with detailed information about positive results found in your plant. When positives appear, TxA proposes an automated, dynamic, and smart corrective action.",
+            "image": "/TxA_QA2.svg"
+          },
+          {
+            "title": "A new and better way of seeing microbiology",
+            "text": "See all relevant information about your environmental monitoring plan on your food plant layout in a comprehensive and intuitive way.",
+            "image": "/TxA_QA3.svg"
+          }
         ]
       }
     },
