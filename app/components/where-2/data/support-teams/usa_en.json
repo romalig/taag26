@@ -1,0 +1,26 @@
+{
+  "hub": {
+    "image": "/face.png",
+    "entityName": "Boston TAAG Hub",
+    "name": "Sarah Jenkins",
+    "phone": "+1 (555) 123-4567",
+    "email": "sjenkins@taag.com",
+    "description": "Scientific guidance, method selection, and technical troubleshooting."
+  },
+  "distributor": {
+    "image": "/face.png",
+    "entityName": "NorthAm Distribution",
+    "name": "Michael Chang",
+    "phone": "+1 (555) 987-6543",
+    "email": "mchang@northam.com",
+    "description": "Day-to-day commercial assistance, quoting, and fast on-the-ground logistics."
+  },
+  "lab": {
+    "image": "/face.png",
+    "entityName": "EastCoast Lab Services",
+    "name": "Dr. Emily Ruiz",
+    "phone": "+1 (555) 456-7890",
+    "email": "eruiz@eastcoastlabs.com",
+    "description": "Local laboratory services delivering highly reliable and ultra-fast results."
+  }
+}
