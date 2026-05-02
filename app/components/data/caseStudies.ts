@@ -43,7 +43,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     techKey: "TxA",
     title: "Bottling Intelligence.",
     description: "Standardizing microbiological control across 35 production plants with our AI-driven software.",
-    image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=800&auto=format&fit=crop",
+    image: "/coke.png",
     heroMetric: "35 Plants",
     challenge: "Managing microbiological data across 35 different bottling plants created information silos. Quality managers lacked real-time visibility to trace contamination sources and predict risk across the entire supply chain efficiently.",
     solution: "We implemented the TxA™ platform to digitize and map the microbiological ecosystem of all 35 facilities. This centralized the data and deployed AI algorithms for predictive risk assessment and plant mapping.",
@@ -51,24 +51,6 @@ export const CASE_STUDIES: CaseStudy[] = [
       "Standardized quality control metrics across all international facilities.",
       "Real-time alerts for contamination trends before they reach critical levels.",
       "Significant reduction in delayed product releases."
-    ]
-  },
-  {
-    id: "chocolate",
-    slug: "chocolate-leader-pathogen-safety",
-    company: "Global Chocolate Leader",
-    category: "AiGOR™ Pathogen Safety",
-    techKey: "AiGOR",
-    title: "Safety at Speed.",
-    description: "Ultra-fast Salmonella detection in chocolate matrices without complex enrichment.",
-    image: "https://images.unsplash.com/photo-1606312619070-d48b4c652a52?q=80&w=800&auto=format&fit=crop",
-    heroMetric: "0 Enrichment",
-    challenge: "Testing for Salmonella in complex, high-fat matrices like chocolate traditionally requires long and complex enrichment steps. This delayed product release times and drastically increased warehousing costs for finished goods.",
-    solution: "We deployed our AiGOR™ RNA technology. Utilizing its 10,000x amplified sensitivity, the client can now detect metabolically active Salmonella directly from the sample, bypassing traditional enrichment protocols entirely.",
-    results: [
-      "Eliminated the 24-48 hour enrichment phase.",
-      "Reduced warehousing costs by enabling same-shift product release.",
-      "Zero false positives thanks to RNA-based live-cell detection."
     ]
   },
 
@@ -82,7 +64,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     category: "Food Safety",
     techKey: "AiGOR",
     title: "Fast control of Salmonella in the food industry",
-    description: "Achieve actionable results and product release in just 6 hours, bypassing 24-48h enrichments.",
+    description: "Achieve actionable results and product release in just 9 hours, bypassing 24-48h enrichments.",
     image: "/Elevia_food5.png",
     heroMetric: "6 Hours",
     challenge: "Traditional food testing for Salmonella can take up to 24 to 48 hours, causing massive warehousing bottlenecks, delaying product release, and reducing shelf life. Furthermore, thermal or chemical interventions often leave dead cells that cause costly false positives in standard DNA tests.",
@@ -135,7 +117,7 @@ export const CASE_STUDIES: CaseStudy[] = [
   {
     id: "ind-4",
     slug: "salmonella-ecoli-protection",
-    company: "Fresh Produce & Meat",
+    company: "Fresh Produce",
     category: "Pathogen Protection",
     techKey: "MILA",
     title: "Protection against Salmonella and Pathogenic E. coli",

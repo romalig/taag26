@@ -23,7 +23,11 @@ const NAV_LINKS = [
 const LANGUAGES = [
   { locale: "en", label: "English" },
   { locale: "es", label: "Español" },
+  { locale: "fr", label: "Français"},
 ] as const;
+
+// Crea un tipo basado en los locales que pusiste arriba
+type SupportedLocales = (typeof LANGUAGES)[number]["locale"];
 
 /*
  * ---------------------------------------------------------------------------
@@ -137,7 +141,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
     }
   }, [isMenuOpen, isLangOpen]);
 
-  const switchLocale = (nextLocale: "en" | "es") => {
+  const switchLocale = (nextLocale: "en" | "es" | "fr") => {
     router.replace(pathname, { locale: nextLocale });
     setIsLangOpen(false);
     setIsMenuOpen(false);

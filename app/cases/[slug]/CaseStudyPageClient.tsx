@@ -89,8 +89,8 @@ export default function CaseStudyPageClient({ slug }: { slug: string }) {
                     {t("detail.solutionHeading")}
                   </h2>
                 </div>
-                <p className="text-lg md:text-xl text-gray-600 leading-relaxed font-medium">
-                  {loc.solution}
+                <p className="text-lg md:text-xl text-gray-600 leading-relaxed font-medium whitespace-pre-line">
+                    {loc.solution}
                 </p>
               </div>
             </div>

@@ -36,6 +36,7 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
       languages: {
         en: `${siteUrl}/en`,
         es: `${siteUrl}/es`,
+        fr: `${siteUrl}/fr`,
         "x-default": `${siteUrl}/en`,
       },
     },
@@ -56,6 +57,7 @@ export default async function LocaleLayout({children, params}: Props) {
     <NextIntlClientProvider locale={locale} messages={messages}>
       <link rel="alternate" hrefLang="en" href={`${siteUrl}/en`} />
       <link rel="alternate" hrefLang="es" href={`${siteUrl}/es`} />
+      <link rel="alternate" hrefLang="fr" href={`${siteUrl}/fr`} />
       <link rel="alternate" hrefLang="x-default" href={`${siteUrl}/en`} />
       <CTAProvider>
         <ModalProvider>

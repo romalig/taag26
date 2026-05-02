@@ -22,5 +22,7 @@ export default function proxy(request: Parameters<typeof intlMiddleware>[0]) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  // Exclude: /api/* (Laravel proxy), /bff/* (Next.js server-side routes that
+  // must not receive a locale redirect), Next internals, and static assets.
+  matcher: ['/((?!api|bff|_next|_vercel|.*\\..*).*)'],
 };
