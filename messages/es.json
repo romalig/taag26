@@ -80,7 +80,7 @@
         "industrial": {
           "tag": "Velocidad",
           "title": "Microbiología Industrial",
-          "description": "Decisiones en tan solo 3 horas. Reemplaza los holds tradicionales con cribado RNA ultrarrápido."
+          "description": "Decisiones en tan solo 3 horas. Disminuye significativamente los paros de línea con análisis de RNA ultrarrápido."
         },
         "custom": {
           "tag": "Precisión",
@@ -351,12 +351,12 @@
         "company": "Gran Empresa de Bebidas",
         "category": "Defensa contra Deterioro",
         "title": "Defensa de Amplio Espectro contra el Deterioro.",
-        "description": "Ayudando a un fabricante de bebidas a acelerar el cribado de deterioro y proteger la calidad del producto con detección molecular de amplio espectro.",
+        "description": "Ayudando a un fabricante de bebidas a acelerar la detección de microorganismos deteriorantes y proteger la calidad del producto con detección molecular de amplio espectro.",
         "heroMetric": "52 Hrs",
         "challenge": "Nuestro socio necesitaba una forma más rápida y completa de controlar el riesgo de deterioro en bebidas terminadas. Los métodos tradicionales de siembra requerían entre 5 y 7 días y ofrecían visibilidad limitada mientras los productos esperaban su liberación. Este retraso aumentaba la presión de inventario, ralentizaba la distribución y exponía la marca a fallas de calidad como hinchamiento del envase, turbidez, sabores desagradables y pérdida prematura de vida útil.",
         "solution": "TAAG implementó una solución de PCR multiplex de alta capacidad para detectar los microorganismos de deterioro de bebidas más relevantes en un solo flujo de trabajo molecular, incluyendo bacterias acidófilas, levaduras, mohos y levaduras resistentes a conservantes. Esto permitió al socio identificar riesgos de deterioro antes de que comprometieran la calidad del producto, reduciendo la dependencia de métodos lentos basados en cultivos y habilitando decisiones de liberación más rápidas.",
         "results": [
-          "Reducción del tiempo de cribado de deterioro de 5–7 días a aproximadamente 50 horas.",
+          "Reducción del tiempo de análisis de microorganismos deteriorantes de 5–7 días a aproximadamente 50 horas.",
           "Detección amplia de deteriorantes críticos de bebidas, incluyendo bacterias acidófilas, levaduras, mohos y levaduras resistentes a conservantes.",
           "Identificación anticipada de microorganismos asociados con hinchamiento del envase, turbidez, sabores desagradables y fallas de vida útil.",
           "Consolidación de múltiples pruebas basadas en cultivo en un flujo de trabajo molecular simplificado.",
