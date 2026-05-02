@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  ...(process.env.STANDALONE === 'true' && { output: 'standalone' }),
   images: {
     remotePatterns: [
       {
@@ -12,3 +13,5 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+
+

@@ -34,6 +34,7 @@ services:
       dockerfile: .docker/Dockerfile
       target: runner
       args:
+        - STANDALONE=true          
         - NEXT_PUBLIC_APIWEBSITE_URL=${NEXT_PUBLIC_APIWEBSITE_URL:-}
         - NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY=${NEXT_PUBLIC_APIWEBSITE_SERVICE_KEY:-}
         - NEXT_PUBLIC_TXALAB_LOGIN_URL=${NEXT_PUBLIC_TXALAB_LOGIN_URL:-https://txalab.taag-genetics.com}
