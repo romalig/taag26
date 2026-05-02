@@ -1,0 +1,1257 @@
+{
+  "Common": {
+    "closeModal": "Venster sluiten"
+  },
+  "Header": {
+    "login": "Inloggen",
+    "language": "Taal",
+    "closeLanguageSelector": "Taalselector sluiten",
+    "mobileMenu": {
+      "title": "Menu",
+      "featuredTechnology": "Uitgelichte Technologie",
+      "explore": "Ontdekken",
+      "aigorLogoWordmark": "AiGOR",
+      "aigorProductTitle": "AiGOR™",
+      "aigorSubtitle": "RNA-technologie",
+      "aigorDescription": "Geavanceerde RNA-technologie voor ultrasnelle resultaten",
+      "nav": {
+        "industrial": "Industriële Microbiologie",
+        "customized": "Maatwerk Moleculair",
+        "txa": "Digitale Transformatie",
+        "labNetwork": "Laboratoriumdiensten",
+        "labs": "Partnerlaboratoria",
+        "where": "Waar We Zijn",
+        "about": "Over Ons"
+      }
+    }
+  },
+  "GlobalError": {
+    "title": "Er is iets misgegaan",
+    "description": "De pagina kon niet worden geladen. Probeer het opnieuw.",
+    "retry": "Opnieuw proberen"
+  },
+  "NotFound": {
+    "title": "Pagina niet gevonden",
+    "description": "Deze pagina kon niet worden gevonden.",
+    "backHome": "Terug naar home"
+  },
+  "Contact": {
+    "formTitle": "Neem contact op",
+    "formSubtitle": "Vertel ons wat u nodig heeft — we reageren zo snel mogelijk.",
+    "nameLabel": "Naam",
+    "companyLabel": "Bedrijf",
+    "emailLabel": "E-mailadres",
+    "messageLabel": "Bericht",
+    "namePlaceholder": "Jan de Vries",
+    "companyPlaceholder": "Global Foods B.V.",
+    "emailPlaceholder": "jan@bedrijf.nl",
+    "websiteLabel": "Website",
+    "submit": "Bericht versturen",
+    "submitting": "Wordt verstuurd...",
+    "successTitle": "Bericht verstuurd",
+    "successBody": "Dank u. We hebben uw bericht ontvangen.",
+    "errorGeneric": "Er is iets misgegaan. Probeer het opnieuw.",
+    "errorDuplicate": "U heeft recentelijk een zeer vergelijkbaar bericht verstuurd. Wacht een paar minuten voordat u het opnieuw probeert.",
+    "disclaimer": "Door dit formulier in te dienen, stemt u ermee in dat uw e-mailadres kan worden opgeslagen en gebruikt voor meldingen en relevante communicatie over TAAG-producten en -diensten, zoals beschreven in onze bevestigingsmail.",
+    "modalTitle": "Laten we uw oplossing ontwerpen.",
+    "modalSubtitle": "Spreek rechtstreeks met ons technisch team. Geen verkoopscript — alleen wetenschap en strategie.",
+    "support": "Deskundige technische ondersteuning",
+    "kits": "Kits en geavanceerde laboratoriumdiensten",
+    "custom": "Maatwerk moleculaire oplossingen",
+    "technicalSupport": "Technische Ondersteuning",
+    "challengePlaceholder": "Vertel ons over uw detectiedoelstellingen...",
+    "secure": "Versleuteld & Vertrouwelijk.",
+    "close": "Venster Sluiten"
+  },
+  "Home": {
+    "Hero": {
+      "title": "Op een dag wordt elk biologisch risico gedetecteerd",
+      "subtitle": "voordat het een probleem wordt.",
+      "primary": "Spreek met een Expert",
+      "secondary": "Bekijk Onze Oplossingen",
+      "imageAlt": "Hyperrealistische bacterievisualisatie"
+    },
+    "Modules": {
+      "title": "Verder dan Testen.",
+      "subtitle": "Microbiologische Intelligentie.",
+      "intro": "We bouwen een toekomst waarin biologische informatie snel, geautomatiseerd en toegankelijk is.",
+      "explore": "Ontdekken",
+      "items": {
+        "industrial": {
+          "tag": "Snelheid",
+          "title": "Industriële Microbiologie",
+          "description": "Beslissingen in slechts 3 uur. Vervang traditionele blokkades door ultrasnelle RNA-screening."
+        },
+        "custom": {
+          "tag": "Precisie",
+          "title": "Maatwerk Moleculair",
+          "description": "Door AI ontworpen moleculaire assays voor uw specifieke behoeften."
+        },
+        "digital": {
+          "tag": "Intelligentie",
+          "title": "Digitale Transformatie",
+          "description": "Contaminatiebronnen traceren met TxA-fabrieksruimtekartering."
+        },
+        "hubs": {
+          "tag": "Schaal",
+          "title": "Wereldwijde Hubs",
+          "description": "Lokale laboratoria met geavanceerde moleculaire diensten."
+        }
+      }
+    },
+    "Manifesto": {
+      "titleLine1": "Verder dan Testen.",
+      "titleAccent": "Microbiologische Intelligentie.",
+      "p1Before": "We bouwen een toekomst waarin biologische informatie ",
+      "p1Highlight": "onmiddellijk en bruikbaar",
+      "p1After": " is. We transformeren detectie naar preventie, en data naar beslissingen.",
+      "p2Before": "Door AI-ontworpen moleculaire tools te combineren met ultrasnelle analyses, ontwikkelt TAAG de traditionele microbiologie tot ",
+      "p2Highlight": "echte intelligentie",
+      "p2After": ".",
+      "pillar1Title": "Gebruiksklare Kits",
+      "pillar1Body": "Gestandaardiseerde moleculaire kits voor directe implementatie in uw laboratorium.",
+      "pillar2Title": "AI-personalisatie",
+      "pillar2Body": "Op maat gemaakte assays ontworpen door algoritmen om uw specifieke stammen te targeten.",
+      "pillar3Title": "Wereldwijde Service-Hubs",
+      "pillar3Body": "Regionale laboratoria met geavanceerde uitbestedings- en ondersteuningsdiensten."
+    },
+    "ProofStrip": {
+      "tagline": "Microbiologische beslissingen van toonaangevende wereldwijde fabrikanten worden door ons mogelijk gemaakt"
+    },
+    "AigorSection": {
+      "chipSubtitle": "RNA-technologie",
+      "headline1": "Gevoeligheid opnieuw gedefinieerd.",
+      "headlineAccent": "10.000x Versterkt.",
+      "intro": "De eerste RNA-gebaseerde detectietechnologie die traditionele grenzen overstijgt. Detecteer metabolisch actieve micro-organismen zonder langdurige verrijkingsstappen.",
+      "card1Stat": "10.000x",
+      "card1Label": "Hogere Gevoeligheid",
+      "card1Body": "Door RNA in plaats van DNA te targeten, detecteert AiGOR actieve cellen met ongekende precisie in vergelijking met traditionele PCR.",
+      "card2Stat": "Vanaf 3 uur",
+      "card2Label": "Tijd tot Resultaat",
+      "card2Body": "Sla lange verrijkingsstappen over of reduceer ze. Ga van monster naar bruikbare beslissing in één dienst.",
+      "card3Stat": "Protocol Nul",
+      "card3Label": "GEEN Verrijking Vereist",
+      "card3Body": "Directe detectiecapaciteiten betekenen dat u stopt met het kweken van ziekteverwekkers en begint met het elimineren ervan.",
+      "cta": "AiGOR-producten verkennen"
+    }
+  },
+  "Metadata": {
+    "defaultTitle": "Biologische risico's detecteren voordat ze zich verspreiden",
+    "defaultDescription": "TAAG combineert moleculaire diagnostiek, laboratoriumdiensten en intelligente software zodat elk biologisch risico kan worden gedetecteerd voordat het een probleem wordt.",
+    "pages": {
+      "TxA": {
+        "title": "TxA — intelligente microbiologiesoftware",
+        "description": "TxA transformeert geïsoleerde laboratoriumresultaten naar voorspellende risico-inzichten en onthult correlaties voordat contaminatie een uitbraak wordt.",
+        "keywords": ["TxA", "microbiologiesoftware", "LIMS", "voorspellend risico", "TAAG"]
+      },
+      "Where": {
+        "title": "Wereldwijde wetenschap, lokale ondersteuning",
+        "description": "TAAG-hubs, partnerlaboratoria en distributeurs wereldwijd — ondersteuning in uw taal en tijdzone voor kits, TxA, MILA en laboratoriumdiensten.",
+        "keywords": ["TAAG-locaties", "laboratoriumpartner", "wereldwijde ondersteuning", "distributeurs"]
+      },
+      "Customized": {
+        "title": "MILA — door AI ontworpen moleculaire assays",
+        "description": "Ontwerp aangepaste multiplex-microbiologieassays met MILA™: van doelsequenties tot productieklare panels voor uw laboratorium.",
+        "keywords": ["MILA", "maatwerk PCR", "multiplex-assay", "AI-diagnostiek", "TAAG"]
+      },
+      "Aigor": {
+        "title": "AiGOR — RNA-gebaseerde microbiologie",
+        "description": "AiGOR™ RNA-technologie voor een nieuwe generatie microbiologische oplossingen: gevoelige en snelle detectie van pathogenen en bederf-organismen.",
+        "keywords": ["AiGOR", "RNA-detectie", "Salmonella", "voedselveiligheid", "TAAG"]
+      },
+      "Labs": {
+        "title": "Partnerlaboratoria — TAAG moleculair ecosysteem",
+        "description": "Word lid van het TAAG-partnerlaboratoriumnetwerk: multiplex-PCR, snelle Elevia-workflows, TxA-integratie en schaalbare moleculaire diensten.",
+        "keywords": ["TAAG laboratoriumpartner", "multiplex-PCR", "Elevia", "laboratoriumnetwerk"]
+      },
+      "LabNetwork": {
+        "title": "Laboratoriumdiensten — TAAG",
+        "description": "ISO-geaccrediteerde microbiologische analyses: pathogenen, bederf, NGS en maatwerk-assays — met TxA-integratie voor end-to-end inzicht.",
+        "keywords": ["TAAG laboratoriumdiensten", "microbiologische analyses", "ISO 17025", "contractlaboratorium"]
+      },
+      "AboutUs": {
+        "title": "Over TAAG",
+        "description": "TAAG biedt geavanceerde moleculaire diagnostiek, laboratoriumdiensten en intelligente software om microbiologische risico's te detecteren voordat ze zich verspreiden.",
+        "keywords": ["TAAG", "over ons", "biotechnologie", "moleculaire diagnostiek"]
+      },
+      "Industrial": {
+        "title": "Industriële Microbiologie — TAAG",
+        "description": "Ultrasnelle RNA-screening, multiplex EMP-workflows en AiGOR-technologie voor kwaliteits- en voedselveiligheidsteams in de productie.",
+        "keywords": ["industriële microbiologie", "EMP", "AiGOR", "voedselveiligheid", "TAAG"]
+      },
+      "EmpTesting": {
+        "title": "Intern moleculair EMP-testen — TAAG",
+        "description": "Turnkey AiGOR Elevia-implementatie: voetafdruk, doorvoer en ROI voor interne pathogeen- en indicatoranalyses.",
+        "keywords": ["EMP-analyse", "AiGOR", "intern laboratorium", "voedselproductie", "TAAG"]
+      }
+    }
+  },
+  "SolutionFinder": {
+    "badge": "AI-diagnostisch Hulpmiddel",
+    "title": "Deel uw uitdaging.",
+    "subtitle": "Ontdek uw oplossing.",
+    "inputLabel": "Invoerparameters",
+    "placeholder": "Bijv. Ik moet Salmonella detecteren in cacaopoeder in minder dan 24 uur om verzendvertragingen te voorkomen...",
+    "health": {
+      "checkingTitle": "Verbinding met assistent wordt gecontroleerd...",
+      "misconfiguredTitle": "Chat-API-URL of sleutel is niet geconfigureerd op de server",
+      "downTitle": "De assistentservice is niet beschikbaar of heeft een fout geretourneerd",
+      "upTitle": "Assistent-eindpunt heeft gereageerd; klaar voor analyse",
+      "checking": "Verbinding controleren...",
+      "up": "Systeem Actief",
+      "down": "Assistent niet beschikbaar",
+      "misconfigured": "Assistent niet geconfigureerd"
+    },
+    "analyze": "Verzoek Analyseren",
+    "responseBadge": "AI-antwoord",
+    "loadingTitle": "Uw verzoek wordt geanalyseerd",
+    "loadingBody": "Onze catalogus wordt doorzocht op de beste overeenkomende oplossingen...",
+    "connectionError": "Kan geen verbinding maken met de assistent. Probeer het opnieuw.",
+    "processing": "Antwoord wordt verwerkt...",
+    "parseError": "Het antwoord kon niet worden verwerkt. Probeer het opnieuw.",
+    "retry": "Opnieuw proberen",
+    "contactCommercial": "Contact met commercieel team"
+  },
+  "CaseStudies": {
+    "eyebrow": "Bewezen Impact",
+    "title": "Echte oplossingen.",
+    "subtitle": "Echte impact.",
+    "description": "Het vertrouwen van mondiale leiders om hun merken te beschermen en hun productie te optimaliseren.",
+    "partners": "Enkele van onze partners",
+    "successfulCases": "Succesverhalen",
+    "read": "Casestudy lezen",
+    "detail": {
+      "challengeHeading": "De Uitdaging",
+      "solutionHeading": "De TAAG-oplossing",
+      "coreImpact": "Kernimpact",
+      "keyResults": "Kernresultaten:",
+      "techBehind": "Technologie Achter Deze Case",
+      "learnMoreAbout": "Meer leren over {tech}",
+      "ctaTitle": "Klaar voor vergelijkbare resultaten?",
+      "ctaButton": "Spreek met een Expert"
+    },
+    "techLabels": {
+      "AiGOR": "AiGOR",
+      "Industrial": "Industriële Oplossingen",
+      "MILA": "MILA",
+      "TxA": "TxA",
+      "Lab": "Laboratoriumdiensten"
+    },
+    "cards": {
+      "danone-precision-probiotics": {
+        "company": "Top-3 wereldwijd zuivelbedrijf",
+        "category": "MILA™ Maatwerkontwerp",
+        "title": "Precisieprobiotica.",
+        "description": "Ontwikkeling van een maatwerk triplex-qPCR-kit voor de kwantificering van propriëtaire stammen in afgewerkte yoghurtproducten.",
+        "heroMetric": "Snelle en nauwkeurige kwaliteitscontrole",
+        "challenge": "Onze partner had behoefte aan een snellere en nauwkeurigere methode om propriëtaire probiotische stammen direct in afgewerkte yoghurtproducten te kwantificeren. Klassieke plaatmethoden waren te traag en misten de specificiteit om nauw verwante stammen te onderscheiden, wat leidde tot vertragingen bij productievrijgave.",
+        "solution": "Met het MILA™ AI-platform ontwierp TAAG een maatwerk triplex-qPCR-assay gericht op de propriëtaire genetische handtekeningen van de drie probiotische stammen. Het resultaat was een kwantitatieve eénreactiemethode die nauw verwante stammen kan onderscheiden en in slechts 3 uur bruikbare resultaten levert.",
+        "results": [
+          "Kwantificeringstijd gereduceerd van meerdere dagen naar minder dan 3 uur.",
+          "100% stamspecificiteit bereikt in complexe zuivelmatrices.",
+          "Naadloze integratie in bestaande laboratoriumworkflows."
+        ]
+      },
+      "arca-continental-bottling-intelligence": {
+        "company": "Een van 's werelds toonaangevende bottelaarsbedrijven",
+        "category": "TxA™ Digitale Transformatie",
+        "title": "Intelligentie in Bottelen.",
+        "description": "Standaardisering van microbiologische controle in 35 productiefabrieken met onze AI-gestuurde software.",
+        "heroMetric": "35 Fabrieken",
+        "challenge": "Het beheren van microbiologische data in 35 verschillende bottelfabrieken creëerde informatiesilos. Kwaliteitsmanagers misten real-time zichtbaarheid om contaminatiebronnen te traceren en risico's in de gehele toeleveringsketen efficiënt te voorspellen.",
+        "solution": "We implementeerden het TxA™-platform om microbiologische data te centraliseren en AI-algoritmen te implementeren voor voorspellende risicobeoordeling en fabriekskartering. Onze partner breidt het gebruik van TxA uit als kerncomponent van zijn microbiologische controlestrategie.\n\nNa een succesvolle implementatie is de partner van plan TxA in alle 35 productiefabrieken uit te rollen, data te standaardiseren, besluitvorming te versnellen en preventieve controle op schaal te versterken.",
+        "results": [
+          "Gestandaardiseerde kwaliteitscontrolecijfers in alle internationale vestigingen.",
+          "Real-time waarschuwingen bij contaminatietrends voordat kritieke niveaus worden bereikt.",
+          "Significante reductie van vertraagde productiefreigaven."
+        ]
+      },
+      "fast-salmonella-food": {
+        "company": "Voedselindustrie",
+        "category": "Voedselveiligheid",
+        "title": "Snelle Salmonella-controle in de voedselindustrie",
+        "description": "Bruikbare resultaten en productiefreigave in slechts 9 uur — zonder langdurige 24-48u verrijkingen.",
+        "heroMetric": "9 Uur",
+        "challenge": "Traditionele voedselanalyses voor Salmonella kunnen tot 24 tot 48 uur duren en veroorzaken enorme opslagbottlenecks, vertragen productiefreigave en reduceren houdbaarheid. Bovendien laten thermische of chemische behandelingen vaak dode cellen achter die in standaard DNA-tests kostbare valse positieven genereren.",
+        "solution": "Aangedreven door onze revolutionaire AiGOR-technologie richt deze oplossing zich op metabolisch actief RNA om Salmonella in complexe voedselmatrices in een fractie van de tijd te detecteren. Het onderscheidt transparant levende van dode cellen.",
+        "results": [
+          "Positieve Vrijgave op Dezelfde Dag: Drastische verkorting van blokkadeduur met resultaten in slechts 9 uur.",
+          "Differentiatie van Levende Cellen: RNA-gebaseerde detectie vermijdt valse positieven veroorzaakt door dode cellen.",
+          "Geschikt voor Complexe Matrices: Zeer robuust tegen inhibitoren in chocoladegerelateerde matrices.",
+          "Maximale Gevoeligheid: Consistente detectie tot 1 KVE/monster."
+        ]
+      },
+      "full-preventive-control": {
+        "company": "Voedselproducent Partner",
+        "category": "Preventieve Microbiologische Controle",
+        "title": "Preventieve Controle in Één Reactie.",
+        "description": "Een voedselproducent helpen van reactieve pathogeenanlyse naar geïntegreerde preventieve microbiologische controle met resultaten in ongeveer 24 uur.",
+        "heroMetric": "24 Uur",
+        "challenge": "Onze partner moest de microbiologische controle versterken zonder de laboratoriumcomplexiteit te verhogen. De bestaande workflow vereiste aparte tests voor pathogenen en hygiëne-indicatoren, waardoor kosten, arbeidsintensiteit en doorlooptijd toenamen. Pathogene resultaten bevestigden problemen bovendien pas nadat het contaminatierisico al was opgetreden.",
+        "solution": "TAAG implementeerde een geïntegreerde multiplex-PCR-aanpak die Salmonella, L. monocytogenes en belangrijke hygiëne-indicatormicro-organismen gelijktijdig in één reactiebuis detecteert. Door pathogendetectie en indicatormonitoring in één workflow te combineren, verkreeg de partner een sneller en bruikbaarder overzicht van het microbiologisch risico — met resultaten beschikbaar in ongeveer 24 uur.",
+        "results": [
+          "Gecombineerde detectie van pathogenen en hygiëne-indicatoren in één PCR-reactie.",
+          "Resultaten beschikbaar in ongeveer 24 uur voor snellere vrijgave- en correctiebeslissingen.",
+          "Betere vroegtijdige zichtbaarheid van hygiënefouten en contaminatierisicosignalen.",
+          "Lagere operationele belasting door reductie van afzonderlijke assays, reagentia, plastic en handmatige tijd.",
+          "Een meer preventief kwaliteitscontrolemodel met vereenvoudigde implementatie in routineanalyse."
+        ]
+      },
+      "broad-spectrum-spoilage": {
+        "company": "Groot Drankenbbedrijf",
+        "category": "Bederf Verdediging",
+        "title": "Breedspectrumverdediging Tegen Bederf.",
+        "description": "Een drankenfabrikant helpen bederf-screening te versnellen en productkwaliteit te beschermen door middel van breedspectrum moleculaire detectie.",
+        "heroMetric": "52 Uur",
+        "challenge": "Onze partner had behoefte aan een snellere en completere methode om bederf-risico in afgewerkte dranken te controleren. Traditionele plaatmethoden vereisten 5 tot 7 dagen en boden beperkte zichtbaarheid terwijl producten op vrijgave wachtten. Deze vertraging verhoogde de voorraaddruk, vertraagde distributie en stelde het merk bloot aan kwaliteitsfouten zoals verpakkingsopzwelling, troebelheid, smaakvervalsing en voortijdig houdbaarheidsverlies.",
+        "solution": "TAAG implementeerde een hoogcapaciteits multiplex-PCR-oplossing om de meest relevante bederf-micro-organismen in dranken in één moleculaire workflow te detecteren, inclusief acidofiele bacteriën, gisten, schimmels en conserveringsmiddelresistente gisten. Dit stelde de partner in staat bederf-risico's te identificeren voordat ze de productkwaliteit in gevaar brengen, de afhankelijkheid van trage cultuurgebaseerde methoden te verminderen en snellere vrijgavebeslissingen te nemen.",
+        "results": [
+          "Reductie van de bederf-screeningtijd van 5-7 dagen naar ongeveer 50 uur.",
+          "Brede detectie van kritieke drankenbedervers, inclusief acidofiele bacteriën, gisten, schimmels en conserveringsmiddelresistente gisten.",
+          "Vroege identificatie van micro-organismen geassocieerd met verpakkingsopzwelling, troebelheid, smaakvervalsing en houdbaarheidsfalen.",
+          "Consolidatie van meerdere cultuurgebaseerde tests in één vereenvoudigde moleculaire workflow.",
+          "Solidere kwaliteitscontrolebeslissingen vóór productdistributie."
+        ]
+      },
+      "salmonella-ecoli-protection": {
+        "company": "Versproductenpartner",
+        "category": "Pathogeen Bescherming",
+        "title": "Bescherming Tegen Salmonella en E. coli",
+        "description": "Simultane multiplex-detectie van Salmonella, E. coli O157:H7 en STEC.",
+        "heroMetric": "3-in-1",
+        "challenge": "Onze partner moest de pathogenanalyse voor sterk bederfelijke producten versnellen zonder de voedselveiligheid te compromitteren. De bestaande workflow vereiste aparte protocollen voor Salmonella, E. coli O157:H7 en STEC, waardoor laboratoriumcomplexiteit, doorlooptijden en vrijgavevertragingen voor producten zoals bladgroenten toenamen.",
+        "solution": "TAAG implementeerde een multiplex-PCR-oplossing die Salmonella, E. coli O157:H7 en STEC uit één verrijkt monster kan detecteren. Door drie kritieke pathogentests in één moleculaire workflow te consolideren, reduceerde de partner de operationele complexiteit, versnelde vrijgavebeslissingen en versterkte het vertrouwen in routinematige voedselveiligheidscontrole.",
+        "results": [
+          "Simultane detectie van Salmonella, E. coli O157:H7 en STEC in één PCR-reactie.",
+          "Één monstervoorbereidings- en verrijkingsworkflow voor drie kritieke pathogendoelen.",
+          "Resultaten beschikbaar in minder dan 24 uur voor snellere vrijgavebeslissingen.",
+          "Lagere laboratoriumbelasting door consolidatie van drie afzonderlijke pathogentests in één workflow.",
+          "Verbeterde besluitvorming voor bederfelijke producten met kortere commerciële vensters."
+        ]
+      }
+    }
+  },
+  "FinalCTA": {
+    "title": "Ontdek hoe u uw microbiologie naar het volgende niveau kunt tillen",
+    "body": "Laten we een meeting plannen om meer te leren over onze producten, technologieën en laboratoriumdiensten.",
+    "availability": "Beschikbaarheid vanaf de volgende dag",
+    "consultation": "Consultatie met experts",
+    "button": "Een Meeting Plannen"
+  },
+  "Footer": {
+    "taglineA": "De natuur lezen.",
+    "taglineB": "De toekomst interpreteren.",
+    "description": "Geavanceerde moleculaire intelligentie en AI-gestuurde diagnostiek voor de wereldwijde maakindustrie.",
+    "solutions": "Oplossingen",
+    "technologies": "Technologieën",
+    "company": "Bedrijf",
+    "links": {
+      "industrial": "Industriële Microbiologie",
+      "customized": "Maatwerk Oplossingen",
+      "txa": "Digitale Transformatie",
+      "labServices": "Laboratoriumdiensten",
+      "about": "Over Ons",
+      "locations": "Locaties",
+      "contact": "Contact",
+      "privacy": "Privacybeleid",
+      "terms": "Gebruiksvoorwaarden"
+    },
+    "certifications": {
+      "iso17025": "ISO/IEC 17025 geaccrediteerd",
+      "iso13485": "ISO 13485 geaccrediteerd"
+    },
+    "rights": "Alle rechten voorbehouden."
+  },
+  "Pages": {
+    "Industrial": {
+      "titleA": "De Volgende Generatie",
+      "titleB": "Microbiologische Oplossingen.",
+      "body": "Verken microbiologische oplossingen voor multiplex- en ultrasnelle detectie om beslissingen te versnellen, risico's te verminderen en productiviteit te verbeteren."
+    },
+    "Customized": {
+      "arc": "Door AI Ontworpen Assays",
+      "titleA": "Stel u uw ideale",
+      "titleB": "moleculaire microbiologie-assay voor.",
+      "subtitle": "Begin hem nu te gebruiken.",
+      "scroll": "Scroll naar beneden"
+    },
+    "TxA": {
+      "titleA": "Intelligente microbiologie.",
+      "titleB": "Verspreiding voorkomen.",
+      "body": "TxA transformeert geïsoleerde resultaten om risico's te voorspellen en onthult verborgen correlaties voordat ze uitbraken worden."
+    },
+    "Labs": {
+      "titleA": "Uw laboratorium",
+      "titleB": "Volledig geoptimaliseerd.",
+      "body": "Word laboratoriumpartner en krijg toegang tot ons volledige ecosysteem van technologieën, software, producten en workflows. Benut het ware potentieel van uw faciliteit en genereer ongekende productiviteit, operationele wendbaarheid en kostenbesparingen."
+    },
+    "Where": {
+      "titleA": "Wereldwijde Wetenschap.",
+      "body": "Met operationele TAAG-hubs en een netwerk van partnerlaboratoria en distributeurs brengen we het TAAG-ecosysteem rechtstreeks naar uw faciliteit. Ondersteuning in uw taal, in uw tijdzone, aan uw zijde.",
+      "localSupport": {
+        "eyebrow": "LOKALE ONDERSTEUNING",
+        "headline": "Hoe we uw laboratorium lokaal ondersteunen.",
+        "hubsTitle": "TAAG Hubs",
+        "hubsDesc": "Deskundige wetenschappelijke begeleiding bij methodeselectie, maatwerk moleculaire ontwikkelingen en technische probleemoplossing.",
+        "partnersTitle": "Lokale Partners",
+        "partnersDesc": "Dagelijkse commerciële hulp, soepele kit-implementatie en snelle logistiek afgestemd op de behoeften van uw fabriek.",
+        "labTitle": "Service-Laboratorium Partner",
+        "labDesc": "Toegankelijke lokale laboratoriumdiensten met behulp van geavanceerde TAAG-kits voor betrouwbare resultaten bij u in de buurt."
+      }
+    },
+    "About": {
+      "title": "Hallo, wij zijn TAAG.",
+      "intro": "We helpen organisaties microbiologische risico's te beheersen via geavanceerde moleculaire oplossingen en intelligente systemen.",
+      "storyTitle": "Ons verhaal",
+      "story1": "TAAG werd in 2001 opgericht als een hooggespezialispeerd analyselaboratorium. In de loop der jaren hebben we onze aanwezigheid voortdurend uitgebreid en vestigingen geopend in de VS, België, Mexico en Chili.",
+      "story2": "Naarmate de mondiale vraag naar snellere, nauwkeurigere en schaalbaardere diagnostiek groeide, erkenden we de noodzaak om verder te gaan dan de grenzen van traditionele servicemodellen.",
+      "story3": "Dit inzicht dreef onze transformatie van een regionale dienstverlener naar een technologiegedreven biotechnologieorganisatie die deskundige laboratoriumdiensten, geavanceerde kit-productie en softwareontwikkeling naadloos integreert in onze kernactiviteiten.",
+      "story4": "Vandaag ligt onze focus duidelijk op het vooruitbrengen van de diagnostische standaard. We ontwerpen, fabriceren en distribueren geavanceerde moleculaire oplossingen die onze eigen hubs en een groeiend wereldwijd netwerk van partnerlaboratoria empoweren.",
+      "missionTitle": "TAAG-missie",
+      "mission": "Geavanceerde biologische analyse toegankelijk maken voor elk laboratorium en elke organisatie, en een revolutie teweegbrengen in de manier waarop biologische entiteiten worden gedetecteerd, geïdentificeerd en beheerd.",
+      "visionTitle": "TAAG-visie",
+      "vision": "Een toekomst bouwen waarin biologische analyses snel, geautomatiseerd, voorspellend en universeel toegankelijk zijn, zodat elke organisatie gezondheid kan beschermen, productie kan optimaliseren en het volledige potentieel van biotechnologie kan benutten.",
+      "valuesTitle": "Onze Waarden",
+      "values": [
+        {
+          "title": "Eerlijkheid omarmen",
+          "description": "Transparantie bouwt vertrouwen. We communiceren open met onze klanten, partners en met elkaar. We verbergen ons niet achter jargon; we presenteren data en feiten zoals ze zijn. Absolute eerlijkheid is het fundament van onze wetenschappelijke strengheid."
+        },
+        {
+          "title": "Grenzen verleggen",
+          "description": "Innovatie zit in ons DNA. We verkennen voortdurend nieuwe technologieën en methodologieën om complexe microbiologische uitdagingen op te lossen die anderen onmogelijk achten. We volgen niet zomaar de standaard — we bedenken wat daarna komt."
+        },
+        {
+          "title": "Wereldklasse zijn",
+          "description": "We zijn gefocust op beter worden en beter zijn in alles wat we doen. We genoegen ons niet met goed genoeg als het gaat om het beschermen van de mondiale voedselveiligheid en gezondheid. Als we voor excellentie erkend willen worden, moeten we het dagelijks belichamen."
+        },
+        {
+          "title": "Nooit genoegen nemen",
+          "description": "Continue verbetering drijft ons vooruit. We geloven dat er ongeacht hoe geavanceerd onze huidige oplossingen zijn, altijd ruimte is om te optimaliseren, versnellen en verfijnen. We bevragen de status-quo om snellere en nauwkeurigere resultaten te leveren."
+        },
+        {
+          "title": "Team boven titels",
+          "description": "Hard werken en teamgeest tellen meer dan hiërarchie. Iedereen speelt een uniek belangrijke rol. Onze impact wordt gemaximaliseerd wanneer we de mouwen opstropen, elkaar ondersteunen en het team op de eerste plaats zetten."
+        },
+        {
+          "title": "Vooruitvallen",
+          "description": "Aan de frontlinie van biotechnologie opereren betekent risico's nemen. We zijn niet bang om fouten te maken, zolang we ze erkennen, ervan leren en snel itereren. Elke mislukking is slechts een datapunt dat ons helpt een sterkere en slimmere oplossing te bouwen."
+        }
+      ],
+      "timeline": {
+        "titleLine1": "Een geschiedenis vol eersten.",
+        "titleAccent": "Een toekomst vol doorbraken.",
+        "intro": "We gebruiken technologie niet alleen — we bedenken haar. Ontdek de mijlpalen die de microbiologische analyse door de jaren heen opnieuw hebben gedefinieerd.",
+        "innovationBadge": "Innovatie",
+        "items": [
+          {
+            "title": "Multiplex-PCR-integratie",
+            "description": "Eerste PCR-kit om Salmonella spp., L. monocytogenes, E. coli en S. aureus gelijktijdig in één reactie en één workflow te detecteren."
+          },
+          {
+            "title": "Extreem Multiplexen",
+            "description": "Eerste extreem gemultiplexte PCR-kit (propriëtaire technologie) die meer dan 50 bederf-micro-organismen in één PCR-reactie kan detecteren en identificeren."
+          },
+          {
+            "title": "TxA-platform",
+            "description": "Eerste AI-algoritme dat het microbiologisch analyseprogramma dynamisch kan aanpassen op basis van real-time risicobeoordeling."
+          },
+          {
+            "title": "MILA-platform",
+            "description": "Ontwikkeling van MILA (propriëtaire technologie): de eerste AI-software die de beste moleculen voor hooggemultiplexte PCR-kits kan voorspellen."
+          },
+          {
+            "title": "AiGOR-technologie",
+            "description": "Ontwikkeling van AiGOR (propriëtaire technologie): een revolutionaire RNA-detectietechnologie met meer dan 10.000 keer hogere gevoeligheid dan standaard real-time PCR."
+          }
+        ],
+        "future": {
+          "badge": "In Actieve Ontwikkeling",
+          "title": "De Volgende Generatie",
+          "body": "Voortbouwend op AiGOR en MILA ontwikkelen we momenteel de volgende generatie assays. Verwacht ongekende mogelijkheden: extreem snelle (dienstinterne) resultaten, gemultiplext en kwantitatief."
+        }
+      }
+    }
+  },
+  "Industrial": {
+    "FeaturedModalData": {
+      "zeroRiskEmp": {
+        "title": "Intern Ultrasnelle en Nulrisico EMP-pathogenanalyse",
+        "subtitle": "Ultrasnelle pathogendetectie in omgevingsmonsters. Nauwkeurige resultaten voor Salmonella, Listeria spp. en Listeria monocytogenes in slechts 3 uur — zonder verrijking.",
+        "description": "Traditionele omgevingsmonitoringprogramma's zijn reactief en traag. Dankzij de revolutionaire AiGOR-technologie hebben we dit paradigma getransformeerd. Door geavanceerde RNA-gebaseerde detectie te combineren met AI-gestuurde voorspellende analyses stelt onze oplossing voedselproductiefaciliteiten in staat biologische grenzen te overwinnen, pathogenen te detecteren met ongekende snelheid en nauwkeurigheid, en contaminatierisico's te voorspellen voordat ze het eindproduct beïnvloeden.",
+        "eleviaProducts": {
+          "intro": "Elevia is onze premium suite van diagnostische producten op basis van AiGOR-technologie. Door RNA te targeten overstijgt Elevia traditionele biologische grenzen en levert extreme gevoeligheid en ultrasnelle resultaten in al uw testmatrices.",
+          "main": [
+            "Ultrasnelle Salmonella-detectie in slechts 3 uur resp. 7 uur voor omgevings- en voedselmonsters.",
+            "Simultane identificatie van Salmonella en Listeria spp. in één reactie, in slechts 3 uur resp. 7 uur voor omgevings- en voedselmonsters."
+          ],
+          "upcoming": [
+            {
+              "desc": "Simultane identificatie van Salmonella en Enterobacteria in één reactie, in slechts 3 uur."
+            },
+            {
+              "desc": "Simultane identificatie van Listeria spp. en L. monocytogenes in één reactie, in slechts 3 uur.",
+              "launch": "Lancering K2 2026"
+            },
+            {
+              "desc": "Simultane identificatie van Salmonella + Listeria spp. en L. monocytogenes in één reactie, in slechts 3 uur.",
+              "launch": "Lancering K2 2026"
+            }
+          ]
+        },
+        "advantages": [
+          "Resultaten in 3-6 uur: Onmiddellijke besluitvorming en dezelfde dag corrigerende maatregelen.",
+          "Operationele Wendbaarheid: Dezelfde dag corrigerende maatregelen verminderen productieuitvaltijd.",
+          "Verbeterde Voedselveiligheid: Vroege detectie van contaminatie-hotspots voorkomt grootschalige blokkades.",
+          "Naadloze Implementatie: Moeiteloze workflow die werkt op elk open PCR-platform.",
+          "TxA-software Inbegrepen: Preventieve en dynamische omgevingsbemonstering aangedreven door AI.",
+          "Aanzienlijke Kostenbesparingen: Reductie van opslagtijden, productblokkades en afhankelijkheid van externe laboratoria."
+        ],
+        "matrices": [
+          "Omgevingsmonsters (1 KVE/swab)",
+          "Vloeibare monsters (1 KVE/mL)",
+          "Faciliteitsoppervlakken"
+        ],
+        "table": {
+          "title": "Protocol Nul vs. Protocol Xpress: de juiste strategie voor elke situatie",
+          "rows": [
+            { "feature": "Strategie", "col1": "Ultrasnelle screening", "col2": "Routinemonitoring met extra flexibiliteit" },
+            { "feature": "Verrijkingstijd", "col1": "Geen verrijking", "col2": "3 uur" },
+            { "feature": "Totale tijd tot resultaat", "col1": "3 uur", "col2": "6 uur" },
+            { "feature": "Beoogd gebruik", "col1": "Post-sanering Zone 1 en Zone 2", "col2": "Pre- en post-sanering Zone 1, 2 en 3" },
+            { "feature": "Bemonsteringsapparaat", "col1": "Swab", "col2": "Swabs en sponzen" },
+            { "feature": "Detectielimiet", "col1": "1 KVE/monster", "col2": "1 KVE/monster" },
+            { "feature": "Downstreamtoepassingen", "col1": "Geen, destructieve methode. Het gehele monster moet worden verwerkt", "col2": "Ja. Extra monster voor downstreamtoepassingen, bijv. bevestiging, WGS, enz." }
+          ]
+        },
+        "orderingDescriptions": [
+          "Ultrasnelle RNA-gebaseerde detectie van Salmonella spp.",
+          "Multiplex-detectie van Salmonella en Enterobacteria.",
+          "Snel RNA/DNA-extractieprotocol voor omgevingsmonsters.",
+          "Bemonsteringskit voor analyses met 3 uur verrijking.",
+          "Bemonsteringskit voor snelle analyses zonder verrijking."
+        ],
+        "txaSection": {
+          "title": "TAAG Xpert Assistant. Uw door AI aangedreven ecosysteem.",
+          "desc": "Implementeer een dynamisch en preventief microbiologisch programma speciaal ontworpen voor EMP. TxA gebruikt geavanceerde voorspellende AI om uw bemonsteringsplan te optimaliseren en contaminatiebronnen te lokaliseren, naadloos werkend met Elevia-kits om interpretatie en analyse van begin tot eind te automatiseren.",
+          "linkText": "TxA verkennen"
+        }
+      }
+    },
+    "Featured": {
+      "modalFallbackDescription": "De inhoud voor deze oplossing is nog niet beschikbaar. Probeer het later opnieuw of neem contact op met ons team.",
+      "eyebrow": "Uitgelichte oplossingen",
+      "title": "Zo ziet de toekomst eruit",
+      "timeToResult": "Tijd tot Resultaat",
+      "externalLab": "Extern Laboratorium",
+      "days": "3-5 Dagen",
+      "aigorTech": "AiGOR-technologie",
+      "hours": "< 3 Uur",
+      "savings": "Aanzienlijke Kostenbesparingen",
+      "advantages": "Voordelen",
+      "contact": "Contact",
+      "details": "Details",
+      "learnMore": "Meer Leren",
+      "labels": { "results": "Resultaten", "ai": "AI", "improveEmp": "EMP Verbeteren" },
+      "solutions": {
+        "pathogen-control": {
+          "title": "Intern Ultrasnelle en Nulrisico EMP-pathogenanalyse",
+          "descriptionLeft": "Pathogenen detecteren in < 3 uur zonder verrijking.",
+          "description": "Analyses intern uitvoeren met absolute veiligheid en efficiëntie.",
+          "advantages": [
+            "Nul Biorisico: Geen verrijking betekent geen pathogenengroei op locatie.",
+            "Snelle Resultaten: Resultaten in uren in plaats van dagen.",
+            "Onmiddellijke Actie: Van reactief wachten naar dezelfde dag interventie.",
+            "Kostenefficiëntie: Externe laboratoriumkosten en verzendvertragingen elimineren."
+          ]
+        },
+        "fast Salmonella": { "title": "Snelle Salmonella-controle in de voedselindustrie", "description": "Resultaten binnen dezelfde dienst voor Salmonella in omgevings- en voedselmonsters." },
+        "F41": { "title": "Volledige en Preventieve Microbiologische Controle", "description": "Pathogenen en indicatoren in één PCR-reactie detecteren. Preventieve controle ontmoet efficiëntie." },
+        "spoilage-beverage": { "title": "Breedspectrumverdediging Tegen Bederf", "description": "Bederf-gisten, schimmels en bacteriën screenen in één PCR-run. Houdbaarheid beschermen met absolute moleculaire precisie." },
+        "F39": { "title": "Bescherming Tegen Salmonella en Pathogene E. coli", "description": "Één workflow voor simultane detectie en identificatie van Salmonella en pathogene E. coli." },
+        "txa-integration": { "title": "Alles naadloos geïntegreerd met TxA", "description": "AI-platform om complexe data om te zetten in preventieve actie." }
+      }
+    },
+    "Equipment": {
+      "eyebrow": "Infrastructuur en Apparatuur",
+      "title": "Geen gespecialiseerde of complexe apparatuur. Open platforms",
+      "body": "We geloven in eenvoud. Zes vierkante meter. Een standaard qPCR-apparaat. Dat is alles wat nodig is.",
+      "qPCR": "qPCR-apparaat",
+      "recommended": "Analytik Jena aanbevolen",
+      "scenarios": {
+        "simple": { "label": "Omgevings- en Voedselmonsters", "title": "Eenvoudige en Snelle Workflow", "description": "Ideaal voor omgevings- en normale voedselmatrices. Vermijd complexe apparatuur met onze snelle extractieprotocollen die u in recordtijd naar PCR-resultaten brengen." },
+        "complex": { "label": "Complexe Voedselmonsters", "title": "Geautomatiseerde Hoge Doorvoer", "description": "Voor complexe matrices zoals chocolade of kruiden. We integreren geautomatiseerde magnetische kralenextractieroboters voor maximale zuiverheid en efficiëntie zonder bottlenecks." }
+      }
+    },
+    "How": {
+      "headline": "Duik dieper in de toekomst, ontdek",
+      "headlineAccent": "AiGOR-oplossingen.",
+      "shortLabels": ["AiGOR", "Voedselanalyse", "Omgevingsanalyse", "Omgevingsprotocollen", "Micro-organismen", "TxA-platform"],
+      "steps": {
+        "intro": { "step": "Het Ecosysteem", "title": "Ultrasnelle RNA-detectietechnologie", "description": "Resultaten binnen dezelfde dienst. Absolute zekerheid. Volledige productiviteit." },
+        "sample": { "step": "Stap 01", "title": "", "description": "Elk product met absolute zekerheid leveren." },
+        "extraction": { "step": "Stap 02", "title": "", "description": "Ultrasnelle resultaten verkrijgen uit swabs en sponzen, voor of na sanering." },
+        "pcr": { "step": "Stap 03", "title": "Uw keuze maken", "description": "Protocol ZERO of XPRESS." },
+        "interpretation": { "step": "Stap 04", "title": "", "description": "Snelle detectie van Salmonella spp., Listeria spp., Enterobacteria, L. monocytogenes en meer." },
+        "management": { "step": "Stap 05", "title": "Snelle resultaten voor snelle acties", "description": "Al onze kits integreren naadloos met TxA voor geavanceerde AI-gebaseerde bescherming." }
+      },
+      "futureTitle": "Klaar om de toekomst te verkennen?",
+      "futureBodyA": "Ervaar de kracht van RNA-gebaseerde detectie.",
+      "futureBodyB": "Versterkte gevoeligheid. Tijd tot resultaat opnieuw gedefinieerd.",
+      "explore": "AiGOR-producten verkennen",
+      "previousImage": "Vorige workflow-afbeelding",
+      "currentImage": "Huidige workflow-afbeelding"
+    },
+    "FeaturedModal": {
+      "featuredBadge": "Uitgelichte Oplossing",
+      "solutionOverview": "Oplossingsoverzicht",
+      "keyAdvantages": "Kernvoordelen",
+      "validatedMatrices": "Gevalideerde Matrices",
+      "fallbackPathogens": "Gedetecteerde Pathogenen",
+      "fallbackIndicators": "Gedetecteerde Indicatoren",
+      "welcomeTitleA": "Welkom in de toekomst.",
+      "welcomeTitleB": "Maak kennis met Elevia-producten.",
+      "loading": "Laden…",
+      "unavailable": "Niet beschikbaar",
+      "learnMore": "Meer leren",
+      "aigorBanner": {
+        "eyebrow": "Aangedreven door AiGOR",
+        "headline": "Biologische grenzen overwinnen door geavanceerde RNA-gebaseerde detectie.",
+        "chipSubtitle": "RNA-TECHNOLOGIE",
+        "statTimeStrong": "Resultaten in 3 uur.",
+        "statTimeRest": "Lange verrijkingen overslaan.",
+        "statCfuStrong": "1 KVE/monster.",
+        "statCfuRest": "Maximale precisie.",
+        "statSensStrong": "10.000x gevoeligheid.",
+        "statSensRest": "vs. real-time PCR.",
+        "statRnaStrong": "RNA-detectie.",
+        "statRnaRest": "Gericht op actieve cellen.",
+        "exploreLink": "AiGOR-technologie verkennen"
+      },
+      "swipeColumns": "Veeg naar links om alle kolommen te zien",
+      "orderingTitle": "Bestelinformatie",
+      "orderingCatNo": "Kat.-nr.",
+      "orderingProduct": "Product",
+      "orderingSize": "Grootte",
+      "orderingFormat": "Formaat",
+      "orderingDescription": "Beschrijving",
+      "contactUs": "Neem contact op",
+      "empProtocolZero": "PROTOCOL NUL",
+      "empProtocolXpress": "PROTOCOL XPRESS"
+    },
+    "Impact": {
+      "eyebrow": "Hyper-snel EMP",
+      "titleA": "Een volledig",
+      "titleB": "getransformeerde",
+      "titleC": "workflow.",
+      "introA": "Meeslepende snelheid als nooit tevoren.",
+      "introB": "AiGOR gebruikt RNA-gebaseerde detectie om biologische grenzen te overwinnen en bruikbare resultaten te leveren in uren, niet in dagen.",
+      "cards": {
+        "rna": { "title": "RNA-gevoeligheid.", "body": "Detecteert alleen actieve cellen. Geen valse positieven door dood DNA.", "value": "10k", "suffix": "x" },
+        "zero": { "title": "Nul Verrijking.", "body": "De 24u-groeistap overslaan.", "value": "Direct." },
+        "speed": { "title": "Snelheid opnieuw gedefinieerd.", "body": "Van monster tot certificaat.", "value": "3", "suffix": "UUR" },
+        "fit": { "title": "Naadloze Integratie.", "body": "Integreert met standaard LIMS en bestaande laboratoriumworkflows." }
+      }
+    },
+    "Catalog": {
+      "title": "Verken al onze oplossingen",
+      "searchAll": "In alle oplossingen zoeken...",
+      "searching": "In alle categorieën zoeken...",
+      "download": "Productselectiegids Downloaden",
+      "filtering": "Filteren op:",
+      "loading": "Producten laden...",
+      "contact": "Contact",
+      "details": "Details",
+      "loadingDetails": "Laden",
+      "noResults": "Geen overeenkomende oplossingen gevonden.",
+      "trySearch": "Probeer te zoeken op doel, technologie of naam.",
+      "customTitle": "Niet gevonden wat u zocht?",
+      "customBody": "Aangedreven door MILA zet ons O&O-team unieke uitdagingen om in maatwerk oplossingen.",
+      "contactUs": "Neem contact op"
+    },
+    "DatasheetModal": {
+      "technicalDataSheet": "Technisch Gegevensblad",
+      "targetType": "Doeltype",
+      "targets": "Doelen",
+      "mainIndustries": "Hoofdsectoren",
+      "sensitivity": "Gevoeligheid",
+      "intendedUse": "Beoogd Gebruik",
+      "keyAdvantages": "Kernvoordelen",
+      "principle": "Principe",
+      "industries": "Sectoren",
+      "limitations": "Beperkingen",
+      "technicalSpecifications": "Technische Specificaties",
+      "microorganisms": "Micro-organismen",
+      "validatedMatrices": "Gevalideerde Matrices",
+      "timeToResults": "Tijd tot Resultaat",
+      "time": "Tijd",
+      "technology": "Technologie",
+      "validatedThermocyclers": "Gevalideerde Thermocyclers",
+      "detectionChemistry": "Detectiechemie",
+      "detectionChannel": "Detectiekanaal",
+      "detectionChannels": "Detectiekanalen",
+      "storageConditions": "Opslagomstandigheden",
+      "temperature": "Temperatuur",
+      "shelfLife": "Houdbaarheid",
+      "certifications": "Certificeringen",
+      "certificationImageAlt": "Certificering",
+      "orderInformation": "Bestelinformatie",
+      "catNo": "Kat.-nr.",
+      "catNum": "Kat.-num.",
+      "name": "Naam",
+      "size": "Grootte",
+      "format": "Formaat",
+      "kitContent": "Kit-inhoud",
+      "swipeForColumns": "Veeg naar links om alle kolommen te zien",
+      "additionalSupplies": "Aanvullende Benodigdheden",
+      "orderInformationAdditionalSupplies": "Bestelinformatie - Aanvullende Benodigdheden",
+      "product": "Product",
+      "description": "Beschrijving",
+      "pageOf": "Pagina {page} van {total}",
+      "generatingPdf": "PDF genereren...",
+      "downloadDatasheet": "Gegevensblad Downloaden (PDF)",
+      "contactSalesTeam": "Verkoopteam Contacteren",
+      "pdfError": "Fout bij het genereren van PDF. Probeer het opnieuw.",
+      "pleaseWait": "Een ogenblik geduld.",
+      "selectKitSize": "Selecteer de juiste kit-grootte.",
+      "matricesLabel": "Matrices",
+      "descriptionHeading": "Beschrijving",
+      "channelsNeeded": "Benodigde Kanalen",
+      "storageShort": "Opslag",
+      "loadingPdfTitle": "PDF laden...",
+      "generatingDatasheetHtml": "Gegevensblad genereren...",
+      "catNumber": "Catalogusnummer",
+      "allowPopups": "Sta pop-ups toe voor deze website om de PDF te bekijken.",
+      "viewDatasheetPdf": "Gegevensblad Bekijken (PDF)"
+    },
+    "LabInstallation": {
+      "eyebrow": "Installatie",
+      "titleA": "Eenvoudige opzet.",
+      "titleB": "Krachtige resultaten.",
+      "body": "Ontworpen voor efficiëntie. Ons ecosysteem past in uw bestaande laboratoriumruimte — zonder dure verbouwingen of gespecialiseerd personeel.",
+      "imageAlt": "Laboratoriumopzet"
+    },
+    "LabSpecs": {
+      "space": { "label": "Vereiste Ruimte", "value": "3 m²", "subtext": "Standaard werkbladoppervlak" },
+      "operators": { "label": "Operators", "value": "1 Persoon", "subtext": "Geen specialistische opleiding vereist" },
+      "setupTime": { "label": "Insteltijd", "value": "< 48 Uur", "subtext": "Installatie & Training" },
+      "infrastructure": { "label": "Infrastructuur", "value": "Minimaal", "subtext": "Standaard stroom & internet" }
+    },
+    "HowItWorksAlt": {
+      "title": "Hoe onze oplossingen werken.",
+      "subtitle": "Van monster naar beslissing.",
+      "intro": "Wij leveren het volledige ecosysteem. Geen gefragmenteerde leveranciers, geen compatibiliteitsproblemen. Alleen een naadloze stroom van monstername naar digitaal TxA-beheer.",
+      "learnMore": "Meer leren",
+      "scrollLeft": "Naar links scrollen",
+      "scrollRight": "Naar rechts scrollen"
+    },
+    "Success": {
+      "eyebrow": "Bewezen Impact",
+      "titleA": "Echte problemen.",
+      "titleB": "Echte oplossingen.",
+      "body": "Van productiviteitsverbetering en lagere opslagkosten tot preventie van terugroepacties. Ontdek hoe brancheleiders ons ecosysteem benutten.",
+      "featured": "Uitgelichte Business Case",
+      "readCase": "Casestudy Lezen",
+      "readSuccess": "Succesverhaal lezen",
+      "scrollLeft": "Naar links scrollen",
+      "scrollRight": "Naar rechts scrollen",
+      "stories": {
+        "hero-case": { "client": "Omgevingsanalyse", "title": ">$200k besparing/jaar per faciliteit", "metric": "Intern EMP-analyse aangedreven door AiGOR-technologie" },
+        "fast-salmonella-food": { "client": "Voedselindustrie", "title": "Snelle Salmonella-controle in de voedselindustrie", "metric": "9 Uur", "description": "Bruikbare resultaten en productiefreigave in slechts 9 uur — zonder langdurige 24-48u verrijkingen." },
+        "full-preventive-control": { "client": "Kwaliteitscontrole", "title": "Volledige en Preventieve Microbiologische Controle", "metric": "Alles-in-één", "description": "De enige multiplex-PCR-oplossing ter wereld die pathogenen en microbiële indicatoren in één reactie detecteert." },
+        "broad-spectrum-spoilage": { "client": "Drankenindustrie", "title": "Breedspectrumverdediging Tegen Bederf", "metric": "52 Uur", "description": "Bederf-gisten, schimmels en bacteriën screenen in één PCR-run. Houdbaarheid beschermen met absolute moleculaire precisie." },
+        "salmonella-ecoli-protection": { "client": "Versproducten & Vlees", "title": "Bescherming Tegen Salmonella en Pathogene E. coli", "metric": "3-in-1", "description": "Simultane multiplex-detectie van Salmonella, E. coli O157:H7 en STEC in één reactie." }
+      }
+    }
+  },
+  "Customized": {
+    "Mila": {
+      "title": "Het volledige spectrum van diagnostisch potentieel ontsluiten.",
+      "body": "MILA, ons AI-gestuurde platform, navigeert door miljoenen genomische combinaties om de precieze primer- en sondesets voor uw doelen te ontwerpen en selecteren. Voor elke toepassing garandeert MILA de beste PCR-kits — snel en moeiteloos.",
+      "cards": {
+        "ai": { "title": "AI-intelligentie.", "body": "MILA analyseert genomische data met een propriëtair neuraal netwerk en identificeert patronen die onzichtbaar zijn voor traditionele ontwerpmethoden." },
+        "precision": { "title": "Precisieselectie.", "body": "Ze ontwerpt niet alleen — ze selecteert. MILA filtert ruis om de beste unieke primer-/sondesset voor uw doel te vinden." },
+        "multiplex": { "title": "Sterk Gemultiplext Ontwerp.", "body": "Meerdere doelen gelijktijdig detecteren in één reactie — maximale efficiëntie zonder gevoeligheidsverlies." },
+        "fast": { "title": "Snel & Moeiteloos.", "body": "Van concept naar kit-ontwerp in recordtijd. Maanden van O&O reduceren tot een eenvoudig, gestroomlijnd proces.", "complete": "Ontwerp Voltooid", "accurate": "100% nauwkeurig" }
+      }
+    },
+    "CustomDev": {
+      "titleA": "Uw visie.",
+      "titleB": "Ontworpen door AI.",
+      "body": "Door gebruik te maken van MILAs AI biedt TAAG een uitgebreide maatwerk assay-ontwikkelingsservice. We ontwerpen en valideren maatwerk moleculaire oplossingen namens u en bieden een superieur alternatief voor interne O&O met kortere doorlooptijden, vereenvoudigde workflows en aanzienlijk lagere kosten.",
+      "cards": {
+        "speed": { "titleA": "Van concept naar kit", "titleB": "5x sneller.", "body": "MILA identificeert direct het optimale ontwerp, omzeilt iteratieve mislukkingen en verkort uw time-to-market drastisch." },
+        "cost": { "titleA": "Tot 50% reductie", "titleB": "in ontwikkelingskosten.", "body": "Uitbesteden aan TAAG elimineert interne O&O-overhead, vermindert uw totale investering en operationeel risico." },
+        "reaction": { "titleA": "Laagste kosten", "titleB": "per reactie.", "body": "Geavanceerd multiplexen en ontwerpoptimalisatie minimaliseren reagentiaverbruik en garanderen de meest competitieve prijs per test." }
+      }
+    },
+    "Profiles": {
+      "titleA": "Maatwerk Assay-ontwikkeling,",
+      "titleB": "Aangedreven door MILA.",
+      "body": "Benut onze propriëtaire AI om de complexiteit van traditionele O&O te omzeilen. Van concept tot commercialisering ontwerpen en valideren we maatwerk moleculaire oplossingen op maat van uw exacte bedrijfsmodel.",
+      "serviceOverview": "Service Overzicht",
+      "getStarted": "Aan de slag",
+      "cards": {
+        "intro": { "title": "Geavanceerde moleculaire assay-ontwikkeling als service.", "description": "Of u nu een biotechnologiebedrijf of een analyselaboratorium bent, TAAG biedt uitbestede moleculaire assay-ontwikkeling via MILA, waardoor productiviteit toeneemt terwijl ontwikkelingstijd en -kosten dalen." },
+        "manufacturer": { "label": "Kit-fabrikant", "title": "Portfolio uitbreiden", "description": "Meerdere modellen ondersteunen — van het leveren van primermengsels tot het wereldwijd leveren van volledig gevalideerde, volledig gelabelde afgewerkte kits." },
+        "distributor": { "label": "Distributeur", "title": "Eigenmerklancering", "description": "Exclusieve hoogwaardige kits ontwikkelen die onder uw merk worden gedistribueerd. Onderscheid u met unieke producten." },
+        "third-party-lab": { "label": "Derdepartijlaboratorium", "title": "Marges verhogen", "description": "Starre commerciële kits vervangen door maatwerk, sterk gemultiplexte assays afgestemd op uw specifieke workflow en doorvoer." },
+        "internal-lab": { "label": "Intern Laboratorium", "title": "Contaminatie oplossen", "description": "Faciliteitsspecifieke bederf-organismen of zeldzame pathogenen detecteren die generieke kits missen, voor nauwkeurige interne QC." },
+        "outsourcer": { "label": "Met Derdepartijlaboratorium", "title": "Managed Service", "description": "Wij ontwerpen de assay en voeren hem voor u uit in onze strategische TAAG-hubs. Maatwerk analyses zonder de infrastructuur." }
+      }
+    },
+    "Story": {
+      "eyebrow": "Succesverhalen",
+      "title": "Uitgelicht Partnerschap.",
+      "badge": "Top-3 Wereldwijd Zuivelbedrijf",
+      "heading": "Simultane kwantificering van 3 probiotische stammen.",
+      "bodyA": "Met MILA ontwikkelde TAAG een maatwerk triplex-qPCR-assay die drie afzonderlijke probiotische stammen in één reactie direct uit afgewerkte producten kan detecteren en kwantificeren.",
+      "bodyB": "Deze doorbraak stelt onze partner in staat probiotische tellingen te valideren met ongekende snelheid en nauwkeurigheid, waardoor kwaliteitsborging wordt geoptimaliseerd.",
+      "read": "Volledige casestudy lezen",
+      "imageAlt": "Danone Casestudy"
+    },
+    "Contact": { "title": "Klaar om te lanceren?", "body": "Begin met het gebruik van implementatieklare kits ontwikkeld met de kracht van MILA.", "button": "Neem contact op" }
+  },
+  "Labs": {
+    "ModularDX": {
+      "eyebrow": "Turnkey Laboratorium",
+      "title": "Uw laboratorium.",
+      "titleB": "Overal. Meteen.",
+      "body": "ModularDX is een volledig uitgerust, plug-and-play moleculair diagnostisch laboratorium. Ontworpen voor snelle inzet en moeiteloze opschaling — brengt het volledige TAAG-ecosysteem naar elke locatie.",
+      "previous": "Vorige dia",
+      "next": "Volgende dia",
+      "samples": "300+ MONSTERS / DAG",
+      "advantages": [
+        { "title": "Plug & Play.", "text": "Volledig uitgerust en bedrijfsklaar geleverd. Maanden van opbouw overslaan en vanaf dag één moleculaire diagnostiek uitvoeren." },
+        { "title": "Overal te installeren.", "text": "Vereist alleen een standaard elektrische aansluiting. Uw moleculair laboratorium moeiteloos installeren op afgelegen locaties of binnen bestaande faciliteiten." },
+        { "title": "TxA Geïntegreerd.", "text": "Voorbedrading en gesynchroniseerd met ons AI-software-ecosysteem. Workflows, rapporten en data-analyse direct automatiseren." },
+        { "title": "Schaalbare voetafdruk.", "text": "Begin met precies de capaciteit die u vandaag nodig heeft. ModularDX maakt naadloze uitbreiding met nieuwe modules mogelijk naarmate uw monstervolume groeit." },
+        { "title": "Massieve productiviteit.", "text": "Maximale efficiëntie bereiken met minimaal personeel. Een compact team van twee kan comfortabel meer dan 300 PCR-monsters per dag verwerken." },
+        { "title": "ISO-conform.", "text": "Gebouwd om te voldoen aan de strengste internationale normen voor moleculaire biologie — garandeert absolute betrouwbaarheid en kwaliteitscontrole." }
+      ]
+    },
+    "PartnerPaths": {
+      "eyebrow": "Afgestemd op uw operatie",
+      "title": "Kies uw pad naar het volgende niveau.",
+      "body": "Elk laboratorium is anders. Ontdek exact wat ons ecosysteem biedt op basis van uw unieke bedrijfsmodel.",
+      "capabilities": "Ecosysteemmogelijkheden",
+      "businessOutcome": "Zakelijk Resultaat",
+      "serviceLabs": "Servicelaboratoria",
+      "foodBeverage": "Voedsel & Dranken",
+      "turnkeyLabs": "Turnkey Laboratoria",
+      "mobileServiceLabs": "Service-labs",
+      "mobileFoodBev": "Voedsel & Dr.",
+      "mobileTurnkeyLabs": "Turnkey Labs",
+      "goals": {
+        "service": "Gemaximaliseerde Marges & Schaal",
+        "food": "Snelle, Betrouwbare Resultaten & Lage Kosten",
+        "build": "Snelle Opzet & Efficiënte Werking",
+        "mobileService": "Gemaximaliseerde Marges",
+        "mobileFood": "Snelle & Nauwkeurige Vrijgave",
+        "mobileBuild": "Snelle & Kostenefficiënte Opzet"
+      },
+      "rows": [
+        { "feature": "Intelligent Laboratoriumontwerp", "description": "Maatwerk plattegrond en workflow-optimalisatie voor uw faciliteit." },
+        { "feature": "Hardware-advies", "description": "Onpartijdige begeleiding bij het selecteren van de exacte instrumenten die u nodig heeft." },
+        { "feature": "Next-Gen Assays", "description": "Upgraden naar Multiplex-PCR en Elevia-resultaten in 3-6 uur." },
+        { "feature": "Uitgebreide Training", "description": "Praktische training voor uw team in alle TAAG-producten en protocollen." },
+        { "feature": "Maatwerk Validaties", "description": "Op maat gemaakte matrixvalidaties en -verificaties voor absolute nauwkeurigheid en kwaliteitsconformiteit." },
+        { "feature": "Software-integratie", "description": "Onze laboratoriumbeheersoftware en voorspellende AI naadloos verbinden met uw bestaande activiteiten." },
+        { "feature": "Doorlopende Expertondersteuning", "description": "Toegewijde TAAG-expert voor wetenschappelijke en technische ondersteuning." },
+        { "feature": "Commerciële Activering", "description": "Verkoopondersteuning gerelateerd aan TAAG-producten." },
+        { "feature": "Groeipartnerschap", "description": "Co-gebrandmerde campagnes volledig ontworpen en uitgevoerd door TAAG om uw groei te versnellen." },
+        { "feature": "O&O op aanvraag", "description": "Beschouw ons als uw privé-O&O-afdeling. We ontwerpen en valideren propriëtaire multiplex-panels exclusief voor de unieke eisen van uw laboratorium." },
+        { "feature": "Geautoriseerd Verwerkingslaboratorium", "description": "Lid worden van ons laboratoriumnetwerk. Monsterstroom ontvangen van ons klantenbestand." }
+      ]
+    },
+    "Ecosystem": {
+      "eyebrow": "HET PARTNER-ECOSYSTEEM",
+      "title": "De ultieme laboratoriumupgrade.",
+      "becomePartner": "Partner Worden",
+      "learnMore": "Meer leren over {title}",
+      "badges": {
+        "fastest": { "title": "Snelste Resultaten", "text": "In slechts uren" },
+        "efficient": { "title": "Efficiënte Werking", "text": "Geautomatiseerde workflows" },
+        "margins": { "title": "Hogere Marges", "text": "Gemaximaliseerde ROI" },
+        "txa": { "title": "TxA-software", "text": "Voorspellende AI" },
+        "plug": { "title": "Plug & Play", "text": "Klaar om op te schalen" }
+      },
+      "features": {
+        "intro": { "title": "Directe schaalbaarheid. Maximale winstgevendheid.", "description": "Vergroot uw analysecapaciteiten met ons geïntegreerde ecosysteem. Wij leveren de geavanceerde PCR-kits, labsoftware en efficiënte protocollen die u nodig heeft om kosten drastisch te verlagen, doorlooptijden te versnellen en de concurrentie voor te blijven." },
+        "pcr": { "badge": "Kostenefficiëntie", "title": "Multiplex-PCR-kits", "description": "Winstgevendheid van uw laboratorium maximaliseren. Toegang tot onze premium multiplex-kits tegen de laagste marktprijs, zodat u marges kunt verhogen en meer klanten kunt winnen zonder kwaliteit te compromitteren." },
+        "elevia": { "badge": "Concurrentievoordeel", "title": "Elevia-lijn", "description": "Zich onderscheiden van de concurrentie. Klanten dezelfde-dag resultaten bieden door traditionele verrijking te omzeilen — een uniek verkoopargument voor uw laboratorium op een verzadigde markt." },
+        "txa": { "badge": "Maximale Efficiëntie", "title": "TxA-ecosysteem", "description": "Overheadkosten verlagen en menselijke fouten elimineren. Uw gehele workflow automatiseren om slimmer en sneller te opereren en klanten een moderne digitale ervaring te bieden." },
+        "mila": { "badge": "Moeiteloze O&O", "title": "MILA", "description": "Uw analysemenu in dagen uitbreiden, niet in maanden. Onze AI gebruiken om maatwerk multiplex-panels te ontwikkelen zonder een dure interne O&O-afdeling." },
+        "support": { "title": "Technische ondersteuning", "description": "Koop niet alleen producten — win een partner. We bieden gestandaardiseerde workflows en expertondersteuning om te zorgen dat uw laboratorium soepel draait." }
+      }
+    }
+  },
+  "EmpTesting": {
+    "Implementation": {
+      "eyebrow": "TURNKEY IMPLEMENTATIE",
+      "titleA": "Minimale voetafdruk.",
+      "titleB": "Maximale capaciteit.",
+      "body": "Omdat AiGOR traditionele verrijkingsstappen elimineert en geen autoclaven of gespecialiseerde omvangrijke apparatuur vereist, is het implementeren van een intern moleculair laboratorium sneller en toegankelijker dan ooit.",
+      "footprint": "Totale Voetafdruk",
+      "footprintBody": "Voor een volledig uitgerust intern moleculair laboratorium.",
+      "samples": "Monsters / Dag",
+      "samplesBody": "Verwerkingscapaciteit beheerd door één laboratoriumanalist.",
+      "partnership": "End-to-end Partnerschap",
+      "installationTitle": "Installatie & Validatie:",
+      "installationBody": "TAAG houdt toezicht op het gehele opzetproces en traint uw laboratoriumanalist zowel in het AiGOR-protocol als in de instrumentbediening.",
+      "txaTitle": "TxA-software-integratie:",
+      "txaBody": "Onze suite neemt de controle over de gehele workflow — van intelligente monstername tot geautomatiseerde data-interpretatie en resultaatpublicatie.",
+      "capex": "Kapitaalinvestering (CAPEX)",
+      "setup": "Geschatte Totale Opzetkosten",
+      "instrument": "Open-platform real-time PCR-instrument en open-platform RNA-extractierobot.",
+      "cabinets": "Kasten en standaard kleine laboratoriumapparatuur.",
+      "note": "Gebaseerd op gemiddelde marktprijzen in Europa. De werkelijke kosten kunnen variëren afhankelijk van de regio en de uiteindelijke keuze van de apparatuurleverancier."
+    },
+    "Hero": {
+      "eyebrow": "BUSINESS CASE",
+      "title": "EMP Omvormen tot een Winstcentrum.",
+      "body": "Hoe het internaliseren van omgevingspathogenanalyse zes cijfers aan jaarlijkse besparingen genereert terwijl 72 uur productie-bottlenecks worden geëlimineerd.",
+      "imageAlt": "Omgevingsanalyse Business Case"
+    },
+    "Summary": {
+      "problemTitleA": "Het Zakelijk Probleem:",
+      "problemTitleB": "Traag, Reactief en Kostbaar EMP.",
+      "problemBodyA": "Mondiale voedselproducenten besteden omgevingsmonitoring vaak uit aan derdepartijlaboratoria, wat leidt tot doorlooptijden van 48-72 uur en aanzienlijke kosten per monster.",
+      "problemBodyB": "Deze reactieve aanpak betekent dat oppervlakken vaak worden hergebruikt voordat de resultaten bekend zijn, wat het risico verhoogt en een kritieke bottleneck in de productie creëert.",
+      "transformationTitleA": "De Transformatie:",
+      "transformationTitleB": "Interne Moleculaire Intelligentie.",
+      "transformationBody": "Door intern gebruik te maken van Elevia-kits aangedreven door AiGOR kunnen faciliteiten ultragevoelige RNA-amplificatie benutten om pathogenen zoals Salmonella spp. direct ter plaatse te detecteren in slechts 3 uur en zonder verrijking.",
+      "impact": "Kern Zakelijke Impact",
+      "savings": "Gedocumenteerde Jaarlijkse Besparingen (Per Faciliteit)",
+      "metrics": [
+        { "label": "Tijd tot Resultaat", "value": "< 3 Uur", "change": "was 72u" },
+        { "label": "Verrijkingstijd", "value": "Nul", "change": "was 24u" },
+        { "label": "Corrigerende Maatregel", "value": "Dezelfde Dag", "change": "was 3 dagen" }
+      ]
+    },
+    "CTA": {
+      "eyebrow": "Bereken Uw Eigen ROI",
+      "title": "Klaar om 72 uur wachttijd te elimineren en uw budget veilig te stellen?",
+      "body": "Spreek direct met een van onze Experts voor een gepersonaliseerd economisch voorstel op maat van het volume en de huidige testmethoden van uw faciliteit.",
+      "button": "Gepersonaliseerde ROI-analyse Aanvragen"
+    },
+    "Products": {
+      "eyebrow": "AANGEDREVEN DOOR AIGOR",
+      "heroWelcomeLine1": "Welkom in de toekomst.",
+      "heroWelcomeLine2": "Maak kennis met Elevia-producten.",
+      "titleA": "ELEVIA",
+      "titleB": "Multiplex-kits.",
+      "body": "Elevia is onze premium suite van diagnostische producten op basis van AiGOR-technologie. Door RNA te targeten overstijgt Elevia traditionele biologische grenzen en levert extreme gevoeligheid en ultrasnelle resultaten in al uw testmatrices.",
+      "learnMore": "Meer leren",
+      "loading": "Laden...",
+      "unavailable": "Niet beschikbaar",
+      "products": {
+        "salmonella": { "title": "Elevia Salmonella", "desc": "Ultrasnelle Salmonella-detectie in slechts 3 uur in omgevingsmonsters.", "longDesc": "Ultrasnelle Salmonella-detectie in slechts 3 uur resp. 7 uur voor omgevings- en voedselmonsters." },
+        "salmonellaLS": { "title": "Elevia Salmonella + Listeria spp.", "desc": "Simultane identificatie van Salmonella en Listeria spp. in één reactie, in slechts 3 uur.", "longDesc": "Simultane identificatie van Salmonella en Listeria spp. in één reactie, in slechts 3 uur resp. 6 uur voor omgevings- en voedselmonsters." },
+        "salmonellaEB": { "title": "Elevia Salmonella + Enterobacteria.", "desc": "Simultane identificatie van Salmonella en Enterobacteria in één reactie, in slechts 3 uur.", "longDesc": "Simultane identificatie van Salmonella en Enterobacteria in één reactie, in slechts 3 uur in omgevingsmonsters." }
+      },
+      "upcoming": [
+        { "title": "Elevia Listeria spp. + L. monocytogenes", "desc": "Simultane identificatie van Listeria spp. en L. monocytogenes in één reactie, in slechts 3 uur.", "launch": "Lancering K2 2026" },
+        { "title": "Elevia Salmonella + Listeria spp. + L. mono.", "desc": "Simultane identificatie van Salmonella + Listeria spp. en L. monocytogenes in één reactie, in slechts 3 uur.", "launch": "Lancering K2 2026" }
+      ]
+    },
+    "EleviaEnvironmental": {
+      "eyebrow": "Omgevingsmonitoring",
+      "titleLine1": "Snelle resultaten.",
+      "titleLine2": "Absolute faciliteitscontrole.",
+      "body": "Traditionele verrijking omzeilen. Elevia detecteert actieve pathogenen direct van elk oppervlak in recordtijd en transformeert uw omgevingsmonitoring van reactief naar voorspellend.",
+      "heroImageAlt": "Elevia Omgeving",
+      "learnMore": "Meer leren",
+      "carouselPrev": "Vorige dia",
+      "carouselNext": "Volgende dia",
+      "advantages": [
+        { "title": "Nul verrijking.", "text": "De 24-uurse groeifase omzeilen. Onze directe RNA-oppervlaktestechnologie elimineert incubatierisico's en versnelt uw workflow." },
+        { "title": "Resultaten in uren.", "text": "In slechts 3 tot 6 uur van swab naar bruikbare data. Onmiddellijke besluitvorming mogelijk maken en dezelfde dag corrigerende maatregelen implementeren." },
+        { "title": "Universele monstername.", "text": "Volledig gevalideerd voor swabs en sponzen. Elevia naadloos aanpassen aan uw bestaande omgevingsmonitoringprotocollen." },
+        { "title": "Supergemakkelijke workflow.", "text": "Werkt met gangbare qPCR-apparaten zonder incubatoren. Het eenvoudige protocol stelt elke analist in staat de kits moeiteloos uit te voeren." },
+        { "title": "Operationele wendbaarheid.", "text": "Uw lijnen draaiende houden. Dezelfde dag corrigerende maatregelen verminderen productieuitvaltijd drastisch en optimaliseren de toewijzing van middelen." },
+        { "title": "Verbeterde voedselveiligheid.", "text": "Bedreigingen stoppen voordat ze zich verspreiden. Vroege detectie van contaminatie-hotspots voorkomt grootschalige blokkades en beschermt uw merk." },
+        { "title": "Kostenefficiëntie.", "text": "Operationele besparingen maximaliseren. Snelle resultaten betekenen lagere blokkadeduur en hogere operationele efficiëntie in uw fabriek." },
+        { "title": "Aangedreven door TxA.", "text": "Contaminatie efficiënter in kaart brengen, traceren en voorkomen. Naadloos integreren met onze AI-gestuurde software voor dynamische omgevingsbemonstering." }
+      ]
+    },
+    "EleviaFood": {
+      "eyebrow": "Analyse van Eindproducten",
+      "titleLine1": "Sneller vrijgeven.",
+      "titleLine2": "Minder blokkeren.",
+      "body": "Elevia vermindert uw blokkadeduur aanzienlijk. Door pathogenen in eindproducten in recordtijd te detecteren, kunt u producten met vertrouwen dagen eerder vrijgeven dan traditionele methoden.",
+      "heroImageAlt": "Elevia Voedselanalyse",
+      "learnMore": "Meer leren",
+      "carouselPrev": "Vorige dia",
+      "carouselNext": "Volgende dia",
+      "visualWarehouseLine1": "Opslag-",
+      "visualWarehouseLine2": "besparingen",
+      "visualDays": "Dagen",
+      "modal": {
+        "eyebrow": "Analyse van Eindproducten",
+        "title": "Elevia Gevalideerde Voedselmatrices",
+        "body": "Door actief RNA te targeten vermindert Elevia-technologie de blokkadeduur aanzienlijk. Ontdek onze ultrasnelle verrijkingsprotocollen voor een breed scala aan sterk complexe voedselmatrices.",
+        "imageAlt": "Elevia Voedsel",
+        "tableTitle": "Kits & Protocollen",
+        "colKit": "Elevia-kit",
+        "colMatrix": "Matrix",
+        "colGrammage": "Gramgewicht",
+        "colEnrichment": "Verrijkingstijd",
+        "loading": "Protocollen laden",
+        "loadError": "Protocollen kunnen niet worden geladen. Probeer het later opnieuw.",
+        "noData": "Geen protocoldata beschikbaar.",
+        "requestReport": "Volledig Validatierapport Aanvragen"
+      },
+      "advantages": [
+        { "title": "Ultrasnelle vrijgave.", "text": "In slechts 7 tot 9 uur bruikbare resultaten voor de meeste voedselmatrices — dezelfde dag productiefreigave mogelijk." },
+        { "title": "Supergemakkelijke workflow.", "text": "Compatibel met open-platform thermocyclers. Het gestroomlijnde protocol stelt elke analist in staat de kits moeiteloos uit te voeren." },
+        { "title": "Focus op levende cellen.", "text": "Elevias RNA-technologie richt zich uitsluitend op levende pathogenen, waardoor valse positieven door dode cellen door koken of pasteurisatie worden geëlimineerd." },
+        { "title": "Lagere blokkadekosten.", "text": "Door producten dagen eerder vrij te geven vermindert u opslagruimte en gebonden kapitaal in geblokkeerde producten aanzienlijk en maximaliseert u uw cashflow." },
+        { "title": "Complexe matrices.", "text": "Gevalideerd voor sterk inhiberend voedseltypen, inclusief kruiden, cacao en vetrijke producten, zonder signaalinterferentie." },
+        { "title": "Verlengde houdbaarheid.", "text": "Door de analysetijd met dagen te reduceren voegt u waardevolle dagen toe aan de commerciële houdbaarheid van uw product en verhoogt u de winstgevendheid." },
+        { "title": "Merkbescherming.", "text": "Absolute zekerheid garanderen in elke batch voordat die de faciliteit verlaat — ter bescherming van uw consumenten en reputatie." }
+      ]
+    },
+    "EleviaROI": {
+      "eyebrow": "ROI-calculator",
+      "title": "Bereken de waarde van snelheid.",
+      "subtitle": "Zie hoeveel kapitaal u kunt vrijmaken door over te stappen op dezelfde-dag vrijgave met Elevia.",
+      "dailyProductionLabel": "Dagelijkse productiewaarde",
+      "currentWaitLabel": "Huidige wachttijd",
+      "daysSuffix": "Dagen",
+      "rangeMin": "$5K",
+      "rangeMax": "$1M",
+      "rangeOneDay": "1 Dag",
+      "rangeTwoWeeks": "2 Weken",
+      "totalFreedCapital": "Totaal Vrijgemaakt Kapitaal",
+      "freedCapitalDescription": "Kapitaal dat momenteel vastzit in opslagblokkades dat Elevia direct aan uw cashflow kan teruggeven.",
+      "warehouseReduction": "Vermindering Opslagkosten",
+      "daysGainedPerBatch": "Gewonnen Dagen per Batch",
+      "cta": "Gepersonaliseerde financiële analyse voor uw faciliteit aanvragen"
+    },
+    "EleviaCaseStudy": {
+      "titleLine1": "Het einde van uitbesteding.",
+      "titleLine2": "De toekomst is intern.",
+      "introLead": "Elevia brengt ",
+      "introStrong": "nul risico op kruisbesmetting",
+      "introRest": " in uw faciliteit. Dankzij onze nul- (of ultrakorte) verrijkingstechnologie en propriëtaire protocollen die het monster volledig inactiveren vóór verwerking, kunt u uw omgevingsmonitoring met vertrouwen en veiligheid internaliseren. U hoeft niet langer 48-72 uur te wachten op resultaten van derde partijen — neem vandaag absolute controle over uw faciliteit.",
+      "stat1Label": "Resultaten in slechts",
+      "stat1Value": "3u",
+      "stat1Desc": "doorlooptijd voor onmiddellijke besluitvorming en dezelfde dag corrigerende maatregelen.",
+      "stat2Label": "Jaarlijkse besparing van",
+      "stat2Value": "$228k",
+      "stat2Desc": "per fabriek door drastische vermindering van externe laboratoriumkosten en verzendkosten.",
+      "stat3Label": "Aangedreven door",
+      "stat3Value": "TxA",
+      "stat3Desc": "dat absolute controle over de laboratoriumworkflow overneemt, waardoor elke analist Elevia zonder voorafgaande expertise kan uitvoeren.",
+      "stat4Label": "Vereiste apparatuur",
+      "stat4Value": "Standaard",
+      "stat4Desc": "laboratoriuminstrumenten. Elevia werkt naadloos op de PCR-apparatuur die u waarschijnlijk al heeft — geen gespecialiseerde hardware vereist.",
+      "stat5Label": "Operationele wendbaarheid",
+      "stat5Value": "Dezelfde dag",
+      "stat5Desc": "corrigerende maatregelen verminderen productieuitvaltijd drastisch en optimaliseren de toewijzing van middelen.",
+      "stat6Label": "Verbeterde voedselveiligheid",
+      "stat6Value": "Proactief",
+      "stat6Desc": "vroege detectie van contaminatie-hotspots voorkomt grootschalige blokkades en beschermt uw merk.",
+      "learnMore": "Meer leren",
+      "contactUs": "Neem contact op"
+    },
+    "Financial": {
+      "eyebrow": "ROI-ANALYSE",
+      "titleA": "Economische Impact:",
+      "titleB": "Operationele kosten verlagen met",
+      "axis": "Duizend € / jaar",
+      "internal": "Interne analyse (AiGOR)",
+      "external": "Externe analyse",
+      "testingCost": "Analysekosten",
+      "laborCost": "Laboratorium personeelskosten",
+      "breakdown": "Kostenberekeninguitsplitsing",
+      "samples": "300 monsters/week",
+      "weeks": "52 weken/jaar",
+      "externalCost": "Externe PCR-analyse voor Salmonella spp. en Listeria spp.:",
+      "aigorCost": "AiGOR-analysekosten voor Salmonella spp. en Listeria spp.:",
+      "analystCost": "Kosten van analist voor interne analyse:",
+      "externalRate": "€35/monster*",
+      "aigorRate": "€15/monster**",
+      "analystRate": "€84.000/jaar***",
+      "savings": "besparing per jaar/fabriek",
+      "notes": [
+        "* Gebaseerd op de gemiddelde marktprijs voor uitbestede omgevings-Salmonella en Enterobacteriaceae PCR in Europa. Werkelijke kosten kunnen variëren afhankelijk van regio, leverancier en analysevolume.",
+        "** De AiGOR-analysekosten omvatten alle benodigde reagentia voor een volledige test (van monstername tot resultaat). De prijs kan variëren afhankelijk van het analysevolume, contractvoorwaarden en andere operationele factoren. Prijzen kunnen op elk moment naar eigen goeddunken worden gewijzigd.",
+        "*** Geschatte jaarlijkse kosten voor een fulltime analist, inclusief salaris, voordelen en overheadkosten. De werkelijke cijfers kunnen variëren afhankelijk van regio, ervaringsniveau en arbeidsvoorwaarden."
+      ]
+    }
+  },
+  "AiGOR": {
+    "Hero": {
+      "eyebrowPoweredBy": "Aangedreven door AiGOR",
+      "titleA": "De Volgende Generatie",
+      "titleB": "Microbiologische",
+      "titleC": "Oplossingen.",
+      "technology": "RNA-technologie",
+      "introStrong": "Snelheid en nauwkeurigheid als nooit tevoren.",
+      "introBody": "AiGOR gebruikt RNA-gebaseerde detectie om biologische grenzen te overwinnen en in uren bruikbare resultaten te leveren.",
+      "features": {
+        "speed": { "strong": "Resultaten in slechts 3 uur.", "text": "Lange verrijkingsstappen overslaan." },
+        "sensitivity": { "strong": "Gevoeligheid 1 KVE/monster.", "text": "Maximale precisie en betrouwbaarheid." },
+        "amplified": { "strong": "10.000x hogere gevoeligheid.", "text": "Vergeleken met traditionele real-time PCR." },
+        "rna": { "strong": "RNA-detectie.", "text": "Uitsluitend gericht op actieve cellen." }
+      }
+    }
+  },
+  "LabNetwork": {
+    "Hero": {
+      "titleA": "De toekomst van",
+      "titleB": "Laboratoriumdiensten.",
+      "body": "Verken multiplex- en ultrasnelle microbiologische detectieoplossingen om beslissingen te versnellen, risico's te verminderen en productiviteit te verbeteren.",
+      "features": {
+        "results": { "strong": "Resultaten op dezelfde dag.", "text": "Voor gangbare pathogenen." },
+        "spoilage": { "strong": "Snelle detectie.", "text": "Bederf-micro-organismen." },
+        "ngs": { "strong": "NGS.", "text": "Next-Generation Sequencing." },
+        "custom": { "strong": "Maatwerk assays.", "text": "Op maat gemaakte assay-ontwikkeling." }
+      }
+    },
+    "Capabilities": {
+      "title": "Uitgebreide analytische mogelijkheden, beheerd",
+      "body": "Stel uw faciliteit in staat de hoogste standaard van voedselveiligheid en -kwaliteit te leveren — zonder complexe interne microbiologie-workflows te hoeven bouwen en beheren.",
+      "isoTitle": "ISO 17025 geaccrediteerd",
+      "isoBody": "Onze diensten opereren volgens strenge internationale normen voor technische competentie.",
+      "learnMore": "Meer leren",
+      "guaranteed": "Gegarandeerd",
+      "savings": "Aanzienlijke Besparingen",
+      "fastest": "Snelste Resultaten",
+      "ctaBodyA": "Neem vandaag contact op met onze experts om te ontdekken hoe we u kunnen helpen uw analysekosten aanzienlijk",
+      "ctaStrongA": "te verlagen",
+      "ctaMiddle": "en",
+      "ctaStrongB": "uw doorlooptijden te verbeteren",
+      "ctaButton": "Neem Contact Op Met Onze Experts",
+      "items": [
+        { "title": "Dezelfde-dag detectie van gangbare pathogenen", "body": "Moleculaire technologie benutten om Salmonella, Listeria en E. coli snel te detecteren — voor snellere productiefreigave en lagere opslagkosten." },
+        { "title": "Hoogcapaciteits multiplex-screening", "body": "Meerdere doelen identificeren in één test. Onze multiplex-aanpak vermindert uw analysekosten aanzienlijk terwijl de workflow-efficiëntie wordt geoptimaliseerd." },
+        { "title": "Snelle moleculaire detectie van bederf-micro-organismen", "body": "Gisten, schimmels en acidofiele bacteriën identificeren om smaakvervalsing en verpakkingsopzwelling vóór distributie te voorkomen." },
+        { "title": "Next-Generation Sequencing (NGS)", "body": "Diepgaande genomische inzichten voor stambevestiging, faciliteitstracering en definitieve grondoorzaakanalyse van contaminatiegebeurtenissen." },
+        { "title": "Routinemicrobiologie en klassieke analyse", "body": "Betrouwbare, ISO-gecertificeerde klassieke plattiermethoden voor regelgevende conformiteit en hygiënemonitoring." },
+        { "title": "TxA-integratie", "body": "Uw omgevingsmonitoringprogramma automatiseren. Uw resultaten verbinden met ons AI-ecosysteem om bemonsteringsplannen te optimaliseren." },
+        { "title": "Technische en wetenschappelijke ondersteuning", "body": "Samenwerken met onze deskundige microbiologen voor methodeselectie, interpretatie van complexe resultaten en probleemoplossing." },
+        { "title": "Maatwerk moleculaire oplossingen", "body": "MILA benutten om hoogspecifieke, niet-interfererende primers te ontwerpen voor uw unieke hoogcapaciteits multiplex-uitdagingen." },
+        { "title": "Geavanceerde microbiologische diensten", "body": "Complexe workflows uitbesteden, zoals challenge-studies, die op fabrieksniveau niet eenvoudig uit te voeren zijn." }
+      ]
+    },
+    "Locations": {
+      "title": "Strategische hubs om uw resultaten te versnellen.",
+      "body": "Onze geavanceerde laboratoria zijn strategisch gelegen om snelle, hoogwaardige microbiologische analysediensten te leveren waar u ook opereert.",
+      "requestQuote": "Offerte Aanvragen",
+      "contactHub": "Hub Contacteren",
+      "modalTitle": "Offerte Aanvragen",
+      "modalBodyA": "Diensten aanvragen voor onze",
+      "modalBodyB": "Hub.",
+      "program": "Microbiologisch Programma / Analysebehoeften",
+      "programPlaceholder": "Beschrijf uw huidige omgevingsmonitoringprogramma, specifieke assays van belang of volumevereisten...",
+      "fullName": "Volledige Naam",
+      "namePlaceholder": "Jan de Vries",
+      "email": "Zakelijk E-mailadres",
+      "company": "Bedrijfsnaam",
+      "companyPlaceholder": "Uw Biotech Bedrijf B.V.",
+      "submit": "Aanvraag Indienen"
+    },
+    "TxA": {
+      "body": "Als partner van ons laboratorium krijgt u volledige toegang tot TxA. Een volledig ecosysteem gebouwd om uw gehele microbiologische operatie te beheren — van digitale monstername in het veld tot real-time resultaatanalyse."
+    }
+  },
+  "TxA": {
+    "System": {
+      "titleA": "TAAG Xpert Assistant.",
+      "titleB": "Uw door AI aangedreven ecosysteem.",
+      "body": "TxA is een volledig ecosysteem gebouwd om uw gehele microbiologische operatie te beheren. Van digitale monstername in het veld tot real-time resultaatanalyse.",
+      "learnMore": "meer leren",
+      "cards": {
+        "app": "Uw bemonsteringsproces digitaliseren voor volledige controle en end-to-end traceerbaarheid.",
+        "lab": "Workflows stroomlijnen en procescontroles automatiseren voor volledig betrouwbare laboratoriumresultaten.",
+        "qa": "Voorspellende microbiologie gebruiken voor uitgebreid en preventief kwaliteitsmanagement.",
+        "core": "Propriëtaire AI-algoritmen die velddata, laboratoriumresultaten en veiligheidsinzichten verbinden."
+      },
+      "labels": {
+        "risk": "Risicovoorspelling",
+        "probability": "Hoge Kans",
+        "sampling": "Bemonstering",
+        "optimized": "Geoptimaliseerd",
+        "trends": "Live Trends",
+        "reports": "Geautomatiseerde Rapporten",
+        "customized": "Volledig gepersonaliseerd"
+      }
+    },
+    "Features": {
+      "titleA": "AI voor geautomatiseerde, intelligente en",
+      "titleB": "dynamische microbiologische programma's.",
+      "body": "Een belangrijk kenmerk van TxA is de digitalisering van uw voedselproductiefabriek. Hierdoor kunnen TxA-algoritmen besmette punten in uw fabriek identificeren en automatisch de beste volgende bemonsteringspunten definiëren om contaminatiebronnen te traceren.",
+      "aiAlgorithms": "TxA AI-algoritmen",
+      "complete": "Optimalisatie Voltooid",
+      "dynamic": "Dynamisch",
+      "preventive": "Preventief",
+      "items": {
+        "1": "TxA voert een echte digitalisering van uw fabrieksindeling uit en bepaalt nauwkeurig apparatuur, afstanden en zones. Dit ruimtelijk bewustzijn is cruciaal voor onze AI-algoritmen.",
+        "2": "Voorspellende Bemonstering. AI-algoritmen analyseren historische data om de beste bemonsteringslocaties te identificeren en risico's te voorkomen voordat ze ontstaan.",
+        "3": "Uw veldwerk versterken met de TxA App. Digitale monstername uitvoeren met bijgevoegde foto's, gedetailleerde puntinformatie en directe cloudsynchronisatie.",
+        "4": "TxA brengt elk datapunt direct in kaart in de context van uw fabriek, waardoor grondoorzaakanalyse en besluitvorming worden versneld.",
+        "5": "TxA stelt u in staat dynamische, preventieve programma's te bouwen die zich in real-time aanpassen om voedselkwaliteit en -veiligheid te maximaliseren."
+      }
+    },
+    "Modal": {
+      "app": {
+        "title": "TxA APP",
+        "intro": "Transformeer uw veldmonstername met onze intelligente mobiele applicatie. Digitaliseer uw gehele proces voor volledige controle en end-to-end traceerbaarheid van het veld direct naar het laboratorium.",
+        "features": [
+          { "title": "Digitale Veldmonstername", "text": "Papieren registers en handmatige gegevensinvoer vervangen door een gestroomlijnde digitale workflow. Foto's, gedetailleerde data en het exacte bemonsteringspunt automatisch vastleggen. De gehele monsterreis volgen met onveranderlijke digitale logs — voor 100% conformiteit en volledige zichtbaarheid van uw operaties.", "image": "/TxA_app_1.png" },
+          { "title": "Alle informatie op één klik", "text": "Zodra u het bemonsteringspunt selecteert, kunt u belangrijke informatie toevoegen zoals een foto van de locatie, laboratoriumanalyses, saneringsstatus en meer.", "image": "/TxA_app_5.png" },
+          { "title": "Een onberispelijk traceersysteem", "text": "Als u onze TAAG S11 NeutroSampling-kit voor omgevingsswabs gebruikt, kunt u alle digitale informatie automatisch aan het monster koppelen door de QR-code op TAAG S11 NeutroSampling-swabs te scannen.", "image": "/TxA_app_4.png" }
+        ]
+      },
+      "lab": {
+        "title": "TxA LAB",
+        "intro": "Uw workflows stroomlijnen en procescontroles automatiseren om te garanderen dat laboratoriumresultaten elke keer foutloos en volledig betrouwbaar zijn.",
+        "features": [
+          { "title": "Gebruik het voor elke analyse... zelfs uw eigen", "text": "TxA Lab stelt u in staat zoveel assays als nodig te creëren en bewerken, inclusief verschillende specialiteiten zoals microbiologische analyse, chemische analyse of andere tests die u wilt toevoegen.", "image": "/your-laboratory-assay.svg" },
+          { "title": "Gedetailleerde informatie voor betere corrigerende maatregelen", "text": "Voeg zoveel velden als gewenst toe aan uw monsters om alle informatie te verkrijgen die u nodig heeft voor de beste corrigerende maatregelen.", "image": "/create-products.svg" },
+          { "title": "Maak kennis met uw nieuwste en beste laboratoriumrapport", "text": "Voeg de specifieke informatie toe die u in uw rapporten wilt weergeven om uw laboratoriumresultaten te communiceren en delen.", "image": "/laboratory-report.svg" }
+        ]
+      },
+      "qa": {
+        "title": "TxA QA",
+        "intro": "Voorspellende microbiologie benutten om risico's te anticiperen en uitgebreid, proactief kwaliteitsmanagement in uw gehele faciliteit te garanderen.",
+        "features": [
+          { "title": "Diepgaande analyse om voedselkwaliteit en -veiligheid te maximaliseren", "text": "Dit platform draait volledig om microbiologisch voedselveiligheidsbeheer. Analyseer eenvoudig uw laboratoriumresultaten, statistieken, waarschuwingen, intelligente en dynamische voorstellen voor corrigerende maatregelen en nog veel meer.", "image": "/TxA_QA1.svg" },
+          { "title": "Real-time waarschuwingen voor snelle corrigerende maatregelen", "text": "In het meldingenpaneel ontvangt u alarmen met gedetailleerde informatie over positieve resultaten gevonden in uw fabriek. Wanneer positieven verschijnen, stelt TxA een geautomatiseerde, dynamische en intelligente corrigerende maatregel voor.", "image": "/TxA_QA2.svg" },
+          { "title": "Een nieuwe en betere manier om microbiologie te bekijken", "text": "Bekijk alle relevante informatie over uw omgevingsmonitoringplan op de plattegrond van uw voedselproductiefabriek op een uitgebreide en intuïtieve manier.", "image": "/TxA_QA3.svg" }
+        ]
+      }
+    },
+    "Story": {
+      "eyebrow": "Succesverhalen",
+      "title": "Uitgelicht Partnerschap.",
+      "badge": "Groot Wereldwijd Drankenbedrijf",
+      "heading": "Dranken kwaliteit en efficiëntie maximaliseren.",
+      "body": "Met TxA breidt onze partner, een van 's werelds grootste bottelaars, TxA uit als kerncomponent van zijn microbiologische controlestrategie. Na een succesvolle implementatie is hij van plan TxA in alle 35 productiefabrieken uit te rollen, data te standaardiseren, besluitvorming te versnellen en preventieve controle op schaal te versterken.",
+      "read": "Volledige casestudy lezen",
+      "imageAlt": "Coca-Cola casestudy"
+    },
+    "VisualSection": {
+      "titleA": "Maak kennis met uw nieuwe",
+      "titleB": "Microbiologie-expert.",
+      "body": "Stop met zoeken in complexe spreadsheets. Spreek in gewone taal met uw voedselveiligheidsdata. TxA identificeert direct trends, anomalieën en opkomende risico's en geeft u in seconden bruikbare inzichten."
+    },
+    "VisualPanel": {
+      "title": "Maak kennis met uw nieuwe Expert.",
+      "body": "Stop met zoeken in spreadsheets. TxA identificeert trends, anomalieën en opkomende risico's in gewone taal.",
+      "question": "Zijn er opkomende trends in zone B?",
+      "insight": "TxA-inzicht",
+      "detectedPrefix": "Een",
+      "detectedHighlight": "stijging van 15%",
+      "detectedSuffix": "in",
+      "detectedEnd": "positieven bij Lijn 4 gedetecteerd.",
+      "map": "Op basis van recente",
+      "mapEnd": "trends heb ik een geoptimaliseerde, gerichte bemonsteringskaart gegenereerd.",
+      "scheme": "BESTE BEMONSTERINGSSCHEMA",
+      "cta": "Klik hier om het voorgestelde bemonsteringsschema te bekijken."
+    }
+  }
+}

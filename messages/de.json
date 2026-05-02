@@ -1,0 +1,1257 @@
+{
+  "Common": {
+    "closeModal": "Fenster schließen"
+  },
+  "Header": {
+    "login": "Anmelden",
+    "language": "Sprache",
+    "closeLanguageSelector": "Sprachauswahl schließen",
+    "mobileMenu": {
+      "title": "Menü",
+      "featuredTechnology": "Ausgewählte Technologie",
+      "explore": "Entdecken",
+      "aigorLogoWordmark": "AiGOR",
+      "aigorProductTitle": "AiGOR™",
+      "aigorSubtitle": "RNA-Technologie",
+      "aigorDescription": "Fortschrittliche RNA-Technologie für ultraschnelle Ergebnisse",
+      "nav": {
+        "industrial": "Industrielle Mikrobiologie",
+        "customized": "Individuelle Molekulardiagnostik",
+        "txa": "Digitale Transformation",
+        "labNetwork": "Labordienstleistungen",
+        "labs": "Laborpartner",
+        "where": "Standorte",
+        "about": "Über uns"
+      }
+    }
+  },
+  "GlobalError": {
+    "title": "Ein Fehler ist aufgetreten",
+    "description": "Die Seite konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
+    "retry": "Erneut versuchen"
+  },
+  "NotFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Diese Seite konnte nicht gefunden werden.",
+    "backHome": "Zurück zur Startseite"
+  },
+  "Contact": {
+    "formTitle": "Kontakt aufnehmen",
+    "formSubtitle": "Sagen Sie uns, was Sie benötigen – wir melden uns schnellstmöglich.",
+    "nameLabel": "Name",
+    "companyLabel": "Unternehmen",
+    "emailLabel": "E-Mail-Adresse",
+    "messageLabel": "Nachricht",
+    "namePlaceholder": "Max Mustermann",
+    "companyPlaceholder": "Global Foods GmbH",
+    "emailPlaceholder": "max@unternehmen.de",
+    "websiteLabel": "Website",
+    "submit": "Nachricht senden",
+    "submitting": "Wird gesendet...",
+    "successTitle": "Nachricht gesendet",
+    "successBody": "Vielen Dank. Wir haben Ihre Nachricht erhalten.",
+    "errorGeneric": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "errorDuplicate": "Sie haben kürzlich eine sehr ähnliche Nachricht gesendet. Bitte warten Sie einige Minuten, bevor Sie es erneut versuchen.",
+    "disclaimer": "Mit dem Absenden dieses Formulars stimmen Sie zu, dass Ihre E-Mail-Adresse gespeichert und für Benachrichtigungen sowie relevante Mitteilungen zu TAAG-Produkten und -Dienstleistungen verwendet werden darf, wie in unserer Bestätigungs-E-Mail beschrieben.",
+    "modalTitle": "Lassen Sie uns Ihre Lösung entwickeln.",
+    "modalSubtitle": "Sprechen Sie direkt mit unserem technischen Team. Kein Verkaufsskript – nur Wissenschaft und Strategie.",
+    "support": "Fachkundiger technischer Support",
+    "kits": "Kits und fortschrittliche Labordienstleistungen",
+    "custom": "Individuelle molekulare Lösungen",
+    "technicalSupport": "Technischer Support",
+    "challengePlaceholder": "Erzählen Sie uns von Ihren Nachweiszielen...",
+    "secure": "Verschlüsselt & Vertraulich.",
+    "close": "Fenster schließen"
+  },
+  "Home": {
+    "Hero": {
+      "title": "Eines Tages wird jedes biologische Risiko erkannt",
+      "subtitle": "bevor es zum Problem wird.",
+      "primary": "Mit einem Experten sprechen",
+      "secondary": "Zu unseren Lösungen",
+      "imageAlt": "Hyperrealistische Bakterienvisualisierung"
+    },
+    "Modules": {
+      "title": "Jenseits des Testens.",
+      "subtitle": "Mikrobiologische Intelligenz.",
+      "intro": "Wir gestalten eine Zukunft, in der biologische Erkenntnisse schnell, automatisiert und zugänglich sind.",
+      "explore": "Entdecken",
+      "items": {
+        "industrial": {
+          "tag": "Geschwindigkeit",
+          "title": "Industrielle Mikrobiologie",
+          "description": "Entscheidungen in nur 3 Stunden. Ersetzen Sie traditionelle Sperren durch ultraschnelles RNA-Screening."
+        },
+        "custom": {
+          "tag": "Präzision",
+          "title": "Individuelle Molekulardiagnostik",
+          "description": "KI-entwickelte molekulare Assays für Ihre spezifischen Anforderungen."
+        },
+        "digital": {
+          "tag": "Intelligenz",
+          "title": "Digitale Transformation",
+          "description": "Kontaminationsquellen mit TxA-Werksraumkartierung zurückverfolgen."
+        },
+        "hubs": {
+          "tag": "Skalierung",
+          "title": "Globale Hubs",
+          "description": "Lokale Labore mit fortschrittlichen molekularen Dienstleistungen."
+        }
+      }
+    },
+    "Manifesto": {
+      "titleLine1": "Jenseits des Testens.",
+      "titleAccent": "Mikrobiologische Intelligenz.",
+      "p1Before": "Wir gestalten eine Zukunft, in der biologische Erkenntnisse ",
+      "p1Highlight": "sofort verfügbar und handlungsorientiert",
+      "p1After": " sind. Wir verwandeln Erkennung in Prävention und Daten in Entscheidungen.",
+      "p2Before": "Durch die Kombination KI-entwickelter molekularer Werkzeuge mit ultraschneller Analytik entwickelt TAAG die traditionelle Mikrobiologie zur ",
+      "p2Highlight": "wahren Intelligenz",
+      "p2After": ".",
+      "pillar1Title": "Gebrauchsfertige Kits",
+      "pillar1Body": "Standardisierte molekulare Kits für den sofortigen Einsatz in Ihrem Labor.",
+      "pillar2Title": "KI-gestützte Individualisierung",
+      "pillar2Body": "Maßgeschneiderte Assays, durch Algorithmen entwickelt, um Ihre spezifischen Stämme zu erfassen.",
+      "pillar3Title": "Globale Service-Hubs",
+      "pillar3Body": "Regionale Labore mit fortschrittlichen Auslagerungs- und Supportleistungen."
+    },
+    "ProofStrip": {
+      "tagline": "Mikrobiologische Entscheidungen führender globaler Hersteller werden durch uns ermöglicht"
+    },
+    "AigorSection": {
+      "chipSubtitle": "RNA-Technologie",
+      "headline1": "Sensitivität neu definiert.",
+      "headlineAccent": "10.000x verstärkt.",
+      "intro": "Die erste RNA-basierte Nachweistechnologie, die traditionelle Grenzen überwindet. Erkennen Sie metabolisch aktive Mikroorganismen ohne lange Anreicherungsschritte.",
+      "card1Stat": "10.000x",
+      "card1Label": "Höhere Sensitivität",
+      "card1Body": "Durch das Targeting von RNA statt DNA erkennt AiGOR aktive Zellen mit beispielloser Präzision im Vergleich zur klassischen PCR.",
+      "card2Stat": "Ab 3 Stunden",
+      "card2Label": "Zeit bis zum Ergebnis",
+      "card2Body": "Überspringen oder reduzieren Sie lange Anreicherungsschritte. Gelangen Sie von der Probe zur Entscheidungsgrundlage in einer einzigen Schicht.",
+      "card3Stat": "Protokoll Null",
+      "card3Label": "KEINE Anreicherung erforderlich",
+      "card3Body": "Direkte Nachweiskapazitäten bedeuten, dass Sie aufhören, Krankheitserreger zu kultivieren, und beginnen, sie zu eliminieren.",
+      "cta": "AiGOR-Produkte entdecken"
+    }
+  },
+  "Metadata": {
+    "defaultTitle": "Biologische Risiken erkennen, bevor sie sich ausbreiten",
+    "defaultDescription": "TAAG kombiniert molekulare Diagnostik, Labordienstleistungen und intelligente Software, damit jedes biologische Risiko erkannt werden kann, bevor es zum Problem wird.",
+    "pages": {
+      "TxA": {
+        "title": "TxA — intelligente Mikrobiologie-Software",
+        "description": "TxA wandelt isolierte Laborergebnisse in prädiktive Risikoerkenntnisse um und deckt Korrelationen auf, bevor eine Kontamination zum Ausbruch wird.",
+        "keywords": ["TxA", "Mikrobiologie-Software", "LIMS", "prädiktives Risiko", "TAAG"]
+      },
+      "Where": {
+        "title": "Globale Wissenschaft, lokaler Support",
+        "description": "TAAG-Hubs, Partnerlabore und Distributoren weltweit – Support in Ihrer Sprache und Zeitzone für Kits, TxA, MILA und Labordienstleistungen.",
+        "keywords": ["TAAG-Standorte", "Laborpartner", "globaler Support", "Distributoren"]
+      },
+      "Customized": {
+        "title": "MILA — KI-entwickelte molekulare Assays",
+        "description": "Entwickeln Sie individuelle Multiplex-Mikrobiologie-Assays mit MILA™: von Zielsequenzen bis zu produktionsreifen Panels für Ihr Labor.",
+        "keywords": ["MILA", "individuelle PCR", "Multiplex-Assay", "KI-Diagnostik", "TAAG"]
+      },
+      "Aigor": {
+        "title": "AiGOR — RNA-basierte Mikrobiologie",
+        "description": "AiGOR™ RNA-Technologie für eine neue Generation mikrobiologischer Lösungen: empfindlicher und schneller Nachweis von Krankheitserregern und Verderbnisorganismen.",
+        "keywords": ["AiGOR", "RNA-Nachweis", "Salmonella", "Lebensmittelsicherheit", "TAAG"]
+      },
+      "Labs": {
+        "title": "Laborpartner — TAAG molekulares Ökosystem",
+        "description": "Treten Sie dem TAAG-Partnerlabornetzwerk bei: Multiplex-PCR, schnelle Elevia-Workflows, TxA-Integration und skalierbare molekulare Dienstleistungen.",
+        "keywords": ["TAAG-Laborpartner", "Multiplex-PCR", "Elevia", "Labornetzwerk"]
+      },
+      "LabNetwork": {
+        "title": "Labordienstleistungen — TAAG",
+        "description": "ISO-akkreditierte mikrobiologische Analysen: Krankheitserreger, Verderb, NGS und individuelle Assays – mit TxA-Integration für lückenlose Erkenntnisse.",
+        "keywords": ["TAAG-Labordienstleistungen", "mikrobiologische Analysen", "ISO 17025", "Auftragslabor"]
+      },
+      "AboutUs": {
+        "title": "Über TAAG",
+        "description": "TAAG bietet fortschrittliche molekulare Diagnostik, Labordienstleistungen und intelligente Software zur Erkennung mikrobiologischer Risiken, bevor sie sich ausbreiten.",
+        "keywords": ["TAAG", "über uns", "Biotechnologie", "molekulare Diagnostik"]
+      },
+      "Industrial": {
+        "title": "Industrielle Mikrobiologie — TAAG",
+        "description": "Ultraschnelles RNA-Screening, Multiplex-EMP-Workflows und AiGOR-Technologie für Qualitäts- und Lebensmittelsicherheitsteams in der Produktion.",
+        "keywords": ["industrielle Mikrobiologie", "EMP", "AiGOR", "Lebensmittelsicherheit", "TAAG"]
+      },
+      "EmpTesting": {
+        "title": "Internes EMP-Molekularscreening — TAAG",
+        "description": "Schlüsselfertige AiGOR-Elevia-Implementierung: Platzbedarf, Durchsatz und ROI für interne Krankheitserreger- und Indikatoranalysen.",
+        "keywords": ["EMP-Analyse", "AiGOR", "internes Labor", "Lebensmittelproduktion", "TAAG"]
+      }
+    }
+  },
+  "SolutionFinder": {
+    "badge": "KI-Diagnosewerkzeug",
+    "title": "Schildern Sie Ihre Herausforderung.",
+    "subtitle": "Finden Sie Ihre Lösung.",
+    "inputLabel": "Eingabeparameter",
+    "placeholder": "z. B. Ich muss Salmonella in Kakaopulver in unter 24 Stunden nachweisen, um Lieferverzögerungen zu vermeiden...",
+    "health": {
+      "checkingTitle": "Verbindung zum Assistenten wird überprüft...",
+      "misconfiguredTitle": "Chat-API-URL oder -Schlüssel ist nicht auf dem Server konfiguriert",
+      "downTitle": "Der Assistentendienst ist nicht erreichbar oder hat einen Fehler zurückgegeben",
+      "upTitle": "Assistent-Endpunkt hat geantwortet; bereit zur Analyse",
+      "checking": "Verbindung wird überprüft...",
+      "up": "System aktiv",
+      "down": "Assistent nicht verfügbar",
+      "misconfigured": "Assistent nicht konfiguriert"
+    },
+    "analyze": "Anfrage analysieren",
+    "responseBadge": "KI-Antwort",
+    "loadingTitle": "Ihre Anfrage wird analysiert",
+    "loadingBody": "Suche in unserem Katalog nach den besten passenden Lösungen...",
+    "connectionError": "Verbindung zum Assistenten konnte nicht hergestellt werden. Bitte versuchen Sie es erneut.",
+    "processing": "Antwort wird verarbeitet...",
+    "parseError": "Die Antwort konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.",
+    "retry": "Erneut versuchen",
+    "contactCommercial": "Vertriebsteam kontaktieren"
+  },
+  "CaseStudies": {
+    "eyebrow": "Nachgewiesene Wirkung",
+    "title": "Echte Lösungen.",
+    "subtitle": "Echte Wirkung.",
+    "description": "Vertrauen globaler Marktführer zum Schutz ihrer Marken und zur Optimierung ihrer Produktion.",
+    "partners": "Einige unserer Partner",
+    "successfulCases": "Erfolgsgeschichten",
+    "read": "Fallstudie lesen",
+    "detail": {
+      "challengeHeading": "Die Herausforderung",
+      "solutionHeading": "Die TAAG-Lösung",
+      "coreImpact": "Kernwirkung",
+      "keyResults": "Kernergebnisse:",
+      "techBehind": "Technologie hinter diesem Fall",
+      "learnMoreAbout": "Mehr über {tech} erfahren",
+      "ctaTitle": "Bereit, ähnliche Ergebnisse zu erzielen?",
+      "ctaButton": "Mit einem Experten sprechen"
+    },
+    "techLabels": {
+      "AiGOR": "AiGOR",
+      "Industrial": "Industrielle Lösungen",
+      "MILA": "MILA",
+      "TxA": "TxA",
+      "Lab": "Labordienstleistungen"
+    },
+    "cards": {
+      "danone-precision-probiotics": {
+        "company": "Top-3-Molkereiunternehmen weltweit",
+        "category": "MILA™ Individualentwicklung",
+        "title": "Präzisionsprobiotika.",
+        "description": "Entwicklung eines individuellen Triplex-qPCR-Kits zur Quantifizierung proprietärer Stämme in fertigen Joghurtprodukten.",
+        "heroMetric": "Schnelle und präzise Qualitätskontrolle",
+        "challenge": "Unser Partner benötigte eine schnellere und präzisere Methode zur direkten Quantifizierung proprietärer Probiotikastämme in fertigen Joghurtprodukten. Klassische Plattierungsmethoden waren zu langsam und zu wenig spezifisch, um eng verwandte Stämme zu unterscheiden, was zu Verzögerungen bei der Produktfreigabe führte.",
+        "solution": "Mit der KI-Plattform MILA™ entwickelte TAAG einen individuellen Triplex-qPCR-Assay, der auf die proprietären genetischen Signaturen der drei Probiotikastämme abzielt. Das Ergebnis war eine quantitative Einzel-Reaktions-Methode, die eng verwandte Stämme differenzieren und in nur 3 Stunden verwertbare Ergebnisse liefern kann.",
+        "results": [
+          "Quantifizierungszeit von mehreren Tagen auf unter 3 Stunden reduziert.",
+          "100 % Stammspezifität in komplexen Milchmatrizes erreicht.",
+          "Nahtlose Integration in bestehende Laborabläufe."
+        ]
+      },
+      "arca-continental-bottling-intelligence": {
+        "company": "Eines der weltweit führenden Abfüllunternehmen",
+        "category": "TxA™ Digitale Transformation",
+        "title": "Intelligenz in der Abfüllung.",
+        "description": "Standardisierung der mikrobiologischen Kontrolle in 35 Produktionswerken mit unserer KI-gestützten Software.",
+        "heroMetric": "35 Werke",
+        "challenge": "Die Verwaltung mikrobiologischer Daten in 35 verschiedenen Abfüllwerken erzeugte Informationssilos. Qualitätsmanagern fehlte die Echtzeitübersicht, um Kontaminationsquellen zu verfolgen und Risiken in der gesamten Lieferkette effizient vorherzusagen.",
+        "solution": "Wir implementierten die TxA™-Plattform zur Zentralisierung mikrobiologischer Daten und setzten KI-Algorithmen für prädiktive Risikobewertung und Werkskartierung ein. Unser Partner erweitert den Einsatz von TxA als zentralen Bestandteil seiner mikrobiologischen Kontrollstrategie.\n\nNach erfolgreicher Implementierung plant der Partner, TxA in allen 35 Produktionswerken einzusetzen, Daten zu standardisieren, Entscheidungsfindung zu beschleunigen und präventive Kontrolle im großen Maßstab zu stärken.",
+        "results": [
+          "Standardisierte Qualitätskontrollkennzahlen in allen internationalen Betrieben.",
+          "Echtzeitwarnungen bei Kontaminationstrends, bevor kritische Grenzwerte erreicht werden.",
+          "Signifikante Reduzierung verzögerter Produktfreigaben."
+        ]
+      },
+      "fast-salmonella-food": {
+        "company": "Lebensmittelindustrie",
+        "category": "Lebensmittelsicherheit",
+        "title": "Schnelle Salmonella-Kontrolle in der Lebensmittelindustrie",
+        "description": "Verwertbare Ergebnisse und Produktfreigabe in nur 9 Stunden – ohne lange 24–48-h-Anreicherungen.",
+        "heroMetric": "9 Stunden",
+        "challenge": "Klassische Lebensmittelanalysen auf Salmonella können bis zu 24 bis 48 Stunden dauern und massive Lagerengpässe verursachen, Produktfreigaben verzögern und die Haltbarkeit verkürzen. Zudem hinterlassen thermische oder chemische Behandlungen oft tote Zellen, die in Standard-DNA-Tests zu kostspieligen falsch-positiven Ergebnissen führen.",
+        "solution": "Diese durch unsere revolutionäre AiGOR-Technologie angetriebene Lösung zielt auf metabolisch aktive RNA ab, um Salmonella in komplexen Lebensmittelmatrizes in einem Bruchteil der Zeit nachzuweisen. Sie unterscheidet zuverlässig lebende von toten Zellen.",
+        "results": [
+          "Freigabe am gleichen Tag: Drastische Verkürzung der Haltezeiten mit Ergebnissen in nur 9 Stunden.",
+          "Differenzierung lebender Zellen: RNA-basierter Nachweis vermeidet falsch-positive Ergebnisse durch tote Zellen.",
+          "Geeignet für komplexe Matrizes: Sehr robust gegenüber Inhibitoren in schokoladehaltigen Matrizes.",
+          "Maximale Sensitivität: Zuverlässiger Nachweis bis 1 KBE/Probe."
+        ]
+      },
+      "full-preventive-control": {
+        "company": "Lebensmittelproduzent",
+        "category": "Präventive mikrobiologische Kontrolle",
+        "title": "Präventive Kontrolle in einer einzigen Reaktion.",
+        "description": "Unterstützung eines Lebensmittelproduzenten beim Übergang von reaktiver Erregertestung zur integrierten präventiven mikrobiologischen Kontrolle mit Ergebnissen in ca. 24 Stunden.",
+        "heroMetric": "24 Stunden",
+        "challenge": "Unser Partner musste die mikrobiologische Kontrolle stärken, ohne die Laborkomplexität zu erhöhen. Der bestehende Workflow erforderte separate Tests für Krankheitserreger und Hygieneindikatoren, was Kosten, Arbeitsaufwand und Durchlaufzeit erhöhte. Erregerbefunde bestätigten Probleme zudem erst, nachdem das Kontaminationsrisiko bereits eingetreten war.",
+        "solution": "TAAG implementierte einen integrierten Multiplex-PCR-Ansatz, der Salmonella, L. monocytogenes und wichtige Hygieneindikatoren in einem einzigen Reaktionsgefäß gleichzeitig nachweist. Durch die Kombination von Erregerdetektion und Indikatorüberwachung in einem einzigen Workflow erhielt der Partner eine schnellere und verwertbarere Übersicht über das mikrobiologische Risiko – mit Ergebnissen in ca. 24 Stunden.",
+        "results": [
+          "Kombinierter Nachweis von Erregern und Hygieneindikatoren in einer PCR-Reaktion.",
+          "Ergebnisse in ca. 24 Stunden für schnellere Freigabe- und Korrekturentscheidungen.",
+          "Frühere Sichtbarkeit von Hygieneversagen und Kontaminationsrisikosignalen.",
+          "Geringere Betriebsbelastung durch Reduzierung separater Assays, Reagenzien, Verbrauchsmaterial und manueller Zeit.",
+          "Präventiveres Qualitätskontrollmodell mit vereinfachter Umsetzung in der Routineanalytik."
+        ]
+      },
+      "broad-spectrum-spoilage": {
+        "company": "Großes Getränkeunternehmen",
+        "category": "Verderbnisschutz",
+        "title": "Breitbandiger Verderbnisschutz.",
+        "description": "Unterstützung eines Getränkeherstellers bei der Beschleunigung des Verderbnisscreenings und dem Schutz der Produktqualität durch molekularen Breitband-Nachweis.",
+        "heroMetric": "52 Std.",
+        "challenge": "Unser Partner benötigte eine schnellere und umfassendere Methode zur Kontrolle des Verderbnisrisikos in Fertiggetränken. Klassische Plattiermethoden erforderten 5 bis 7 Tage und boten begrenzte Sichtbarkeit, während Produkte auf ihre Freigabe warteten. Diese Verzögerung erhöhte den Lagerdruck, verlangsamte den Vertrieb und setzte die Marke Qualitätsrisiken wie Verpackungsaufblähung, Trübung, Fehlaromen und vorzeitigem Haltbarkeitsverlust aus.",
+        "solution": "TAAG implementierte eine hochkapazitative Multiplex-PCR-Lösung zum Nachweis der relevantesten Verderbnisorganismen in Getränken in einem einzigen molekularen Workflow, darunter acidophile Bakterien, Hefen, Schimmel und konservierungsmittelresistente Hefen. Dies ermöglichte dem Partner, Verderbnisrisiken zu erkennen, bevor sie die Produktqualität beeinträchtigen, die Abhängigkeit von langsamen kulturbasierten Methoden zu reduzieren und schnellere Freigabeentscheidungen zu treffen.",
+        "results": [
+          "Verkürzung der Verderbnisscreeningzeit von 5–7 Tagen auf ca. 50 Stunden.",
+          "Breiter Nachweis kritischer Getränkeverderber, einschließlich acidophiler Bakterien, Hefen, Schimmelpilze und konservierungsmittelresistenter Hefen.",
+          "Frühere Identifikation von Organismen, die mit Verpackungsaufblähung, Trübung, Fehlaromen und Haltbarkeitsversagen assoziiert sind.",
+          "Zusammenführung mehrerer kulturbasierter Tests in einem vereinfachten molekularen Workflow.",
+          "Solidere Qualitätskontrollentscheidungen vor der Produktverteilung."
+        ]
+      },
+      "salmonella-ecoli-protection": {
+        "company": "Frischwarenpartner",
+        "category": "Erregerschutz",
+        "title": "Schutz vor Salmonella und E. coli",
+        "description": "Simultaner Multiplex-Nachweis von Salmonella, E. coli O157:H7 und STEC.",
+        "heroMetric": "3-in-1",
+        "challenge": "Unser Partner musste die Erregertestung für hochverderbliche Produkte beschleunigen, ohne die Lebensmittelsicherheit zu gefährden. Der bestehende Workflow erforderte separate Protokolle für Salmonella, E. coli O157:H7 und STEC, was die Laborkomplexität, Durchlaufzeiten und Freigabeverzögerungen für Produkte wie Blattgemüse erhöhte.",
+        "solution": "TAAG implementierte eine Multiplex-PCR-Lösung zum gleichzeitigen Nachweis von Salmonella, E. coli O157:H7 und STEC aus einer einzigen angereicherten Probe. Durch die Konsolidierung von drei kritischen Erregertests in einem einzigen molekularen Workflow reduzierte der Partner die Betriebskomplexität, beschleunigte Freigabeentscheidungen und stärkte das Vertrauen in die routinemäßige Lebensmittelsicherheitskontrolle.",
+        "results": [
+          "Simultaner Nachweis von Salmonella, E. coli O157:H7 und STEC in einer einzigen PCR-Reaktion.",
+          "Ein Probenvorbereitungs- und Anreicherungsworkflow für drei kritische Erregerziele.",
+          "Ergebnisse in weniger als 24 Stunden für schnellere Freigabeentscheidungen.",
+          "Reduzierte Laborbelastung durch Zusammenführung von drei separaten Erregertests in einem Workflow.",
+          "Verbesserte Entscheidungsfindung für verderbliche Produkte mit kürzeren Handelsfenstern."
+        ]
+      }
+    }
+  },
+  "FinalCTA": {
+    "title": "Erfahren Sie, wie Sie Ihre Mikrobiologie auf das nächste Level heben können",
+    "body": "Lassen Sie uns ein Meeting vereinbaren, um mehr über unsere Produkte, Technologien und Labordienstleistungen zu erfahren.",
+    "availability": "Verfügbarkeit ab dem nächsten Tag",
+    "consultation": "Expertenberatung",
+    "button": "Meeting buchen"
+  },
+  "Footer": {
+    "taglineA": "Die Natur lesen.",
+    "taglineB": "Die Zukunft deuten.",
+    "description": "Fortschrittliche molekulare Intelligenz und KI-gestützte Diagnostik für die globale Fertigungsindustrie.",
+    "solutions": "Lösungen",
+    "technologies": "Technologien",
+    "company": "Unternehmen",
+    "links": {
+      "industrial": "Industrielle Mikrobiologie",
+      "customized": "Individuelle Lösungen",
+      "txa": "Digitale Transformation",
+      "labServices": "Labordienstleistungen",
+      "about": "Über uns",
+      "locations": "Standorte",
+      "contact": "Kontakt",
+      "privacy": "Datenschutzrichtlinie",
+      "terms": "Nutzungsbedingungen"
+    },
+    "certifications": {
+      "iso17025": "ISO/IEC 17025 akkreditiert",
+      "iso13485": "ISO 13485 akkreditiert"
+    },
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "Pages": {
+    "Industrial": {
+      "titleA": "Die nächste Generation",
+      "titleB": "mikrobiologischer Lösungen.",
+      "body": "Entdecken Sie mikrobiologische Lösungen für Multiplex- und Ultraschnellnachweis zur Beschleunigung von Entscheidungen, Risikominderung und Produktivitätssteigerung."
+    },
+    "Customized": {
+      "arc": "KI-entwickelte Assays",
+      "titleA": "Stellen Sie sich Ihren idealen",
+      "titleB": "molekularen Mikrobiologie-Assay vor.",
+      "subtitle": "Beginnen Sie jetzt, ihn einzusetzen.",
+      "scroll": "Nach unten scrollen"
+    },
+    "TxA": {
+      "titleA": "Intelligente Mikrobiologie.",
+      "titleB": "Ausbreitung verhindern.",
+      "body": "TxA wandelt isolierte Ergebnisse um, um Risiken vorherzusagen, und deckt verborgene Korrelationen auf, bevor sie zu Ausbrüchen werden."
+    },
+    "Labs": {
+      "titleA": "Ihr Labor",
+      "titleB": "Vollständig optimiert.",
+      "body": "Werden Sie Laborpartner und erhalten Sie Zugang zu unserem gesamten Ökosystem aus Technologien, Software, Produkten und Workflows. Entfalten Sie das wahre Potenzial Ihrer Einrichtung und erzielen Sie beispiellose Produktivität, operative Agilität und Kosteneinsparungen."
+    },
+    "Where": {
+      "titleA": "Globale Wissenschaft.",
+      "body": "Mit operativen TAAG-Hubs und einem Netzwerk aus Partnerlaboren und Distributoren bringen wir das TAAG-Ökosystem direkt zu Ihrer Einrichtung. Support in Ihrer Sprache, in Ihrer Zeitzone, direkt an Ihrer Seite.",
+      "localSupport": {
+        "eyebrow": "LOKALER SUPPORT",
+        "headline": "Wie wir Ihr Labor lokal unterstützen.",
+        "hubsTitle": "TAAG Hubs",
+        "hubsDesc": "Fachkundige wissenschaftliche Beratung bei der Methodenauswahl, individuellen molekularen Entwicklungen und technischer Fehlersuche.",
+        "partnersTitle": "Lokale Partner",
+        "partnersDesc": "Tägliche kommerzielle Unterstützung, reibungslose Kit-Implementierung und schnelle Logistik, abgestimmt auf die Bedürfnisse Ihrer Anlage.",
+        "labTitle": "Service-Labor-Partner",
+        "labDesc": "Zugängliche lokale Labordienstleistungen mit fortschrittlichen TAAG-Kits für zuverlässige Ergebnisse in Ihrer Nähe."
+      }
+    },
+    "About": {
+      "title": "Hallo, wir sind TAAG.",
+      "intro": "Wir helfen Organisationen, mikrobiologische Risiken durch fortschrittliche molekulare Lösungen und intelligente Systeme zu managen.",
+      "storyTitle": "Unsere Geschichte",
+      "story1": "TAAG wurde 2001 als hochspezialisiertes Analyselabor gegründet. Im Laufe der Jahre haben wir unsere Präsenz kontinuierlich ausgebaut und Niederlassungen in den USA, Belgien, Mexiko und Chile etabliert.",
+      "story2": "Als die globale Nachfrage nach schnellerer, präziserer und skalierbarer Diagnostik wuchs, erkannten wir die Notwendigkeit, über die Grenzen traditioneller Servicemodelle hinauszugehen.",
+      "story3": "Diese Erkenntnis trieb unsere Transformation von einem regionalen Dienstleister zu einer technologiegetriebenen Biotechnologieorganisation voran, die fachkundige Labordienstleistungen, fortschrittliche Kit-Fertigung und Softwareentwicklung nahtlos in unsere Kernoperationen integriert.",
+      "story4": "Heute liegt unser Fokus klar auf der Weiterentwicklung des Diagnosestandards. Wir entwickeln, fertigen und vertreiben innovative molekulare Lösungen, die unsere eigenen Hubs und ein wachsendes weltweites Netzwerk von Partnerlaboren stärken.",
+      "missionTitle": "TAAG-Mission",
+      "mission": "Fortschrittliche biologische Analytik für jedes Labor und jede Organisation zugänglich zu machen und die Art und Weise, wie biologische Entitäten nachgewiesen, identifiziert und gemanagt werden, zu revolutionieren.",
+      "visionTitle": "TAAG-Vision",
+      "vision": "Eine Zukunft zu gestalten, in der biologische Analysen schnell, automatisiert, prädiktiv und universell zugänglich sind, sodass jede Organisation Gesundheit schützen, Produktion optimieren und das volle Potenzial der Biotechnologie erschließen kann.",
+      "valuesTitle": "Unsere Werte",
+      "values": [
+        {
+          "title": "Ehrlichkeit leben",
+          "description": "Transparenz schafft Vertrauen. Wir kommunizieren offen mit unseren Kunden, Partnern und untereinander. Wir verstecken uns nicht hinter Fachjargon; wir präsentieren Daten und Fakten so, wie sie sind. Absolute Ehrlichkeit ist das Fundament unserer wissenschaftlichen Strenge."
+        },
+        {
+          "title": "Grenzen verschieben",
+          "description": "Innovation ist in unserer DNA. Wir erkunden ständig neue Technologien und Methoden, um komplexe mikrobiologische Herausforderungen zu lösen, die andere für unmöglich halten. Wir folgen nicht nur dem Standard – wir erfinden, was als Nächstes kommt."
+        },
+        {
+          "title": "Weltklasse sein",
+          "description": "Wir sind darauf fokussiert, bei allem, was wir tun, besser zu werden und besser zu sein. Wenn es darum geht, globale Lebensmittelsicherheit und Gesundheit zu schützen, geben wir uns nicht mit „gut genug“ zufrieden. Wenn wir für Exzellenz bekannt sein wollen, müssen wir sie täglich verkörpern."
+        },
+        {
+          "title": "Niemals aufhören",
+          "description": "Kontinuierliche Verbesserung treibt uns voran. Wir glauben, dass es unabhängig davon, wie fortschrittlich unsere aktuellen Lösungen sind, immer Raum gibt, zu optimieren, zu beschleunigen und zu verfeinern. Wir hinterfragen den Status quo, um schnellere und genauere Ergebnisse zu liefern."
+        },
+        {
+          "title": "Team vor Titeln",
+          "description": "Harte Arbeit und Teamgeist zählen mehr als Hierarchie. Jeder spielt eine einzigartig wichtige Rolle. Unsere Wirkung wird maximiert, wenn wir die Ärmel hochkrempeln, uns gegenseitig unterstützen und das Team an erste Stelle setzen."
+        },
+        {
+          "title": "Aus Fehlern lernen",
+          "description": "An der Spitze der Biotechnologie zu arbeiten bedeutet, Risiken einzugehen. Wir haben keine Angst vor Fehlern, solange wir sie eingestehen, daraus lernen und schnell iterieren. Jeder Misserfolg ist nur ein Datenpunkt, der uns hilft, eine stärkere und intelligentere Lösung zu entwickeln."
+        }
+      ],
+      "timeline": {
+        "titleLine1": "Eine Geschichte voller Premieren.",
+        "titleAccent": "Eine Zukunft voller Durchbrüche.",
+        "intro": "Wir nutzen Technologie nicht nur – wir erfinden sie. Entdecken Sie die Meilensteine, die die mikrobiologische Analytik im Laufe der Jahre neu definiert haben.",
+        "innovationBadge": "Innovation",
+        "items": [
+          {
+            "title": "Multiplex-PCR-Integration",
+            "description": "Erstes PCR-Kit zum gleichzeitigen Nachweis von Salmonella spp., L. monocytogenes, E. coli und S. aureus in einer einzigen Reaktion und einem einzigen Workflow."
+          },
+          {
+            "title": "Extremes Multiplexing",
+            "description": "Erstes hochgradig multiplexes PCR-Kit (proprietäre Technologie), das über 50 Verderbnismikroorganismen in einer einzigen PCR-Reaktion nachweisen und identifizieren kann."
+          },
+          {
+            "title": "TxA-Plattform",
+            "description": "Erster KI-Algorithmus, der das mikrobiologische Analyseprogramm dynamisch auf Basis der Echtzeit-Risikobewertung anpassen kann."
+          },
+          {
+            "title": "MILA-Plattform",
+            "description": "Entwicklung von MILA (proprietäre Technologie): die erste KI-Software, die die besten Moleküle für hochgradig gemultiplexte PCR-Kits vorhersagen kann."
+          },
+          {
+            "title": "AiGOR-Technologie",
+            "description": "Entwicklung von AiGOR (proprietäre Technologie): eine revolutionäre RNA-Nachweistechnologie mit über 10.000-fach höherer Sensitivität als Standard-Echtzeit-PCR."
+          }
+        ],
+        "future": {
+          "badge": "In aktiver Entwicklung",
+          "title": "Die nächste Generation",
+          "body": "Basierend auf AiGOR und MILA entwickeln wir derzeit die nächste Assay-Generation. Erwarten Sie beispiellose Fähigkeiten: extrem schnelle (schichtinterne) Ergebnisse, gemultiplext und quantitativ."
+        }
+      }
+    }
+  },
+  "Industrial": {
+    "FeaturedModalData": {
+      "zeroRiskEmp": {
+        "title": "Internes EMP-Erregerscreening – Ultraschnell und Null-Risiko",
+        "subtitle": "Ultraschneller Erregernachweis in Umgebungsproben. Präzise Ergebnisse für Salmonella, Listeria spp. und Listeria monocytogenes in nur 3 Stunden – ganz ohne Anreicherung.",
+        "description": "Klassische Umgebungsüberwachungsprogramme sind reaktiv und langsam. Dank der revolutionären AiGOR-Technologie haben wir dieses Paradigma verändert. Durch die Integration des fortschrittlichen RNA-basierten Nachweises mit KI-gestützter prädiktiver Analytik ermöglicht unsere Lösung Lebensmittelproduktionsanlagen, biologische Grenzen zu überwinden, Erreger mit beispielloser Geschwindigkeit und Genauigkeit nachzuweisen und Kontaminationsrisiken vorherzusagen, bevor sie das Endprodukt beeinträchtigen.",
+        "eleviaProducts": {
+          "intro": "Elevia ist unsere Premium-Suite diagnostischer Produkte auf Basis der AiGOR-Technologie. Durch das Targeting von RNA überwindet Elevia klassische biologische Grenzen und liefert extreme Sensitivität und ultraschnelle Ergebnisse in allen Ihren Testmatrizes.",
+          "main": [
+            "Ultraschneller Salmonella-Nachweis in nur 3 Stunden bzw. 7 Stunden für Umgebungs- und Lebensmittelproben.",
+            "Simultane Identifikation von Salmonella und Listeria spp. in einer einzigen Reaktion in nur 3 Stunden bzw. 7 Stunden für Umgebungs- und Lebensmittelproben."
+          ],
+          "upcoming": [
+            {
+              "desc": "Simultane Identifikation von Salmonella und Enterobacteria in einer einzigen Reaktion in nur 3 Stunden."
+            },
+            {
+              "desc": "Simultane Identifikation von Listeria spp. und L. monocytogenes in einer einzigen Reaktion in nur 3 Stunden.",
+              "launch": "Markteinführung Q2 2026"
+            },
+            {
+              "desc": "Simultane Identifikation von Salmonella + Listeria spp. und L. monocytogenes in einer einzigen Reaktion in nur 3 Stunden.",
+              "launch": "Markteinführung Q2 2026"
+            }
+          ]
+        },
+        "advantages": [
+          "Ergebnisse in 3–6 Stunden: Sofortige Entscheidungsfindung und taggleiche Korrekturmaßnahmen.",
+          "Operative Agilität: Taggleiche Korrekturmaßnahmen reduzieren Produktionsausfallzeiten.",
+          "Verbesserte Lebensmittelsicherheit: Früherkennung von Kontaminationshotspots verhindert großflächige Produktsperren.",
+          "Nahtlose Implementierung: Mühelos funktionierender Workflow auf jeder offenen PCR-Plattform.",
+          "TxA-Software inklusive: Präventives und dynamisches Umgebungsmonitoring durch KI.",
+          "Erhebliche Kosteneinsparungen: Reduzierung von Lagerzeiten, Produktsperren und Abhängigkeit von externen Laboren."
+        ],
+        "matrices": [
+          "Umgebungsproben (1 KBE/Abstrich)",
+          "Flüssigproben (1 KBE/mL)",
+          "Anlagenoberflächen"
+        ],
+        "table": {
+          "title": "Protokoll Null vs. Protokoll Xpress: die richtige Strategie für jede Situation",
+          "rows": [
+            { "feature": "Strategie", "col1": "Ultraschnelles Screening", "col2": "Routineüberwachung mit mehr Flexibilität" },
+            { "feature": "Anreicherungszeit", "col1": "Keine Anreicherung", "col2": "3 Stunden" },
+            { "feature": "Gesamtzeit bis zum Ergebnis", "col1": "3 Stunden", "col2": "6 Stunden" },
+            { "feature": "Anwendungszweck", "col1": "Post-Sanierung Zone 1 und Zone 2", "col2": "Prä- und Post-Sanierung Zone 1, 2 und 3" },
+            { "feature": "Probenahmegerät", "col1": "Abstrichtupfer", "col2": "Abstrichtupfer und Schwämme" },
+            { "feature": "Nachweisgrenze", "col1": "1 KBE/Probe", "col2": "1 KBE/Probe" },
+            { "feature": "Nachgelagerte Anwendungen", "col1": "Keine, destruktive Methode. Die gesamte Probe muss verarbeitet werden", "col2": "Ja. Zusätzliche Probe für nachgelagerte Anwendungen, z. B. Bestätigung, WGS usw." }
+          ]
+        },
+        "orderingDescriptions": [
+          "Ultraschneller RNA-basierter Nachweis von Salmonella spp.",
+          "Multiplex-Nachweis von Salmonella und Enterobacteria.",
+          "Schnelles RNA/DNA-Extraktionsprotokoll für Umgebungsproben.",
+          "Probenahmeset für Analysen mit 3-stündiger Anreicherung.",
+          "Probenahmeset für schnelle anreicherungsfreie Analysen."
+        ],
+        "txaSection": {
+          "title": "TAAG Xpert Assistant. Ihr KI-gestütztes Ökosystem.",
+          "desc": "Implementieren Sie ein dynamisches und präventives mikrobiologisches Programm, das speziell für EMP entwickelt wurde. TxA nutzt fortschrittliche prädiktive KI zur Optimierung Ihres Probenahme plans und zur Lokalisierung von Kontaminationsquellen – und arbeitet nahtlos mit Elevia-Kits zusammen, um Interpretation und Analyse von Anfang bis Ende zu automatisieren.",
+          "linkText": "TxA entdecken"
+        }
+      }
+    },
+    "Featured": {
+      "modalFallbackDescription": "Inhalte für diese Lösung sind noch nicht verfügbar. Bitte versuchen Sie es später erneut oder kontaktieren Sie unser Team.",
+      "eyebrow": "Ausgewählte Lösungen",
+      "title": "So sieht die Zukunft aus",
+      "timeToResult": "Zeit bis zum Ergebnis",
+      "externalLab": "Externes Labor",
+      "days": "3–5 Tage",
+      "aigorTech": "AiGOR-Technologie",
+      "hours": "< 3 Stunden",
+      "savings": "Erhebliche Kosteneinsparungen",
+      "advantages": "Vorteile",
+      "contact": "Kontakt",
+      "details": "Details",
+      "learnMore": "Mehr erfahren",
+      "labels": { "results": "Ergebnisse", "ai": "KI", "improveEmp": "EMP verbessern" },
+      "solutions": {
+        "pathogen-control": {
+          "title": "Internes EMP-Erregerscreening – Ultraschnell und Null-Risiko",
+          "descriptionLeft": "Erreger in < 3 Stunden ohne Anreicherung nachweisen.",
+          "description": "Testung mit absoluter Sicherheit und Effizienz internalisieren.",
+          "advantages": [
+            "Kein Biorisiko: Keine Anreicherung bedeutet kein Erregerwachstum vor Ort.",
+            "Schnelle Ergebnisse: Ergebnisse in Stunden statt in Tagen.",
+            "Sofortige Maßnahmen: Von reaktivem Warten zu taggleichem Eingreifen.",
+            "Kosteneffizienz: Externe Laborgebühren und Versandverzögerungen entfallen."
+          ]
+        },
+        "fast Salmonella": { "title": "Schnelle Salmonella-Kontrolle in der Lebensmittelindustrie", "description": "Schichtinterne Ergebnisse für Salmonella in Umgebungs- und Lebensmittelproben." },
+        "F41": { "title": "Vollständige und präventive mikrobiologische Kontrolle", "description": "Erreger und Indikatoren in einer einzigen PCR-Reaktion nachweisen. Präventive Kontrolle trifft Effizienz." },
+        "spoilage-beverage": { "title": "Breitbandiger Verderbnisschutz", "description": "Verderbnishefen, Schimmelpilze und Bakterien in einem einzigen PCR-Lauf screenen. Haltbarkeit mit molekularer Präzision sichern." },
+        "F39": { "title": "Schutz vor Salmonella und pathogener E. coli", "description": "Ein einziger Workflow für den simultanen Nachweis und die Identifikation von Salmonella und pathogener E. coli." },
+        "txa-integration": { "title": "Alles nahtlos mit TxA integriert", "description": "KI-Plattform zur Umwandlung komplexer Daten in präventive Maßnahmen." }
+      }
+    },
+    "Equipment": {
+      "eyebrow": "Infrastruktur und Ausstattung",
+      "title": "Keine spezialisierten oder komplexen Geräte. Offene Plattformen",
+      "body": "Wir glauben an Einfachheit. Sechs Quadratmeter. Ein Standard-qPCR-Gerät. Das ist alles, was benötigt wird.",
+      "qPCR": "qPCR-Gerät",
+      "recommended": "Analytik Jena empfohlen",
+      "scenarios": {
+        "simple": { "label": "Umgebungs- und Lebensmittelproben", "title": "Einfacher und schneller Workflow", "description": "Ideal für Umgebungs- und normale Lebensmittelmatrizes. Überspringen Sie komplexe Geräte mit unseren schnellen Extraktionsprotokollen, die Sie in Rekordzeit zu PCR-Ergebnissen bringen." },
+        "complex": { "label": "Komplexe Lebensmittelproben", "title": "Automatisierter Hochdurchsatz", "description": "Für komplexe Matrizes wie Schokolade oder Gewürze. Wir integrieren automatisierte Magnetkugel-Extraktionsroboter für maximale Reinheit und Effizienz ohne Engpässe." }
+      }
+    },
+    "How": {
+      "headline": "Blicken Sie tiefer in die Zukunft – entdecken Sie",
+      "headlineAccent": "AiGOR-Lösungen.",
+      "shortLabels": ["AiGOR", "Lebensmittelanalytik", "Umgebungsanalytik", "Umgebungsprotokolle", "Mikroorganismen", "TxA-Plattform"],
+      "steps": {
+        "intro": { "step": "Das Ökosystem", "title": "Ultraschnelle RNA-Nachweistechnologie", "description": "Schichtinterne Ergebnisse. Absolute Sicherheit. Volle Produktivität." },
+        "sample": { "step": "Schritt 01", "title": "", "description": "Jedes Produkt mit absoluter Sicherheit ausliefern." },
+        "extraction": { "step": "Schritt 02", "title": "", "description": "Ultraschnelle Ergebnisse aus Abstrichen und Schwämmen erhalten – vor oder nach der Sanierung." },
+        "pcr": { "step": "Schritt 03", "title": "Ihre Wahl treffen", "description": "Protokoll ZERO oder XPRESS." },
+        "interpretation": { "step": "Schritt 04", "title": "", "description": "Schneller Nachweis von Salmonella spp., Listeria spp., Enterobacteria, L. monocytogenes und mehr." },
+        "management": { "step": "Schritt 05", "title": "Schnelle Ergebnisse für schnelle Maßnahmen", "description": "Alle unsere Kits integrieren sich nahtlos mit TxA für fortschrittlichen KI-basierten Schutz." }
+      },
+      "futureTitle": "Bereit, die Zukunft zu erkunden?",
+      "futureBodyA": "Erleben Sie die Stärke des RNA-basierten Nachweises.",
+      "futureBodyB": "Sensitivität verstärkt. Zeit bis zum Ergebnis neu definiert.",
+      "explore": "AiGOR-Produkte entdecken",
+      "previousImage": "Vorheriges Workflow-Bild",
+      "currentImage": "Aktuelles Workflow-Bild"
+    },
+    "FeaturedModal": {
+      "featuredBadge": "Ausgewählte Lösung",
+      "solutionOverview": "Lösungsübersicht",
+      "keyAdvantages": "Hauptvorteile",
+      "validatedMatrices": "Validierte Matrizes",
+      "fallbackPathogens": "Nachgewiesene Erreger",
+      "fallbackIndicators": "Nachgewiesene Indikatoren",
+      "welcomeTitleA": "Willkommen in der Zukunft.",
+      "welcomeTitleB": "Entdecken Sie Elevia-Produkte.",
+      "loading": "Wird geladen…",
+      "unavailable": "Nicht verfügbar",
+      "learnMore": "Mehr erfahren",
+      "aigorBanner": {
+        "eyebrow": "Powered by AiGOR",
+        "headline": "Biologische Grenzen durch fortschrittlichen RNA-basierten Nachweis überwinden.",
+        "chipSubtitle": "RNA-TECHNOLOGIE",
+        "statTimeStrong": "Ergebnisse in 3 Stunden.",
+        "statTimeRest": "Lange Anreicherungen überspringen.",
+        "statCfuStrong": "1 KBE/Probe.",
+        "statCfuRest": "Maximale Präzision.",
+        "statSensStrong": "10.000x Sensitivität.",
+        "statSensRest": "vs. Echtzeit-PCR.",
+        "statRnaStrong": "RNA-Nachweis.",
+        "statRnaRest": "Zielt auf aktive Zellen.",
+        "exploreLink": "AiGOR-Technologie entdecken"
+      },
+      "swipeColumns": "Nach links wischen, um alle Spalten zu sehen",
+      "orderingTitle": "Bestellinformationen",
+      "orderingCatNo": "Kat.-Nr.",
+      "orderingProduct": "Produkt",
+      "orderingSize": "Größe",
+      "orderingFormat": "Format",
+      "orderingDescription": "Beschreibung",
+      "contactUs": "Kontakt aufnehmen",
+      "empProtocolZero": "PROTOKOLL NULL",
+      "empProtocolXpress": "PROTOKOLL XPRESS"
+    },
+    "Impact": {
+      "eyebrow": "Hyper-schnelles EMP",
+      "titleA": "Ein vollständig",
+      "titleB": "transformierter",
+      "titleC": "Workflow.",
+      "introA": "Immersive Geschwindigkeit wie nie zuvor.",
+      "introB": "AiGOR nutzt RNA-basierten Nachweis, um biologische Grenzen zu überwinden und verwertbare Ergebnisse in Stunden statt in Tagen zu liefern.",
+      "cards": {
+        "rna": { "title": "RNA-Sensitivität.", "body": "Erkennt nur aktive Zellen. Keine falsch-positiven Ergebnisse durch tote DNA.", "value": "10k", "suffix": "x" },
+        "zero": { "title": "Null Anreicherung.", "body": "Den 24-h-Wachstumsschritt überspringen.", "value": "Direkt." },
+        "speed": { "title": "Geschwindigkeit neu definiert.", "body": "Von der Probe bis zum Zertifikat.", "value": "3", "suffix": "STUNDEN" },
+        "fit": { "title": "Nahtlose Integration.", "body": "Integriert sich in Standard-LIMS und bestehende Laborworkflows." }
+      }
+    },
+    "Catalog": {
+      "title": "Alle unsere Lösungen entdecken",
+      "searchAll": "In allen Lösungen suchen...",
+      "searching": "In allen Kategorien suchen...",
+      "download": "Produktauswahlguide herunterladen",
+      "filtering": "Filterung nach:",
+      "loading": "Produkte werden geladen...",
+      "contact": "Kontakt",
+      "details": "Details",
+      "loadingDetails": "Wird geladen",
+      "noResults": "Keine passenden Lösungen gefunden.",
+      "trySearch": "Versuchen Sie, nach Ziel, Technologie oder Name zu suchen.",
+      "customTitle": "Nicht das Gesuchte gefunden?",
+      "customBody": "Unser F&E-Team, unterstützt durch MILA, verwandelt einzigartige Herausforderungen in individuelle Lösungen.",
+      "contactUs": "Kontakt aufnehmen"
+    },
+    "DatasheetModal": {
+      "technicalDataSheet": "Technisches Datenblatt",
+      "targetType": "Zieltyp",
+      "targets": "Ziele",
+      "mainIndustries": "Hauptbranchen",
+      "sensitivity": "Sensitivität",
+      "intendedUse": "Verwendungszweck",
+      "keyAdvantages": "Hauptvorteile",
+      "principle": "Prinzip",
+      "industries": "Branchen",
+      "limitations": "Einschränkungen",
+      "technicalSpecifications": "Technische Spezifikationen",
+      "microorganisms": "Mikroorganismen",
+      "validatedMatrices": "Validierte Matrizes",
+      "timeToResults": "Zeit bis zum Ergebnis",
+      "time": "Zeit",
+      "technology": "Technologie",
+      "validatedThermocyclers": "Validierte Thermocycler",
+      "detectionChemistry": "Nachweischemie",
+      "detectionChannel": "Nachweiskanal",
+      "detectionChannels": "Nachweiskanäle",
+      "storageConditions": "Lagerbedingungen",
+      "temperature": "Temperatur",
+      "shelfLife": "Haltbarkeit",
+      "certifications": "Zertifizierungen",
+      "certificationImageAlt": "Zertifizierung",
+      "orderInformation": "Bestellinformationen",
+      "catNo": "Kat.-Nr.",
+      "catNum": "Kat.-Num.",
+      "name": "Name",
+      "size": "Größe",
+      "format": "Format",
+      "kitContent": "Kit-Inhalt",
+      "swipeForColumns": "Nach links wischen, um alle Spalten zu sehen",
+      "additionalSupplies": "Zusätzliches Zubehör",
+      "orderInformationAdditionalSupplies": "Bestellinformationen – Zusätzliches Zubehör",
+      "product": "Produkt",
+      "description": "Beschreibung",
+      "pageOf": "Seite {page} von {total}",
+      "generatingPdf": "PDF wird erstellt...",
+      "downloadDatasheet": "Datenblatt herunterladen (PDF)",
+      "contactSalesTeam": "Vertriebsteam kontaktieren",
+      "pdfError": "Fehler bei der PDF-Erstellung. Bitte versuchen Sie es erneut.",
+      "pleaseWait": "Bitte warten Sie einen Moment.",
+      "selectKitSize": "Geeignete Kit-Größe auswählen.",
+      "matricesLabel": "Matrizes",
+      "descriptionHeading": "Beschreibung",
+      "channelsNeeded": "Benötigte Kanäle",
+      "storageShort": "Lagerung",
+      "loadingPdfTitle": "PDF wird geladen...",
+      "generatingDatasheetHtml": "Datenblatt wird erstellt...",
+      "catNumber": "Katalognummer",
+      "allowPopups": "Bitte erlauben Sie Pop-ups für diese Website, um das PDF anzuzeigen.",
+      "viewDatasheetPdf": "Datenblatt ansehen (PDF)"
+    },
+    "LabInstallation": {
+      "eyebrow": "Installation",
+      "titleA": "Einfache Einrichtung.",
+      "titleB": "Leistungsstarke Ergebnisse.",
+      "body": "Für Effizienz entwickelt. Unser Ökosystem passt in Ihren bestehenden Laborbereich – ohne kostspielige Renovierungen oder spezialisiertes Personal.",
+      "imageAlt": "Laboraufbau"
+    },
+    "LabSpecs": {
+      "space": { "label": "Erforderliche Fläche", "value": "3 m²", "subtext": "Standard-Arbeitsfläche" },
+      "operators": { "label": "Bediener", "value": "1 Person", "subtext": "Kein Spezialabschluss erforderlich" },
+      "setupTime": { "label": "Einrichtungszeit", "value": "< 48 Std.", "subtext": "Installation & Schulung" },
+      "infrastructure": { "label": "Infrastruktur", "value": "Minimal", "subtext": "Standard-Strom & Internet" }
+    },
+    "HowItWorksAlt": {
+      "title": "Wie unsere Lösungen funktionieren.",
+      "subtitle": "Von der Probe zur Entscheidung.",
+      "intro": "Wir liefern das gesamte Ökosystem. Keine fragmentierten Anbieter, keine Kompatibilitätsprobleme. Nur ein nahtloser Fluss von der Probenahme bis zum digitalen TxA-Management.",
+      "learnMore": "Mehr erfahren",
+      "scrollLeft": "Nach links scrollen",
+      "scrollRight": "Nach rechts scrollen"
+    },
+    "Success": {
+      "eyebrow": "Nachgewiesene Wirkung",
+      "titleA": "Echte Probleme.",
+      "titleB": "Echte Lösungen.",
+      "body": "Von Produktivitätssteigerung und Reduzierung von Lagerkosten bis zur Rückrufprävention. Erfahren Sie, wie Branchenführer unser Ökosystem nutzen.",
+      "featured": "Ausgewählter Business Case",
+      "readCase": "Fallstudie lesen",
+      "readSuccess": "Erfolgsgeschichte lesen",
+      "scrollLeft": "Nach links scrollen",
+      "scrollRight": "Nach rechts scrollen",
+      "stories": {
+        "hero-case": { "client": "Umgebungsanalytik", "title": ">200k$ Einsparungen/Jahr pro Anlage", "metric": "Internes EMP-Screening mit AiGOR-Technologie" },
+        "fast-salmonella-food": { "client": "Lebensmittelindustrie", "title": "Schnelle Salmonella-Kontrolle in der Lebensmittelindustrie", "metric": "9 Stunden", "description": "Verwertbare Ergebnisse und Produktfreigabe in nur 9 Stunden – ohne lange 24–48-h-Anreicherungen." },
+        "full-preventive-control": { "client": "Qualitätskontrolle", "title": "Vollständige und präventive mikrobiologische Kontrolle", "metric": "Alles-in-Einem", "description": "Die weltweit einzige Multiplex-PCR-Lösung, die Erreger und mikrobielle Indikatoren in einer einzigen Reaktion nachweist." },
+        "broad-spectrum-spoilage": { "client": "Getränkeindustrie", "title": "Breitbandiger Verderbnisschutz", "metric": "52 Std.", "description": "Verderbnishefen, Schimmelpilze und Bakterien in einem einzigen PCR-Lauf screenen. Haltbarkeit mit molekularer Präzision sichern." },
+        "salmonella-ecoli-protection": { "client": "Frischware & Fleisch", "title": "Schutz vor Salmonella und pathogener E. coli", "metric": "3-in-1", "description": "Simultaner Multiplex-Nachweis von Salmonella, E. coli O157:H7 und STEC in einer einzigen Reaktion." }
+      }
+    }
+  },
+  "Customized": {
+    "Mila": {
+      "title": "Das gesamte Spektrum des diagnostischen Potenzials erschließen.",
+      "body": "MILA, unsere KI-gestützte Plattform, navigiert durch Millionen genomischer Kombinationen, um den präzisen Primer- und Sondensatz für Ihre Ziele zu entwickeln und auszuwählen. Für jede Anwendung gewährleistet MILA die besten PCR-Kits – schnell und mühelos.",
+      "cards": {
+        "ai": { "title": "KI-gestützte Intelligenz.", "body": "MILA analysiert genomische Daten mit einem proprietären neuronalen Netzwerk und identifiziert Muster, die für klassische Designmethoden unsichtbar sind." },
+        "precision": { "title": "Präzisionsauswahl.", "body": "MILA entwickelt nicht nur – sie wählt aus. MILA filtert Rauschen heraus, um den besten Primer-/Sondensatz für Ihr Ziel zu finden." },
+        "multiplex": { "title": "Hochgradig gemultiplextes Design.", "body": "Mehrere Ziele in einer einzigen Reaktion gleichzeitig nachweisen – maximale Effizienz ohne Sensitivitätsverlust." },
+        "fast": { "title": "Schnell & mühelos.", "body": "Vom Konzept zum Kit-Design in Rekordzeit. Monate der F&E auf einen einfachen, optimierten Prozess reduzieren.", "complete": "Design abgeschlossen", "accurate": "100 % präzise" }
+      }
+    },
+    "CustomDev": {
+      "titleA": "Ihre Vision.",
+      "titleB": "Von KI entwickelt.",
+      "body": "Durch den Einsatz von MILAs KI bietet TAAG einen umfassenden individuellen Assay-Entwicklungsservice. Wir entwickeln und validieren maßgeschneiderte molekulare Lösungen in Ihrem Namen und bieten eine überlegene Alternative zur internen F&E mit kürzeren Fristen, vereinfachten Workflows und deutlich geringeren Kosten.",
+      "cards": {
+        "speed": { "titleA": "Vom Konzept zum Kit", "titleB": "5x schneller.", "body": "MILA identifiziert sofort das optimale Design, umgeht iterative Misserfolge und verkürzt Ihre Time-to-Market drastisch." },
+        "cost": { "titleA": "Bis zu 50 % Reduktion", "titleB": "der Entwicklungskosten.", "body": "Die Auslagerung an TAAG eliminiert internen F&E-Overhead, reduziert Ihre Gesamtinvestition und operatives Risiko." },
+        "reaction": { "titleA": "Geringste Kosten", "titleB": "pro Reaktion.", "body": "Fortschrittliches Multiplexing und Designoptimierung minimieren den Reagenzienverbrauch und gewährleisten den wettbewerbsfähigsten Preis pro Test." }
+      }
+    },
+    "Profiles": {
+      "titleA": "Individuelle Assay-Entwicklung,",
+      "titleB": "unterstützt durch MILA.",
+      "body": "Nutzen Sie unsere proprietäre KI, um die Komplexität klassischer F&E zu umgehen. Vom Konzept bis zur Vermarktung entwickeln und validieren wir maßgeschneiderte molekulare Lösungen, die auf Ihr genaues Geschäftsmodell zugeschnitten sind.",
+      "serviceOverview": "Serviceübersicht",
+      "getStarted": "Loslegen",
+      "cards": {
+        "intro": { "title": "Fortschrittliche molekulare Assay-Entwicklung als Service.", "description": "Ob Biotechnologieunternehmen oder Analyselabor – TAAG bietet ausgelagerte molekulare Assay-Entwicklung über MILA an, um die Produktivität zu steigern und gleichzeitig Entwicklungszeit und -kosten zu senken." },
+        "manufacturer": { "label": "Kit-Hersteller", "title": "Portfolio erweitern", "description": "Mehrere Modelle unterstützen – von der Lieferung von Primer-Mixen bis zur weltweiten Lieferung vollständig markierter, validierter Fertigkits." },
+        "distributor": { "label": "Distributor", "title": "Eigenmarken-Launch", "description": "Exklusive Hochleistungskits entwickeln, die unter Ihrer Marke vertrieben werden. Differenzieren Sie sich mit einzigartigen Produkten." },
+        "third-party-lab": { "label": "Auftragslabor", "title": "Margen steigern", "description": "Starre kommerzielle Kits durch individuelle, hochgradig gemultiplexte Assays ersetzen, die auf Ihren spezifischen Workflow und Durchsatz zugeschnitten sind." },
+        "internal-lab": { "label": "Internes Labor", "title": "Kontamination lösen", "description": "Anlagenspezifische Verderbnisorganismen oder seltene Erreger nachweisen, die generische Kits verfehlen, für präzise interne QS." },
+        "outsourcer": { "label": "Mit Auftragslabor", "title": "Managed Service", "description": "Wir entwickeln den Assay und führen ihn für Sie in unseren strategischen TAAG-Hubs durch. Maßgeschneiderte Analytik ohne die Infrastruktur." }
+      }
+    },
+    "Story": {
+      "eyebrow": "Erfolgsgeschichten",
+      "title": "Ausgewählte Partnerschaft.",
+      "badge": "Top-3-Molkereiunternehmen weltweit",
+      "heading": "Simultane Quantifizierung von 3 Probiotikastämmen.",
+      "bodyA": "Mit MILA entwickelte TAAG einen individuellen Triplex-qPCR-Assay, der drei verschiedene Probiotikastämme in einer einzigen Reaktion direkt aus Fertigprodukten nachweisen und quantifizieren kann.",
+      "bodyB": "Dieser Durchbruch ermöglicht unserem Partner, Probiotikagehalte mit beispielloser Geschwindigkeit und Genauigkeit zu validieren und die Qualitätssicherung zu optimieren.",
+      "read": "Vollständige Fallstudie lesen",
+      "imageAlt": "Danone-Fallstudie"
+    },
+    "Contact": { "title": "Bereit zum Start?", "body": "Beginnen Sie mit dem Einsatz sofort einsetzbarer Kits, die mit der Kraft von MILA entwickelt wurden.", "button": "Kontakt aufnehmen" }
+  },
+  "Labs": {
+    "ModularDX": {
+      "eyebrow": "Schlüsselfertiges Labor",
+      "title": "Ihr Labor.",
+      "titleB": "Überall. Sofort.",
+      "body": "ModularDX ist ein vollständig ausgestattetes, Plug-and-Play-Molekulardiagnostiklabor. Entwickelt für schnellen Einsatz und mühelose Skalierung – bringt das gesamte TAAG-Ökosystem an jeden Standort.",
+      "previous": "Vorherige Folie",
+      "next": "Nächste Folie",
+      "samples": "300+ PROBEN / TAG",
+      "advantages": [
+        { "title": "Plug & Play.", "text": "Vollständig ausgestattet und betriebsbereit geliefert. Monate des Aufbaus überspringen und ab Tag eins molekulare Diagnostik betreiben." },
+        { "title": "Überall installierbar.", "text": "Benötigt nur einen Standard-Stromanschluss. Ihr Molekularlabor mühelos an abgelegenen Standorten oder in bestehenden Einrichtungen einrichten." },
+        { "title": "TxA integriert.", "text": "Vorverdrahtet und mit unserem KI-Software-Ökosystem synchronisiert. Workflows, Berichte und Datenanalyse sofort automatisieren." },
+        { "title": "Skalierbare Stellfläche.", "text": "Mit genau der Kapazität beginnen, die Sie heute benötigen. ModularDX ermöglicht die nahtlose Erweiterung um neue Module, wenn Ihr Probenvolumen wächst." },
+        { "title": "Massive Produktivität.", "text": "Maximale Effizienz mit minimalem Personal erzielen. Ein kompaktes Zweierteam kann komfortabel über 300 PCR-Proben pro Tag verarbeiten." },
+        { "title": "ISO-konform.", "text": "Entwickelt, um die strengsten internationalen Molekularbiologiestandards zu erfüllen – gewährleistet absolute Zuverlässigkeit und Qualitätskontrolle." }
+      ]
+    },
+    "PartnerPaths": {
+      "eyebrow": "Auf Ihren Betrieb zugeschnitten",
+      "title": "Wählen Sie Ihren Weg zur nächsten Stufe.",
+      "body": "Jedes Labor ist anders. Entdecken Sie, was unser Ökosystem basierend auf Ihrem einzigartigen Geschäftsmodell bietet.",
+      "capabilities": "Ökosystem-Fähigkeiten",
+      "businessOutcome": "Geschäftsergebnis",
+      "serviceLabs": "Service-Labore",
+      "foodBeverage": "Lebensmittel & Getränke",
+      "turnkeyLabs": "Schlüsselfertige Labore",
+      "mobileServiceLabs": "Service-Labs",
+      "mobileFoodBev": "LM & Getränke",
+      "mobileTurnkeyLabs": "Schlüsselfertige Labs",
+      "goals": {
+        "service": "Maximierte Margen & Skalierung",
+        "food": "Schnelle, zuverlässige Ergebnisse & niedrige Kosten",
+        "build": "Schnelle Einrichtung & effizienter Betrieb",
+        "mobileService": "Maximierte Margen",
+        "mobileFood": "Schnelle & präzise Freigabe",
+        "mobileBuild": "Schnelle & kosteneffiziente Einrichtung"
+      },
+      "rows": [
+        { "feature": "Intelligentes Labordesign", "description": "Individueller Grundriss und Workflow-Optimierung für Ihre Einrichtung." },
+        { "feature": "Hardware-Beratung", "description": "Unparteiische Beratung bei der Auswahl der genau benötigten Instrumente." },
+        { "feature": "Next-Gen-Assays", "description": "Upgrade auf Multiplex-PCR und Elevia-Ergebnisse in 3–6 Stunden." },
+        { "feature": "Umfassende Schulung", "description": "Praxisorientierte Schulung Ihres Teams zu allen TAAG-Produkten und Protokollen." },
+        { "feature": "Individuelle Validierungen", "description": "Maßgeschneiderte Matrix-Validierungen und -Verifikationen für absolute Genauigkeit und Qualitätskonformität." },
+        { "feature": "Software-Integration", "description": "Unser Labormanagement- und prädiktive KI-Software nahtlos mit Ihren bestehenden Betrieben verbinden." },
+        { "feature": "Kontinuierlicher Expertensupport", "description": "Dedizierter TAAG-Experte für wissenschaftliche und technische Unterstützung." },
+        { "feature": "Kommerzielle Unterstützung", "description": "Vertriebsunterstützung im Zusammenhang mit TAAG-Produkten." },
+        { "feature": "Wachstumspartnerschaft", "description": "Co-gebrandete Kampagnen, vollständig von TAAG entwickelt und umgesetzt, zur Beschleunigung Ihres Wachstums." },
+        { "feature": "F&E auf Abruf", "description": "Betrachten Sie uns als Ihre private F&E-Abteilung. Wir entwickeln und validieren proprietäre Multiplex-Panels exklusiv für die einzigartigen Anforderungen Ihres Labors." },
+        { "feature": "Autorisiertes Verarbeitungslabor", "description": "Unserem Labornetzwerk beitreten. Probenzufluss von unserem Kundenstamm erhalten." }
+      ]
+    },
+    "Ecosystem": {
+      "eyebrow": "DAS PARTNER-ÖKOSYSTEM",
+      "title": "Das ultimative Labor-Upgrade.",
+      "becomePartner": "Partner werden",
+      "learnMore": "Mehr über {title} erfahren",
+      "badges": {
+        "fastest": { "title": "Schnellste Ergebnisse", "text": "In nur Stunden" },
+        "efficient": { "title": "Effizienter Betrieb", "text": "Automatisierte Workflows" },
+        "margins": { "title": "Höhere Margen", "text": "Maximierter ROI" },
+        "txa": { "title": "TxA-Software", "text": "Prädiktive KI" },
+        "plug": { "title": "Plug & Play", "text": "Bereit zur Skalierung" }
+      },
+      "features": {
+        "intro": { "title": "Sofortige Skalierbarkeit. Maximale Rentabilität.", "description": "Erweitern Sie Ihre Analysekapazitäten mit unserem integrierten Ökosystem. Wir liefern die fortschrittlichen PCR-Kits, die Laborsoftware und die effizienten Protokolle, die Sie benötigen, um Kosten drastisch zu senken, Durchlaufzeiten zu beschleunigen und die Konkurrenz zu überholen." },
+        "pcr": { "badge": "Kosteneffizienz", "title": "Multiplex-PCR-Kits", "description": "Rentabilität Ihres Labors maximieren. Zugang zu unseren Premium-Multiplex-Kits zum günstigsten Marktpreis, damit Sie Margen erhöhen und mehr Kunden gewinnen können, ohne Kompromisse bei der Qualität einzugehen." },
+        "elevia": { "badge": "Wettbewerbsvorteil", "title": "Elevia-Linie", "description": "Sich von der Konkurrenz abheben. Kunden taggleiche Ergebnisse durch Umgehung klassischer Anreicherung anbieten – ein einzigartiges Verkaufsargument für Ihr Labor auf einem übersättigten Markt." },
+        "txa": { "badge": "Maximale Effizienz", "title": "TxA-Ökosystem", "description": "Gemeinkosten reduzieren und menschliche Fehler eliminieren. Den gesamten Workflow automatisieren, um schlanker und schneller zu operieren und Kunden ein modernes, digitales Erlebnis zu bieten." },
+        "mila": { "badge": "Mühelose F&E", "title": "MILA", "description": "Ihr Analysemenü in Tagen statt Monaten erweitern. Unsere KI nutzen, um individuelle Multiplex-Panels ohne eine kostspielige interne F&E-Abteilung zu entwickeln." },
+        "support": { "title": "Technischer Support", "description": "Kaufen Sie nicht nur Produkte – gewinnen Sie einen Partner. Wir bieten standardisierte Workflows und Expertenunterstützung, damit Ihr Labor reibungslos läuft." }
+      }
+    }
+  },
+  "EmpTesting": {
+    "Implementation": {
+      "eyebrow": "SCHLÜSSELFERTIGE IMPLEMENTIERUNG",
+      "titleA": "Minimaler Platzbedarf.",
+      "titleB": "Maximale Kapazität.",
+      "body": "Da AiGOR klassische Anreicherungsschritte eliminiert und keine Autoklaven oder spezialisierte sperrige Geräte benötigt, ist die Einrichtung eines internen Molekularlabors schneller und zugänglicher als je zuvor.",
+      "footprint": "Gesamtstellfläche",
+      "footprintBody": "Für ein vollständig ausgestattetes internes Molekularlabor.",
+      "samples": "Proben / Tag",
+      "samplesBody": "Verarbeitungskapazität, die von einem einzigen Laboranalysten verwaltet wird.",
+      "partnership": "End-to-End-Partnerschaft",
+      "installationTitle": "Installation & Validierung:",
+      "installationBody": "TAAG überwacht den gesamten Einrichtungsprozess und schult Ihren Laboranalysten sowohl im AiGOR-Protokoll als auch im Gerätebetrieb.",
+      "txaTitle": "TxA-Software-Integration:",
+      "txaBody": "Unsere Suite übernimmt die Kontrolle über den gesamten Workflow, von der intelligenten Probenahme bis zur automatisierten Dateninterpretation und Ergebnisveröffentlichung.",
+      "capex": "Kapitalinvestition (CAPEX)",
+      "setup": "Geschätzte Gesamteinrichtungskosten",
+      "instrument": "Echtzeit-PCR-Instrument mit offener Plattform & RNA-Extraktionsroboter mit offener Plattform.",
+      "cabinets": "Schränke und Standard-Kleinlaborausstattung.",
+      "note": "Basierend auf durchschnittlichen Marktpreisen in Europa. Tatsächliche Kosten können je nach Region und endgültiger Ausstattungsanbieterwahl variieren."
+    },
+    "Hero": {
+      "eyebrow": "BUSINESS CASE",
+      "title": "EMP in ein Profitcenter verwandeln.",
+      "body": "Wie die Internalisierung der Umgebungserregertestung sechsstellige jährliche Einsparungen generiert und gleichzeitig 72 Stunden Produktionsengpässe eliminiert.",
+      "imageAlt": "Business Case Umgebungsanalytik"
+    },
+    "Summary": {
+      "problemTitleA": "Das Geschäftsproblem:",
+      "problemTitleB": "Langsames, reaktives und kostspieliges EMP.",
+      "problemBodyA": "Globale Lebensmittelhersteller lagern die Umgebungsüberwachung häufig an Drittlabore aus, was zu Vorlaufzeiten von 48–72 Stunden und erheblichen Probengebühren führt.",
+      "problemBodyB": "Dieser reaktive Ansatz bedeutet, dass Oberflächen oft wiederverwendet werden, bevor die Ergebnisse bekannt sind, was das Risiko erhöht und einen kritischen Engpass in der Produktion schafft.",
+      "transformationTitleA": "Die Transformation:",
+      "transformationTitleB": "Molekulare Intelligenz intern.",
+      "transformationBody": "Durch den internen Einsatz von Elevia-Kits, angetrieben durch AiGOR, können Anlagen ultrasensible RNA-Amplifikation nutzen, um Erreger wie Salmonella spp. direkt vor Ort in nur 3 Stunden und ohne Anreicherung nachzuweisen.",
+      "impact": "Kerngeschäftswirkung",
+      "savings": "Dokumentierte jährliche Einsparungen (pro Anlage)",
+      "metrics": [
+        { "label": "Zeit bis zum Ergebnis", "value": "< 3 Std.", "change": "waren 72 Std." },
+        { "label": "Anreicherungszeit", "value": "Null", "change": "waren 24 Std." },
+        { "label": "Korrekturmaßnahme", "value": "Taggleich", "change": "waren 3 Tage" }
+      ]
+    },
+    "CTA": {
+      "eyebrow": "Eigenen ROI berechnen",
+      "title": "Bereit, 72 Stunden Wartezeit zu eliminieren und Ihr Budget zu sichern?",
+      "body": "Sprechen Sie direkt mit einem unserer Experten, um ein personalisiertes Wirtschaftlichkeitsangebot zu erhalten, das auf das Volumen und die aktuellen Testmethoden Ihrer Anlage zugeschnitten ist.",
+      "button": "Individuelle ROI-Analyse anfordern"
+    },
+    "Products": {
+      "eyebrow": "ANGETRIEBEN DURCH AIGOR",
+      "heroWelcomeLine1": "Willkommen in der Zukunft.",
+      "heroWelcomeLine2": "Entdecken Sie Elevia-Produkte.",
+      "titleA": "ELEVIA",
+      "titleB": "Multiplex-Kits.",
+      "body": "Elevia ist unsere Premium-Suite diagnostischer Produkte auf Basis der AiGOR-Technologie. Durch das Targeting von RNA überwindet Elevia klassische biologische Grenzen und liefert extreme Sensitivität und ultraschnelle Ergebnisse in allen Ihren Testmatrizes.",
+      "learnMore": "Mehr erfahren",
+      "loading": "Wird geladen...",
+      "unavailable": "Nicht verfügbar",
+      "products": {
+        "salmonella": { "title": "Elevia Salmonella", "desc": "Ultraschneller Salmonella-Nachweis in nur 3 Stunden in Umgebungsproben.", "longDesc": "Ultraschneller Salmonella-Nachweis in nur 3 Stunden bzw. 7 Stunden für Umgebungs- und Lebensmittelproben." },
+        "salmonellaLS": { "title": "Elevia Salmonella + Listeria spp.", "desc": "Simultane Identifikation von Salmonella und Listeria spp. in einer einzigen Reaktion in nur 3 Stunden.", "longDesc": "Simultane Identifikation von Salmonella und Listeria spp. in einer einzigen Reaktion in nur 3 Stunden bzw. 6 Stunden für Umgebungs- und Lebensmittelproben." },
+        "salmonellaEB": { "title": "Elevia Salmonella + Enterobacteria.", "desc": "Simultane Identifikation von Salmonella und Enterobacteria in einer einzigen Reaktion in nur 3 Stunden.", "longDesc": "Simultane Identifikation von Salmonella und Enterobacteria in einer einzigen Reaktion in nur 3 Stunden in Umgebungsproben." }
+      },
+      "upcoming": [
+        { "title": "Elevia Listeria spp. + L. monocytogenes", "desc": "Simultane Identifikation von Listeria spp. und L. monocytogenes in einer einzigen Reaktion in nur 3 Stunden.", "launch": "Markteinführung Q2 2026" },
+        { "title": "Elevia Salmonella + Listeria spp. + L. mono.", "desc": "Simultane Identifikation von Salmonella + Listeria spp. und L. monocytogenes in einer einzigen Reaktion in nur 3 Stunden.", "launch": "Markteinführung Q2 2026" }
+      ]
+    },
+    "EleviaEnvironmental": {
+      "eyebrow": "Umgebungsmonitoring",
+      "titleLine1": "Schnelle Ergebnisse.",
+      "titleLine2": "Absolute Anlagenkontrolle.",
+      "body": "Klassische Anreicherung umgehen. Elevia weist aktive Erreger direkt von jeder Oberfläche in Rekordzeit nach und verwandelt Ihre Umgebungsüberwachung von reaktiv zu prädiktiv.",
+      "heroImageAlt": "Elevia Umgebung",
+      "learnMore": "Mehr erfahren",
+      "carouselPrev": "Vorherige Folie",
+      "carouselNext": "Nächste Folie",
+      "advantages": [
+        { "title": "Null Anreicherung.", "text": "Die 24-stündige Wachstumsphase umgehen. Unsere direktoberflächige RNA-Technologie eliminiert Inkubationsrisiken und beschleunigt Ihren Workflow." },
+        { "title": "Ergebnisse in Stunden.", "text": "In nur 3 bis 6 Stunden vom Abstrich zu verwertbaren Daten gelangen. Sofortige Entscheidungsfindung ermöglichen und taggleiche Korrekturmaßnahmen umsetzen." },
+        { "title": "Universelle Probenahme.", "text": "Vollständig validiert für Abstrichtupfer und Schwämme. Elevia nahtlos an Ihre bestehenden Umgebungsüberwachungsprotokolle anpassen." },
+        { "title": "Supereinfacher Workflow.", "text": "Funktioniert mit gängigen qPCR-Geräten ohne Inkubatoren. Das einfache Protokoll ermöglicht jedem Analysten die mühlose Durchführung der Kits." },
+        { "title": "Operative Agilität.", "text": "Linien am Laufen halten. Taggleiche Korrekturmaßnahmen reduzieren Produktionsausfallzeiten drastisch und optimieren die Ressourcenzuteilung." },
+        { "title": "Verbesserte Lebensmittelsicherheit.", "text": "Bedrohungen stoppen, bevor sie sich ausbreiten. Früherkennung von Kontaminationshotspots verhindert großflächige Sperren und schützt Ihre Marke." },
+        { "title": "Kosteneffizienz.", "text": "Operative Einsparungen maximieren. Schnelle Ergebnisse bedeuten kürzere Haltezeiten und höhere operative Effizienz in Ihrer Anlage." },
+        { "title": "Angetrieben durch TxA.", "text": "Kontamination effizienter kartieren, verfolgen und verhindern. Nahtlos mit unserer KI-gestützten Software für dynamisches Umgebungssampling integrieren." }
+      ]
+    },
+    "EleviaFood": {
+      "eyebrow": "Fertigproduktanalytik",
+      "titleLine1": "Schneller freigeben.",
+      "titleLine2": "Weniger sperren.",
+      "body": "Elevia reduziert Ihre Haltezeiten erheblich. Durch den Nachweis von Erregern aus Fertigprodukten in Rekordzeit können Sie Produkte tage früher als klassische Methoden mit Zuversicht freigeben.",
+      "heroImageAlt": "Elevia Lebensmittelanalytik",
+      "learnMore": "Mehr erfahren",
+      "carouselPrev": "Vorherige Folie",
+      "carouselNext": "Nächste Folie",
+      "visualWarehouseLine1": "Lager-",
+      "visualWarehouseLine2": "einsparungen",
+      "visualDays": "Tage",
+      "modal": {
+        "eyebrow": "Fertigproduktanalytik",
+        "title": "Elevia validierte Lebensmittelmatrizes",
+        "body": "Durch das Targeting aktiver RNA reduziert die Elevia-Technologie Haltezeiten erheblich. Entdecken Sie unsere ultraschnellen Anreicherungsprotokolle für eine breite Palette hochkomplexer Lebensmittelmatrizes.",
+        "imageAlt": "Elevia Lebensmittel",
+        "tableTitle": "Kits & Protokolle",
+        "colKit": "Elevia-Kit",
+        "colMatrix": "Matrix",
+        "colGrammage": "Grammage",
+        "colEnrichment": "Anreicherungszeit",
+        "loading": "Protokolle werden geladen",
+        "loadError": "Protokolle konnten nicht geladen werden. Bitte versuchen Sie es später erneut.",
+        "noData": "Keine Protokolldaten verfügbar.",
+        "requestReport": "Vollständigen Validierungsbericht anfordern"
+      },
+      "advantages": [
+        { "title": "Ultraschnelle Freigabe.", "text": "In nur 7 bis 9 Stunden verwertbare Ergebnisse für die meisten Lebensmittelmatrizes erhalten – taggleiche Produktfreigabe ermöglicht." },
+        { "title": "Supereinfacher Workflow.", "text": "Kompatibel mit Open-Platform-Thermocyclern. Das optimierte Protokoll ermöglicht jedem Analysten die mühlose Durchführung der Kits." },
+        { "title": "Fokus auf lebende Zellen.", "text": "Die RNA-Technologie von Elevia zielt ausschließlich auf lebende Erreger ab und eliminiert falsch-positive Ergebnisse durch tote Zellen aus Kochen oder Pasteurisierung." },
+        { "title": "Reduzierte Haltekosten.", "text": "Durch die tage frühere Produktfreigabe reduzieren Sie Lagerfläche und gebundenes Kapital durch gesperrte Produkte erheblich und maximieren Ihren Cashflow." },
+        { "title": "Komplexe Matrizes.", "text": "Validiert für hochinhibitorische Lebensmitteltypen, einschließlich Gewürze, Kakao und fettreiche Produkte – ohne Signalinterferenz." },
+        { "title": "Verlängerte Haltbarkeit.", "text": "Durch die Reduzierung der Analysezeit um Tage gewinnen Sie wertvolle Tage bei der kommerziellen Haltbarkeit Ihres Produkts und steigern die Rentabilität." },
+        { "title": "Markenschutz.", "text": "Absolute Sicherheit in jedem Chargen gewährleisten, bevor sie die Anlage verlässt – zum Schutz Ihrer Verbraucher und Ihres Rufs." }
+      ]
+    },
+    "EleviaROI": {
+      "eyebrow": "ROI-Rechner",
+      "title": "Berechnen Sie den Wert der Geschwindigkeit.",
+      "subtitle": "Sehen Sie, wie viel Kapital Sie durch den Wechsel zur taggleichen Freigabe mit Elevia freisetzen können.",
+      "dailyProductionLabel": "Täglicher Produktionswert",
+      "currentWaitLabel": "Aktuelle Wartezeit",
+      "daysSuffix": "Tage",
+      "rangeMin": "5k$",
+      "rangeMax": "1M$",
+      "rangeOneDay": "1 Tag",
+      "rangeTwoWeeks": "2 Wochen",
+      "totalFreedCapital": "Gesamtes freigesetztes Kapital",
+      "freedCapitalDescription": "Kapital, das derzeit in Lagersperren gebunden ist und Elevia sofort in Ihren Cashflow zurückführen kann.",
+      "warehouseReduction": "Lagerkostenreduktion",
+      "daysGainedPerBatch": "Gewonnene Tage pro Charge",
+      "cta": "Personalisierte Finanzanalyse für Ihre Anlage anfordern"
+    },
+    "EleviaCaseStudy": {
+      "titleLine1": "Das Ende der Auslagerung.",
+      "titleLine2": "Die Zukunft ist intern.",
+      "introLead": "Elevia bringt ",
+      "introStrong": "null Kreuzkonzentaminationsrisiko",
+      "introRest": " in Ihre Anlage. Dank unserer Null- (oder ultrakürzlichen) Anreicherungstechnologie und proprietären Protokollen, die die Probe vor der Verarbeitung vollständig inaktivieren, können Sie Ihr Umgebungsmonitoring sicher und zuverlässig internalisieren. Sie müssen nicht mehr 48–72 Stunden auf Drittergebnisse warten – gewinnen Sie noch heute absolute Kontrolle über Ihre Anlage.",
+      "stat1Label": "Ergebnisse in nur",
+      "stat1Value": "3 Std.",
+      "stat1Desc": "Durchlaufzeit für sofortige Entscheidungsfindung und taggleiche Korrekturmaßnahmen.",
+      "stat2Label": "Jährliche Einsparungen von",
+      "stat2Value": "228k$",
+      "stat2Desc": "pro Werk durch drastische Reduzierung externer Laborgebühren und Versandkosten.",
+      "stat3Label": "Angetrieben durch",
+      "stat3Value": "TxA",
+      "stat3Desc": "das die absolute Kontrolle über den Laborworkflow übernimmt und jeden Analysten die Durchführung von Elevia ohne Vorkenntnisse ermöglicht.",
+      "stat4Label": "Benötigte Ausstattung",
+      "stat4Value": "Standard",
+      "stat4Desc": "Laborinstrumente. Elevia läuft nahtlos auf der PCR-Ausstattung, die Sie wahrscheinlich bereits haben – kein spezialisiertes Equipment erforderlich.",
+      "stat5Label": "Operative Agilität",
+      "stat5Value": "Taggleich",
+      "stat5Desc": "Korrekturmaßnahmen reduzieren Produktionsausfallzeiten drastisch und optimieren die Ressourcenzuteilung.",
+      "stat6Label": "Verbesserte Lebensmittelsicherheit",
+      "stat6Value": "Proaktiv",
+      "stat6Desc": "Früherkennung von Kontaminationshotspots verhindert großflächige Sperren und schützt Ihre Marke.",
+      "learnMore": "Mehr erfahren",
+      "contactUs": "Kontakt aufnehmen"
+    },
+    "Financial": {
+      "eyebrow": "ROI-ANALYSE",
+      "titleA": "Wirtschaftliche Wirkung:",
+      "titleB": "Operative Kosten senken um",
+      "axis": "Tausend € / Jahr",
+      "internal": "Interne Analytik (AiGOR)",
+      "external": "Externe Analytik",
+      "testingCost": "Analysekosten",
+      "laborCost": "Laborpersonalkosten",
+      "breakdown": "Kostenberechnungsaufschlüsselung",
+      "samples": "300 Proben/Woche",
+      "weeks": "52 Wochen/Jahr",
+      "externalCost": "Externe PCR-Analytik für Salmonella spp. und Listeria spp.:",
+      "aigorCost": "AiGOR-Analysekosten für Salmonella spp. und Listeria spp.:",
+      "analystCost": "Kosten des Analysten für interne Analytik:",
+      "externalRate": "35 €/Probe*",
+      "aigorRate": "15 €/Probe**",
+      "analystRate": "84.000 €/Jahr***",
+      "savings": "Einsparungen pro Jahr/Werk",
+      "notes": [
+        "* Basierend auf durchschnittlichen Marktpreisen für ausgelagerte Umgebungs-Salmonella-PCR und Enterobacteriaceae in Europa. Tatsächliche Kosten können je nach Region, Anbieter und Analysevolumen variieren.",
+        "** AiGOR-Analysekosten umfassen alle Reagenzien für einen vollständigen Test (von der Probenahme bis zum Ergebnis). Der Preis kann je nach Analysevolumen, Vertragsbedingungen und anderen operativen Faktoren variieren. Preise können jederzeit nach unserem alleinigen Ermessen geändert werden.",
+        "*** Geschätzte Jahreskosten für einen Vollzeit-Analysten, einschließlich Gehalt, Leistungen und Gemeinkosten. Tatsächliche Zahlen können je nach Region, Erfahrungsniveau und Beschäftigungsbedingungen variieren."
+      ]
+    }
+  },
+  "AiGOR": {
+    "Hero": {
+      "eyebrowPoweredBy": "Powered by AiGOR",
+      "titleA": "Die nächste Generation",
+      "titleB": "mikrobiologischer",
+      "titleC": "Lösungen.",
+      "technology": "RNA-Technologie",
+      "introStrong": "Geschwindigkeit und Genauigkeit wie nie zuvor.",
+      "introBody": "AiGOR nutzt RNA-basierten Nachweis, um biologische Grenzen zu überwinden und verwertbare Ergebnisse in Stunden zu liefern.",
+      "features": {
+        "speed": { "strong": "Ergebnisse in nur 3 Stunden.", "text": "Lange Anreicherungsschritte überspringen." },
+        "sensitivity": { "strong": "Sensitivität 1 KBE/Probe.", "text": "Maximale Präzision und Zuverlässigkeit." },
+        "amplified": { "strong": "10.000x höhere Sensitivität.", "text": "Im Vergleich zur klassischen Echtzeit-PCR." },
+        "rna": { "strong": "RNA-Nachweis.", "text": "Zielt ausschließlich auf aktive Zellen." }
+      }
+    }
+  },
+  "LabNetwork": {
+    "Hero": {
+      "titleA": "Die Zukunft der",
+      "titleB": "Labordienstleistungen.",
+      "body": "Entdecken Sie Multiplex- und ultraschnelle mikrobiologische Nachweislösungen zur Beschleunigung von Entscheidungen, Risikominderung und Produktivitätssteigerung.",
+      "features": {
+        "results": { "strong": "Ergebnisse am gleichen Tag.", "text": "Für gängige Erreger." },
+        "spoilage": { "strong": "Schneller Nachweis.", "text": "Verderbnismikroorganismen." },
+        "ngs": { "strong": "NGS.", "text": "Next-Generation Sequencing." },
+        "custom": { "strong": "Individuelle Assays.", "text": "Maßgeschneiderte Assay-Entwicklung." }
+      }
+    },
+    "Capabilities": {
+      "title": "Umfassende analytische Fähigkeiten, gemanagt",
+      "body": "Ermöglichen Sie Ihrer Einrichtung den höchsten Standard an Lebensmittelsicherheit und -qualität – ohne komplexe interne Mikrobiologie-Workflows aufbauen und managen zu müssen.",
+      "isoTitle": "ISO 17025 akkreditiert",
+      "isoBody": "Unsere Dienstleistungen erfolgen nach strengen internationalen Normen der technischen Kompetenz.",
+      "learnMore": "Mehr erfahren",
+      "guaranteed": "Garantiert",
+      "savings": "Erhebliche Einsparungen",
+      "fastest": "Schnellste Ergebnisse",
+      "ctaBodyA": "Kontaktieren Sie unsere Experten noch heute, um zu erfahren, wie wir Ihnen helfen können, Ihre Analysekosten erheblich",
+      "ctaStrongA": "zu senken",
+      "ctaMiddle": "und",
+      "ctaStrongB": "Ihre Durchlaufzeiten zu verbessern",
+      "ctaButton": "Unsere Experten kontaktieren",
+      "items": [
+        { "title": "Taggleicher Nachweis gängiger Erreger", "body": "Molekulartechnologie nutzen, um Salmonella, Listeria und E. coli schnell nachzuweisen – für schnellere Produktfreigabe und reduzierte Lagerkosten." },
+        { "title": "Hochkapazitatives Multiplex-Screening", "body": "Mehrere Ziele in einem einzigen Test identifizieren. Unser Multiplex-Ansatz reduziert Ihre Analysekosten erheblich und optimiert die Workflow-Effizienz." },
+        { "title": "Schneller molekularer Nachweis von Verderbnismikroorganismen", "body": "Hefen, Schimmelpilze und acidophile Bakterien identifizieren, um Fehlaromen und Verpackungsaufblähung vor der Distribution zu verhindern." },
+        { "title": "Next-Generation Sequencing (NGS)", "body": "Tiefe genomische Erkenntnisse für Stammbestätigung, Anlagenrückverfolgbarkeit und definitive Ursachenanalyse bei Kontaminationsereignissen." },
+        { "title": "Routinemikrobiologie und klassische Analytik", "body": "Zuverlässige, ISO-zertifizierte klassische Plattiermethoden für regulatorische Konformität und Hygieneüberwachung." },
+        { "title": "TxA-Integration", "body": "Ihr Umgebungsüberwachungsprogramm automatisieren. Ergebnisse mit unserem KI-Ökosystem zur Optimierung von Probenahmeplänen verknüpfen." },
+        { "title": "Technischer und wissenschaftlicher Support", "body": "Mit unseren Expertenmikrobiologen für Methodenauswahl, Interpretation komplexer Ergebnisse und Fehlersuche zusammenarbeiten." },
+        { "title": "Individuelle molekulare Lösungen", "body": "MILA nutzen, um hochspezifische, nicht interferierende Primer für Ihre einzigartigen Hochkapazitäts-Multiplex-Herausforderungen zu entwickeln." },
+        { "title": "Fortschrittliche mikrobiologische Dienstleistungen", "body": "Komplexe Workflows wie Challenge-Studien auslagern, die auf Werksebene nicht einfach durchführbar sind." }
+      ]
+    },
+    "Locations": {
+      "title": "Strategische Hubs zur Beschleunigung Ihrer Ergebnisse.",
+      "body": "Unsere hochmodernen Labore sind strategisch platziert, um schnelle, hochwertige mikrobiologische Analysendienstleistungen überall dort zu bieten, wo Sie tätig sind.",
+      "requestQuote": "Angebot anfordern",
+      "contactHub": "Hub kontaktieren",
+      "modalTitle": "Angebot anfordern",
+      "modalBodyA": "Dienste für unseren",
+      "modalBodyB": "Hub werden angefragt.",
+      "program": "Mikrobiologisches Programm / Analysebedarf",
+      "programPlaceholder": "Bitte beschreiben Sie Ihr aktuelles Umgebungsüberwachungsprogramm, spezifische Assays von Interesse oder Volumenanforderungen...",
+      "fullName": "Vollständiger Name",
+      "namePlaceholder": "Max Mustermann",
+      "email": "Unternehmens-E-Mail",
+      "company": "Unternehmensname",
+      "companyPlaceholder": "Ihr Biotech-Unternehmen GmbH",
+      "submit": "Anfrage einreichen"
+    },
+    "TxA": {
+      "body": "Als Partner unseres Labors erhalten Sie vollen Zugang zu TxA. Ein vollständiges Ökosystem, das für das Management Ihrer gesamten Mikrobiologieoperation entwickelt wurde – von der digitalen Probenahme im Feld bis zur Echtzeit-Ergebnisanalyse."
+    }
+  },
+  "TxA": {
+    "System": {
+      "titleA": "TAAG Xpert Assistant.",
+      "titleB": "Ihr KI-gestütztes Ökosystem.",
+      "body": "TxA ist ein vollständiges Ökosystem für das Management Ihrer gesamten Mikrobiologieoperation. Von der digitalen Probenahme im Feld bis zur Echtzeit-Ergebnisanalyse.",
+      "learnMore": "Mehr erfahren",
+      "cards": {
+        "app": "Digitalisieren Sie Ihren Probenahmeprozess für vollständige Kontrolle und lückenlose Rückverfolgbarkeit.",
+        "lab": "Workflows optimieren und Prozesskontrollen automatisieren für vollständig zuverlässige Laborergebnisse.",
+        "qa": "Prädiktive Mikrobiologie für umfassendes und präventives Qualitätsmanagement nutzen.",
+        "core": "Proprietäre KI-Algorithmen verbinden Felddaten, Laborergebnisse und Sicherheitserkenntnisse."
+      },
+      "labels": {
+        "risk": "Risikovorhersage",
+        "probability": "Hohe Wahrscheinlichkeit",
+        "sampling": "Probenahme",
+        "optimized": "Optimiert",
+        "trends": "Live-Trends",
+        "reports": "Automatisierte Berichte",
+        "customized": "Vollständig individuell"
+      }
+    },
+    "Features": {
+      "titleA": "KI für automatisierte, intelligente und",
+      "titleB": "dynamische mikrobiologische Programme.",
+      "body": "Ein wichtiges Merkmal von TxA ist die Digitalisierung Ihrer Lebensmittelanlage. Dadurch können TxA-Algorithmen kontaminierte Punkte in Ihrer Anlage identifizieren und automatisch die besten nächsten Probenahmepunkte definieren, um Kontaminationsquellen zu verfolgen.",
+      "aiAlgorithms": "TxA KI-Algorithmen",
+      "complete": "Optimierung abgeschlossen",
+      "dynamic": "Dynamisch",
+      "preventive": "Präventiv",
+      "items": {
+        "1": "TxA führt eine echte Digitalisierung Ihres Werkslayouts durch und bestimmt präzise Ausstattung, Abstände und Zonen. Dieses räumliche Bewusstsein ist entscheidend für unsere KI-Algorithmen.",
+        "2": "Prädiktive Probenahme. KI-Algorithmen analysieren historische Daten, um die besten Probenahmepositionen zu identifizieren und Risiken zu verhindern, bevor sie entstehen.",
+        "3": "Ihre Feldarbeit mit der TxA App stärken. Digitale Probenahme mit angefügten Fotos, detaillierten Punktinformationen und sofortiger Cloud-Synchronisierung durchführen.",
+        "4": "TxA bildet jeden Datenpunkt direkt im Kontext Ihrer Anlage ab und beschleunigt die Ursachenanalyse und Entscheidungsfindung.",
+        "5": "TxA ermöglicht Ihnen, dynamische, präventive Programme aufzubauen, die sich in Echtzeit anpassen, um Lebensmittelqualität und -sicherheit zu maximieren."
+      }
+    },
+    "Modal": {
+      "app": {
+        "title": "TxA APP",
+        "intro": "Verwandeln Sie Ihre Feldprobenahme mit unserer intelligenten mobilen Anwendung. Digitalisieren Sie Ihren gesamten Prozess für vollständige Kontrolle und lückenlose Rückverfolgbarkeit vom Feld direkt ins Labor.",
+        "features": [
+          { "title": "Digitale Feldprobenahme", "text": "Papierprotokolle und manuelle Dateneingabe durch einen optimierten digitalen Workflow ersetzen. Fotos, detaillierte Daten und den genauen Probenahmepunkt automatisch erfassen. Die gesamte Probenreise mit unveränderlichen digitalen Protokollen verfolgen – für 100 % Konformität und vollständige Transparenz über Ihre Operationen.", "image": "/TxA_app_1.png" },
+          { "title": "Alle Informationen auf einen Klick", "text": "Sobald Sie den Probenahmepunkt ausgewählt haben, können Sie wichtige Informationen hinzufügen, wie ein Foto des Standorts, Laboranalysen, Sanierungsstatus und mehr.", "image": "/TxA_app_5.png" },
+          { "title": "Ein einwandfreies Tracking-System", "text": "Wenn Sie unser TAAG S11 NeutroSampling-Kit für Umgebungsabstriche verwenden, können Sie alle digitalen Informationen automatisch mit der Probe verknüpfen, indem Sie den QR-Code auf TAAG S11 NeutroSampling-Abstrichtupfern scannen.", "image": "/TxA_app_4.png" }
+        ]
+      },
+      "lab": {
+        "title": "TxA LAB",
+        "intro": "Ihre Workflows optimieren und Prozesskontrollen automatisieren, um jederzeit fehlerfreie, vollständig zuverlässige Laborergebnisse zu gewährleisten.",
+        "features": [
+          { "title": "Für jeden Test verwendbar... auch für Ihren eigenen", "text": "TxA Lab ermöglicht Ihnen, so viele Assays wie benötigt zu erstellen und zu bearbeiten, einschließlich verschiedener Spezialgebiete wie Mikrobiologieanalytik, chemische Analytik oder andere Tests, die Sie hinzufügen müssen.", "image": "/your-laboratory-assay.svg" },
+          { "title": "Detaillierte Informationen für bessere Korrekturmaßnahmen", "text": "So viele Felder wie gewünscht zu Ihren Proben hinzufügen, um alle Informationen zu erhalten, die Sie für die besten Korrekturmaßnahmen benötigen.", "image": "/create-products.svg" },
+          { "title": "Lernen Sie Ihren neuen und besseren Laborbericht kennen", "text": "Die spezifischen Informationen hinzufügen, die Sie in Ihren Berichten anzeigen möchten, um Ihre Laborergebnisse zu kommunizieren und zu teilen.", "image": "/laboratory-report.svg" }
+        ]
+      },
+      "qa": {
+        "title": "TxA QA",
+        "intro": "Prädiktive Mikrobiologie nutzen, um Risiken vorherzusehen und umfassendes, proaktives Qualitätsmanagement in Ihrer gesamten Anlage zu gewährleisten.",
+        "features": [
+          { "title": "Tiefgreifende Analyse zur Maximierung von Lebensmittelqualität und -sicherheit", "text": "Diese Plattform dreht sich alles um das mikrobiologische Lebensmittelsicherheitsmanagement. Laborergebnisse, Statistiken, Warnungen, intelligente und dynamische Korrekturmaßnahmenvorschläge und vieles mehr einfach analysieren.", "image": "/TxA_QA1.svg" },
+          { "title": "Echtzeitwarnungen für schnelle Korrekturmaßnahmen", "text": "Im Benachrichtigungsfeld erhalten Sie Alarme mit detaillierten Informationen über positive Ergebnisse in Ihrer Anlage. Wenn Positive erscheinen, schlägt TxA eine automatisierte, dynamische und intelligente Korrekturmaßnahme vor.", "image": "/TxA_QA2.svg" },
+          { "title": "Eine neue und bessere Art, Mikrobiologie zu sehen", "text": "Alle relevanten Informationen über Ihren Umgebungsüberwachungsplan auf dem Werkslayout Ihrer Lebensmittelanlage auf umfassende und intuitive Weise einsehen.", "image": "/TxA_QA3.svg" }
+        ]
+      }
+    },
+    "Story": {
+      "eyebrow": "Erfolgsgeschichten",
+      "title": "Ausgewählte Partnerschaft.",
+      "badge": "Globales Getränkeunternehmen",
+      "heading": "Getränkequalität und Effizienz maximieren.",
+      "body": "Mit TxA erweitert unser Partner, einer der weltgrößten Abfüller, TxA als zentralen Bestandteil seiner mikrobiologischen Kontrollstrategie. Nach erfolgreicher Implementierung plant er, TxA in allen 35 Produktionswerken einzusetzen, Daten zu standardisieren, Entscheidungsfindung zu beschleunigen und präventive Kontrolle im großen Maßstab zu stärken.",
+      "read": "Vollständige Fallstudie lesen",
+      "imageAlt": "Coca-Cola-Fallstudie"
+    },
+    "VisualSection": {
+      "titleA": "Lernen Sie Ihren neuen",
+      "titleB": "Mikrobiologie-Experten kennen.",
+      "body": "Hören Sie auf, durch komplexe Tabellen zu graben. Sprechen Sie in normaler Sprache mit Ihren Lebensmittelsicherheitsdaten. TxA identifiziert sofort Trends, Anomalien und aufkommende Risiken und liefert Ihnen in Sekunden verwertbare Erkenntnisse."
+    },
+    "VisualPanel": {
+      "title": "Lernen Sie Ihren neuen Experten kennen.",
+      "body": "Hören Sie auf, durch Tabellen zu graben. TxA identifiziert Trends, Anomalien und aufkommende Risiken in normaler Sprache.",
+      "question": "Gibt es aufkommende Trends in Zone B?",
+      "insight": "TxA-Erkenntnis",
+      "detectedPrefix": "Einen",
+      "detectedHighlight": "15-prozentigen Anstieg",
+      "detectedSuffix": "bei",
+      "detectedEnd": "Positiven nahe Linie 4 erkannt.",
+      "map": "Basierend auf aktuellen",
+      "mapEnd": "Trends habe ich eine optimierte, gezielte Probenahmekarte erstellt.",
+      "scheme": "BESTES PROBENAHMESCHEMA",
+      "cta": "Hier klicken, um das vorgeschlagene Probenahmeschema zu sehen."
+    }
+  }
+}

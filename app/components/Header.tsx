@@ -21,9 +21,14 @@ const NAV_LINKS = [
 ];
 
 const LANGUAGES = [
+  { locale: "de", label: "Deutsch" },
   { locale: "en", label: "English" },
   { locale: "es", label: "Español" },
-  { locale: "fr", label: "Français"},
+  { locale: "fr", label: "Français" },
+  { locale: "it", label: "Italiano" },
+  { locale: "pt", label: "Português" },
+  { locale: "nl", label: "Nederlands" },
+  { locale: "ar", label: "العربية" },
 ] as const;
 
 // Crea un tipo basado en los locales que pusiste arriba
@@ -141,7 +146,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
     }
   }, [isMenuOpen, isLangOpen]);
 
-  const switchLocale = (nextLocale: "en" | "es" | "fr") => {
+  const switchLocale = (nextLocale: "en" | "es" | "fr" | "de" | "nl" | "it" | "pt"  | "ar") => {
     router.replace(pathname, { locale: nextLocale });
     setIsLangOpen(false);
     setIsMenuOpen(false);

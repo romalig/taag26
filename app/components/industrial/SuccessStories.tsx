@@ -110,7 +110,7 @@ export default function SuccessStories() {
                   }
                 `}
               >
-                {/* --- CONTENIDO HERO (Primera tarjeta intacta visualmente) --- */}
+                {/* --- CONTENIDO HERO (Primera tarjeta intacta visualmente pero protegida) --- */}
                 {isHero ? (
                   <>
                     <div className="absolute inset-0 z-0">
@@ -133,15 +133,21 @@ export default function SuccessStories() {
 
                        <div>
                          <div className="flex items-center gap-3 mb-4">
-                            <span className="text-white/90 font-bold uppercase tracking-widest text-sm drop-shadow-md">{t(`stories.${story.id}.client`)}</span>
+                            <span className="text-white/90 font-bold uppercase tracking-widest text-sm drop-shadow-md break-words">{t(`stories.${story.id}.client`)}</span>
                          </div>
-                         <h3 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
+                         
+                         {/* Métrica protegida */}
+                         <h3 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg break-words">
                            {t(`stories.${story.id}.metric`)}
                          </h3>
-                         <p className="text-lg md:text-xl font-bold text-white/95 mb-4 drop-shadow-md">
+                         
+                         {/* Título un poco más pequeño y con límite de líneas */}
+                         <p className="text-base sm:text-lg md:text-xl font-bold text-white/95 mb-4 drop-shadow-md break-words line-clamp-2 md:line-clamp-3">
                            {t(`stories.${story.id}.title`)}
                          </p>
-                         <p className="text-sm md:text-base font-medium leading-relaxed text-gray-200 mb-6 md:mb-8 line-clamp-3 drop-shadow-sm">
+                         
+                         {/* Descripción protegida */}
+                         <p className="text-sm md:text-base font-medium leading-relaxed text-gray-200 mb-6 md:mb-8 line-clamp-3 break-words drop-shadow-sm">
                            {"description" in story ? t(`stories.${story.id}.description`) : ""}
                          </p>
                          
@@ -171,12 +177,12 @@ export default function SuccessStories() {
                         {/* Header: Cliente y Tag */}
                         <div className="flex justify-between items-start mb-6">
                           <div className="flex flex-col">
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-[#FF270A] mb-1">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-[#FF270A] mb-1 break-words">
                               {t(`stories.${story.id}.client`)}
                             </span>
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 flex-wrap">
                               {story.tags.map(tag => (
-                                <span key={tag} className="text-[10px] font-bold text-gray-300 uppercase tracking-wider border border-white/20 px-2 py-0.5 rounded-full backdrop-blur-sm">
+                                <span key={tag} className="text-[10px] font-bold text-gray-300 uppercase tracking-wider border border-white/20 px-2 py-0.5 rounded-full backdrop-blur-sm break-words mt-1">
                                   {tag}
                                 </span>
                               ))}
@@ -184,19 +190,19 @@ export default function SuccessStories() {
                           </div>
                         </div>
 
-                        {/* Métrica Central */}
+                        {/* Métrica Central un poco más pequeña */}
                         <div className="flex-1 flex flex-col justify-center mb-4">
-                          <span className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-2 drop-shadow-md">
+                          <span className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter mb-2 drop-shadow-md break-words">
                             {t(`stories.${story.id}.metric`)}
                           </span>
                         </div>
 
-                        {/* Footer con alturas mínimas fijas para garantizar alineación perfecta */}
+                        {/* Footer protegido con alturas mínimas fijas y line clamps */}
                         <div className="flex flex-col justify-end">
-                          <h4 className="text-2xl md:text-3xl font-bold text-white mb-3 leading-tight drop-shadow-sm line-clamp-3 min-h-[90px] md:min-h-[108px]">
+                          <h4 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 leading-tight drop-shadow-sm line-clamp-3 break-words min-h-[84px] md:min-h-[108px]">
                             {t(`stories.${story.id}.title`)}
                           </h4>
-                          <p className="text-sm font-medium leading-relaxed text-gray-300 mb-6 md:mb-8 line-clamp-3 min-h-[66px] md:min-h-[68px]">
+                          <p className="text-sm font-medium leading-relaxed text-gray-300 mb-6 md:mb-8 line-clamp-3 break-words min-h-[66px] md:min-h-[68px]">
                             {t(`stories.${story.id}.description`)}
                           </p>
                           <div className="pt-6 border-t border-white/20 mt-auto">

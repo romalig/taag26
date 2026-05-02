@@ -1,9 +1,11 @@
 import {defineRouting} from 'next-intl/routing';
 
 export const routing = defineRouting({
-  locales: ['en', 'es', 'fr'],
+  locales: ['en', 'es', 'fr', 'de', 'nl', 'it', 'pt', 'ar'],
   defaultLocale: 'en',
   localePrefix: 'always',
   // hreflang Link header is set in proxy.ts using NEXT_PUBLIC_SITE_URL (same source as SEO).
   alternateLinks: false,
 });
+
+

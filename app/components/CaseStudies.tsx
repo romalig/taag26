@@ -6,8 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-// 2. IMPORTAMOS NUESTRA BASE DE DATOS CENTRAL
-// (Asegúrate de que la ruta coincida con donde guardaste el archivo)
+// IMPORTAMOS NUESTRA BASE DE DATOS CENTRAL
 import { CASE_STUDIES } from "@/app/components/data/caseStudies";
 import {
   getLocalizedCaseStudy,
@@ -138,12 +137,11 @@ export default function CaseStudies() {
           } as React.CSSProperties}
           className="flex gap-4 md:gap-6 overflow-x-auto pb-6 w-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pl-[var(--edge-padding-mobile)] pr-[var(--edge-padding-mobile)] md:pl-[var(--edge-padding-desktop)] md:pr-[var(--edge-padding-desktop)] scroll-pl-[var(--edge-padding-mobile)] scroll-pr-[var(--edge-padding-mobile)] md:scroll-pl-[var(--edge-padding-desktop)] md:scroll-pr-[var(--edge-padding-desktop)]"
         >
-          {/* 3. MAPEAMOS USANDO CASE_STUDIES Y USAMOS <Link> */}
           {CASE_STUDIES.map((item) => {
             const loc = getLocalizedCaseStudy(item, t as unknown as CaseStudiesTranslator);
             return (
               <Link 
-                href={`/cases/${item.slug}`} // Ruta dinámica conectada
+                href={`/cases/${item.slug}`} 
                 key={item.id}
                 className="group relative flex-shrink-0 w-[85vw] md:w-[420px] h-[460px] md:h-[580px] rounded-[2.5rem] flex flex-col justify-between snap-start transition-transform duration-300 hover:scale-[1.01] overflow-hidden bg-black text-white p-8 md:p-10 border border-white/10 cursor-pointer"
               >
@@ -177,20 +175,20 @@ export default function CaseStudies() {
                      </div>
                    </div>
 
-                   {/* Métrica Central / Título Grande */}
+                   {/* Métrica Central / Título Grande - SOLUCIÓN APLICADA AQUÍ */}
                    <div className="flex-1 flex flex-col justify-center mb-4">
-                     <span className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2 drop-shadow-md leading-tight">
+                     <span className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tighter mb-2 drop-shadow-md leading-tight break-words line-clamp-3 md:line-clamp-4">
                        {loc.title}
                      </span>
                    </div>
 
                    {/* Footer */}
                    <div>
-                     <p className="text-sm font-medium leading-relaxed text-gray-300 mb-6 md:mb-8 line-clamp-3">
+                     {/* También aplicamos break-words a la descripción por seguridad */}
+                     <p className="text-sm font-medium leading-relaxed text-gray-300 mb-6 md:mb-8 line-clamp-3 break-words">
                        {loc.description}
                      </p>
                      <div className="pt-6 border-t border-white/20">
-                         {/* Convertido de button a div porque ya estamos dentro de un <Link> */}
                          <div className="text-xs font-bold uppercase tracking-widest flex items-center gap-2 text-white group-hover:text-[#FF270A] transition-colors">
                            {t("read")} <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                          </div>
