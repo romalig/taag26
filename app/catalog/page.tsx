@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import Catalog from "../components/catalog/WorkflowBuilder";
+import Products from "../components/catalog/ProductCatalog";
 import { ModalProvider } from "../components/industrial/ModalProvider"; 
 import SolutionModal from "../components/industrial/SolutionModal";
 
@@ -9,6 +10,7 @@ export default function TxAPage() {
     <main className="bg-white min-h-screen font-sans selection:bg-[#FF270A] selection:text-white">
       <Header/>
       <Catalog />
+      <Products />
       <SolutionModal /> 
     </main>
     </ModalProvider>
