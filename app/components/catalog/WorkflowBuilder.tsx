@@ -203,7 +203,7 @@ export default function WorkflowBuilder() {
   return (
     <section className="pt-24 pb-20 px-4 md:px-6 w-full max-w-[1400px] mx-auto font-sans relative">
       
-      {/* TÍTULO DE LA SECCIÓN */}
+      {/* TÍTULO DE LA SECCIÓN (Centrado) */}
       <div className="mb-10 md:mb-12 text-center flex flex-col items-center px-2">
         <h2 className="text-3xl md:text-5xl font-black text-[#111111] mb-4 tracking-tighter leading-tight">
           Product & Protocol Selector
@@ -215,8 +215,8 @@ export default function WorkflowBuilder() {
 
       <div className="w-full bg-gray-50 rounded-[2rem] md:rounded-[3rem] p-5 sm:p-8 md:p-16 relative min-h-[600px] flex flex-col overflow-hidden">
         
-        {/* BARRA DE PROGRESO Y RESUMEN DE SELECCIÓN */}
-        <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mb-10 md:mb-16 gap-6 border-b border-gray-200/60 pb-6 md:pb-8">
+        {/* BARRA DE PROGRESO Y RESUMEN DE SELECCIÓN (Línea Negra) */}
+        <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mb-10 md:mb-16 gap-6 border-b border-[#111111] pb-6 md:pb-8">
            <div className="flex items-center gap-2 md:gap-6 w-full justify-between lg:justify-start overflow-x-auto no-scrollbar pb-2 md:pb-0">
               <button onClick={() => setStep(1)} className={`text-xs md:text-base font-bold flex items-center gap-2 transition-colors shrink-0 ${step >= 1 ? 'text-[#111111]' : 'text-gray-300'}`}>
                  <span className={`w-6 h-6 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] md:text-xs transition-colors ${step === 1 ? 'bg-[#FF270A] text-white' : step > 1 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-500'}`}>1</span>
@@ -257,13 +257,12 @@ export default function WorkflowBuilder() {
                <p className="text-gray-500 font-medium text-xs md:text-sm px-4">Choose the sector that best represents your facility's operations.</p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 w-full max-w-3xl">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-6 w-full max-w-3xl">
               {INDUSTRIES.map(ind => (
                 <button 
                   key={ind} 
                   onClick={() => { setSelectedIndustry(ind); setStep(2); }} 
-                  /* CORRECCIÓN: Fondo blanco permanente, sin bordes/sombras. Sólo el texto pasa a rojo. */
-                  className="p-5 md:p-8 bg-white rounded-2xl md:rounded-[2rem] font-bold text-[#111111] text-base md:text-lg hover:text-[#FF270A] transition-colors duration-300 flex items-center justify-center text-center break-words min-h-[90px] md:min-h-0"
+                  className="p-4 md:p-8 bg-white rounded-2xl md:rounded-[2rem] font-bold text-[#111111] text-sm md:text-lg hover:text-[#FF270A] transition-colors duration-300 flex items-center justify-center text-center min-h-[90px] md:min-h-0 break-words"
                 >
                   {ind}
                 </button>
@@ -319,14 +318,14 @@ export default function WorkflowBuilder() {
             
             {/* ENCABEZADO PASO 3 */}
             <div className="flex flex-col items-start text-left mb-6 md:mb-8 w-full">
-              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm mb-6 block">Recommended Protocol and kits</span>
+              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm mb-4 block">Recommended Protocol</span>
               
               <div className="flex w-full md:w-fit items-center bg-white p-1 rounded-full mb-8">
                 <button onClick={() => setSampleType("Environmental")} className={`flex-1 md:flex-none px-2 md:px-6 py-2.5 rounded-full text-xs md:text-sm font-bold transition-colors leading-tight ${sampleType === "Environmental" ? "bg-[#111111] text-white" : "text-gray-500 hover:text-[#111111]"}`}>Environmental</button>
                 <button onClick={() => setSampleType("Finished product")} className={`flex-1 md:flex-none px-2 md:px-6 py-2.5 rounded-full text-xs md:text-sm font-bold transition-colors leading-tight ${sampleType === "Finished product" ? "bg-[#111111] text-white" : "text-gray-500 hover:text-[#111111]"}`}>Finished product</button>
               </div>
 
-              {/* CONTENEDOR FLEX PRINCIPAL DEL CARRUSEL */}
+              {/* CARRUSEL DE PROTOCOLOS */}
               <div className="w-full flex flex-col items-center gap-4">
                  
                  {/* Fila principal: Flecha Izq (Desktop) + Carrusel + Flecha Der (Desktop) */}
@@ -346,11 +345,11 @@ export default function WorkflowBuilder() {
                          <button 
                            key={idx} 
                            onClick={() => setActiveFlowIndex(idx)}
-                           /* CORRECCIÓN: h-auto, whitespace-normal, text-left forzado para que el texto fluya y nunca se corte */
-                           className={`snap-start shrink-0 flex flex-col items-start justify-start text-left p-5 md:px-8 md:py-6 rounded-2xl md:rounded-[2rem] transition-all border-2 w-[85vw] md:w-[340px] h-auto whitespace-normal ${activeFlowIndex === idx ? "border-[#FF270A] bg-white text-[#111111]" : "border-transparent bg-white text-gray-400 hover:bg-gray-100"}`}
+                           /* CORRECCIÓN: flex-col, h-auto y text wrap forzado para que el texto nunca se corte */
+                           className={`snap-start shrink-0 flex flex-col items-start justify-center text-left p-5 md:px-8 md:py-6 rounded-2xl md:rounded-[2rem] transition-all border-2 w-[260px] sm:w-[300px] md:w-[340px] max-w-full h-auto whitespace-normal break-words ${activeFlowIndex === idx ? "border-[#FF270A] bg-white text-[#111111]" : "border-transparent bg-white text-gray-400 hover:bg-gray-100"}`}
                          >
                            <h4 className="text-lg md:text-2xl font-black tracking-tighter mb-1 w-full">Protocol {idx + 1}</h4>
-                           <p className="font-medium text-xs md:text-sm w-full leading-snug">(detection of {micros.join(" + ")})</p>
+                           <p className="font-medium text-xs md:text-sm w-full leading-snug break-words">(detection of {micros.join(" + ")})</p>
                          </button>
                        ))}
                     </div>
@@ -384,33 +383,31 @@ export default function WorkflowBuilder() {
               </div>
             </div>
 
-            {/* RESUMEN DE TIEMPO (TTR) */}
-            <div className="flex flex-col mb-4 w-full pt-4">
-              <h4 className="text-3xl md:text-4xl font-black text-[#111111] mb-1">{calculateTotalTime()} Hours</h4>
-              <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">Time to Result (TTR)</span>
+            {/* TÍTULO RECOMMENDED KITS */}
+            <div className="w-full mt-4 md:mt-8 mb-4">
+              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm block">Recommended Kits</span>
             </div>
 
-            {/* TARJETAS DE PRODUCTOS (Planos, sin bordes ni sombras) */}
-            <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-4 w-full mt-2">
+            {/* TARJETAS DE PRODUCTOS */}
+            <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-4 w-full">
               {(sampleType === "Environmental" ? ["Sampling", "Enrichment", "Extraction", "PCR"] : ["Enrichment", "Extraction", "PCR"]).map((stage, sIdx, arr) => {
                 const currentProd = STAGE_PRODUCTS[stage].find((p: any) => p.id === selectedProductIds[stage]);
                 const alternatives = STAGE_PRODUCTS[stage].filter((p: any) => p.id !== selectedProductIds[stage]);
 
                 return (
                   <Fragment key={stage}>
-                    <div className="flex-1 w-full bg-white p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] flex flex-col transition-colors duration-300">
+                    <div className="flex-1 w-full bg-white p-5 sm:p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] flex flex-col transition-colors duration-300">
                       <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 md:mb-6 block shrink-0">Stage 0{sIdx + 1} // {stage}</span>
                       
-                      <div className="flex items-start mb-2 shrink-0">
-                         <h5 className="text-lg md:text-xl font-bold text-[#111111] leading-tight">{currentProd.name}</h5>
+                      <div className="md:h-16 flex items-start mb-2">
+                         <h5 className="text-lg md:text-xl font-bold text-[#111111] leading-tight line-clamp-2">{currentProd.name}</h5>
                       </div>
                       
-                      <div className="flex flex-col gap-0.5 mb-4 md:mb-6 shrink-0">
+                      <div className="flex flex-col gap-0.5 mb-4 md:mb-6 md:h-10 shrink-0">
                          <span className="text-xs md:text-sm font-medium text-gray-400">Cat #{currentProd.cat}</span>
                          <span className="text-xs md:text-sm font-medium text-gray-400">{currentProd.format}</span>
                       </div>
                       
-                      {/* flex-grow empuja las acciones hacia abajo, alineando verticalmente sin cortar el texto */}
                       <div className="flex-grow flex items-start mb-6 md:mb-8">
                          <p className="text-xs md:text-sm text-[#111111] leading-relaxed font-medium">{currentProd.desc}</p>
                       </div>
@@ -447,8 +444,14 @@ export default function WorkflowBuilder() {
               })}
             </div>
 
-            {/* CALL TO ACTION (Cotización) */}
-            <div className="mt-12 md:mt-20 w-full flex flex-col items-center justify-center border-t border-gray-200/60 pt-10 md:pt-16">
+            {/* RESUMEN DE TIEMPO (TTR) - Movido debajo de las tarjetas */}
+            <div className="flex flex-col mb-4 w-full pt-6 md:pt-8 mt-4">
+              <h4 className="text-3xl md:text-4xl font-black text-[#111111] mb-1">{calculateTotalTime()} Hours</h4>
+              <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">Time to Result (TTR)</span>
+            </div>
+
+            {/* CALL TO ACTION (Cotización) - Línea Negra */}
+            <div className="mt-12 md:mt-20 w-full flex flex-col items-center justify-center border-t border-[#111111] pt-10 md:pt-16">
                <h3 className="text-xl md:text-3xl font-black text-[#111111] mb-2 md:mb-3 tracking-tight text-center">Ready to optimize your lab?</h3>
                <p className="text-sm md:text-base text-gray-500 font-medium mb-8 text-center max-w-lg px-4">Get a customized quote and start implementing these advanced diagnostic products in your facility.</p>
                
