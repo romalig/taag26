@@ -18,7 +18,8 @@ const MOCK_PRODUCTS = [
     technology: "Neutralizing Swab",
     targets: "Environmental surfaces",
     desc: "Neutralizing buffer swab for 10x10 surfaces, optimized for environmental monitoring.", 
-    industries: ["Environmental", "Dairy", "Meat & Poultry"] 
+    industries: ["Environmental", "Dairy", "Meat & Poultry"],
+    link: "#"
   },
   { 
     id: "s2", 
@@ -28,7 +29,8 @@ const MOCK_PRODUCTS = [
     technology: "Cellulose Sponge",
     targets: "Large equipment, carcasses",
     desc: "High-capacity cellulose sponge for large equipment and carcass sampling.", 
-    industries: ["Meat & Poultry", "Environmental"] 
+    industries: ["Meat & Poultry", "Environmental"],
+    link: "#"
   },
   { 
     id: "e1", 
@@ -38,7 +40,8 @@ const MOCK_PRODUCTS = [
     technology: "Dehydrated Culture Media",
     targets: "Salmonella spp., Listeria spp.",
     desc: "Universal enrichment broth for rapid growth of Salmonella and Listeria.", 
-    industries: ["Dairy", "Meat & Poultry", "Beverages", "Ready-to-Eat", "Produce"] 
+    industries: ["Dairy", "Meat & Poultry", "Beverages", "Ready-to-Eat", "Produce"],
+    link: "#"
   },
   { 
     id: "e2", 
@@ -48,7 +51,8 @@ const MOCK_PRODUCTS = [
     technology: "Accelerated Culture Media",
     targets: "Salmonella spp.",
     desc: "Accelerated enrichment medium specifically formulated for high-fat samples.", 
-    industries: ["Dairy", "Ready-to-Eat"] 
+    industries: ["Dairy", "Ready-to-Eat"],
+    link: "#"
   },
   { 
     id: "x1", 
@@ -58,7 +62,8 @@ const MOCK_PRODUCTS = [
     technology: "Magnetic Beads",
     targets: "DNA/RNA from complex matrices",
     desc: "High-yield magnetic bead DNA/RNA isolation kit for complex matrices.", 
-    industries: ["Dairy", "Meat & Poultry", "Beverages", "Ready-to-Eat", "Produce", "Environmental"] 
+    industries: ["Dairy", "Meat & Poultry", "Beverages", "Ready-to-Eat", "Produce", "Environmental"],
+    link: "#"
   },
   { 
     id: "x2", 
@@ -68,7 +73,8 @@ const MOCK_PRODUCTS = [
     technology: "Thermal Lysis",
     targets: "DNA from environmental swabs",
     desc: "Rapid 12-minute thermal lysis protocol for standard environmental swabs.", 
-    industries: ["Environmental", "Beverages"] 
+    industries: ["Environmental", "Beverages"],
+    link: "#"
   },
   { 
     id: "p1", 
@@ -78,7 +84,8 @@ const MOCK_PRODUCTS = [
     technology: "RT-PCR - AiGOR",
     targets: "Salmonella spp., L. monocytogenes",
     desc: "Simultaneous multiplex Real-Time PCR detection of Salmonella and L. monocytogenes.", 
-    industries: ["Dairy", "Meat & Poultry", "Ready-to-Eat", "Produce"] 
+    industries: ["Dairy", "Meat & Poultry", "Ready-to-Eat", "Produce"],
+    link: "#"
   },
   { 
     id: "p2", 
@@ -88,7 +95,8 @@ const MOCK_PRODUCTS = [
     technology: "Real-time PCR, Melting curve analysis",
     targets: "E. coli O157:H7",
     desc: "Specific Real-Time PCR detection of E. coli O157:H7 in raw meat and produce.", 
-    industries: ["Meat & Poultry", "Produce"] 
+    industries: ["Meat & Poultry", "Produce"],
+    link: "#"
   },
 ];
 
@@ -293,22 +301,22 @@ export default function ProductCatalog() {
 
       {/* BARRA FLOTANTE DE COMPARACIÓN */}
       {compareList.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-10 fade-in duration-300">
-           <div className="bg-[#111111] text-white p-2 pl-6 rounded-full shadow-2xl flex items-center gap-6 border border-gray-800">
-              <div className="flex items-center gap-3">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-10 fade-in duration-300 w-[90%] md:w-auto">
+           <div className="bg-[#111111] text-white p-2 pl-4 md:pl-6 rounded-full shadow-2xl flex flex-col md:flex-row items-center gap-4 md:gap-6 border border-gray-800">
+              <div className="flex items-center gap-3 w-full md:w-auto justify-center">
                  <BarChart2 className="w-5 h-5 text-[#FF270A]" />
                  <span className="text-sm font-bold">
                    {compareList.length} <span className="font-normal text-gray-400">product{compareList.length > 1 ? 's' : ''} selected</span>
                  </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 w-full md:w-auto justify-center">
                  <button onClick={clearCompare} className="px-4 py-2 text-xs font-bold text-gray-400 hover:text-white uppercase tracking-widest transition-colors">
                    Clear
                  </button>
                  <button 
                    onClick={() => setIsCompareModalOpen(true)}
                    disabled={compareList.length < 2}
-                   className="px-6 py-2.5 bg-[#FF270A] text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-[#111111] transition-colors disabled:opacity-50 disabled:hover:bg-[#FF270A] disabled:hover:text-white"
+                   className="px-6 py-2.5 bg-[#FF270A] text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-[#111111] transition-colors disabled:opacity-50 disabled:hover:bg-[#FF270A] disabled:hover:text-white whitespace-nowrap"
                  >
                    Compare Now
                  </button>
@@ -324,24 +332,24 @@ export default function ProductCatalog() {
               
               <div className="p-6 md:p-8 flex items-center justify-between border-b border-gray-100">
                  <div>
-                   <h3 className="text-2xl font-black text-[#111111] leading-tight">Product Comparison</h3>
-                   <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Review specifications side-by-side</span>
+                   <h3 className="text-xl md:text-2xl font-black text-[#111111] leading-tight">Product Comparison</h3>
+                   <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">Review specifications side-by-side</span>
                  </div>
-                 <button onClick={() => setIsCompareModalOpen(false)} className="p-2 bg-gray-50 rounded-full hover:bg-gray-200 transition-colors">
+                 <button onClick={() => setIsCompareModalOpen(false)} className="p-2 bg-gray-50 rounded-full hover:bg-gray-200 transition-colors shrink-0">
                    <X className="w-5 h-5 text-[#111111]" />
                  </button>
               </div>
 
-              <div className="p-6 md:p-8 overflow-x-auto">
+              <div className="p-4 md:p-8 overflow-x-auto">
                  <div className="flex gap-4 min-w-max">
                    {/* Columna de Títulos (Specs) */}
-                   <div className="w-48 shrink-0 flex flex-col justify-end gap-6 pb-6">
+                   <div className="w-32 md:w-48 shrink-0 flex flex-col justify-end gap-6 pb-6">
                       <div className="h-16"></div> {/* Espacio para el título del producto */}
-                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Category</div>
-                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Targets</div>
-                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Technology</div>
-                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Time (Full Protocol)</div>
-                      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Description</div>
+                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Category</div>
+                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Targets</div>
+                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Technology</div>
+                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Time (Full Protocol)</div>
+                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Description</div>
                    </div>
 
                    {/* Columnas de Productos */}
@@ -349,34 +357,34 @@ export default function ProductCatalog() {
                      const prod = MOCK_PRODUCTS.find(p => p.id === id);
                      if (!prod) return null;
                      return (
-                       <div key={prod.id} className="w-72 shrink-0 bg-gray-50 rounded-3xl p-6 border border-gray-100 flex flex-col gap-6 relative group">
+                       <div key={prod.id} className="w-64 md:w-72 shrink-0 bg-gray-50 rounded-3xl p-5 md:p-6 border border-gray-100 flex flex-col gap-6 relative group">
                           <button 
                             onClick={() => toggleCompare(prod.id)}
-                            className="absolute top-4 right-4 p-1.5 bg-white rounded-full text-gray-300 hover:text-[#FF270A] hover:bg-red-50 transition-colors opacity-0 group-hover:opacity-100"
+                            className="absolute top-3 right-3 p-1.5 bg-white rounded-full text-gray-300 hover:text-[#FF270A] hover:bg-red-50 transition-colors opacity-100 md:opacity-0 group-hover:opacity-100"
                             title="Remove from comparison"
                           >
                             <X className="w-4 h-4" />
                           </button>
                           
                           <div className="h-16 flex flex-col">
-                             <h4 className="text-lg font-bold text-[#111111] leading-tight mb-1 line-clamp-2">{prod.name}</h4>
+                             <h4 className="text-base md:text-lg font-bold text-[#111111] leading-tight mb-1 line-clamp-2 pr-6">{prod.name}</h4>
                           </div>
 
                           <div className="py-3 border-b border-gray-200">
-                             <span className="inline-block px-3 py-1 bg-white border border-gray-200 rounded-full text-[9px] font-black uppercase tracking-widest text-[#111111]">
+                             <span className="inline-block px-3 py-1 bg-white border border-gray-200 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest text-[#111111]">
                                {prod.type}
                              </span>
                           </div>
-                          <div className="py-3 border-b border-gray-200 text-sm font-medium text-[#111111]">
+                          <div className="py-3 border-b border-gray-200 text-xs md:text-sm font-medium text-[#111111]">
                              {prod.targets}
                           </div>
-                          <div className="py-3 border-b border-gray-200 text-sm font-medium text-[#111111]">
+                          <div className="py-3 border-b border-gray-200 text-xs md:text-sm font-medium text-[#111111]">
                              {prod.technology}
                           </div>
-                          <div className="py-3 border-b border-gray-200 text-sm font-bold text-[#FF270A] flex items-center gap-2">
-                             <Clock className="w-4 h-4" /> {prod.time}
+                          <div className="py-3 border-b border-gray-200 text-xs md:text-sm font-bold text-[#FF270A] flex items-center gap-2">
+                             <Clock className="w-4 h-4 shrink-0" /> {prod.time}
                           </div>
-                          <div className="py-3 border-b border-gray-200 text-sm text-[#111111] leading-relaxed">
+                          <div className="py-3 border-b border-gray-200 text-xs md:text-sm text-[#111111] leading-relaxed">
                              {prod.desc}
                           </div>
                        </div>
