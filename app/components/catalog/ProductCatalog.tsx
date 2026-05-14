@@ -1,102 +1,137 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Search, X, Filter, ChevronDown, Square, CheckSquare, Clock, FileText, BarChart2, Target, Zap } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Search, X, Filter, ChevronDown, Square, CheckSquare, Clock, FileText, BarChart2, Target, Zap, AlertCircle } from "lucide-react";
 
 // =========================================================
-// MOCK DATA: PRODUCTOS DEL CATÁLOGO
+// MOCK DATA: PRODUCTOS DEL CATÁLOGO CON SPECS ESPECÍFICOS
 // =========================================================
 const PRODUCT_TYPES = ["All", "Sampling", "Enrichment", "DNA/RNA extraction", "PCR kits"];
 const INDUSTRIES = ["All Industries", "Dairy", "Meat & Poultry", "Beverages", "Ready-to-Eat", "Produce", "Environmental"];
 
 const MOCK_PRODUCTS = [
+  // --- SAMPLING ---
   { 
-    id: "s1", 
-    type: "Sampling", 
-    name: "TAAG S1 Swab Kit", 
-    time: "15 min", 
-    technology: "Neutralizing Swab",
-    targets: "Environmental surfaces",
+    id: "s1", type: "Sampling", name: "TAAG S1 Swab Kit",
+    time: "15 min", technology: "Neutralizing Swab", targets: "Environmental surfaces",
     desc: "Neutralizing buffer swab for 10x10 surfaces, optimized for environmental monitoring.", 
-    industries: ["Environmental", "Dairy", "Meat & Poultry"],
-    link: "#"
+    industries: ["Environmental", "Dairy", "Meat & Poultry"], link: "#",
+    specs: {
+      "Target Application": "Environmental surfaces",
+      "Device": "Swab",
+      "Buffer Type": "Neutralizing Buffer",
+      "Recommended For": "General equipment, small areas",
+      "Description": "Neutralizing buffer swab for 10x10 surfaces, optimized for environmental monitoring."
+    }
   },
   { 
-    id: "s2", 
-    type: "Sampling", 
-    name: "TAAG S2 Sponge", 
-    time: "25 min", 
-    technology: "Cellulose Sponge",
-    targets: "Large equipment, carcasses",
+    id: "s2", type: "Sampling", name: "TAAG S2 Sponge",
+    time: "25 min", technology: "Cellulose Sponge", targets: "Large equipment, carcasses",
     desc: "High-capacity cellulose sponge for large equipment and carcass sampling.", 
-    industries: ["Meat & Poultry", "Environmental"],
-    link: "#"
+    industries: ["Meat & Poultry", "Environmental"], link: "#",
+    specs: {
+      "Target Application": "Large equipment, carcasses",
+      "Device": "Sponge",
+      "Buffer Type": "None (Dry)",
+      "Recommended For": "Large surface areas, meat carcasses",
+      "Description": "High-capacity cellulose sponge for large equipment and carcass sampling."
+    }
   },
+
+  // --- ENRICHMENT ---
   { 
-    id: "e1", 
-    type: "Enrichment", 
-    name: "TAAG E24 Medium", 
-    time: "24h", 
-    technology: "Dehydrated Culture Media",
-    targets: "Salmonella spp., Listeria spp.",
+    id: "e1", type: "Enrichment", name: "TAAG E24 Medium",
+    time: "24h", technology: "Dehydrated Culture Media", targets: "Salmonella spp., Listeria spp.",
     desc: "Universal enrichment broth for rapid growth of Salmonella and Listeria.", 
-    industries: ["Dairy", "Meat & Poultry", "Beverages", "Ready-to-Eat", "Produce"],
-    link: "#"
+    industries: ["Dairy", "Meat & Poultry", "Beverages", "Ready-to-Eat", "Produce"], link: "#",
+    specs: {
+      "Target Microorganisms": "Salmonella spp., Listeria spp.",
+      "Incubation Time": "24 hours",
+      "Incubation Temp": "37°C ± 1°C",
+      "Ready to Use Format?": "No (Dehydrated)",
+      "Description": "Universal enrichment broth for rapid growth of Salmonella and Listeria."
+    }
   },
   { 
-    id: "e2", 
-    type: "Enrichment", 
-    name: "TAAG E-Fast", 
-    time: "18h", 
-    technology: "Accelerated Culture Media",
-    targets: "Salmonella spp.",
+    id: "e2", type: "Enrichment", name: "TAAG E-Fast",
+    time: "18h", technology: "Accelerated Culture Media", targets: "Salmonella spp.",
     desc: "Accelerated enrichment medium specifically formulated for high-fat samples.", 
-    industries: ["Dairy", "Ready-to-Eat"],
-    link: "#"
+    industries: ["Dairy", "Ready-to-Eat"], link: "#",
+    specs: {
+      "Target Microorganisms": "Salmonella spp.",
+      "Incubation Time": "18 hours",
+      "Incubation Temp": "41.5°C ± 1°C",
+      "Ready to Use Format?": "Yes (Pre-filled bags available)",
+      "Description": "Accelerated enrichment medium specifically formulated for high-fat samples."
+    }
   },
+
+  // --- DNA/RNA EXTRACTION ---
   { 
-    id: "x1", 
-    type: "DNA/RNA extraction", 
-    name: "TAAG X-Extract", 
-    time: "30 min", 
-    technology: "Magnetic Beads",
-    targets: "DNA/RNA from complex matrices",
+    id: "x1", type: "DNA/RNA extraction", name: "TAAG X-Extract",
+    time: "30 min", technology: "Magnetic Beads", targets: "DNA/RNA from complex matrices",
     desc: "High-yield magnetic bead DNA/RNA isolation kit for complex matrices.", 
-    industries: ["Dairy", "Meat & Poultry", "Beverages", "Ready-to-Eat", "Produce", "Environmental"],
-    link: "#"
+    industries: ["Dairy", "Meat & Poultry", "Beverages", "Ready-to-Eat", "Produce", "Environmental"], link: "#",
+    specs: {
+      "Target Material": "DNA & RNA",
+      "Technology": "Magnetic Beads",
+      "Protocol Time": "30 minutes",
+      "Automated": "Yes (Compatible with TAAG AutoExtract)",
+      "Validated Samples": "Complex food matrices, environmental",
+      "Description": "High-yield magnetic bead DNA/RNA isolation kit for complex matrices."
+    }
   },
   { 
-    id: "x2", 
-    type: "DNA/RNA extraction", 
-    name: "TAAG X-Quick", 
-    time: "12 min", 
-    technology: "Thermal Lysis",
-    targets: "DNA from environmental swabs",
+    id: "x2", type: "DNA/RNA extraction", name: "TAAG X-Quick",
+    time: "12 min", technology: "Thermal Lysis", targets: "DNA from environmental swabs",
     desc: "Rapid 12-minute thermal lysis protocol for standard environmental swabs.", 
-    industries: ["Environmental", "Beverages"],
-    link: "#"
+    industries: ["Environmental", "Beverages"], link: "#",
+    specs: {
+      "Target Material": "DNA only",
+      "Technology": "Thermal Lysis",
+      "Protocol Time": "12 minutes",
+      "Automated": "No",
+      "Validated Samples": "Environmental swabs, clear liquids",
+      "Description": "Rapid 12-minute thermal lysis protocol for standard environmental swabs."
+    }
   },
+
+  // --- PCR KITS ---
   { 
-    id: "p1", 
-    type: "PCR kits", 
-    name: "TAAG F41 Multiplex", 
-    time: "1.5h", 
-    technology: "RT-PCR - AiGOR",
-    targets: "Salmonella spp., L. monocytogenes",
+    id: "p1", type: "PCR kits", name: "TAAG F41 Multiplex",
+    time: "1.5h", technology: "RT-PCR - AiGOR", targets: "Salmonella spp., L. monocytogenes",
     desc: "Simultaneous multiplex Real-Time PCR detection of Salmonella and L. monocytogenes.", 
-    industries: ["Dairy", "Meat & Poultry", "Ready-to-Eat", "Produce"],
-    link: "#"
+    industries: ["Dairy", "Meat & Poultry", "Ready-to-Eat", "Produce"], link: "#",
+    specs: {
+      "Target Microorganisms": "Salmonella spp., L. monocytogenes",
+      "Validated Matrices": "Dairy, Meat & Poultry, Ready-to-Eat, Produce",
+      "Technology": "RT-PCR - AiGOR",
+      "PCR Run Time": "1.5 hours",
+      "Full Protocol Time (includes enrichment)": "25.5 hours",
+      "Validated Thermocycler": "Bio-Rad CFX96, ABI 7500",
+      "Detection Chemistry": "TaqMan Probes",
+      "Detection Channel": "FAM, HEX, Cy5",
+      "Certification": "AOAC-RI",
+      "Description": "Simultaneous multiplex Real-Time PCR detection of Salmonella and L. monocytogenes."
+    }
   },
   { 
-    id: "p2", 
-    type: "PCR kits", 
-    name: "TAAG E. coli O157", 
-    time: "1.2h", 
-    technology: "Real-time PCR, Melting curve analysis",
-    targets: "E. coli O157:H7",
+    id: "p2", type: "PCR kits", name: "TAAG E. coli O157",
+    time: "1.2h", technology: "Real-time PCR, Melting curve", targets: "E. coli O157:H7",
     desc: "Specific Real-Time PCR detection of E. coli O157:H7 in raw meat and produce.", 
-    industries: ["Meat & Poultry", "Produce"],
-    link: "#"
+    industries: ["Meat & Poultry", "Produce"], link: "#",
+    specs: {
+      "Target Microorganisms": "E. coli O157:H7",
+      "Validated Matrices": "Meat & Poultry, Produce",
+      "Technology": "Real-time PCR, Melting curve analysis",
+      "PCR Run Time": "1.2 hours",
+      "Full Protocol Time (includes enrichment)": "25.2 hours",
+      "Validated Thermocycler": "Bio-Rad CFX96, Agilent QuantStudio",
+      "Detection Chemistry": "Intercalating dye",
+      "Detection Channel": "FAM",
+      "Certification": "AFNOR",
+      "Description": "Specific Real-Time PCR detection of E. coli O157:H7 in raw meat and produce."
+    }
   },
 ];
 
@@ -109,14 +144,21 @@ export default function ProductCatalog() {
   // Estado para comparación
   const [compareList, setCompareList] = useState<string[]>([]);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [compareAlert, setCompareAlert] = useState<string | null>(null);
 
-  // Filtrado de productos (Búsqueda Multipalabra Integrada)
+  // Auto-cerrar la alerta después de 3 segundos
+  useEffect(() => {
+    if (compareAlert) {
+      const timer = setTimeout(() => setCompareAlert(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [compareAlert]);
+
+  // Filtrado de productos (Búsqueda Multipalabra)
   const filteredProducts = useMemo(() => {
     return MOCK_PRODUCTS.filter(product => {
-      // 1. Separar la búsqueda en múltiples palabras
       const searchTerms = searchQuery.toLowerCase().split(" ").filter(term => term.length > 0);
       
-      // 2. Unificar todos los textos buscables del producto
       const itemText = `
         ${product.name} 
         ${product.desc} 
@@ -125,9 +167,7 @@ export default function ProductCatalog() {
         ${product.type}
       `.toLowerCase();
 
-      // 3. Comprobar que TODAS las palabras clave estén incluidas
       const matchesSearch = searchTerms.every(term => itemText.includes(term));
-      
       const matchesType = selectedType === "All" || product.type === selectedType;
       const matchesIndustry = selectedIndustry === "All Industries" || product.industries.includes(selectedIndustry);
 
@@ -135,37 +175,70 @@ export default function ProductCatalog() {
     });
   }, [searchQuery, selectedType, selectedIndustry]);
 
-  // Manejo de Comparación
+  // Manejo de Comparación con Restricciones
   const toggleCompare = (id: string) => {
+    const targetProduct = MOCK_PRODUCTS.find(p => p.id === id);
+    if (!targetProduct) return;
+
     setCompareList(prev => {
+      // Si ya está, lo quitamos
       if (prev.includes(id)) return prev.filter(pId => pId !== id);
-      if (prev.length >= 4) return prev; // Límite de 4 productos para comparar
+      
+      // Límite máximo
+      if (prev.length >= 4) {
+        setCompareAlert("You can compare up to 4 products at a time.");
+        return prev;
+      }
+
+      // Restricción: Misma categoría
+      if (prev.length > 0) {
+        const firstProduct = MOCK_PRODUCTS.find(p => p.id === prev[0]);
+        if (firstProduct && firstProduct.type !== targetProduct.type) {
+          setCompareAlert(`You can only compare products from the same category (${firstProduct.type}).`);
+          return prev;
+        }
+      }
+
       return [...prev, id];
     });
   };
 
   const clearCompare = () => setCompareList([]);
 
+  // Construcción dinámica de la tabla de comparación
+  const comparedProductsData = compareList.map(id => MOCK_PRODUCTS.find(p => p.id === id)).filter(Boolean) as typeof MOCK_PRODUCTS;
+  
+  // Extraemos las llaves EXACTAS del primer producto de la lista (todos comparten la misma categoría)
+  const specKeys = comparedProductsData.length > 0 ? Object.keys(comparedProductsData[0].specs) : [];
+
   return (
     <section className="pt-24 pb-32 px-4 md:px-6 w-full max-w-[1400px] mx-auto font-sans relative">
       
+      {/* ALERTA FLOTANTE PARA ERRORES DE COMPARACIÓN */}
+      {compareAlert && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[200] bg-red-50 text-[#FF270A] border border-[#FF270A]/20 px-6 py-3 rounded-full text-sm font-bold shadow-[0_8px_30px_rgb(255,39,10,0.12)] flex items-center gap-3 animate-in slide-in-from-top-4 fade-in duration-300">
+          <AlertCircle className="w-5 h-5" />
+          <span>{compareAlert}</span>
+          <button onClick={() => setCompareAlert(null)} className="ml-2 hover:bg-red-100 p-1 rounded-full transition-colors"><X className="w-4 h-4"/></button>
+        </div>
+      )}
+
       {/* TÍTULO Y BAJADA (Centrados y fuera de la tarjeta principal) */}
       <div className="mb-10 md:mb-12 text-center flex flex-col items-center">
         <h2 className="text-4xl md:text-5xl font-black text-[#111111] mb-4 tracking-tighter leading-tight">
           Product Explorer
         </h2>
         <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto">
-          Browse our complete catalog, filter by application, and select products to compare their technical specifications side-by-side.
+          Browse our complete catalog, filter by application, and select products of the same category to compare their technical specifications side-by-side.
         </p>
       </div>
 
       {/* CONTENEDOR PRINCIPAL */}
-      <div className="w-full bg-white border border-gray-100 rounded-[2rem] md:rounded-[3rem] p-5 sm:p-8 md:p-16 relative min-h-[600px] flex flex-col">
+      <div className="w-full bg-white border border-gray-100 rounded-[2rem] md:rounded-[3rem] p-5 sm:p-8 md:p-16 relative min-h-[600px] flex flex-col shadow-sm">
         
         {/* TOOLBAR: Buscador + Selector de Industria */}
         <div className="flex flex-col md:flex-row items-center gap-4 mb-8 relative z-30">
            
-           {/* Buscador */}
            <div className="relative w-full md:flex-1 group">
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#FF270A] transition-colors" />
               <input 
@@ -182,7 +255,6 @@ export default function ProductCatalog() {
               )}
            </div>
 
-           {/* Selector de Industria (Custom Dropdown) */}
            <div className="relative w-full md:w-72">
               <button 
                 onClick={() => setIsIndustryDropdownOpen(!isIndustryDropdownOpen)}
@@ -264,7 +336,7 @@ export default function ProductCatalog() {
                           )}
                        </div>
 
-                       {/* Footer del producto: Tiempo y Data Sheet */}
+                       {/* Footer del producto */}
                        <div className="flex flex-wrap items-center gap-6 pt-5 border-t border-gray-200/60">
                          <div className="flex items-center gap-2 text-[#111111] font-bold text-[10px] md:text-xs uppercase tracking-tight">
                            <Clock className="w-4 h-4 text-[#FF270A]" /> 
@@ -325,71 +397,56 @@ export default function ProductCatalog() {
         </div>
       )}
 
-      {/* MODAL DE COMPARACIÓN */}
+      {/* MODAL DE COMPARACIÓN ALINEADO POR FILAS Y DISTRIBUIDO */}
       {isCompareModalOpen && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
            <div className="bg-white rounded-[2rem] w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-in zoom-in-95 duration-300 border-0">
               
-              <div className="p-6 md:p-8 flex items-center justify-between border-b border-gray-100">
+              <div className="p-6 md:p-8 flex items-center justify-between border-b border-gray-100 shrink-0">
                  <div>
                    <h3 className="text-xl md:text-2xl font-black text-[#111111] leading-tight">Product Comparison</h3>
-                   <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">Review specifications side-by-side</span>
+                   <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">{comparedProductsData[0]?.type} Category</span>
                  </div>
                  <button onClick={() => setIsCompareModalOpen(false)} className="p-2 bg-gray-50 rounded-full hover:bg-gray-200 transition-colors shrink-0">
                    <X className="w-5 h-5 text-[#111111]" />
                  </button>
               </div>
 
-              <div className="p-4 md:p-8 overflow-x-auto">
-                 <div className="flex gap-4 min-w-max">
-                   {/* Columna de Títulos (Specs) */}
-                   <div className="w-32 md:w-48 shrink-0 flex flex-col justify-end gap-6 pb-6">
-                      <div className="h-16"></div> {/* Espacio para el título del producto */}
-                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Category</div>
-                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Targets</div>
-                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Technology</div>
-                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Time (Full Protocol)</div>
-                      <div className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest py-3 border-b border-gray-100">Description</div>
-                   </div>
+              {/* Contenedor escrolleable horizontalmente y verticalmente para las filas */}
+              <div className="overflow-x-auto overflow-y-auto w-full h-full bg-white">
+                 <div className="flex flex-col min-w-full">
+                    
+                    {/* FILA 1: Encabezados (Nombres de Productos y Botones de Cerrar) */}
+                    <div className="flex items-stretch bg-gray-50/40 w-full">
+                       <div className="w-32 md:w-56 shrink-0 p-4 md:p-6 border-b border-gray-100"></div>
+                       {comparedProductsData.map(p => (
+                         <div key={p.id} className="flex-1 min-w-[240px] md:min-w-[280px] p-4 md:p-6 border-b border-l border-gray-100 relative group flex flex-col justify-end bg-white">
+                            <button 
+                              onClick={() => toggleCompare(p.id)}
+                              className="absolute top-3 right-3 p-1.5 bg-white rounded-full text-gray-300 hover:text-[#FF270A] hover:bg-red-50 transition-colors md:opacity-0 md:group-hover:opacity-100 shadow-sm border border-gray-100"
+                              title="Remove from comparison"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                            <h4 className="text-base md:text-lg font-bold text-[#111111] leading-tight mb-1 pr-8">{p.name}</h4>
+                         </div>
+                       ))}
+                    </div>
 
-                   {/* Columnas de Productos */}
-                   {compareList.map(id => {
-                     const prod = MOCK_PRODUCTS.find(p => p.id === id);
-                     if (!prod) return null;
-                     return (
-                       <div key={prod.id} className="w-64 md:w-72 shrink-0 bg-gray-50 rounded-3xl p-5 md:p-6 border border-gray-100 flex flex-col gap-6 relative group">
-                          <button 
-                            onClick={() => toggleCompare(prod.id)}
-                            className="absolute top-3 right-3 p-1.5 bg-white rounded-full text-gray-300 hover:text-[#FF270A] hover:bg-red-50 transition-colors opacity-100 md:opacity-0 group-hover:opacity-100"
-                            title="Remove from comparison"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                          
-                          <div className="h-16 flex flex-col">
-                             <h4 className="text-base md:text-lg font-bold text-[#111111] leading-tight mb-1 line-clamp-2 pr-6">{prod.name}</h4>
-                          </div>
+                    {/* FILAS DINÁMICAS DE SPECS ESPECÍFICOS */}
+                    {specKeys.map(key => (
+                      <div key={key} className="flex items-stretch hover:bg-gray-50/50 transition-colors w-full">
+                         <div className="w-32 md:w-56 shrink-0 p-4 md:p-6 flex items-center text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 bg-white leading-relaxed">
+                            {key}
+                         </div>
+                         {comparedProductsData.map(p => (
+                            <div key={`${p.id}-${key}`} className="flex-1 min-w-[240px] md:min-w-[280px] p-4 md:p-6 text-sm font-medium text-[#111111] flex items-center border-b border-l border-gray-100 bg-transparent leading-relaxed whitespace-pre-wrap break-words">
+                               {(p.specs as any)[key] || "-"}
+                            </div>
+                         ))}
+                      </div>
+                    ))}
 
-                          <div className="py-3 border-b border-gray-200">
-                             <span className="inline-block px-3 py-1 bg-white border border-gray-200 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest text-[#111111]">
-                               {prod.type}
-                             </span>
-                          </div>
-                          <div className="py-3 border-b border-gray-200 text-xs md:text-sm font-medium text-[#111111]">
-                             {prod.targets}
-                          </div>
-                          <div className="py-3 border-b border-gray-200 text-xs md:text-sm font-medium text-[#111111]">
-                             {prod.technology}
-                          </div>
-                          <div className="py-3 border-b border-gray-200 text-xs md:text-sm font-bold text-[#FF270A] flex items-center gap-2">
-                             <Clock className="w-4 h-4 shrink-0" /> {prod.time}
-                          </div>
-                          <div className="py-3 border-b border-gray-200 text-xs md:text-sm text-[#111111] leading-relaxed">
-                             {prod.desc}
-                          </div>
-                       </div>
-                     )
-                   })}
                  </div>
               </div>
            </div>
