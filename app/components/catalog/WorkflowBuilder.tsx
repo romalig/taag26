@@ -32,6 +32,10 @@ export default function WorkflowBuilder() {
   const [protocolCompareIndex, setProtocolCompareIndex] = useState<number | null>(null);
   // Modal: Product Value Brief
   const [valueBriefProduct, setValueBriefProduct] = useState<Product | null>(null);
+  // Track if user has explicitly chosen a protocol (not just the default)
+  const [protocolConfirmed, setProtocolConfirmed] = useState(false);
+  // Track if user has explicitly chosen a matrix
+  const [matrixConfirmed, setMatrixConfirmed] = useState(false);
 
   // Referencias para el carrusel de protocolos y scroll al tope
   const sectionRef = useRef<HTMLElement>(null);
@@ -79,6 +83,8 @@ export default function WorkflowBuilder() {
     setSelectedIndustry(null);
     setSelectedMicroorganisms([]);
     setActiveFlowIndex(0);
+    setProtocolConfirmed(false);
+    setMatrixConfirmed(false);
   };
 
   const getTagStyle = (type: string, isSelected: boolean) => {
@@ -280,151 +286,152 @@ export default function WorkflowBuilder() {
 
         {step === 3 && (
           <div className="flex flex-col w-full h-full animate-in fade-in slide-in-from-bottom-8 duration-700 relative">
-            
-            {/* ENCABEZADO PASO 3 */}
+
+            {/* ENCABEZADO */}
             <div className="flex flex-col items-start text-left mb-6 md:mb-8 w-full">
-              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm mb-4 block">Recommended Protocol</span>
-              
+              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm mb-6 block">Recommended Protocol</span>
+
+              {/* STEP 1 — MATRIZ */}
+              {!matrixConfirmed && (
+                <p className="text-[#FF270A] font-bold text-xs uppercase tracking-widest mb-4 animate-in fade-in duration-300">
+                  Select your sample matrix to continue →
+                </p>
+              )}
               <div className="flex w-full md:w-fit items-center bg-white p-1 rounded-full mb-8">
-                <button onClick={() => setSampleType("Environmental")} className={`flex-1 md:flex-none px-2 md:px-6 py-2.5 rounded-full text-xs md:text-sm font-bold transition-colors leading-tight ${sampleType === "Environmental" ? "bg-[#111111] text-white" : "text-gray-500 hover:text-[#111111]"}`}>Environmental</button>
-                <button onClick={() => setSampleType("Finished product")} className={`flex-1 md:flex-none px-2 md:px-6 py-2.5 rounded-full text-xs md:text-sm font-bold transition-colors leading-tight ${sampleType === "Finished product" ? "bg-[#111111] text-white" : "text-gray-500 hover:text-[#111111]"}`}>Finished product</button>
+                <button
+                  onClick={() => { setSampleType("Environmental"); setMatrixConfirmed(true); setProtocolConfirmed(false); }}
+                  className={`flex-1 md:flex-none px-4 md:px-8 py-2.5 rounded-full text-xs md:text-sm font-bold transition-colors leading-tight ${sampleType === "Environmental" && matrixConfirmed ? "bg-[#111111] text-white" : "text-gray-500 hover:text-[#111111]"}`}
+                >Environmental</button>
+                <button
+                  onClick={() => { setSampleType("Finished product"); setMatrixConfirmed(true); setProtocolConfirmed(false); }}
+                  className={`flex-1 md:flex-none px-4 md:px-8 py-2.5 rounded-full text-xs md:text-sm font-bold transition-colors leading-tight ${sampleType === "Finished product" && matrixConfirmed ? "bg-[#111111] text-white" : "text-gray-500 hover:text-[#111111]"}`}
+                >Finished product</button>
               </div>
 
-              {/* CARRUSEL DE PROTOCOLOS */}
-              <div className="w-full flex flex-col items-center gap-4">
-                 <div className="w-full flex items-center gap-2 md:gap-4">
-                    <button 
-                      onClick={() => scrollProtocols("left")} 
-                      className={`hidden md:flex shrink-0 w-12 h-12 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollLeft ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}
-                    >
-                      <ChevronLeft className="w-6 h-6" />
-                    </button>
-                    
-                    <div ref={protocolsScrollRef} onScroll={checkScroll} className="flex-grow flex overflow-x-auto gap-3 md:gap-4 py-2 w-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                       {potentialFlows.map(([_, micros]: any, idx) => (
-                         <div key={idx} className="snap-start shrink-0 flex flex-col items-start justify-between text-left p-5 md:px-8 md:py-6 rounded-2xl md:rounded-[2rem] transition-all w-[260px] sm:w-[300px] md:w-[360px] max-w-full h-auto whitespace-normal break-words cursor-pointer"
-                           style={{ background: activeFlowIndex === idx ? '#111111' : '#ffffff' }}
-                           onClick={() => setActiveFlowIndex(idx)}
-                         >
-                           <div className="w-full">
-                             <h4 className={`text-lg md:text-2xl font-black tracking-tighter mb-3 w-full flex flex-col md:flex-row md:items-baseline gap-1 md:gap-2 ${activeFlowIndex === idx ? 'text-white' : 'text-gray-400'}`}>
-                               Protocol {idx + 1} 
-                               <span className={`text-sm md:text-lg font-bold tracking-normal ${activeFlowIndex === idx ? 'text-gray-300' : 'text-[#FF270A]'}`}>
-                                 ({calculateTotalTime()} hours)
-                               </span>
-                             </h4>
-                             <p className={`font-black text-sm md:text-base w-full leading-snug break-words ${activeFlowIndex === idx ? 'text-white' : 'text-gray-500'}`}>
-                               Detection of {micros.join(" + ")}
-                             </p>
-                           </div>
-                           <button
-                             onClick={(e) => { e.stopPropagation(); setProtocolCompareIndex(idx); }}
-                             className={`mt-4 flex items-center gap-1.5 text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors ${activeFlowIndex === idx ? 'text-white hover:text-gray-300' : 'text-[#FF270A] hover:text-[#111111]'}`}
-                           >
-                             <FileText className="w-3 h-3 md:w-3.5 md:h-3.5" /> Compare Protocol
-                           </button>
-                         </div>
-                       ))}
-                    </div>
+              {/* STEP 2 — CARRUSEL, solo visible tras seleccionar matriz */}
+              {matrixConfirmed && (
+                <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-400">
+                  {!protocolConfirmed && (
+                    <p className="text-[#FF270A] font-bold text-xs uppercase tracking-widest mb-4">
+                      Now select a detection protocol →
+                    </p>
+                  )}
+                  <div className="w-full flex flex-col items-center gap-4">
+                    <div className="w-full flex items-center gap-2 md:gap-4">
+                      <button onClick={() => scrollProtocols("left")} className={`hidden md:flex shrink-0 w-12 h-12 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollLeft ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}>
+                        <ChevronLeft className="w-6 h-6" />
+                      </button>
 
-                    <button 
-                      onClick={() => scrollProtocols("right")} 
-                      className={`hidden md:flex shrink-0 w-12 h-12 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollRight ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}
-                    >
-                      <ChevronRight className="w-6 h-6" />
-                    </button>
-                 </div>
-
-                 <div className="flex md:hidden items-center justify-center gap-4 mt-2">
-                    <button 
-                      onClick={() => scrollProtocols("left")} 
-                      disabled={!canScrollLeft}
-                      className={`w-10 h-10 bg-white rounded-full flex items-center justify-center transition-all duration-300 ${canScrollLeft ? 'text-[#111111] hover:text-[#FF270A]' : 'text-gray-300 opacity-50'}`}
-                    >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-                    <button 
-                      onClick={() => scrollProtocols("right")} 
-                      disabled={!canScrollRight}
-                      className={`w-10 h-10 bg-white rounded-full flex items-center justify-center transition-all duration-300 ${canScrollRight ? 'text-[#111111] hover:text-[#FF270A]' : 'text-gray-300 opacity-50'}`}
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                 </div>
-              </div>
-            </div>
-
-            {/* TÍTULO RECOMMENDED PRODUCTS */}
-            <div className="w-full mt-8 md:mt-12 mb-4">
-              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm block leading-relaxed">
-                Recommended Products for {sampleType} Testing in the {selectedIndustry} Industry
-              </span>
-            </div>
-
-            {/* TARJETAS DE PRODUCTOS */}
-            <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-4 w-full">
-              {getActiveStages().map((stage, sIdx, arr) => {
-                const currentProd = PRODUCT_BY_ID[selectedProductIds[stage.key]];
-                const alternatives = stage.products.filter(p => p.id !== selectedProductIds[stage.key]);
-
-                return (
-                  <Fragment key={stage.key}>
-                    <div className="flex-1 w-full bg-white p-5 sm:p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] flex flex-col transition-colors duration-300">
-                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 md:mb-6 block shrink-0">Stage 0{sIdx + 1} // {stage.label}</span>
-                      
-                      <div className="md:h-16 flex items-start mb-2">
-                         <h5 className="text-lg md:text-xl font-bold text-[#111111] leading-tight line-clamp-2">{currentProd.name}</h5>
-                      </div>
-                      
-                      <div className="flex flex-col gap-0.5 mb-4 md:mb-6 md:h-10 shrink-0">
-                         <span className="text-xs md:text-sm font-medium text-gray-400">Cat #{currentProd.cat}</span>
-                         <span className="text-xs md:text-sm font-medium text-gray-400">{currentProd.format}</span>
-                      </div>
-                      
-                      <div className="flex-grow flex items-start mb-6 md:mb-8">
-                         <p className="text-xs md:text-sm text-[#111111] leading-relaxed font-medium">{currentProd.desc}</p>
-                      </div>
-
-                      <div className="mt-auto pt-4 md:pt-6 flex flex-col gap-4 shrink-0">
-                        <div className="flex items-center gap-2 text-[#111111] font-bold text-[10px] md:text-xs uppercase tracking-tight">
-                          <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A]" />
-                          {currentProd.timeHours >= 1 ? `${currentProd.timeHours}h` : `${currentProd.timeHours * 60} min`}
-                        </div>
-                        <button
-                          onClick={() => setValueBriefProduct(currentProd)}
-                          className="flex items-center gap-2 font-bold text-[10px] md:text-xs uppercase tracking-tight hover:opacity-70 transition-opacity"
-                        >
-                          <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A] shrink-0" />
-                          <span className="text-[#111111]">Product Value Brief</span>
-                        </button>
-                        <a href={currentProd.technicalDataUrl} className="flex items-center gap-2 font-bold text-[10px] md:text-xs uppercase tracking-tight hover:opacity-70 transition-opacity">
-                          <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A] shrink-0" />
-                          <span className="text-[#111111]">Technical Data</span>
-                        </a>
-                        
-                        <div className="h-8 flex items-end">
-                          {alternatives.length > 0 && (
-                            <button 
-                              onClick={() => setActiveModalStage(stage.key)}
-                              className="flex items-center gap-2 text-gray-400 hover:text-[#111111] font-bold text-[10px] uppercase tracking-widest transition-colors"
+                      <div ref={protocolsScrollRef} onScroll={checkScroll} className="flex-grow flex overflow-x-auto gap-3 md:gap-4 py-2 w-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+                        {potentialFlows.map(([_, micros]: any, idx) => {
+                          const isActive = activeFlowIndex === idx && protocolConfirmed;
+                          return (
+                            <div
+                              key={idx}
+                              className="snap-start shrink-0 flex flex-col items-start justify-between text-left p-5 md:px-8 md:py-6 rounded-2xl md:rounded-[2rem] transition-all duration-300 w-[260px] sm:w-[300px] md:w-[360px] max-w-full h-auto whitespace-normal break-words cursor-pointer"
+                              style={{ background: isActive ? '#111111' : '#ffffff' }}
+                              onClick={() => { setActiveFlowIndex(idx); setProtocolConfirmed(true); }}
                             >
-                              <RotateCcw className="w-3 md:w-3.5 h-3 md:h-3.5" /> View Alternatives
-                            </button>
-                          )}
-                        </div>
+                              <div className="w-full">
+                                <h4 className={`text-lg md:text-2xl font-black tracking-tighter mb-3 w-full flex flex-col md:flex-row md:items-baseline gap-1 md:gap-2 ${isActive ? 'text-white' : 'text-gray-400'}`}>
+                                  Protocol {idx + 1}
+                                  <span className={`text-sm md:text-lg font-bold tracking-normal ${isActive ? 'text-gray-300' : 'text-[#FF270A]'}`}>
+                                    ({calculateTotalTime()} hours)
+                                  </span>
+                                </h4>
+                                <p className={`font-black text-sm md:text-base w-full leading-snug break-words ${isActive ? 'text-white' : 'text-gray-500'}`}>
+                                  Detection of {micros.join(" + ")}
+                                </p>
+                              </div>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); setProtocolCompareIndex(idx); }}
+                                className={`mt-4 flex items-center gap-1.5 text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors ${isActive ? 'text-white hover:text-gray-300' : 'text-[#FF270A] hover:text-[#111111]'}`}
+                              >
+                                <FileText className="w-3 h-3 md:w-3.5 md:h-3.5" /> Compare Protocol
+                              </button>
+                            </div>
+                          );
+                        })}
                       </div>
+
+                      <button onClick={() => scrollProtocols("right")} className={`hidden md:flex shrink-0 w-12 h-12 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollRight ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}>
+                        <ChevronRight className="w-6 h-6" />
+                      </button>
                     </div>
-                    
-                    {/* Flecha Conectora entre tarjetas */}
-                    {sIdx < arr.length - 1 && (
-                      <div className="flex items-center justify-center py-2 lg:py-0 shrink-0">
-                         <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-gray-300 rotate-90 lg:rotate-0" />
-                      </div>
-                    )}
-                  </Fragment>
-                );
-              })}
+
+                    <div className="flex md:hidden items-center justify-center gap-4 mt-2">
+                      <button onClick={() => scrollProtocols("left")} disabled={!canScrollLeft} className={`w-10 h-10 bg-white rounded-full flex items-center justify-center transition-all duration-300 ${canScrollLeft ? 'text-[#111111] hover:text-[#FF270A]' : 'text-gray-300 opacity-50'}`}>
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <button onClick={() => scrollProtocols("right")} disabled={!canScrollRight} className={`w-10 h-10 bg-white rounded-full flex items-center justify-center transition-all duration-300 ${canScrollRight ? 'text-[#111111] hover:text-[#FF270A]' : 'text-gray-300 opacity-50'}`}>
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
+
+            {/* PRODUCTOS — solo visibles tras confirmar protocolo */}
+            {protocolConfirmed && (
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="w-full mb-4">
+                  <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm block leading-relaxed">
+                    Recommended Products for {sampleType} Testing in the {selectedIndustry} Industry
+                  </span>
+                </div>
+
+                <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-4 w-full">
+                  {getActiveStages().map((stage, sIdx, arr) => {
+                    const currentProd = PRODUCT_BY_ID[selectedProductIds[stage.key]];
+                    const alternatives = stage.products.filter(p => p.id !== selectedProductIds[stage.key]);
+                    return (
+                      <Fragment key={stage.key}>
+                        <div className="flex-1 w-full bg-white p-5 sm:p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] flex flex-col transition-colors duration-300">
+                          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 md:mb-6 block shrink-0">Stage 0{sIdx + 1} // {stage.label}</span>
+                          <div className="md:h-16 flex items-start mb-2">
+                            <h5 className="text-lg md:text-xl font-bold text-[#111111] leading-tight line-clamp-2">{currentProd.name}</h5>
+                          </div>
+                          <div className="flex flex-col gap-0.5 mb-4 md:mb-6 md:h-10 shrink-0">
+                            <span className="text-xs md:text-sm font-medium text-gray-400">Cat #{currentProd.cat}</span>
+                            <span className="text-xs md:text-sm font-medium text-gray-400">{currentProd.format}</span>
+                          </div>
+                          <div className="flex-grow flex items-start mb-6 md:mb-8">
+                            <p className="text-xs md:text-sm text-[#111111] leading-relaxed font-medium">{currentProd.desc}</p>
+                          </div>
+                          <div className="mt-auto pt-4 md:pt-6 flex flex-col gap-4 shrink-0">
+                            <div className="flex items-center gap-2 text-[#111111] font-bold text-[10px] md:text-xs uppercase tracking-tight">
+                              <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A]" />
+                              {currentProd.timeHours >= 1 ? `${currentProd.timeHours}h` : `${currentProd.timeHours * 60} min`}
+                            </div>
+                            <button onClick={() => setValueBriefProduct(currentProd)} className="flex items-center gap-2 font-bold text-[10px] md:text-xs uppercase tracking-tight hover:opacity-70 transition-opacity">
+                              <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A] shrink-0" />
+                              <span className="text-[#111111]">Product Value Brief</span>
+                            </button>
+                            <a href={currentProd.technicalDataUrl} className="flex items-center gap-2 font-bold text-[10px] md:text-xs uppercase tracking-tight hover:opacity-70 transition-opacity">
+                              <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A] shrink-0" />
+                              <span className="text-[#111111]">Technical Data</span>
+                            </a>
+                            <div className="h-8 flex items-end">
+                              {alternatives.length > 0 && (
+                                <button onClick={() => setActiveModalStage(stage.key)} className="flex items-center gap-2 text-gray-400 hover:text-[#111111] font-bold text-[10px] uppercase tracking-widest transition-colors">
+                                  <RotateCcw className="w-3 md:w-3.5 h-3 md:h-3.5" /> View Alternatives
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        {sIdx < arr.length - 1 && (
+                          <div className="flex items-center justify-center py-2 lg:py-0 shrink-0">
+                            <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-gray-300 rotate-90 lg:rotate-0" />
+                          </div>
+                        )}
+                      </Fragment>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* CALL TO ACTION (Cotización) */}
             <div className="mt-12 md:mt-20 w-full flex flex-col items-center justify-center border-t border-[#111111] pt-10 md:pt-16">
