@@ -33,7 +33,8 @@ export default function WorkflowBuilder() {
   // Modal: Product Value Brief
   const [valueBriefProduct, setValueBriefProduct] = useState<Product | null>(null);
 
-  // Referencias para el carrusel de protocolos
+  // Referencias para el carrusel de protocolos y scroll al tope
+  const sectionRef = useRef<HTMLElement>(null);
   const protocolsScrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -155,7 +156,7 @@ export default function WorkflowBuilder() {
     : getFallbackIcon();
 
   return (
-    <section className="pt-24 pb-20 px-4 md:px-6 w-full max-w-[1400px] mx-auto font-sans relative">
+    <section ref={sectionRef} className="pt-24 pb-20 px-4 md:px-6 w-full max-w-[1400px] mx-auto font-sans relative">
       
       {/* TÍTULO DE LA SECCIÓN */}
       <div className="mb-10 md:mb-12 text-center flex flex-col items-center px-2">
@@ -263,7 +264,12 @@ export default function WorkflowBuilder() {
             </div>
             
             <button 
-              onClick={() => setStep(3)} 
+              onClick={() => {
+                setStep(3);
+                setTimeout(() => {
+                  sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 50);
+              }} 
               disabled={selectedMicroorganisms.length === 0} 
               className="bg-[#FF270A] text-white px-8 md:px-12 py-4 rounded-full font-bold uppercase tracking-widest text-xs md:text-sm hover:scale-105 transition-transform duration-300 disabled:opacity-30 disabled:hover:scale-100 flex items-center gap-3"
             >
@@ -272,7 +278,6 @@ export default function WorkflowBuilder() {
           </div>
         )}
 
-        {/* --- PASO 3 --- */}
         {step === 3 && (
           <div className="flex flex-col w-full h-full animate-in fade-in slide-in-from-bottom-8 duration-700 relative">
             
@@ -302,15 +307,14 @@ export default function WorkflowBuilder() {
                            onClick={() => setActiveFlowIndex(idx)}
                          >
                            <div className="w-full">
-                             {/* TIEMPO INTEGRADO EN EL TÍTULO */}
-                             <h4 className={`text-lg md:text-2xl font-black tracking-tighter mb-2 w-full flex flex-col md:flex-row md:items-baseline gap-1 md:gap-2 ${activeFlowIndex === idx ? 'text-white' : 'text-gray-400'}`}>
+                             <h4 className={`text-lg md:text-2xl font-black tracking-tighter mb-3 w-full flex flex-col md:flex-row md:items-baseline gap-1 md:gap-2 ${activeFlowIndex === idx ? 'text-white' : 'text-gray-400'}`}>
                                Protocol {idx + 1} 
                                <span className={`text-sm md:text-lg font-bold tracking-normal ${activeFlowIndex === idx ? 'text-gray-300' : 'text-[#FF270A]'}`}>
                                  ({calculateTotalTime()} hours)
                                </span>
                              </h4>
-                             <p className={`font-medium text-xs md:text-sm w-full leading-snug break-words ${activeFlowIndex === idx ? 'text-gray-400' : 'text-gray-400'}`}>
-                               (detection of {micros.join(" + ")})
+                             <p className={`font-black text-sm md:text-base w-full leading-snug break-words ${activeFlowIndex === idx ? 'text-white' : 'text-gray-500'}`}>
+                               Detection of {micros.join(" + ")}
                              </p>
                            </div>
                            <button
@@ -352,7 +356,9 @@ export default function WorkflowBuilder() {
 
             {/* TÍTULO RECOMMENDED PRODUCTS */}
             <div className="w-full mt-8 md:mt-12 mb-4">
-              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm block">Recommended Products</span>
+              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm block leading-relaxed">
+                Recommended Products for {sampleType} Testing in the {selectedIndustry} Industry
+              </span>
             </div>
 
             {/* TARJETAS DE PRODUCTOS */}
