@@ -165,46 +165,46 @@ export default function WorkflowBuilder() {
     <section ref={sectionRef} className="pt-24 pb-20 px-4 md:px-6 w-full max-w-[1400px] mx-auto font-sans relative">
       
       {/* TÍTULO DE LA SECCIÓN */}
-      <div className="mb-10 md:mb-12 text-center flex flex-col items-center px-2">
+      <div className="mb-14 md:mb-20 text-center flex flex-col items-center px-2">
         <h2 className="text-3xl md:text-5xl font-black text-[#111111] mb-4 tracking-tighter leading-tight">
           Product & Protocol Selector
         </h2>
-        <p className="text-base md:text-lg text-gray-500 max-w-2xl mx-auto font-medium">
-          Build your optimal testing workflow by selecting your industry and target pathogens to reveal our recommended kits.
+        <p className="text-sm md:text-base text-gray-400 max-w-lg mx-auto font-medium leading-relaxed">
+          Select your industry and target pathogens to reveal your recommended testing workflow.
         </p>
       </div>
 
-      <div className="w-full bg-gray-50 rounded-[2rem] md:rounded-[3rem] p-5 sm:p-8 md:p-16 relative min-h-[600px] flex flex-col overflow-hidden">
+      <div className="w-full bg-gray-50 rounded-[2rem] md:rounded-[3rem] p-6 sm:p-10 md:p-20 relative min-h-[600px] flex flex-col overflow-hidden">
         
         {/* BARRA DE PROGRESO Y RESUMEN */}
-        <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mb-10 md:mb-16 gap-6 border-b border-[#111111] pb-6 md:pb-8">
-           <div className="flex items-center gap-2 md:gap-6 w-full justify-between lg:justify-start overflow-x-auto no-scrollbar pb-2 md:pb-0">
-              <button onClick={() => setStep(1)} className={`text-xs md:text-base font-bold flex items-center gap-2 transition-colors shrink-0 ${step >= 1 ? 'text-[#111111]' : 'text-gray-300'}`}>
-                 <span className={`w-6 h-6 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] md:text-xs transition-colors ${step === 1 ? 'bg-[#FF270A] text-white' : step > 1 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-500'}`}>1</span>
+        <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mb-12 md:mb-20 gap-6 border-b border-gray-200 pb-8 md:pb-10">
+           <div className="flex items-center gap-3 md:gap-8 w-full justify-between lg:justify-start overflow-x-auto no-scrollbar pb-2 md:pb-0">
+              <button onClick={() => setStep(1)} className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step >= 1 ? 'text-[#111111]' : 'text-gray-300'}`}>
+                 <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] transition-colors ${step === 1 ? 'bg-[#FF270A] text-white' : step > 1 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-400'}`}>1</span>
                  Industry
               </button>
-              <div className="w-4 md:w-12 h-px bg-gray-200 shrink-0" />
-              <button onClick={() => { if (step > 1) setStep(2) }} disabled={step < 2} className={`text-xs md:text-base font-bold flex items-center gap-2 transition-colors shrink-0 ${step >= 2 ? 'text-[#111111]' : 'text-gray-300'} ${step > 1 ? 'cursor-pointer hover:text-[#FF270A]' : 'cursor-default'}`}>
-                 <span className={`w-7 h-7 md:w-10 md:h-10 flex items-center justify-center rounded-full text-[10px] md:text-sm transition-colors ${step === 2 ? 'bg-[#FF270A] text-white' : step > 2 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-500'}`}>2</span>
+              <div className="w-8 md:w-16 h-px bg-gray-200 shrink-0" />
+              <button onClick={() => { if (step > 1) setStep(2) }} disabled={step < 2} className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step >= 2 ? 'text-[#111111]' : 'text-gray-300'} ${step > 1 ? 'cursor-pointer hover:text-[#FF270A]' : 'cursor-default'}`}>
+                 <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] transition-colors ${step === 2 ? 'bg-[#FF270A] text-white' : step > 2 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-400'}`}>2</span>
                  Targets
               </button>
-              <div className="w-4 md:w-12 h-px bg-gray-200 shrink-0" />
-              <button disabled className={`text-xs md:text-base font-bold flex items-center gap-2 transition-colors shrink-0 ${step === 3 ? 'text-[#111111]' : 'text-gray-300'} cursor-default`}>
-                 <span className={`w-7 h-7 md:w-10 md:h-10 flex items-center justify-center rounded-full text-[10px] md:text-sm transition-colors ${step === 3 ? 'bg-[#FF270A] text-white' : 'bg-gray-200 text-gray-500'}`}>3</span>
+              <div className="w-8 md:w-16 h-px bg-gray-200 shrink-0" />
+              <button disabled className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step === 3 ? 'text-[#111111]' : 'text-gray-300'} cursor-default`}>
+                 <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] transition-colors ${step === 3 ? 'bg-[#FF270A] text-white' : 'bg-gray-200 text-gray-400'}`}>3</span>
                  Protocol
               </button>
            </div>
            
-           {/* TARJETA AGRUPADA DE RESUMEN (Sin borde ni sombra, fondo sólido) */}
+           {/* PILL DE RESUMEN — siempre visible desde paso 2 en adelante */}
            {step > 1 && (
-             <div className="flex items-center bg-white rounded-2xl md:rounded-full p-1 shrink-0 max-w-full overflow-hidden">
-               <div className="flex items-center gap-2 px-3 py-2 md:px-5 md:py-3 text-xs md:text-sm font-bold text-[#111111] uppercase tracking-widest border-r border-gray-100 min-w-0">
-                 <CurrentIndustryIcon className="w-8 h-8 md:w-10 md:h-10 shrink-0 text-[#FF270A]" strokeWidth={1.5} />
+             <div className="flex items-center bg-white rounded-full p-1 shrink-0 max-w-full overflow-hidden">
+               <div className="flex items-center gap-2 px-4 py-2 text-[10px] font-black text-[#111111] uppercase tracking-[0.12em] border-r border-gray-100 min-w-0">
+                 <CurrentIndustryIcon className="w-5 h-5 shrink-0 text-[#FF270A]" strokeWidth={1.5} />
                  <span className="truncate">{selectedIndustry}</span>
                </div>
                {selectedMicroorganisms.length > 0 && (
-                 <div className="flex items-center gap-2 px-3 py-2 md:px-5 md:py-3 text-xs md:text-sm font-bold text-[#FF270A] uppercase tracking-widest shrink-0">
-                   <img src="/bacteria.png" alt="" className="w-8 h-8 md:w-10 md:h-10 shrink-0 object-contain" />
+                 <div className="flex items-center gap-2 px-4 py-2 text-[10px] font-black text-[#FF270A] uppercase tracking-[0.12em] shrink-0">
+                   <img src="/bacteria.png" alt="" className="w-5 h-5 shrink-0 object-contain" />
                    <span>{selectedMicroorganisms.length} Target{selectedMicroorganisms.length !== 1 ? 's' : ''}</span>
                  </div>
                )}
@@ -215,22 +215,22 @@ export default function WorkflowBuilder() {
         {/* --- PASO 1 --- */}
         {step === 1 && (
           <div className="flex flex-col items-center justify-center flex-grow animate-in fade-in zoom-in-95 duration-500">
-            <div className="text-center mb-8 md:mb-10">
-               <h3 className="text-2xl md:text-3xl font-black text-[#111111] mb-2 tracking-tight">Select your industry</h3>
-               <p className="text-gray-500 font-medium text-xs md:text-sm px-4">Choose the sector that best represents your facility's operations.</p>
+            <div className="text-center mb-12 md:mb-16">
+               <h3 className="text-3xl md:text-5xl font-black text-[#111111] mb-3 tracking-tighter leading-none">Select your industry</h3>
+               <p className="text-gray-400 font-medium text-sm">Choose the sector that best describes your facility.</p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-6 w-full max-w-3xl">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4 w-full max-w-3xl">
               {INDUSTRIES.map(industry => {
                 const Icon = industry.icon;
                 return (
-                  <button 
-                    key={industry.name} 
-                    onClick={() => { setSelectedIndustry(industry.name); setStep(2); }} 
-                    className="p-6 md:p-8 bg-white rounded-2xl md:rounded-[2rem] font-bold text-[#111111] hover:text-[#FF270A] transition-colors duration-300 flex flex-col items-center justify-center text-center min-h-[130px] md:min-h-[150px] gap-3 md:gap-4 group"
+                  <button
+                    key={industry.name}
+                    onClick={() => { setSelectedIndustry(industry.name); setStep(2); }}
+                    className="p-6 md:p-10 bg-white rounded-2xl md:rounded-[2rem] transition-all duration-300 flex flex-col items-center justify-center text-center min-h-[130px] md:min-h-[160px] gap-4 md:gap-5 group hover:bg-[#111111]"
                   >
-                    <Icon className="w-10 h-10 md:w-14 md:h-14 shrink-0 text-gray-300 group-hover:text-[#FF270A] transition-colors" strokeWidth={1.5} />
-                    <span className="text-xs md:text-sm leading-snug">{industry.name}</span>
+                    <Icon className="w-9 h-9 md:w-12 md:h-12 shrink-0 text-gray-200 group-hover:text-[#FF270A] transition-colors" strokeWidth={1.5} />
+                    <span className="text-[10px] md:text-xs font-black text-gray-400 group-hover:text-white uppercase tracking-[0.15em] leading-snug transition-colors">{industry.name}</span>
                   </button>
                 );
               })}
@@ -241,43 +241,43 @@ export default function WorkflowBuilder() {
         {/* --- PASO 2 --- */}
         {step === 2 && (
           <div className="flex flex-col items-center justify-center flex-grow animate-in fade-in slide-in-from-right-8 duration-500">
-            <img src="/bacteria.png" alt="Bacteria" className="w-24 h-24 md:w-32 md:h-32 object-contain mb-4 md:mb-6 opacity-90" />
-            
-            <div className="text-center mb-8 md:mb-10">
-               <h3 className="text-2xl md:text-3xl font-black text-[#111111] mb-2 tracking-tight">Select target microorganisms</h3>
-               <p className="text-gray-500 font-medium text-xs md:text-sm px-4">Select the pathogens, indicators, or spoilage organisms you need to detect.</p>
+            <img src="/bacteria.png" alt="Bacteria" className="w-16 h-16 md:w-24 md:h-24 object-contain mb-8 md:mb-10 opacity-70" />
+
+            <div className="text-center mb-10 md:mb-14">
+               <h3 className="text-3xl md:text-5xl font-black text-[#111111] mb-3 tracking-tighter leading-none">Select target microorganisms</h3>
+               <p className="text-gray-400 font-medium text-sm">Choose the pathogens, indicators, or spoilage organisms you need to detect.</p>
             </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 w-full max-w-4xl mb-10 md:mb-12">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full max-w-4xl mb-12 md:mb-16">
               {MICROORGANISMS.map(micro => {
                 const isSelected = selectedMicroorganisms.includes(micro.id);
                 return (
-                  <button 
-                    key={micro.id} 
-                    onClick={() => toggleMicroorganism(micro.id)} 
-                    className={`relative flex flex-col items-start p-5 md:p-6 rounded-2xl md:rounded-[2rem] transition-colors duration-300 ${isSelected ? "bg-[#111111] text-white" : "bg-white text-[#111111] hover:bg-gray-200"}`}
+                  <button
+                    key={micro.id}
+                    onClick={() => toggleMicroorganism(micro.id)}
+                    className={`relative flex flex-col items-start p-5 md:p-7 rounded-2xl md:rounded-[2rem] transition-all duration-300 ${isSelected ? "bg-[#111111]" : "bg-white hover:bg-gray-100"}`}
                   >
-                    <div className="flex items-center justify-between w-full mb-3">
-                      <span className={`text-[9px] font-black tracking-widest uppercase px-3 py-1 rounded-full ${getTagStyle(micro.type, isSelected)}`}>
+                    <div className="flex items-center justify-between w-full mb-4">
+                      <span className={`text-[9px] font-black tracking-[0.15em] uppercase px-3 py-1 rounded-full ${getTagStyle(micro.type, isSelected)}`}>
                         {micro.type}
                       </span>
-                      {isSelected && <Check className="w-4 h-4 md:w-5 md:h-5 text-[#FF270A]" />}
+                      {isSelected && <Check className="w-4 h-4 text-[#FF270A]" />}
                     </div>
-                    <span className="font-bold text-base md:text-lg text-left">{micro.name}</span>
+                    <span className={`font-black text-lg md:text-xl tracking-tight text-left leading-snug ${isSelected ? 'text-white' : 'text-[#111111]'}`}>{micro.name}</span>
                   </button>
                 );
               })}
             </div>
-            
-            <button 
+
+            <button
               onClick={() => {
                 setStep(3);
                 setTimeout(() => {
                   sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }, 50);
-              }} 
-              disabled={selectedMicroorganisms.length === 0} 
-              className="bg-[#FF270A] text-white px-8 md:px-12 py-4 rounded-full font-bold uppercase tracking-widest text-xs md:text-sm hover:scale-105 transition-transform duration-300 disabled:opacity-30 disabled:hover:scale-100 flex items-center gap-3"
+              }}
+              disabled={selectedMicroorganisms.length === 0}
+              className="bg-[#FF270A] text-white px-10 md:px-14 py-4 md:py-5 rounded-full font-black uppercase tracking-[0.15em] text-xs hover:bg-[#111111] transition-colors duration-300 disabled:opacity-30 flex items-center gap-3"
             >
               Discover our workflow <ArrowRight className="w-4 h-4" />
             </button>
@@ -287,39 +287,38 @@ export default function WorkflowBuilder() {
         {step === 3 && (
           <div className="flex flex-col w-full h-full animate-in fade-in slide-in-from-bottom-8 duration-700 relative">
 
-            {/* ENCABEZADO */}
-            <div className="flex flex-col items-start text-left mb-6 md:mb-8 w-full">
-              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm mb-6 block">Recommended Protocol</span>
+            <div className="flex flex-col items-start text-left mb-10 md:mb-14 w-full">
+              <span className="text-[#FF270A] font-black uppercase tracking-[0.2em] text-[9px] md:text-[10px] mb-8 block">Recommended Protocol</span>
 
-              {/* STEP 1 — MATRIZ */}
+              {/* MATRIZ */}
               {!matrixConfirmed && (
-                <p className="text-[#FF270A] font-bold text-xs uppercase tracking-widest mb-4 animate-in fade-in duration-300">
-                  Select your sample matrix to continue →
+                <p className="text-gray-400 font-medium text-xs mb-4 animate-in fade-in duration-300">
+                  Start by selecting your sample matrix →
                 </p>
               )}
-              <div className="flex w-full md:w-fit items-center bg-white p-1 rounded-full mb-8">
+              <div className="flex w-full md:w-fit items-center bg-white p-1 rounded-full mb-10 md:mb-12">
                 <button
                   onClick={() => { setSampleType("Environmental"); setMatrixConfirmed(true); setProtocolConfirmed(false); }}
-                  className={`flex-1 md:flex-none px-4 md:px-8 py-2.5 rounded-full text-xs md:text-sm font-bold transition-colors leading-tight ${sampleType === "Environmental" && matrixConfirmed ? "bg-[#111111] text-white" : "text-gray-500 hover:text-[#111111]"}`}
+                  className={`flex-1 md:flex-none px-5 md:px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-[0.1em] transition-colors leading-tight ${sampleType === "Environmental" && matrixConfirmed ? "bg-[#111111] text-white" : "text-gray-400 hover:text-[#111111]"}`}
                 >Environmental</button>
                 <button
                   onClick={() => { setSampleType("Finished product"); setMatrixConfirmed(true); setProtocolConfirmed(false); }}
-                  className={`flex-1 md:flex-none px-4 md:px-8 py-2.5 rounded-full text-xs md:text-sm font-bold transition-colors leading-tight ${sampleType === "Finished product" && matrixConfirmed ? "bg-[#111111] text-white" : "text-gray-500 hover:text-[#111111]"}`}
+                  className={`flex-1 md:flex-none px-5 md:px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-[0.1em] transition-colors leading-tight ${sampleType === "Finished product" && matrixConfirmed ? "bg-[#111111] text-white" : "text-gray-400 hover:text-[#111111]"}`}
                 >Finished product</button>
               </div>
 
-              {/* STEP 2 — CARRUSEL, solo visible tras seleccionar matriz */}
+              {/* CARRUSEL — aparece tras seleccionar matriz */}
               {matrixConfirmed && (
                 <div className="w-full animate-in fade-in slide-in-from-bottom-4 duration-400">
                   {!protocolConfirmed && (
-                    <p className="text-[#FF270A] font-bold text-xs uppercase tracking-widest mb-4">
+                    <p className="text-gray-400 font-medium text-xs mb-5">
                       Now select a detection protocol →
                     </p>
                   )}
                   <div className="w-full flex flex-col items-center gap-4">
                     <div className="w-full flex items-center gap-2 md:gap-4">
-                      <button onClick={() => scrollProtocols("left")} className={`hidden md:flex shrink-0 w-12 h-12 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollLeft ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}>
-                        <ChevronLeft className="w-6 h-6" />
+                      <button onClick={() => scrollProtocols("left")} className={`hidden md:flex shrink-0 w-10 h-10 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollLeft ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}>
+                        <ChevronLeft className="w-5 h-5" />
                       </button>
 
                       <div ref={protocolsScrollRef} onScroll={checkScroll} className="flex-grow flex overflow-x-auto gap-3 md:gap-4 py-2 w-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
@@ -328,43 +327,46 @@ export default function WorkflowBuilder() {
                           return (
                             <div
                               key={idx}
-                              className="snap-start shrink-0 flex flex-col items-start justify-between text-left p-5 md:px-8 md:py-6 rounded-2xl md:rounded-[2rem] transition-all duration-300 w-[260px] sm:w-[300px] md:w-[360px] max-w-full h-auto whitespace-normal break-words cursor-pointer"
+                              className="snap-start shrink-0 flex flex-col items-start justify-between text-left p-6 md:px-8 md:py-8 rounded-2xl md:rounded-[2rem] transition-all duration-300 w-[260px] sm:w-[300px] md:w-[380px] max-w-full h-auto whitespace-normal break-words cursor-pointer"
                               style={{ background: isActive ? '#111111' : '#ffffff' }}
                               onClick={() => { setActiveFlowIndex(idx); setProtocolConfirmed(true); }}
                             >
                               <div className="w-full">
-                                <h4 className={`text-lg md:text-2xl font-black tracking-tighter mb-3 w-full flex flex-col md:flex-row md:items-baseline gap-1 md:gap-2 ${isActive ? 'text-white' : 'text-gray-400'}`}>
-                                  Protocol {idx + 1}
-                                  <span className={`text-sm md:text-lg font-bold tracking-normal ${isActive ? 'text-gray-300' : 'text-[#FF270A]'}`}>
-                                    ({calculateTotalTime()} hours)
-                                  </span>
-                                </h4>
-                                <p className={`font-black text-sm md:text-base w-full leading-snug break-words ${isActive ? 'text-white' : 'text-gray-500'}`}>
+                                <div className="flex items-baseline gap-3 mb-4">
+                                  <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${isActive ? 'text-gray-500' : 'text-gray-300'}`}>
+                                    Protocol {idx + 1}
+                                  </p>
+                                  <span className={`w-px h-3 ${isActive ? 'bg-gray-600' : 'bg-gray-200'}`} />
+                                  <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${isActive ? 'text-[#FF270A]' : 'text-[#FF270A]'}`}>
+                                    {calculateTotalTime()} hrs
+                                  </p>
+                                </div>
+                                <p className={`font-black text-lg md:text-2xl leading-snug break-words tracking-tight ${isActive ? 'text-white' : 'text-[#111111]'}`}>
                                   Detection of {micros.join(" + ")}
                                 </p>
                               </div>
                               <button
                                 onClick={(e) => { e.stopPropagation(); setProtocolCompareIndex(idx); }}
-                                className={`mt-4 flex items-center gap-1.5 text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors ${isActive ? 'text-white hover:text-gray-300' : 'text-[#FF270A] hover:text-[#111111]'}`}
+                                className={`mt-6 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.15em] transition-colors ${isActive ? 'text-white hover:text-gray-300' : 'text-gray-300 hover:text-[#FF270A]'}`}
                               >
-                                <FileText className="w-3 h-3 md:w-3.5 md:h-3.5" /> Compare Protocol
+                                <FileText className="w-3 h-3" /> See how we compare vs. competitors
                               </button>
                             </div>
                           );
                         })}
                       </div>
 
-                      <button onClick={() => scrollProtocols("right")} className={`hidden md:flex shrink-0 w-12 h-12 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollRight ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}>
-                        <ChevronRight className="w-6 h-6" />
+                      <button onClick={() => scrollProtocols("right")} className={`hidden md:flex shrink-0 w-10 h-10 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollRight ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}>
+                        <ChevronRight className="w-5 h-5" />
                       </button>
                     </div>
 
-                    <div className="flex md:hidden items-center justify-center gap-4 mt-2">
-                      <button onClick={() => scrollProtocols("left")} disabled={!canScrollLeft} className={`w-10 h-10 bg-white rounded-full flex items-center justify-center transition-all duration-300 ${canScrollLeft ? 'text-[#111111] hover:text-[#FF270A]' : 'text-gray-300 opacity-50'}`}>
-                        <ChevronLeft className="w-5 h-5" />
+                    <div className="flex md:hidden items-center justify-center gap-4 mt-1">
+                      <button onClick={() => scrollProtocols("left")} disabled={!canScrollLeft} className={`w-9 h-9 bg-white rounded-full flex items-center justify-center transition-all ${canScrollLeft ? 'text-[#111111]' : 'text-gray-200'}`}>
+                        <ChevronLeft className="w-4 h-4" />
                       </button>
-                      <button onClick={() => scrollProtocols("right")} disabled={!canScrollRight} className={`w-10 h-10 bg-white rounded-full flex items-center justify-center transition-all duration-300 ${canScrollRight ? 'text-[#111111] hover:text-[#FF270A]' : 'text-gray-300 opacity-50'}`}>
-                        <ChevronRight className="w-5 h-5" />
+                      <button onClick={() => scrollProtocols("right")} disabled={!canScrollRight} className={`w-9 h-9 bg-white rounded-full flex items-center justify-center transition-all ${canScrollRight ? 'text-[#111111]' : 'text-gray-200'}`}>
+                        <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -375,55 +377,66 @@ export default function WorkflowBuilder() {
             {/* PRODUCTOS — solo visibles tras confirmar protocolo */}
             {protocolConfirmed && (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="w-full mb-4">
-                  <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm block leading-relaxed">
-                    Recommended Products for {sampleType} Testing in the {selectedIndustry} Industry
-                  </span>
+                <div className="w-full mb-8 md:mb-10">
+                  <p className="text-[9px] font-black text-[#FF270A] uppercase tracking-[0.2em] mb-1">
+                    {sampleType} · {selectedIndustry}
+                  </p>
+                  <h4 className="text-xl md:text-2xl font-black text-[#111111] tracking-tight leading-tight">
+                    Recommended Products
+                    {potentialFlows[activeFlowIndex] && (
+                      <span className="block text-sm md:text-base font-medium text-gray-400 tracking-normal mt-1">
+                        for detection of {(potentialFlows[activeFlowIndex][1] as string[]).join(" + ")}
+                      </span>
+                    )}
+                  </h4>
                 </div>
 
-                <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-4 w-full">
+                <div className="flex flex-col lg:flex-row items-stretch gap-3 md:gap-4 w-full">
                   {getActiveStages().map((stage, sIdx, arr) => {
                     const currentProd = PRODUCT_BY_ID[selectedProductIds[stage.key]];
                     const alternatives = stage.products.filter(p => p.id !== selectedProductIds[stage.key]);
                     return (
                       <Fragment key={stage.key}>
-                        <div className="flex-1 w-full bg-white p-5 sm:p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] flex flex-col transition-colors duration-300">
-                          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 md:mb-6 block shrink-0">Stage 0{sIdx + 1} // {stage.label}</span>
-                          <div className="md:h-16 flex items-start mb-2">
-                            <h5 className="text-lg md:text-xl font-bold text-[#111111] leading-tight line-clamp-2">{currentProd.name}</h5>
+                        <div className="flex-1 w-full bg-white p-6 md:p-10 rounded-2xl md:rounded-[2rem] flex flex-col">
+                          {/* TOP — stage label */}
+                          <span className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-5 block">
+                            {String(sIdx + 1).padStart(2, '0')} — {stage.label}
+                          </span>
+                          {/* MIDDLE — product info, grows to fill space */}
+                          <div className="flex-grow">
+                            <h5 className="text-xl md:text-2xl font-black text-[#111111] leading-tight tracking-tight mb-2">{currentProd.name}</h5>
+                            <p className="text-[10px] text-gray-300 font-medium mb-5">Cat #{currentProd.cat} · {currentProd.format}</p>
+                            <p className="text-sm text-gray-500 leading-relaxed">{currentProd.desc}</p>
                           </div>
-                          <div className="flex flex-col gap-0.5 mb-4 md:mb-6 md:h-10 shrink-0">
-                            <span className="text-xs md:text-sm font-medium text-gray-400">Cat #{currentProd.cat}</span>
-                            <span className="text-xs md:text-sm font-medium text-gray-400">{currentProd.format}</span>
-                          </div>
-                          <div className="flex-grow flex items-start mb-6 md:mb-8">
-                            <p className="text-xs md:text-sm text-[#111111] leading-relaxed font-medium">{currentProd.desc}</p>
-                          </div>
-                          <div className="mt-auto pt-4 md:pt-6 flex flex-col gap-4 shrink-0">
-                            <div className="flex items-center gap-2 text-[#111111] font-bold text-[10px] md:text-xs uppercase tracking-tight">
-                              <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A]" />
-                              {currentProd.timeHours >= 1 ? `${currentProd.timeHours}h` : `${currentProd.timeHours * 60} min`}
+                          {/* BOTTOM — actions, always pinned at same level */}
+                          <div className="mt-8 pt-5 border-t border-gray-100 flex flex-col gap-3">
+                            <div className="flex items-center gap-2 h-5">
+                              <Clock className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">
+                                {currentProd.timeHours >= 1 ? `${currentProd.timeHours}h` : `${currentProd.timeHours * 60} min`}
+                              </span>
                             </div>
-                            <button onClick={() => setValueBriefProduct(currentProd)} className="flex items-center gap-2 font-bold text-[10px] md:text-xs uppercase tracking-tight hover:opacity-70 transition-opacity">
-                              <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A] shrink-0" />
-                              <span className="text-[#111111]">Product Value Brief</span>
+                            <button onClick={() => setValueBriefProduct(currentProd)} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                              <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
                             </button>
-                            <a href={currentProd.technicalDataUrl} className="flex items-center gap-2 font-bold text-[10px] md:text-xs uppercase tracking-tight hover:opacity-70 transition-opacity">
-                              <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A] shrink-0" />
-                              <span className="text-[#111111]">Technical Data</span>
+                            <a href={currentProd.technicalDataUrl} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                              <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Technical Data</span>
                             </a>
-                            <div className="h-8 flex items-end">
-                              {alternatives.length > 0 && (
-                                <button onClick={() => setActiveModalStage(stage.key)} className="flex items-center gap-2 text-gray-400 hover:text-[#111111] font-bold text-[10px] uppercase tracking-widest transition-colors">
-                                  <RotateCcw className="w-3 md:w-3.5 h-3 md:h-3.5" /> View Alternatives
+                            <div className="h-5 flex items-center">
+                              {alternatives.length > 0 ? (
+                                <button onClick={() => setActiveModalStage(stage.key)} className="flex items-center gap-2 hover:opacity-60 transition-opacity">
+                                  <RotateCcw className="w-3.5 h-3.5 text-gray-300 shrink-0" />
+                                  <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.1em]">View Alternatives</span>
                                 </button>
-                              )}
+                              ) : null}
                             </div>
                           </div>
                         </div>
                         {sIdx < arr.length - 1 && (
                           <div className="flex items-center justify-center py-2 lg:py-0 shrink-0">
-                            <ArrowRight className="w-5 h-5 md:w-6 md:h-6 text-gray-300 rotate-90 lg:rotate-0" />
+                            <ArrowRight className="w-4 h-4 text-gray-200 rotate-90 lg:rotate-0" />
                           </div>
                         )}
                       </Fragment>
@@ -433,22 +446,22 @@ export default function WorkflowBuilder() {
               </div>
             )}
 
-            {/* CALL TO ACTION (Cotización) */}
-            <div className="mt-12 md:mt-20 w-full flex flex-col items-center justify-center border-t border-[#111111] pt-10 md:pt-16">
-               <h3 className="text-xl md:text-3xl font-black text-[#111111] mb-2 md:mb-3 tracking-tight text-center">Ready to optimize your lab?</h3>
-               <p className="text-sm md:text-base text-gray-500 font-medium mb-8 text-center max-w-lg px-4">Get a customized quote and start implementing these advanced diagnostic products in your facility.</p>
-               
-               <button 
-                 onClick={handleOpenQuote} 
-                 className="bg-[#111111] text-white px-8 py-4 md:px-10 md:py-5 rounded-full font-bold uppercase tracking-widest text-xs md:text-sm hover:bg-[#FF270A] transition-colors duration-300 flex items-center gap-3"
-               >
-                 <Mail className="w-4 h-4" /> Request Quote
-               </button>
-
-               <button onClick={reset} className="mt-8 md:mt-10 flex items-center gap-2 text-[10px] md:text-xs font-bold text-gray-400 hover:text-[#111111] uppercase tracking-widest transition-colors">
-                 <RotateCcw className="w-3 h-3 md:w-4 md:h-4" /> Start New Design
-               </button>
-            </div>
+            {/* CTA — solo cuando protocolo confirmado, tamaño original */}
+            {protocolConfirmed && (
+              <div className="mt-16 md:mt-24 w-full flex flex-col items-center justify-center border-t border-gray-200 pt-12 md:pt-16 animate-in fade-in duration-500">
+                <h3 className="text-xl md:text-3xl font-black text-[#111111] mb-2 md:mb-3 tracking-tight text-center">Ready to optimize your lab?</h3>
+                <p className="text-sm text-gray-400 font-medium mb-8 text-center max-w-sm">Get a customized quote for your {selectedIndustry} workflow.</p>
+                <button
+                  onClick={handleOpenQuote}
+                  className="bg-[#111111] text-white px-8 py-4 md:px-10 md:py-5 rounded-full font-bold uppercase tracking-widest text-xs md:text-sm hover:bg-[#FF270A] transition-colors duration-300 flex items-center gap-3"
+                >
+                  <Mail className="w-4 h-4" /> Request Quote
+                </button>
+                <button onClick={reset} className="mt-8 flex items-center gap-2 text-[9px] font-black text-gray-300 hover:text-[#111111] uppercase tracking-[0.15em] transition-colors">
+                  <RotateCcw className="w-3 h-3" /> Start Over
+                </button>
+              </div>
+            )}
             
           </div>
         )}
