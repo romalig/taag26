@@ -288,7 +288,7 @@ export default function WorkflowBuilder() {
           <div className="flex flex-col w-full h-full animate-in fade-in slide-in-from-bottom-8 duration-700 relative">
 
             <div className="flex flex-col items-start text-left mb-10 md:mb-14 w-full">
-              <span className="text-[#FF270A] font-black uppercase tracking-[0.2em] text-[9px] md:text-[10px] mb-8 block">Recommended Protocol</span>
+              <span className="text-[#FF270A] font-black uppercase tracking-[0.2em] text-[9px] md:text-[10px] mb-8 block">Build your workflow</span>
 
               {/* MATRIZ */}
               {!matrixConfirmed && (
@@ -315,53 +315,64 @@ export default function WorkflowBuilder() {
                       Now select a detection protocol →
                     </p>
                   )}
-                  <div className="w-full flex flex-col items-center gap-4">
-                    <div className="w-full flex items-center gap-2 md:gap-4">
-                      <button onClick={() => scrollProtocols("left")} className={`hidden md:flex shrink-0 w-10 h-10 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollLeft ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}>
+
+                  {/* Wrapper full-bleed que rompe el padding del contenedor padre */}
+                  <div className="relative -mx-6 sm:-mx-10 md:-mx-20">
+
+                    {/* Flechas desktop */}
+                    <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 left-16 z-20 transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                      <button onClick={() => scrollProtocols("left")} className="w-10 h-10 rounded-full bg-white border border-gray-100 text-[#111111] flex items-center justify-center hover:text-[#FF270A] transition-colors">
                         <ChevronLeft className="w-5 h-5" />
                       </button>
-
-                      <div ref={protocolsScrollRef} onScroll={checkScroll} className="flex-grow flex overflow-x-auto gap-3 md:gap-4 py-2 w-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                        {potentialFlows.map(([_, micros]: any, idx) => {
-                          const isActive = activeFlowIndex === idx && protocolConfirmed;
-                          return (
-                            <div
-                              key={idx}
-                              className="snap-start shrink-0 flex flex-col items-start justify-between text-left p-6 md:px-8 md:py-8 rounded-2xl md:rounded-[2rem] transition-all duration-300 w-[260px] sm:w-[300px] md:w-[380px] max-w-full h-auto whitespace-normal break-words cursor-pointer"
-                              style={{ background: isActive ? '#111111' : '#ffffff' }}
-                              onClick={() => { setActiveFlowIndex(idx); setProtocolConfirmed(true); }}
-                            >
-                              <div className="w-full">
-                                <div className="flex items-baseline gap-3 mb-4">
-                                  <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${isActive ? 'text-gray-500' : 'text-gray-300'}`}>
-                                    Protocol {idx + 1}
-                                  </p>
-                                  <span className={`w-px h-3 ${isActive ? 'bg-gray-600' : 'bg-gray-200'}`} />
-                                  <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${isActive ? 'text-[#FF270A]' : 'text-[#FF270A]'}`}>
-                                    {calculateTotalTime()} hrs
-                                  </p>
-                                </div>
-                                <p className={`font-black text-lg md:text-2xl leading-snug break-words tracking-tight ${isActive ? 'text-white' : 'text-[#111111]'}`}>
-                                  Detection of {micros.join(" + ")}
-                                </p>
-                              </div>
-                              <button
-                                onClick={(e) => { e.stopPropagation(); setProtocolCompareIndex(idx); }}
-                                className={`mt-6 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.15em] transition-colors ${isActive ? 'text-white hover:text-gray-300' : 'text-gray-300 hover:text-[#FF270A]'}`}
-                              >
-                                <FileText className="w-3 h-3" /> See how we compare vs. competitors
-                              </button>
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      <button onClick={() => scrollProtocols("right")} className={`hidden md:flex shrink-0 w-10 h-10 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollRight ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}>
+                    </div>
+                    <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 right-16 z-20 transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                      <button onClick={() => scrollProtocols("right")} className="w-10 h-10 rounded-full bg-white border border-gray-100 text-[#111111] flex items-center justify-center hover:text-[#FF270A] transition-colors">
                         <ChevronRight className="w-5 h-5" />
                       </button>
                     </div>
 
-                    <div className="flex md:hidden items-center justify-center gap-4 mt-1">
+                    {/* Track scrolleable — paddingLeft = mesmo valor que el p- del contenedor padre */}
+                    <div
+                      ref={protocolsScrollRef}
+                      onScroll={checkScroll}
+                      className="flex overflow-x-auto gap-3 md:gap-4 py-3 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pl-6 sm:pl-10 md:pl-20 pr-6 sm:pr-10 md:pr-20"
+                    >
+                      {potentialFlows.map(([_, micros]: any, idx) => {
+                        const isActive = activeFlowIndex === idx && protocolConfirmed;
+                        return (
+                          <div
+                            key={idx}
+                            className="snap-start shrink-0 flex flex-col items-start justify-between text-left p-6 md:px-8 md:py-8 rounded-2xl md:rounded-[2rem] transition-all duration-300 w-[80vw] sm:w-[340px] md:w-[380px] h-auto whitespace-normal break-words cursor-pointer"
+                            style={{ background: isActive ? '#111111' : '#ffffff' }}
+                            onClick={() => { setActiveFlowIndex(idx); setProtocolConfirmed(true); }}
+                          >
+                            <div className="w-full">
+                              <div className="flex items-baseline gap-3 mb-4">
+                                <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${isActive ? 'text-gray-500' : 'text-gray-300'}`}>
+                                  Protocol {idx + 1}
+                                </p>
+                                <span className={`w-px h-3 ${isActive ? 'bg-gray-600' : 'bg-gray-200'}`} />
+                                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[#FF270A]">
+                                  {calculateTotalTime()} hrs
+                                </p>
+                              </div>
+                              <p className={`font-black text-lg md:text-2xl leading-snug break-words tracking-tight ${isActive ? 'text-white' : 'text-[#111111]'}`}>
+                                Detection of {micros.join(" + ")}
+                              </p>
+                            </div>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setProtocolCompareIndex(idx); }}
+                              className={`mt-6 flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.15em] transition-colors ${isActive ? 'text-white hover:text-gray-300' : 'text-gray-300 hover:text-[#FF270A]'}`}
+                            >
+                              <FileText className="w-3 h-3" /> See how we compare vs. competitors
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Controles móviles */}
+                    <div className="flex md:hidden items-center justify-center gap-4 mt-2 px-6">
                       <button onClick={() => scrollProtocols("left")} disabled={!canScrollLeft} className={`w-9 h-9 bg-white rounded-full flex items-center justify-center transition-all ${canScrollLeft ? 'text-[#111111]' : 'text-gray-200'}`}>
                         <ChevronLeft className="w-4 h-4" />
                       </button>
@@ -379,69 +390,71 @@ export default function WorkflowBuilder() {
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="w-full mb-8 md:mb-10">
                   <p className="text-[9px] font-black text-[#FF270A] uppercase tracking-[0.2em] mb-1">
+                    Recommended Products
+                  </p>
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">
                     {sampleType} · {selectedIndustry}
                   </p>
-                  <h4 className="text-xl md:text-2xl font-black text-[#111111] tracking-tight leading-tight">
-                    Recommended Products
-                    {potentialFlows[activeFlowIndex] && (
-                      <span className="block text-sm md:text-base font-medium text-gray-400 tracking-normal mt-1">
-                        for detection of {(potentialFlows[activeFlowIndex][1] as string[]).join(" + ")}
-                      </span>
-                    )}
-                  </h4>
+                  {potentialFlows[activeFlowIndex] && (
+                    <p className="text-xl md:text-2xl font-black text-[#111111] tracking-tight leading-snug">
+                      {(potentialFlows[activeFlowIndex][1] as string[]).join(" + ")}
+                    </p>
+                  )}
                 </div>
 
-                <div className="flex flex-col lg:flex-row items-stretch gap-3 md:gap-4 w-full">
-                  {getActiveStages().map((stage, sIdx, arr) => {
-                    const currentProd = PRODUCT_BY_ID[selectedProductIds[stage.key]];
-                    const alternatives = stage.products.filter(p => p.id !== selectedProductIds[stage.key]);
-                    return (
-                      <Fragment key={stage.key}>
-                        <div className="flex-1 w-full bg-white p-6 md:p-10 rounded-2xl md:rounded-[2rem] flex flex-col">
-                          {/* TOP — stage label */}
-                          <span className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-5 block">
-                            {String(sIdx + 1).padStart(2, '0')} — {stage.label}
-                          </span>
-                          {/* MIDDLE — product info, grows to fill space */}
-                          <div className="flex-grow">
-                            <h5 className="text-xl md:text-2xl font-black text-[#111111] leading-tight tracking-tight mb-2">{currentProd.name}</h5>
-                            <p className="text-[10px] text-gray-300 font-medium mb-5">Cat #{currentProd.cat} · {currentProd.format}</p>
-                            <p className="text-sm text-gray-500 leading-relaxed">{currentProd.desc}</p>
-                          </div>
-                          {/* BOTTOM — actions, always pinned at same level */}
-                          <div className="mt-8 pt-5 border-t border-gray-100 flex flex-col gap-3">
-                            <div className="flex items-center gap-2 h-5">
-                              <Clock className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">
-                                {currentProd.timeHours >= 1 ? `${currentProd.timeHours}h` : `${currentProd.timeHours * 60} min`}
-                              </span>
+                {/* Full-bleed scroll igual que el carrusel de protocolos */}
+                <div className="relative -mx-6 sm:-mx-10 md:-mx-20">
+                  <div
+                    className="flex overflow-x-auto gap-3 md:gap-4 py-3 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pl-6 sm:pl-10 md:pl-20 pr-6 sm:pr-10 md:pr-20"
+                  >
+                    {getActiveStages().map((stage, sIdx, arr) => {
+                      const currentProd = PRODUCT_BY_ID[selectedProductIds[stage.key]];
+                      const alternatives = stage.products.filter(p => p.id !== selectedProductIds[stage.key]);
+                      return (
+                        <Fragment key={stage.key}>
+                          <div className="snap-start shrink-0 w-[80vw] sm:w-[340px] md:w-[380px] bg-white p-6 md:p-10 rounded-2xl md:rounded-[2rem] flex flex-col">
+                            <span className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-5 block">
+                              {String(sIdx + 1).padStart(2, '0')} — {stage.label}
+                            </span>
+                            <div className="flex-grow">
+                              <h5 className="text-xl md:text-2xl font-black text-[#111111] leading-tight tracking-tight mb-2">{currentProd.name}</h5>
+                              <p className="text-[10px] text-gray-300 font-medium mb-5">Cat #{currentProd.cat} · {currentProd.format}</p>
+                              <p className="text-sm text-gray-500 leading-relaxed">{currentProd.desc}</p>
                             </div>
-                            <button onClick={() => setValueBriefProduct(currentProd)} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
-                              <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
-                            </button>
-                            <a href={currentProd.technicalDataUrl} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
-                              <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Technical Data</span>
-                            </a>
-                            <div className="h-5 flex items-center">
-                              {alternatives.length > 0 ? (
-                                <button onClick={() => setActiveModalStage(stage.key)} className="flex items-center gap-2 hover:opacity-60 transition-opacity">
-                                  <RotateCcw className="w-3.5 h-3.5 text-gray-300 shrink-0" />
-                                  <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.1em]">View Alternatives</span>
-                                </button>
-                              ) : null}
+                            <div className="mt-8 pt-5 border-t border-gray-100 flex flex-col gap-3">
+                              <div className="flex items-center gap-2 h-5">
+                                <Clock className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">
+                                  {currentProd.timeHours >= 1 ? `${currentProd.timeHours}h` : `${currentProd.timeHours * 60} min`}
+                                </span>
+                              </div>
+                              <button onClick={() => setValueBriefProduct(currentProd)} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
+                              </button>
+                              <a href={currentProd.technicalDataUrl} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Technical Data</span>
+                              </a>
+                              <div className="h-5 flex items-center">
+                                {alternatives.length > 0 ? (
+                                  <button onClick={() => setActiveModalStage(stage.key)} className="flex items-center gap-2 hover:opacity-60 transition-opacity">
+                                    <RotateCcw className="w-3.5 h-3.5 text-gray-300 shrink-0" />
+                                    <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.1em]">View Alternatives</span>
+                                  </button>
+                                ) : null}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        {sIdx < arr.length - 1 && (
-                          <div className="flex items-center justify-center py-2 lg:py-0 shrink-0">
-                            <ArrowRight className="w-4 h-4 text-gray-200 rotate-90 lg:rotate-0" />
-                          </div>
-                        )}
-                      </Fragment>
-                    );
-                  })}
+                          {sIdx < arr.length - 1 && (
+                            <div className="flex items-center justify-center shrink-0 px-1">
+                              <ArrowRight className="w-4 h-4 text-gray-200" />
+                            </div>
+                          )}
+                        </Fragment>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}
