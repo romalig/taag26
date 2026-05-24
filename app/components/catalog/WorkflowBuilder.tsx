@@ -1,58 +1,15 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect, Fragment } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Factory, Check, RotateCcw, FileText, Clock, X, Mail, Send, CheckCircle2 } from "lucide-react";
-
-// =========================================================
-// ÍCONO PERSONALIZADO: BACTERIA
-// =========================================================
-const BacteriaIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="4" y="7" width="16" height="10" rx="5" />
-    <path d="M9 12h.01" />
-    <path d="M12 12h.01" />
-    <path d="M15 12h.01" />
-    <path d="M6 7v-2" />
-    <path d="M12 7v-2" />
-    <path d="M18 7v-2" />
-    <path d="M6 17v2" />
-    <path d="M12 17v2" />
-    <path d="M18 17v2" />
-  </svg>
-);
-
-// =========================================================
-// CONFIGURACIÓN DE DATOS TÉCNICOS
-// =========================================================
-const INDUSTRIES = ["Dairy", "Meat & Poultry", "Beverages", "Ready-to-Eat", "Produce", "Environmental"];
-
-const MICROORGANISMS = [
-  { id: "Sal", name: "Salmonella spp.", type: "PATHOGEN", group: "Multiplex S+L" },
-  { id: "Lis", name: "Listeria spp.", type: "PATHOGEN", group: "Multiplex S+L" },
-  { id: "Mon", name: "L. monocytogenes", type: "PATHOGEN", group: "Multiplex S+L" },
-  { id: "Eco", name: "E. coli O157:H7", type: "PATHOGEN", group: "E. coli Flow" },
-  { id: "Cro", name: "Cronobacter spp.", type: "PATHOGEN", group: "Cronobacter Flow" },
-  { id: "Ent", name: "Enterobacteriaceae", type: "INDICATOR", group: "Indicators" },
-  { id: "Yeast", name: "Yeast & Molds", type: "SPOILAGE", group: "Spoilage" }
-];
-
-const STAGE_PRODUCTS: any = {
-  "Sampling": [
-    { id: "s1", name: "TAAG S1 Swab Kit", cat: "30-0012", format: "100 swabs / box", time: 0.25, desc: "Neutralizing buffer swab for 10x10 surfaces.", link: "#" },
-    { id: "s2", name: "TAAG S2 Sponge", cat: "30-0015", format: "50 sponges / box", time: 0.4, desc: "High-capacity sponge for large equipment.", link: "#" }
-  ],
-  "Enrichment": [
-    { id: "e1", name: "TAAG E24 Medium", cat: "20-0540", format: "500g dehydrated", time: 24, desc: "Universal enrichment broth for rapid growth.", link: "#" },
-    { id: "e2", name: "TAAG E-Fast", cat: "20-0900", format: "500g dehydrated", time: 18, desc: "Accelerated medium for high-fat samples.", link: "#" }
-  ],
-  "Extraction": [
-    { id: "x1", name: "TAAG X-Extract", cat: "10-0921", format: "96 extractions / kit", time: 0.5, desc: "High-yield magnetic bead DNA/RNA isolation.", link: "#" },
-    { id: "x2", name: "TAAG X-Quick", cat: "10-0100", format: "100 extractions / kit", time: 0.2, desc: "5-minute thermal lysis protocol.", link: "#" }
-  ],
-  "PCR": [
-    { id: "p1", name: "TAAG Pathogen Kit", cat: "40-1120", format: "96 reactions / kit", time: 1.5, desc: "Multiplex Real-Time PCR detection.", link: "#" }
-  ]
-};
+import { 
+  ArrowRight, ChevronLeft, ChevronRight, Check, RotateCcw, 
+  FileText, Clock, X, Mail, Send, CheckCircle2
+} from "lucide-react";
+import {
+  INDUSTRIES, MICROORGANISMS, STAGES, PRODUCT_BY_ID, STAGE_BY_KEY,
+  DEFAULT_SELECTED_IDS, getFallbackIcon,
+  type Product, type StageKey
+} from "./workflowData";
 
 export default function WorkflowBuilder() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -60,9 +17,7 @@ export default function WorkflowBuilder() {
   const [selectedMicroorganisms, setSelectedMicroorganisms] = useState<string[]>([]);
   const [sampleType, setSampleType] = useState<"Environmental" | "Finished product">("Environmental");
   
-  const [selectedProductIds, setSelectedProductIds] = useState<Record<string, string>>({
-    Sampling: "s1", Enrichment: "e1", Extraction: "x1", PCR: "p1"
-  });
+  const [selectedProductIds, setSelectedProductIds] = useState<Record<string, string>>(DEFAULT_SELECTED_IDS);
 
   const [activeFlowIndex, setActiveFlowIndex] = useState(0);
   
@@ -72,6 +27,11 @@ export default function WorkflowBuilder() {
   const [quoteMessage, setQuoteMessage] = useState("");
   const [isSubmittingQuote, setIsSubmittingQuote] = useState(false);
   const [isQuoteSent, setIsQuoteSent] = useState(false);
+
+  // Modal: Protocol Comparison
+  const [protocolCompareIndex, setProtocolCompareIndex] = useState<number | null>(null);
+  // Modal: Product Value Brief
+  const [valueBriefProduct, setValueBriefProduct] = useState<Product | null>(null);
 
   // Referencias para el carrusel de protocolos
   const protocolsScrollRef = useRef<HTMLDivElement>(null);
@@ -101,17 +61,16 @@ export default function WorkflowBuilder() {
     setActiveModalStage(null); 
   };
 
+  const getActiveStages = () =>
+    sampleType === "Environmental" ? STAGES : STAGES.filter(s => s.key !== "Sampling");
+
   const calculateTotalTime = () => {
-    const stages = sampleType === "Environmental" 
-      ? ["Sampling", "Enrichment", "Extraction", "PCR"] 
-      : ["Enrichment", "Extraction", "PCR"];
-    
-    let total = 0;
-    stages.forEach(s => {
-      const prod = STAGE_PRODUCTS[s].find((p: any) => p.id === selectedProductIds[s]);
-      if (prod) total += prod.time;
-    });
-    return total.toFixed(1);
+    return getActiveStages()
+      .reduce((total, stage) => {
+        const prod = PRODUCT_BY_ID[selectedProductIds[stage.key]];
+        return total + (prod?.timeHours ?? 0);
+      }, 0)
+      .toFixed(1);
   };
 
   const reset = () => {
@@ -125,17 +84,16 @@ export default function WorkflowBuilder() {
     if (isSelected) {
       if (type === "PATHOGEN") return "bg-red-500/20 text-red-400";
       if (type === "SPOILAGE") return "bg-orange-500/20 text-orange-400";
-      if (type === "INDICATOR") return "bg-green-500/20 text-green-400";
+      if (type === "INDICATOR") return "bg-gray-500/20 text-gray-300";
       return "bg-gray-700 text-gray-300";
     } else {
       if (type === "PATHOGEN") return "bg-red-50 text-red-600";
       if (type === "SPOILAGE") return "bg-orange-50 text-orange-600";
-      if (type === "INDICATOR") return "bg-green-50 text-green-600";
+      if (type === "INDICATOR") return "bg-gray-100 text-gray-500";
       return "bg-gray-100 text-gray-500";
     }
   };
 
-  // Manejo de flechas del carrusel de protocolos
   const checkScroll = () => {
     if (protocolsScrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = protocolsScrollRef.current;
@@ -151,7 +109,7 @@ export default function WorkflowBuilder() {
     }
     window.addEventListener("resize", checkScroll);
     return () => window.removeEventListener("resize", checkScroll);
-  }, [step, potentialFlows, sampleType]);
+  }, [step, potentialFlows, sampleType, selectedProductIds]); // Agregado dependency
 
   const scrollProtocols = (direction: "left" | "right") => {
     if (protocolsScrollRef.current) {
@@ -160,29 +118,21 @@ export default function WorkflowBuilder() {
     }
   };
 
-  // Generar Cotización con MÚLTIPLES PROTOCOLOS
   const handleOpenQuote = () => {
-    const stages = sampleType === "Environmental" 
-      ? ["Sampling", "Enrichment", "Extraction", "PCR"] 
-      : ["Enrichment", "Extraction", "PCR"];
-      
+    const activeStages = getActiveStages();
     let allProtocolsText = "";
 
     potentialFlows.forEach(([_, micros]: any, idx) => {
       const targets = micros.join(" + ");
       allProtocolsText += `Protocol ${idx + 1} (${targets})\n`;
-      
-      stages.forEach(stage => {
-        const prod = STAGE_PRODUCTS[stage].find((p: any) => p.id === selectedProductIds[stage]);
-        if (prod) {
-          allProtocolsText += `- ${prod.name} (Cat. ${prod.cat})\n`;
-        }
+      activeStages.forEach(stage => {
+        const prod = PRODUCT_BY_ID[selectedProductIds[stage.key]];
+        if (prod) allProtocolsText += `- ${prod.name} (Cat. ${prod.cat})\n`;
       });
-      allProtocolsText += `\n`; 
+      allProtocolsText += `\n`;
     });
 
     const msg = `Hello TAAG Team,\n\nI would like to request a quote for the following workflows designed for the ${selectedIndustry} industry:\n\n${allProtocolsText}Please let me know the pricing and availability.\n\nThank you.`;
-
     setQuoteMessage(msg);
     setIsQuoteModalOpen(true);
     setIsQuoteSent(false);
@@ -200,10 +150,14 @@ export default function WorkflowBuilder() {
     }, 4000);
   };
 
+  const CurrentIndustryIcon = selectedIndustry
+    ? (INDUSTRIES.find(i => i.name === selectedIndustry)?.icon ?? getFallbackIcon())
+    : getFallbackIcon();
+
   return (
     <section className="pt-24 pb-20 px-4 md:px-6 w-full max-w-[1400px] mx-auto font-sans relative">
       
-      {/* TÍTULO DE LA SECCIÓN (Centrado) */}
+      {/* TÍTULO DE LA SECCIÓN */}
       <div className="mb-10 md:mb-12 text-center flex flex-col items-center px-2">
         <h2 className="text-3xl md:text-5xl font-black text-[#111111] mb-4 tracking-tighter leading-tight">
           Product & Protocol Selector
@@ -215,7 +169,7 @@ export default function WorkflowBuilder() {
 
       <div className="w-full bg-gray-50 rounded-[2rem] md:rounded-[3rem] p-5 sm:p-8 md:p-16 relative min-h-[600px] flex flex-col overflow-hidden">
         
-        {/* BARRA DE PROGRESO Y RESUMEN DE SELECCIÓN (Línea Negra) */}
+        {/* BARRA DE PROGRESO Y RESUMEN */}
         <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mb-10 md:mb-16 gap-6 border-b border-[#111111] pb-6 md:pb-8">
            <div className="flex items-center gap-2 md:gap-6 w-full justify-between lg:justify-start overflow-x-auto no-scrollbar pb-2 md:pb-0">
               <button onClick={() => setStep(1)} className={`text-xs md:text-base font-bold flex items-center gap-2 transition-colors shrink-0 ${step >= 1 ? 'text-[#111111]' : 'text-gray-300'}`}>
@@ -224,24 +178,28 @@ export default function WorkflowBuilder() {
               </button>
               <div className="w-4 md:w-12 h-px bg-gray-200 shrink-0" />
               <button onClick={() => { if (step > 1) setStep(2) }} disabled={step < 2} className={`text-xs md:text-base font-bold flex items-center gap-2 transition-colors shrink-0 ${step >= 2 ? 'text-[#111111]' : 'text-gray-300'} ${step > 1 ? 'cursor-pointer hover:text-[#FF270A]' : 'cursor-default'}`}>
-                 <span className={`w-6 h-6 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] md:text-xs transition-colors ${step === 2 ? 'bg-[#FF270A] text-white' : step > 2 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-500'}`}>2</span>
+                 <span className={`w-7 h-7 md:w-10 md:h-10 flex items-center justify-center rounded-full text-[10px] md:text-sm transition-colors ${step === 2 ? 'bg-[#FF270A] text-white' : step > 2 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-500'}`}>2</span>
                  Targets
               </button>
               <div className="w-4 md:w-12 h-px bg-gray-200 shrink-0" />
               <button disabled className={`text-xs md:text-base font-bold flex items-center gap-2 transition-colors shrink-0 ${step === 3 ? 'text-[#111111]' : 'text-gray-300'} cursor-default`}>
-                 <span className={`w-6 h-6 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] md:text-xs transition-colors ${step === 3 ? 'bg-[#FF270A] text-white' : 'bg-gray-200 text-gray-500'}`}>3</span>
+                 <span className={`w-7 h-7 md:w-10 md:h-10 flex items-center justify-center rounded-full text-[10px] md:text-sm transition-colors ${step === 3 ? 'bg-[#FF270A] text-white' : 'bg-gray-200 text-gray-500'}`}>3</span>
                  Protocol
               </button>
            </div>
            
+           {/* TARJETA AGRUPADA DE RESUMEN (Sin borde ni sombra, fondo sólido) */}
            {step > 1 && (
-             <div className="flex flex-wrap items-center justify-center gap-2 bg-white px-4 py-2.5 md:px-5 md:py-2.5 rounded-2xl md:rounded-full text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest text-center">
-               <span className="text-[#111111]">{selectedIndustry}</span>
+             <div className="flex items-center bg-white rounded-2xl md:rounded-full p-1 shrink-0 max-w-full overflow-hidden">
+               <div className="flex items-center gap-2 px-3 py-2 md:px-5 md:py-3 text-xs md:text-sm font-bold text-[#111111] uppercase tracking-widest border-r border-gray-100 min-w-0">
+                 <CurrentIndustryIcon className="w-8 h-8 md:w-10 md:h-10 shrink-0 text-[#FF270A]" strokeWidth={1.5} />
+                 <span className="truncate">{selectedIndustry}</span>
+               </div>
                {selectedMicroorganisms.length > 0 && (
-                 <>
-                   <span className="text-gray-300 hidden md:inline">•</span>
-                   <span className="text-[#FF270A]">{selectedMicroorganisms.length} Targets</span>
-                 </>
+                 <div className="flex items-center gap-2 px-3 py-2 md:px-5 md:py-3 text-xs md:text-sm font-bold text-[#FF270A] uppercase tracking-widest shrink-0">
+                   <img src="/bacteria.png" alt="" className="w-8 h-8 md:w-10 md:h-10 shrink-0 object-contain" />
+                   <span>{selectedMicroorganisms.length} Target{selectedMicroorganisms.length !== 1 ? 's' : ''}</span>
+                 </div>
                )}
              </div>
            )}
@@ -250,23 +208,25 @@ export default function WorkflowBuilder() {
         {/* --- PASO 1 --- */}
         {step === 1 && (
           <div className="flex flex-col items-center justify-center flex-grow animate-in fade-in zoom-in-95 duration-500">
-            <Factory className="w-12 h-12 text-[#FF270A] mb-6 md:mb-8" strokeWidth={1.5} />
-            
             <div className="text-center mb-8 md:mb-10">
                <h3 className="text-2xl md:text-3xl font-black text-[#111111] mb-2 tracking-tight">Select your industry</h3>
                <p className="text-gray-500 font-medium text-xs md:text-sm px-4">Choose the sector that best represents your facility's operations.</p>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-6 w-full max-w-3xl">
-              {INDUSTRIES.map(ind => (
-                <button 
-                  key={ind} 
-                  onClick={() => { setSelectedIndustry(ind); setStep(2); }} 
-                  className="p-4 md:p-8 bg-white rounded-2xl md:rounded-[2rem] font-bold text-[#111111] text-sm md:text-lg hover:text-[#FF270A] transition-colors duration-300 flex items-center justify-center text-center min-h-[90px] md:min-h-0 break-words"
-                >
-                  {ind}
-                </button>
-              ))}
+              {INDUSTRIES.map(industry => {
+                const Icon = industry.icon;
+                return (
+                  <button 
+                    key={industry.name} 
+                    onClick={() => { setSelectedIndustry(industry.name); setStep(2); }} 
+                    className="p-6 md:p-8 bg-white rounded-2xl md:rounded-[2rem] font-bold text-[#111111] hover:text-[#FF270A] transition-colors duration-300 flex flex-col items-center justify-center text-center min-h-[130px] md:min-h-[150px] gap-3 md:gap-4 group"
+                  >
+                    <Icon className="w-10 h-10 md:w-14 md:h-14 shrink-0 text-gray-300 group-hover:text-[#FF270A] transition-colors" strokeWidth={1.5} />
+                    <span className="text-xs md:text-sm leading-snug">{industry.name}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -274,10 +234,10 @@ export default function WorkflowBuilder() {
         {/* --- PASO 2 --- */}
         {step === 2 && (
           <div className="flex flex-col items-center justify-center flex-grow animate-in fade-in slide-in-from-right-8 duration-500">
-            <BacteriaIcon className="w-10 h-10 md:w-12 md:h-12 text-[#FF270A] mb-4 md:mb-6" />
+            <img src="/bacteria.png" alt="Bacteria" className="w-24 h-24 md:w-32 md:h-32 object-contain mb-4 md:mb-6 opacity-90" />
             
             <div className="text-center mb-8 md:mb-10">
-               <h3 className="text-2xl md:text-3xl font-black text-[#111111] mb-2 tracking-tight">Identify target microorganisms</h3>
+               <h3 className="text-2xl md:text-3xl font-black text-[#111111] mb-2 tracking-tight">Select target microorganisms</h3>
                <p className="text-gray-500 font-medium text-xs md:text-sm px-4">Select the pathogens, indicators, or spoilage organisms you need to detect.</p>
             </div>
             
@@ -288,7 +248,7 @@ export default function WorkflowBuilder() {
                   <button 
                     key={micro.id} 
                     onClick={() => toggleMicroorganism(micro.id)} 
-                    className={`relative flex flex-col items-start p-5 md:p-6 rounded-2xl md:rounded-[2rem] transition-colors duration-300 border-transparent ${isSelected ? "bg-[#111111] text-white" : "bg-white text-[#111111] hover:bg-gray-200"}`}
+                    className={`relative flex flex-col items-start p-5 md:p-6 rounded-2xl md:rounded-[2rem] transition-colors duration-300 ${isSelected ? "bg-[#111111] text-white" : "bg-white text-[#111111] hover:bg-gray-200"}`}
                   >
                     <div className="flex items-center justify-between w-full mb-3">
                       <span className={`text-[9px] font-black tracking-widest uppercase px-3 py-1 rounded-full ${getTagStyle(micro.type, isSelected)}`}>
@@ -327,11 +287,7 @@ export default function WorkflowBuilder() {
 
               {/* CARRUSEL DE PROTOCOLOS */}
               <div className="w-full flex flex-col items-center gap-4">
-                 
-                 {/* Fila principal: Flecha Izq (Desktop) + Carrusel + Flecha Der (Desktop) */}
                  <div className="w-full flex items-center gap-2 md:gap-4">
-                    
-                    {/* Flecha Izquierda (Solo Desktop) */}
                     <button 
                       onClick={() => scrollProtocols("left")} 
                       className={`hidden md:flex shrink-0 w-12 h-12 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollLeft ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}
@@ -339,22 +295,34 @@ export default function WorkflowBuilder() {
                       <ChevronLeft className="w-6 h-6" />
                     </button>
                     
-                    {/* Área de Scroll Central */}
                     <div ref={protocolsScrollRef} onScroll={checkScroll} className="flex-grow flex overflow-x-auto gap-3 md:gap-4 py-2 w-full snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
                        {potentialFlows.map(([_, micros]: any, idx) => (
-                         <button 
-                           key={idx} 
+                         <div key={idx} className="snap-start shrink-0 flex flex-col items-start justify-between text-left p-5 md:px-8 md:py-6 rounded-2xl md:rounded-[2rem] transition-all w-[260px] sm:w-[300px] md:w-[360px] max-w-full h-auto whitespace-normal break-words cursor-pointer"
+                           style={{ background: activeFlowIndex === idx ? '#111111' : '#ffffff' }}
                            onClick={() => setActiveFlowIndex(idx)}
-                           /* CORRECCIÓN: flex-col, h-auto y text wrap forzado para que el texto nunca se corte */
-                           className={`snap-start shrink-0 flex flex-col items-start justify-center text-left p-5 md:px-8 md:py-6 rounded-2xl md:rounded-[2rem] transition-all border-2 w-[260px] sm:w-[300px] md:w-[340px] max-w-full h-auto whitespace-normal break-words ${activeFlowIndex === idx ? "border-[#FF270A] bg-white text-[#111111]" : "border-transparent bg-white text-gray-400 hover:bg-gray-100"}`}
                          >
-                           <h4 className="text-lg md:text-2xl font-black tracking-tighter mb-1 w-full">Protocol {idx + 1}</h4>
-                           <p className="font-medium text-xs md:text-sm w-full leading-snug break-words">(detection of {micros.join(" + ")})</p>
-                         </button>
+                           <div className="w-full">
+                             {/* TIEMPO INTEGRADO EN EL TÍTULO */}
+                             <h4 className={`text-lg md:text-2xl font-black tracking-tighter mb-2 w-full flex flex-col md:flex-row md:items-baseline gap-1 md:gap-2 ${activeFlowIndex === idx ? 'text-white' : 'text-gray-400'}`}>
+                               Protocol {idx + 1} 
+                               <span className={`text-sm md:text-lg font-bold tracking-normal ${activeFlowIndex === idx ? 'text-gray-300' : 'text-[#FF270A]'}`}>
+                                 ({calculateTotalTime()} hours)
+                               </span>
+                             </h4>
+                             <p className={`font-medium text-xs md:text-sm w-full leading-snug break-words ${activeFlowIndex === idx ? 'text-gray-400' : 'text-gray-400'}`}>
+                               (detection of {micros.join(" + ")})
+                             </p>
+                           </div>
+                           <button
+                             onClick={(e) => { e.stopPropagation(); setProtocolCompareIndex(idx); }}
+                             className={`mt-4 flex items-center gap-1.5 text-[10px] md:text-xs font-black uppercase tracking-widest transition-colors ${activeFlowIndex === idx ? 'text-white hover:text-gray-300' : 'text-[#FF270A] hover:text-[#111111]'}`}
+                           >
+                             <FileText className="w-3 h-3 md:w-3.5 md:h-3.5" /> Compare Protocol
+                           </button>
+                         </div>
                        ))}
                     </div>
 
-                    {/* Flecha Derecha (Solo Desktop) */}
                     <button 
                       onClick={() => scrollProtocols("right")} 
                       className={`hidden md:flex shrink-0 w-12 h-12 bg-white rounded-full items-center justify-center transition-all duration-300 ${canScrollRight ? 'opacity-100 text-[#111111] hover:text-[#FF270A]' : 'opacity-0 pointer-events-none'}`}
@@ -363,7 +331,6 @@ export default function WorkflowBuilder() {
                     </button>
                  </div>
 
-                 {/* Flechas de Navegación (Solo Mobile - Bajo el carrusel) */}
                  <div className="flex md:hidden items-center justify-center gap-4 mt-2">
                     <button 
                       onClick={() => scrollProtocols("left")} 
@@ -383,21 +350,21 @@ export default function WorkflowBuilder() {
               </div>
             </div>
 
-            {/* TÍTULO RECOMMENDED KITS */}
-            <div className="w-full mt-4 md:mt-8 mb-4">
-              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm block">Recommended Kits</span>
+            {/* TÍTULO RECOMMENDED PRODUCTS */}
+            <div className="w-full mt-8 md:mt-12 mb-4">
+              <span className="text-[#FF270A] font-black uppercase tracking-widest text-xs md:text-sm block">Recommended Products</span>
             </div>
 
             {/* TARJETAS DE PRODUCTOS */}
             <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-4 w-full">
-              {(sampleType === "Environmental" ? ["Sampling", "Enrichment", "Extraction", "PCR"] : ["Enrichment", "Extraction", "PCR"]).map((stage, sIdx, arr) => {
-                const currentProd = STAGE_PRODUCTS[stage].find((p: any) => p.id === selectedProductIds[stage]);
-                const alternatives = STAGE_PRODUCTS[stage].filter((p: any) => p.id !== selectedProductIds[stage]);
+              {getActiveStages().map((stage, sIdx, arr) => {
+                const currentProd = PRODUCT_BY_ID[selectedProductIds[stage.key]];
+                const alternatives = stage.products.filter(p => p.id !== selectedProductIds[stage.key]);
 
                 return (
-                  <Fragment key={stage}>
+                  <Fragment key={stage.key}>
                     <div className="flex-1 w-full bg-white p-5 sm:p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] flex flex-col transition-colors duration-300">
-                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 md:mb-6 block shrink-0">Stage 0{sIdx + 1} // {stage}</span>
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 md:mb-6 block shrink-0">Stage 0{sIdx + 1} // {stage.label}</span>
                       
                       <div className="md:h-16 flex items-start mb-2">
                          <h5 className="text-lg md:text-xl font-bold text-[#111111] leading-tight line-clamp-2">{currentProd.name}</h5>
@@ -412,18 +379,27 @@ export default function WorkflowBuilder() {
                          <p className="text-xs md:text-sm text-[#111111] leading-relaxed font-medium">{currentProd.desc}</p>
                       </div>
 
-                      <div className="mt-auto pt-4 md:pt-6 border-t border-gray-50 flex flex-col gap-4 shrink-0">
+                      <div className="mt-auto pt-4 md:pt-6 flex flex-col gap-4 shrink-0">
                         <div className="flex items-center gap-2 text-[#111111] font-bold text-[10px] md:text-xs uppercase tracking-tight">
-                          <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A]" /> {currentProd.time >= 1 ? `${currentProd.time}h` : `${currentProd.time * 60} min`}
+                          <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A]" />
+                          {currentProd.timeHours >= 1 ? `${currentProd.timeHours}h` : `${currentProd.timeHours * 60} min`}
                         </div>
-                        <a href={currentProd.link} className="flex items-center gap-2 text-[#FF270A] font-bold text-[10px] md:text-xs uppercase tracking-tight hover:underline">
-                          <FileText className="w-3.5 h-3.5 md:w-4 md:h-4" /> Technical Data
+                        <button
+                          onClick={() => setValueBriefProduct(currentProd)}
+                          className="flex items-center gap-2 font-bold text-[10px] md:text-xs uppercase tracking-tight hover:opacity-70 transition-opacity"
+                        >
+                          <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A] shrink-0" />
+                          <span className="text-[#111111]">Product Value Brief</span>
+                        </button>
+                        <a href={currentProd.technicalDataUrl} className="flex items-center gap-2 font-bold text-[10px] md:text-xs uppercase tracking-tight hover:opacity-70 transition-opacity">
+                          <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-[#FF270A] shrink-0" />
+                          <span className="text-[#111111]">Technical Data</span>
                         </a>
                         
                         <div className="h-8 flex items-end">
                           {alternatives.length > 0 && (
                             <button 
-                              onClick={() => setActiveModalStage(stage)}
+                              onClick={() => setActiveModalStage(stage.key)}
                               className="flex items-center gap-2 text-gray-400 hover:text-[#111111] font-bold text-[10px] uppercase tracking-widest transition-colors"
                             >
                               <RotateCcw className="w-3 md:w-3.5 h-3 md:h-3.5" /> View Alternatives
@@ -444,13 +420,7 @@ export default function WorkflowBuilder() {
               })}
             </div>
 
-            {/* RESUMEN DE TIEMPO (TTR) - Movido debajo de las tarjetas */}
-            <div className="flex flex-col mb-4 w-full pt-6 md:pt-8 mt-4">
-              <h4 className="text-3xl md:text-4xl font-black text-[#111111] mb-1">{calculateTotalTime()} Hours</h4>
-              <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">Time to Result (TTR)</span>
-            </div>
-
-            {/* CALL TO ACTION (Cotización) - Línea Negra */}
+            {/* CALL TO ACTION (Cotización) */}
             <div className="mt-12 md:mt-20 w-full flex flex-col items-center justify-center border-t border-[#111111] pt-10 md:pt-16">
                <h3 className="text-xl md:text-3xl font-black text-[#111111] mb-2 md:mb-3 tracking-tight text-center">Ready to optimize your lab?</h3>
                <p className="text-sm md:text-base text-gray-500 font-medium mb-8 text-center max-w-lg px-4">Get a customized quote and start implementing these advanced diagnostic products in your facility.</p>
@@ -474,7 +444,7 @@ export default function WorkflowBuilder() {
       {/* --- MODAL DE ALTERNATIVAS --- */}
       {activeModalStage && (
         <div className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-           <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 max-w-md w-full relative animate-in zoom-in-95 duration-300 border-0">
+           <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 max-w-md w-full relative animate-in zoom-in-95 duration-300">
               <button 
                 onClick={() => setActiveModalStage(null)} 
                 className="absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-gray-50 rounded-full hover:bg-gray-200 transition-colors"
@@ -488,7 +458,9 @@ export default function WorkflowBuilder() {
               </div>
 
               <div className="flex flex-col gap-3">
-                 {STAGE_PRODUCTS[activeModalStage].filter((p: any) => p.id !== selectedProductIds[activeModalStage]).map((alt: any) => (
+                 {(STAGE_BY_KEY[activeModalStage]?.products ?? [])
+                   .filter((p: Product) => p.id !== selectedProductIds[activeModalStage])
+                   .map((alt: Product) => (
                     <div 
                       key={alt.id} 
                       onClick={() => handleProductChange(activeModalStage, alt.id)} 
@@ -520,8 +492,8 @@ export default function WorkflowBuilder() {
 
               {isQuoteSent ? (
                 <div className="flex flex-col items-center justify-center py-10 text-center">
-                  <div className="w-16 h-16 md:w-20 md:h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-4 md:mb-6">
-                    <CheckCircle2 className="w-8 h-8 md:w-10 md:h-10 text-emerald-500" />
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 md:mb-6">
+                    <CheckCircle2 className="w-8 h-8 md:w-10 md:h-10 text-[#111111]" />
                   </div>
                   <h3 className="text-2xl md:text-3xl font-black text-[#111111] mb-2 tracking-tight">Request Sent!</h3>
                   <p className="text-sm md:text-base text-gray-500 font-medium">Our team will get back to you with the quotation shortly.</p>
@@ -578,6 +550,142 @@ export default function WorkflowBuilder() {
                 </>
               )}
            </div>
+        </div>
+      )}
+
+      {/* --- MODAL: PROTOCOL COMPARISON BROCHURE --- */}
+      {protocolCompareIndex !== null && (() => {
+        const [_, micros]: any = potentialFlows[protocolCompareIndex];
+        // Use comparison data from the first active stage's selected product as the protocol reference
+        const refProduct = PRODUCT_BY_ID[selectedProductIds[getActiveStages()[0]?.key ?? "Enrichment"]];
+        const cmp = refProduct?.protocolComparison;
+        if (!cmp) return null;
+        return (
+          <div className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] max-w-2xl w-full relative animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
+              <div className="bg-[#111111] rounded-t-[2rem] md:rounded-t-[2.5rem] px-8 md:px-12 py-8 md:py-10 relative">
+                <button onClick={() => setProtocolCompareIndex(null)} className="absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
+                  <X className="w-5 h-5 text-white" />
+                </button>
+                <span className="text-[10px] font-black text-[#FF270A] uppercase tracking-widest mb-2 block">Protocol Comparison</span>
+                <h3 className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tighter">Protocol {protocolCompareIndex + 1}</h3>
+                <p className="text-gray-400 text-xs md:text-sm font-medium mt-2">Detection of {micros.join(" + ")}</p>
+              </div>
+
+              <div className="px-8 md:px-12 py-8 md:py-10 flex flex-col gap-8">
+                {/* Why TAAG wins */}
+                <div>
+                  <span className="text-[10px] font-black text-[#FF270A] uppercase tracking-widest mb-4 block">Why TAAG wins</span>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {cmp.highlights.map(item => (
+                      <div key={item.label} className="bg-gray-50 rounded-2xl p-5">
+                        <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 block mb-3">{item.label}</span>
+                        <div className="flex flex-col gap-1.5">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-[#FF270A] shrink-0" />
+                            <span className="text-xs font-bold text-[#111111]">{item.taag}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-gray-300 shrink-0" />
+                            <span className="text-xs text-gray-400 font-medium">{item.industryAvg}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Head-to-head table — columns driven by competitorNames */}
+                <div>
+                  <span className="text-[10px] font-black text-[#FF270A] uppercase tracking-widest mb-4 block">Head-to-Head Comparison</span>
+                  <div className="rounded-2xl overflow-hidden border border-gray-100">
+                    <table className="w-full text-xs">
+                      <thead>
+                        <tr className="bg-gray-50">
+                          <th className="text-left px-4 py-3 font-black text-[#111111] uppercase tracking-widest text-[9px]">Feature</th>
+                          <th className="px-4 py-3 font-black text-[#FF270A] uppercase tracking-widest text-[9px] text-center">TAAG</th>
+                          {cmp.competitorNames.map(name => (
+                            <th key={name} className="px-4 py-3 font-black text-gray-400 uppercase tracking-widest text-[9px] text-center">{name}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {cmp.rows.map((row, i) => (
+                          <tr key={row.feature} className={i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}>
+                            <td className="px-4 py-3 font-semibold text-[#111111]">{row.feature}</td>
+                            <td className="px-4 py-3 text-center font-bold text-[#111111]">{row.taag}</td>
+                            {cmp.competitorNames.map(name => (
+                              <td key={name} className="px-4 py-3 text-center text-gray-400 font-medium">
+                                {row.competitors[name] ?? "—"}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <button onClick={() => { setProtocolCompareIndex(null); setIsQuoteModalOpen(true); }} className="w-full bg-[#FF270A] text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-[#111111] transition-colors flex items-center justify-center gap-3">
+                  <Mail className="w-4 h-4" /> Request Quote for this Protocol
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* --- MODAL: PRODUCT VALUE BRIEF --- */}
+      {valueBriefProduct && (
+        <div className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] max-w-xl w-full relative animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
+            <div className="bg-[#111111] rounded-t-[2rem] md:rounded-t-[2.5rem] px-8 md:px-12 py-8 md:py-10 relative">
+              <button onClick={() => setValueBriefProduct(null)} className="absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
+                <X className="w-5 h-5 text-white" />
+              </button>
+              <span className="text-[10px] font-black text-[#FF270A] uppercase tracking-widest mb-2 block">Product Value Brief</span>
+              <h3 className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tighter">{valueBriefProduct.name}</h3>
+              <p className="text-gray-400 text-xs font-medium mt-2">Cat #{valueBriefProduct.cat} · {valueBriefProduct.format}</p>
+            </div>
+
+            <div className="px-8 md:px-12 py-8 md:py-10 flex flex-col gap-8">
+              <div>
+                <span className="text-[10px] font-black text-[#FF270A] uppercase tracking-widest mb-4 block">Key Advantages</span>
+                <div className="flex flex-col gap-3">
+                  {valueBriefProduct.valueBrief.advantages.map((adv: string, i: number) => (
+                    <div key={i} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                      <div className="w-5 h-5 shrink-0 rounded-full bg-[#FF270A]/10 flex items-center justify-center mt-0.5">
+                        <Check className="w-3 h-3 text-[#FF270A]" />
+                      </div>
+                      <p className="text-xs md:text-sm text-[#111111] font-medium leading-relaxed">{adv}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <span className="text-[10px] font-black text-[#FF270A] uppercase tracking-widest mb-4 block">Value at a Glance</span>
+                <div className="grid grid-cols-3 gap-3">
+                  {valueBriefProduct.valueBrief.metrics.map(item => (
+                    <div key={item.label} className="bg-gray-50 rounded-2xl p-4 text-center">
+                      <span className="text-xl md:text-2xl font-black text-[#111111] block">{item.value}</span>
+                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mt-1">{item.label}</span>
+                      <span className="text-[9px] text-gray-400 block">{item.sub}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button onClick={() => { setValueBriefProduct(null); setIsQuoteModalOpen(true); }} className="w-full bg-[#111111] text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-[#FF270A] transition-colors flex items-center justify-center gap-3">
+                  <Mail className="w-4 h-4" /> Request Quote
+                </button>
+                <a href={valueBriefProduct.technicalDataUrl} className="w-full border border-gray-200 text-[#111111] py-4 rounded-2xl font-bold uppercase tracking-widest text-xs hover:border-[#111111] transition-colors flex items-center justify-center gap-3">
+                  <FileText className="w-4 h-4" /> Full Technical Data
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
