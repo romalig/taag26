@@ -36,6 +36,9 @@ export default function WorkflowBuilder() {
   const [protocolConfirmed, setProtocolConfirmed] = useState(false);
   // Track if user has explicitly chosen a matrix
   const [matrixConfirmed, setMatrixConfirmed] = useState(false);
+  // Dot indicators for mobile carousels
+  const [activeProdDot, setActiveProdDot] = useState(0);
+  const productsScrollRef = useRef<HTMLDivElement>(null);
 
   // Referencias para el carrusel de protocolos y scroll al tope
   const sectionRef = useRef<HTMLElement>(null);
@@ -178,20 +181,23 @@ export default function WorkflowBuilder() {
         
         {/* BARRA DE PROGRESO Y RESUMEN */}
         <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mb-12 md:mb-20 gap-6 border-b border-gray-200 pb-8 md:pb-10">
-           <div className="flex items-center gap-3 md:gap-8 w-full justify-between lg:justify-start overflow-x-auto no-scrollbar pb-2 md:pb-0">
+           <div className="flex items-center gap-3 md:gap-8 w-full justify-start lg:justify-start overflow-x-hidden no-scrollbar pb-2 md:pb-0">
+              {/* Step 1 — always visible */}
               <button onClick={() => setStep(1)} className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step >= 1 ? 'text-[#111111]' : 'text-gray-300'}`}>
                  <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] transition-colors ${step === 1 ? 'bg-[#FF270A] text-white' : step > 1 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-400'}`}>1</span>
-                 Industry
+                 <span className={step === 1 ? 'inline' : 'hidden md:inline'}>Industry</span>
               </button>
-              <div className="w-8 md:w-16 h-px bg-gray-200 shrink-0" />
-              <button onClick={() => { if (step > 1) setStep(2) }} disabled={step < 2} className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step >= 2 ? 'text-[#111111]' : 'text-gray-300'} ${step > 1 ? 'cursor-pointer hover:text-[#FF270A]' : 'cursor-default'}`}>
+              <div className="w-6 md:w-16 h-px bg-gray-200 shrink-0" />
+              {/* Step 2 — visible on mobile only when step >= 2 */}
+              <button onClick={() => { if (step > 1) setStep(2) }} disabled={step < 2} className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step >= 2 ? 'text-[#111111]' : 'text-gray-300'} ${step > 1 ? 'cursor-pointer hover:text-[#FF270A]' : 'cursor-default'} ${step < 2 ? 'hidden md:flex' : 'flex'}`}>
                  <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] transition-colors ${step === 2 ? 'bg-[#FF270A] text-white' : step > 2 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-400'}`}>2</span>
-                 Targets
+                 <span className={step === 2 ? 'inline' : 'hidden md:inline'}>Targets</span>
               </button>
-              <div className="w-8 md:w-16 h-px bg-gray-200 shrink-0" />
-              <button disabled className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step === 3 ? 'text-[#111111]' : 'text-gray-300'} cursor-default`}>
+              <div className={`w-6 md:w-16 h-px bg-gray-200 shrink-0 ${step < 2 ? 'hidden md:block' : 'block'}`} />
+              {/* Step 3 — visible on mobile only when step >= 3 */}
+              <button disabled className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step === 3 ? 'text-[#111111]' : 'text-gray-300'} cursor-default ${step < 3 ? 'hidden md:flex' : 'flex'}`}>
                  <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] transition-colors ${step === 3 ? 'bg-[#FF270A] text-white' : 'bg-gray-200 text-gray-400'}`}>3</span>
-                 Protocol
+                 <span className={step === 3 ? 'inline' : 'hidden md:inline'}>Protocol</span>
               </button>
            </div>
            
@@ -316,25 +322,31 @@ export default function WorkflowBuilder() {
                     </p>
                   )}
 
-                  {/* Wrapper full-bleed que rompe el padding del contenedor padre */}
+                  {/* Wrapper full-bleed */}
                   <div className="relative -mx-6 sm:-mx-10 md:-mx-20">
-
                     {/* Flechas desktop */}
-                    <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 left-16 z-20 transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                      <button onClick={() => scrollProtocols("left")} className="w-10 h-10 rounded-full bg-white border border-gray-100 text-[#111111] flex items-center justify-center hover:text-[#FF270A] transition-colors">
+                    <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 left-4 z-20 transition-opacity duration-300 ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                      <button onClick={() => scrollProtocols("left")} className="w-10 h-10 rounded-full bg-white border border-gray-100 text-[#111111] flex items-center justify-center hover:text-[#FF270A] transition-colors shadow-sm">
                         <ChevronLeft className="w-5 h-5" />
                       </button>
                     </div>
-                    <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 right-16 z-20 transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                      <button onClick={() => scrollProtocols("right")} className="w-10 h-10 rounded-full bg-white border border-gray-100 text-[#111111] flex items-center justify-center hover:text-[#FF270A] transition-colors">
+                    <div className={`hidden md:flex absolute top-1/2 -translate-y-1/2 right-4 z-20 transition-opacity duration-300 ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                      <button onClick={() => scrollProtocols("right")} className="w-10 h-10 rounded-full bg-white border border-gray-100 text-[#111111] flex items-center justify-center hover:text-[#FF270A] transition-colors shadow-sm">
                         <ChevronRight className="w-5 h-5" />
                       </button>
                     </div>
 
-                    {/* Track scrolleable — paddingLeft = mesmo valor que el p- del contenedor padre */}
+                    {/* Track — pl/pr mirror the container's p- values exactly */}
                     <div
                       ref={protocolsScrollRef}
-                      onScroll={checkScroll}
+                      onScroll={() => {
+                        checkScroll();
+                        if (protocolsScrollRef.current) {
+                          const el = protocolsScrollRef.current;
+                          const cardW = el.clientWidth * 0.8;
+                          setActiveFlowIndex(Math.round(el.scrollLeft / cardW));
+                        }
+                      }}
                       className="flex overflow-x-auto gap-3 md:gap-4 py-3 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pl-6 sm:pl-10 md:pl-20 pr-6 sm:pr-10 md:pr-20"
                     >
                       {potentialFlows.map(([_, micros]: any, idx) => {
@@ -348,13 +360,9 @@ export default function WorkflowBuilder() {
                           >
                             <div className="w-full">
                               <div className="flex items-baseline gap-3 mb-4">
-                                <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${isActive ? 'text-gray-500' : 'text-gray-300'}`}>
-                                  Protocol {idx + 1}
-                                </p>
+                                <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${isActive ? 'text-gray-500' : 'text-gray-300'}`}>Protocol {idx + 1}</p>
                                 <span className={`w-px h-3 ${isActive ? 'bg-gray-600' : 'bg-gray-200'}`} />
-                                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[#FF270A]">
-                                  {calculateTotalTime()} hrs
-                                </p>
+                                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[#FF270A]">{calculateTotalTime()} hrs</p>
                               </div>
                               <p className={`font-black text-lg md:text-2xl leading-snug break-words tracking-tight ${isActive ? 'text-white' : 'text-[#111111]'}`}>
                                 Detection of {micros.join(" + ")}
@@ -371,15 +379,22 @@ export default function WorkflowBuilder() {
                       })}
                     </div>
 
-                    {/* Controles móviles */}
-                    <div className="flex md:hidden items-center justify-center gap-4 mt-2 px-6">
-                      <button onClick={() => scrollProtocols("left")} disabled={!canScrollLeft} className={`w-9 h-9 bg-white rounded-full flex items-center justify-center transition-all ${canScrollLeft ? 'text-[#111111]' : 'text-gray-200'}`}>
-                        <ChevronLeft className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => scrollProtocols("right")} disabled={!canScrollRight} className={`w-9 h-9 bg-white rounded-full flex items-center justify-center transition-all ${canScrollRight ? 'text-[#111111]' : 'text-gray-200'}`}>
-                        <ChevronRight className="w-4 h-4" />
-                      </button>
-                    </div>
+                    {/* Dot indicators — mobile only */}
+                    {potentialFlows.length > 1 && (
+                      <div className="flex md:hidden justify-center gap-2 mt-4">
+                        {potentialFlows.map((_, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              setActiveFlowIndex(idx);
+                              setProtocolConfirmed(true);
+                              protocolsScrollRef.current?.scrollTo({ left: idx * (protocolsScrollRef.current.clientWidth * 0.8 + 12), behavior: 'smooth' });
+                            }}
+                            className={`rounded-full transition-all duration-300 ${activeFlowIndex === idx && protocolConfirmed ? 'w-5 h-2 bg-[#FF270A]' : 'w-2 h-2 bg-gray-300'}`}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -389,72 +404,134 @@ export default function WorkflowBuilder() {
             {protocolConfirmed && (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="w-full mb-8 md:mb-10">
-                  <p className="text-[9px] font-black text-[#FF270A] uppercase tracking-[0.2em] mb-1">
-                    Recommended Products
-                  </p>
-                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">
-                    {sampleType} · {selectedIndustry}
-                  </p>
+                  <p className="text-[9px] font-black text-[#FF270A] uppercase tracking-[0.2em] mb-1">Recommended Products</p>
+                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">{sampleType} · {selectedIndustry}</p>
                   {potentialFlows[activeFlowIndex] && (
                     <p className="text-xl md:text-2xl font-black text-[#111111] tracking-tight leading-snug">
-                      {(potentialFlows[activeFlowIndex][1] as string[]).join(" + ")}
+                      Detection of {(potentialFlows[activeFlowIndex][1] as string[]).join(" + ")}
                     </p>
                   )}
                 </div>
 
-                {/* Full-bleed scroll igual que el carrusel de protocolos */}
-                <div className="relative -mx-6 sm:-mx-10 md:-mx-20">
+                {/* Desktop: grid hasta 4 columnas. Mobile: carrusel full-bleed con dots */}
+                <div className="hidden md:grid gap-3 md:gap-4" style={{ gridTemplateColumns: `repeat(${Math.min(getActiveStages().length, 4)}, 1fr)` }}>
+                  {getActiveStages().map((stage, sIdx, arr) => {
+                    const currentProd = PRODUCT_BY_ID[selectedProductIds[stage.key]];
+                    const alternatives = stage.products.filter(p => p.id !== selectedProductIds[stage.key]);
+                    return (
+                      <Fragment key={stage.key}>
+                        <div className="bg-white p-6 md:p-8 rounded-2xl md:rounded-[2rem] flex flex-col">
+                          <span className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-5 block">
+                            {String(sIdx + 1).padStart(2, '0')} — {stage.label}
+                          </span>
+                          <div className="flex-grow">
+                            <h5 className="text-lg md:text-xl font-black text-[#111111] leading-tight tracking-tight mb-2">{currentProd.name}</h5>
+                            <p className="text-[10px] text-gray-300 font-medium mb-4">Cat #{currentProd.cat} · {currentProd.format}</p>
+                            <p className="text-sm text-gray-500 leading-relaxed">{currentProd.desc}</p>
+                          </div>
+                          <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col gap-3">
+                            <div className="flex items-center gap-2 h-5">
+                              <Clock className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">
+                                {currentProd.timeHours >= 1 ? `${currentProd.timeHours}h` : `${currentProd.timeHours * 60} min`}
+                              </span>
+                            </div>
+                            <button onClick={() => setValueBriefProduct(currentProd)} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                              <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
+                            </button>
+                            <a href={currentProd.technicalDataUrl} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                              <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Technical Data</span>
+                            </a>
+                            <div className="h-5 flex items-center">
+                              {alternatives.length > 0 && (
+                                <button onClick={() => setActiveModalStage(stage.key)} className="flex items-center gap-2 hover:opacity-60 transition-opacity">
+                                  <RotateCcw className="w-3.5 h-3.5 text-gray-300 shrink-0" />
+                                  <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.1em]">View Alternatives</span>
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        {sIdx < arr.length - 1 && (
+                          <div className="hidden" />
+                        )}
+                      </Fragment>
+                    );
+                  })}
+                </div>
+
+                {/* Mobile: carrusel full-bleed con dots */}
+                <div className="md:hidden relative -mx-6 sm:-mx-10">
                   <div
-                    className="flex overflow-x-auto gap-3 md:gap-4 py-3 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pl-6 sm:pl-10 md:pl-20 pr-6 sm:pr-10 md:pr-20"
+                    ref={productsScrollRef}
+                    onScroll={() => {
+                      if (productsScrollRef.current) {
+                        const el = productsScrollRef.current;
+                        const cardW = el.clientWidth * 0.8 + 12;
+                        setActiveProdDot(Math.round(el.scrollLeft / cardW));
+                      }
+                    }}
+                    className="flex overflow-x-auto gap-3 py-3 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pl-6 sm:pl-10 pr-6 sm:pr-10"
                   >
-                    {getActiveStages().map((stage, sIdx, arr) => {
+                    {getActiveStages().map((stage, sIdx) => {
                       const currentProd = PRODUCT_BY_ID[selectedProductIds[stage.key]];
                       const alternatives = stage.products.filter(p => p.id !== selectedProductIds[stage.key]);
                       return (
-                        <Fragment key={stage.key}>
-                          <div className="snap-start shrink-0 w-[80vw] sm:w-[340px] md:w-[380px] bg-white p-6 md:p-10 rounded-2xl md:rounded-[2rem] flex flex-col">
-                            <span className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-5 block">
-                              {String(sIdx + 1).padStart(2, '0')} — {stage.label}
-                            </span>
-                            <div className="flex-grow">
-                              <h5 className="text-xl md:text-2xl font-black text-[#111111] leading-tight tracking-tight mb-2">{currentProd.name}</h5>
-                              <p className="text-[10px] text-gray-300 font-medium mb-5">Cat #{currentProd.cat} · {currentProd.format}</p>
-                              <p className="text-sm text-gray-500 leading-relaxed">{currentProd.desc}</p>
+                        <div key={stage.key} className="snap-start shrink-0 w-[80vw] bg-white p-6 rounded-2xl flex flex-col">
+                          <span className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-5 block">
+                            {String(sIdx + 1).padStart(2, '0')} — {stage.label}
+                          </span>
+                          <div className="flex-grow">
+                            <h5 className="text-xl font-black text-[#111111] leading-tight tracking-tight mb-2">{currentProd.name}</h5>
+                            <p className="text-[10px] text-gray-300 font-medium mb-4">Cat #{currentProd.cat} · {currentProd.format}</p>
+                            <p className="text-sm text-gray-500 leading-relaxed">{currentProd.desc}</p>
+                          </div>
+                          <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col gap-3">
+                            <div className="flex items-center gap-2 h-5">
+                              <Clock className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">
+                                {currentProd.timeHours >= 1 ? `${currentProd.timeHours}h` : `${currentProd.timeHours * 60} min`}
+                              </span>
                             </div>
-                            <div className="mt-8 pt-5 border-t border-gray-100 flex flex-col gap-3">
-                              <div className="flex items-center gap-2 h-5">
-                                <Clock className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">
-                                  {currentProd.timeHours >= 1 ? `${currentProd.timeHours}h` : `${currentProd.timeHours * 60} min`}
-                                </span>
-                              </div>
-                              <button onClick={() => setValueBriefProduct(currentProd)} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
-                                <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
-                              </button>
-                              <a href={currentProd.technicalDataUrl} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
-                                <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Technical Data</span>
-                              </a>
-                              <div className="h-5 flex items-center">
-                                {alternatives.length > 0 ? (
-                                  <button onClick={() => setActiveModalStage(stage.key)} className="flex items-center gap-2 hover:opacity-60 transition-opacity">
-                                    <RotateCcw className="w-3.5 h-3.5 text-gray-300 shrink-0" />
-                                    <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.1em]">View Alternatives</span>
-                                  </button>
-                                ) : null}
-                              </div>
+                            <button onClick={() => setValueBriefProduct(currentProd)} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                              <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
+                            </button>
+                            <a href={currentProd.technicalDataUrl} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                              <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Technical Data</span>
+                            </a>
+                            <div className="h-5 flex items-center">
+                              {alternatives.length > 0 && (
+                                <button onClick={() => setActiveModalStage(stage.key)} className="flex items-center gap-2 hover:opacity-60 transition-opacity">
+                                  <RotateCcw className="w-3.5 h-3.5 text-gray-300 shrink-0" />
+                                  <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.1em]">View Alternatives</span>
+                                </button>
+                              )}
                             </div>
                           </div>
-                          {sIdx < arr.length - 1 && (
-                            <div className="flex items-center justify-center shrink-0 px-1">
-                              <ArrowRight className="w-4 h-4 text-gray-200" />
-                            </div>
-                          )}
-                        </Fragment>
+                        </div>
                       );
                     })}
                   </div>
+
+                  {/* Dot indicators productos — mobile */}
+                  {getActiveStages().length > 1 && (
+                    <div className="flex justify-center gap-2 mt-4">
+                      {getActiveStages().map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setActiveProdDot(idx);
+                            productsScrollRef.current?.scrollTo({ left: idx * (productsScrollRef.current.clientWidth * 0.8 + 12), behavior: 'smooth' });
+                          }}
+                          className={`rounded-full transition-all duration-300 ${activeProdDot === idx ? 'w-5 h-2 bg-[#FF270A]' : 'w-2 h-2 bg-gray-300'}`}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
