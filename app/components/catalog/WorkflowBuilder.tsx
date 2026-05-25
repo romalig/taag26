@@ -36,9 +36,24 @@ export default function WorkflowBuilder() {
   const [protocolConfirmed, setProtocolConfirmed] = useState(false);
   // Track if user has explicitly chosen a matrix
   const [matrixConfirmed, setMatrixConfirmed] = useState(false);
-  // Dot indicators for mobile carousels
+  // Dot indicators for mobile product carousel
   const [activeProdDot, setActiveProdDot] = useState(0);
   const productsScrollRef = useRef<HTMLDivElement>(null);
+  // Ref to main container to read its actual computed padding for carousel alignment
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerPad, setContainerPad] = useState('1.5rem');
+
+  useEffect(() => {
+    const updatePad = () => {
+      if (containerRef.current) {
+        const pad = getComputedStyle(containerRef.current).paddingLeft;
+        setContainerPad(pad);
+      }
+    };
+    updatePad();
+    window.addEventListener('resize', updatePad);
+    return () => window.removeEventListener('resize', updatePad);
+  }, []);
 
   // Referencias para el carrusel de protocolos y scroll al tope
   const sectionRef = useRef<HTMLElement>(null);
@@ -177,27 +192,24 @@ export default function WorkflowBuilder() {
         </p>
       </div>
 
-      <div className="w-full bg-gray-50 rounded-[2rem] md:rounded-[3rem] p-6 sm:p-10 md:p-20 relative min-h-[600px] flex flex-col overflow-hidden">
+      <div ref={containerRef} className="w-full bg-gray-50 rounded-[2rem] md:rounded-[3rem] p-6 sm:p-10 md:p-20 relative min-h-[600px] flex flex-col overflow-hidden">
         
         {/* BARRA DE PROGRESO Y RESUMEN */}
         <div className="w-full flex flex-col lg:flex-row lg:items-center justify-between mb-12 md:mb-20 gap-6 border-b border-gray-200 pb-8 md:pb-10">
-           <div className="flex items-center gap-3 md:gap-8 w-full justify-start lg:justify-start overflow-x-hidden no-scrollbar pb-2 md:pb-0">
-              {/* Step 1 — always visible */}
-              <button onClick={() => setStep(1)} className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step >= 1 ? 'text-[#111111]' : 'text-gray-300'}`}>
-                 <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] transition-colors ${step === 1 ? 'bg-[#FF270A] text-white' : step > 1 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-400'}`}>1</span>
-                 <span className={step === 1 ? 'inline' : 'hidden md:inline'}>Industry</span>
+           <div className="flex items-center gap-2 md:gap-8 w-full justify-start overflow-x-hidden no-scrollbar pb-2 md:pb-0">
+              <button onClick={() => setStep(1)} className={`text-[10px] font-black flex items-center gap-2 transition-colors shrink-0 uppercase tracking-[0.15em] ${step === 1 ? 'text-[#FF270A]' : step > 1 ? 'text-[#111111]' : 'text-gray-300'}`}>
+                 <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] shrink-0 transition-colors ${step === 1 ? 'bg-[#FF270A] text-white' : step > 1 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-400'}`}>1</span>
+                 {step === 1 && <span>Industry</span>}
               </button>
-              <div className="w-6 md:w-16 h-px bg-gray-200 shrink-0" />
-              {/* Step 2 — visible on mobile only when step >= 2 */}
-              <button onClick={() => { if (step > 1) setStep(2) }} disabled={step < 2} className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step >= 2 ? 'text-[#111111]' : 'text-gray-300'} ${step > 1 ? 'cursor-pointer hover:text-[#FF270A]' : 'cursor-default'} ${step < 2 ? 'hidden md:flex' : 'flex'}`}>
-                 <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] transition-colors ${step === 2 ? 'bg-[#FF270A] text-white' : step > 2 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-400'}`}>2</span>
-                 <span className={step === 2 ? 'inline' : 'hidden md:inline'}>Targets</span>
+              <div className="w-4 md:w-16 h-px bg-gray-200 shrink-0" />
+              <button onClick={() => { if (step > 1) setStep(2) }} disabled={step < 2} className={`text-[10px] font-black flex items-center gap-2 transition-colors shrink-0 uppercase tracking-[0.15em] ${step === 2 ? 'text-[#FF270A]' : step > 2 ? 'text-[#111111]' : 'text-gray-300'} ${step > 1 ? 'cursor-pointer' : 'cursor-default'}`}>
+                 <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] shrink-0 transition-colors ${step === 2 ? 'bg-[#FF270A] text-white' : step > 2 ? 'bg-[#111111] text-white' : 'bg-gray-200 text-gray-400'}`}>2</span>
+                 {step === 2 && <span>Targets</span>}
               </button>
-              <div className={`w-6 md:w-16 h-px bg-gray-200 shrink-0 ${step < 2 ? 'hidden md:block' : 'block'}`} />
-              {/* Step 3 — visible on mobile only when step >= 3 */}
-              <button disabled className={`text-[10px] md:text-xs font-black flex items-center gap-2.5 transition-colors shrink-0 uppercase tracking-[0.15em] ${step === 3 ? 'text-[#111111]' : 'text-gray-300'} cursor-default ${step < 3 ? 'hidden md:flex' : 'flex'}`}>
-                 <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] transition-colors ${step === 3 ? 'bg-[#FF270A] text-white' : 'bg-gray-200 text-gray-400'}`}>3</span>
-                 <span className={step === 3 ? 'inline' : 'hidden md:inline'}>Protocol</span>
+              <div className="w-4 md:w-16 h-px bg-gray-200 shrink-0" />
+              <button disabled className={`text-[10px] font-black flex items-center gap-2 transition-colors shrink-0 uppercase tracking-[0.15em] cursor-default ${step === 3 ? 'text-[#FF270A]' : 'text-gray-300'}`}>
+                 <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] shrink-0 transition-colors ${step === 3 ? 'bg-[#FF270A] text-white' : 'bg-gray-200 text-gray-400'}`}>3</span>
+                 {step === 3 && <span>Protocol</span>}
               </button>
            </div>
            
@@ -336,18 +348,12 @@ export default function WorkflowBuilder() {
                       </button>
                     </div>
 
-                    {/* Track — pl/pr mirror the container's p- values exactly */}
+                    {/* Track — inline style padding mirrors container p-6 sm:p-10 md:p-20 exactly */}
                     <div
                       ref={protocolsScrollRef}
-                      onScroll={() => {
-                        checkScroll();
-                        if (protocolsScrollRef.current) {
-                          const el = protocolsScrollRef.current;
-                          const cardW = el.clientWidth * 0.8;
-                          setActiveFlowIndex(Math.round(el.scrollLeft / cardW));
-                        }
-                      }}
-                      className="flex overflow-x-auto gap-3 md:gap-4 py-3 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pl-6 sm:pl-10 md:pl-20 pr-6 sm:pr-10 md:pr-20"
+                      onScroll={checkScroll}
+                      className="flex overflow-x-auto gap-3 md:gap-4 py-3 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
+                      style={{ paddingLeft: containerPad, paddingRight: containerPad, scrollPaddingLeft: containerPad }}
                     >
                       {potentialFlows.map(([_, micros]: any, idx) => {
                         const isActive = activeFlowIndex === idx && protocolConfirmed;
@@ -473,7 +479,8 @@ export default function WorkflowBuilder() {
                         setActiveProdDot(Math.round(el.scrollLeft / cardW));
                       }
                     }}
-                    className="flex overflow-x-auto gap-3 py-3 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] pl-6 sm:pl-10 pr-6 sm:pr-10"
+                    className="flex overflow-x-auto gap-3 py-3 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
+                    style={{ paddingLeft: containerPad, paddingRight: containerPad, scrollPaddingLeft: containerPad }}
                   >
                     {getActiveStages().map((stage, sIdx) => {
                       const currentProd = PRODUCT_BY_ID[selectedProductIds[stage.key]];
