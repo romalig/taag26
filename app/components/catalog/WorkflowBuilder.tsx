@@ -103,6 +103,9 @@ export default function WorkflowBuilder() {
     setActiveFlowIndex(0);
     setProtocolConfirmed(false);
     setMatrixConfirmed(false);
+    setTimeout(() => {
+      sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   };
 
   const getTagStyle = (type: string, isSelected: boolean) => {
