@@ -56,8 +56,23 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM and HEX"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Mila molecular precision: qPCR with fluorescent probes and AI-optimized primer/probe design to support sensitivity, specificity and analytical robustness.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "HEX-channel internal control: monitors reaction performance and helps identify inhibition or amplification failures.",
+      "Automated TxA interpretation: standardizes result reading, improves microbiological traceability and speeds QA/QC reporting."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Seafood"
+    ]
   },
   "ampliora_1_3_e_coli": {
     "key": "ampliora_1_3_e_coli",
@@ -81,8 +96,21 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "HEX and ROX"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Mila molecular precision: qPCR with fluorescent probes and AI-optimized primer/probe design to support sensitivity, specificity and analytical robustness.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "PCR internal control: monitors reaction performance and helps identify inhibition or amplification failures before results are released.",
+      "Automated TxA interpretation: standardizes result reading, improves microbiological traceability and speeds QA/QC reporting."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "ampliora_2_10_acb_plus_guaiacol_producing_gene": {
     "key": "ampliora_2_10_acb_plus_guaiacol_producing_gene",
@@ -106,8 +134,17 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX and ROX"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Preventive beverage panel: simultaneous detection of Alicyclobacillus spp. and a guaiacol-associated marker relevant to off-flavors and spoilage in concentrates.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beverage",
+      "Sauces and condiments"
+    ]
   },
   "ampliora_2_3_listeria_spp_and_l_monocytogenes": {
     "key": "ampliora_2_3_listeria_spp_and_l_monocytogenes",
@@ -131,8 +168,20 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX and ROX"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Listeria coverage in one reaction: simultaneous detection of Listeria spp. and Listeria monocytogenes to expand microbiological control without duplicating PCR runs.",
+      "Mila molecular design optimized with AI: primers and probes for fluorescent-probe PCR, oriented to sensitivity, specificity and robust performance in multi-target panels.",
+      "Operational consolidation: combines multiple targets in a single PCR reaction, reducing runs, reagent use, plastics and analysis time.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability."
+    ],
+    "mainIndustries": [
+      "Dairy",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "ampliora_2_8_listeria_spp_and_salmonella_spp": {
     "key": "ampliora_2_8_listeria_spp_and_salmonella_spp",
@@ -156,8 +205,23 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX and ROX"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Multipathogen coverage in one reaction: simultaneous detection of Listeria spp. and Salmonella spp. to consolidate relevant food and environmental controls.",
+      "Mila molecular design optimized with AI: primers and probes for fluorescent-probe PCR, oriented to sensitivity, specificity and robust performance in multi-target panels.",
+      "Operational consolidation: combines multiple targets in a single PCR reaction, reducing runs, reagent use, plastics and analysis time.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Dairy",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "ampliora_3_10_v_cholerae_v_vulnificus_and_v_parahaemolyticus": {
     "key": "ampliora_3_10_v_cholerae_v_vulnificus_and_v_parahaemolyticus",
@@ -181,8 +245,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX and Cy5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Vibrio panel for seafood: simultaneous detection of V. cholerae, V. vulnificus and V. parahaemolyticus in a single qPCR workflow.",
+      "Mila molecular design optimized with AI: primers and probes for fluorescent-probe PCR, oriented to sensitivity, specificity and robust performance in multi-target panels.",
+      "Operational consolidation: combines multiple targets in a single PCR reaction, reducing runs, reagent use, plastics and analysis time.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability."
+    ],
+    "mainIndustries": [
+      "Seafood"
+    ]
   },
   "ampliora_3_11_waterscan": {
     "key": "ampliora_3_11_waterscan",
@@ -206,8 +278,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX and Cy5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "WaterScan indicator panel: simultaneous detection of E. coli, Citrobacter spp. and Klebsiella spp. for microbiological water-quality monitoring.",
+      "Mila molecular design optimized with AI: primers and probes for fluorescent-probe PCR, oriented to sensitivity, specificity and robust performance in multi-target panels.",
+      "Broader coverage per run: integrates multiple indicators in one PCR reaction, increasing analytical capacity and reducing individual assays.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability."
+    ],
+    "mainIndustries": [
+      "Beverage"
+    ]
   },
   "ampliora_3_12_waterscan": {
     "key": "ampliora_3_12_waterscan",
@@ -231,8 +311,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX and Cy5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "WaterScan indicator panel: simultaneous detection of Enterococcus spp., Enterobacter spp. and Escherichia spp. for reliable water-quality monitoring.",
+      "Mila molecular design optimized with AI: primers and probes for fluorescent-probe PCR, oriented to sensitivity, specificity and robust performance in multi-target panels.",
+      "Broader coverage per run: integrates multiple indicators in one PCR reaction, increasing analytical capacity and reducing individual assays.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability."
+    ],
+    "mainIndustries": [
+      "Beverage"
+    ]
   },
   "ampliora_3_13_acb_guaiacol_producing_gene_plus_zygosaccharomyces_spp": {
     "key": "ampliora_3_13_acb_guaiacol_producing_gene_plus_zygosaccharomyces_spp",
@@ -256,8 +344,17 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX and Cy5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Expanded spoilage panel: simultaneous detection of Alicyclobacillus spp., a guaiacol-associated marker and Zygosaccharomyces spp. in beverages and concentrates.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beverage",
+      "Sauces and condiments"
+    ]
   },
   "ampliora_3_15_zygosaccharomyces_group_saccharomyces_spp_and_saccharomyces_cerevisiae": {
     "key": "ampliora_3_15_zygosaccharomyces_group_saccharomyces_spp_and_saccharomyces_cerevisiae",
@@ -280,8 +377,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX and Cy5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Spoilage yeast differentiation: detection of the Zygosaccharomyces group, Saccharomyces spp. and Saccharomyces cerevisiae in fermentative and wine-related matrices.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beer & Wine"
+    ]
   },
   "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7": {
     "key": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
@@ -305,8 +410,25 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX and Cy5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Critical pathogen panel: simultaneous detection of Salmonella spp., Listeria monocytogenes and E. coli O157:H7 in a single PCR reaction.",
+      "Mila molecular design optimized with AI: primers and probes for fluorescent-probe PCR, oriented to sensitivity, specificity and robust performance in multi-target panels.",
+      "Operational consolidation: combines multiple targets in a single PCR reaction, reducing runs, reagent use, plastics and analysis time.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Seafood"
+    ]
   },
   "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp": {
     "key": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
@@ -330,8 +452,24 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX and Cy5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Comprehensive food-pathogen monitoring: simultaneous detection of Salmonella spp., Listeria monocytogenes and Listeria spp. in food and environmental samples.",
+      "Mila molecular design optimized with AI: primers and probes for fluorescent-probe PCR, oriented to sensitivity, specificity and robust performance in multi-target panels.",
+      "Operational consolidation: combines multiple targets in a single PCR reaction, reducing runs, reagent use, plastics and analysis time.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp": {
     "key": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
@@ -355,8 +493,24 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, VIC, ROX, TAMRA and Cy5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Multipathogen panel for critical matrices: simultaneous detection of Salmonella spp., Listeria monocytogenes and Listeria spp. in dairy, meat, poultry and processed vegetables.",
+      "Mila molecular design optimized with AI: primers and probes for fluorescent-probe PCR, oriented to sensitivity, specificity and robust performance in multi-target panels.",
+      "Operational consolidation: combines multiple targets in a single PCR reaction, reducing runs, reagent use, plastics and analysis time.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "ampliora_3_9_e_coli_stec_e_coli_o157_h7_and_salmonella_spp": {
     "key": "ampliora_3_9_e_coli_stec_e_coli_o157_h7_and_salmonella_spp",
@@ -380,8 +534,21 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX, Cy5 and Cy5.5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "STEC, O157 and Salmonella panel in one reaction: simultaneous detection and identification of critical pathogens for leafy greens, meat, poultry and ready-to-eat foods.",
+      "Simplified universal enrichment: one protocol for the three pathogens reduces handling, parallel steps and operational time.",
+      "Mila design for advanced multiplexing: AI-optimized primers and probes help minimize cross-interference while maintaining sensitivity in multi-target panels.",
+      "Operational consolidation: replaces separate assays with a single PCR workflow, reducing runs, reagents and labor load.",
+      "Multichannel panel with internal control: monitors multiplex PCR performance and increases analytical reliability.",
+      "AOAC-certified method for critical matrices, including leafy greens and 80% lean raw ground beef; available in ready-to-use SPID format."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Ready-to-eat"
+    ]
   },
   "ampliora_4_3_yeast": {
     "key": "ampliora_4_3_yeast",
@@ -405,8 +572,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX, Cy5 and Cy5.5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Key brewing yeasts: detection of Saccharomyces and Zygosaccharomyces for early control of product stability and consistency.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beer & Wine"
+    ]
   },
   "ampliora_4_4_yeast": {
     "key": "ampliora_4_4_yeast",
@@ -430,8 +605,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX, Cy5 and Cy5.5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "High sensory-impact yeasts: detection of Brettanomyces, Pichia and S. cerevisiae var. diastaticus to prevent alterations in beer.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beer & Wine"
+    ]
   },
   "ampliora_4_5_bacteria": {
     "key": "ampliora_4_5_bacteria",
@@ -455,8 +638,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX, Cy5 and Cy5.5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Common brewing bacteria: detection of Lactobacillus and Pediococcus for early spoilage monitoring and microbiological stability control.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beer & Wine"
+    ]
   },
   "ampliora_4_6_bacteria": {
     "key": "ampliora_4_6_bacteria",
@@ -480,8 +671,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX, Cy5 and Cy5.5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Expanded brewing bacteria panel: detection of Lactobacillus, Megasphaera and Pectinatus for spoilage control in brewing processes.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beer & Wine"
+    ]
   },
   "ampliora_4_7_low_ph_microorganisms": {
     "key": "ampliora_4_7_low_ph_microorganisms",
@@ -505,8 +704,18 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX, Cy5 and Cy5.5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Panel for low-pH beverages: detection of acidophilic bacteria, preservative-resistant yeasts, spoilage yeasts and molds.",
+      "Specialized PRY detection: identifies preservative-resistant yeasts that are critical in beverages and acidified products.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beverage",
+      "Sauces and condiments"
+    ]
   },
   "ampliora_6_1_waterscan_plus": {
     "key": "ampliora_6_1_waterscan_plus",
@@ -530,8 +739,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX and Cy5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Expanded WaterScan Plus coverage: multiplex detection of microbiological indicators for water-quality monitoring, compliance and preventive risk management.",
+      "Mila molecular design optimized with AI: primers and probes for fluorescent-probe PCR, oriented to sensitivity, specificity and robust performance in multi-target panels.",
+      "Higher analytical productivity: integrates multiple indicators in one run, reducing individual assays, reagents and review time.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability."
+    ],
+    "mainIndustries": [
+      "Beverage"
+    ]
   },
   "ampliora_8_1_yeast_plus": {
     "key": "ampliora_8_1_yeast_plus",
@@ -555,8 +772,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX, Cy5 and Cy5.5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Broad brewing-yeast panel: detection of Brettanomyces, Pichia, Saccharomyces, Zygosaccharomyces and S. cerevisiae var. diastaticus for advanced quality control.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beer & Wine"
+    ]
   },
   "ampliora_8_2_bacteria_plus": {
     "key": "ampliora_8_2_bacteria_plus",
@@ -580,8 +805,16 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX, ROX, Cy5 and Cy5.5"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Broad brewing-bacteria panel: detection of Lactobacillus, Pediococcus, Megasphaera and Pectinatus for advanced microbiological stability control.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beer & Wine"
+    ]
   },
   "augmentis_1_listeria": {
     "key": "augmentis_1_listeria",
@@ -913,6 +1146,18 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "shelfLifeMonths": "12",
         "storeTemp": "15°C to 25°C",
         "dye": "-"
+      },
+      {
+        "catalogCode": "V-FL18",
+        "format": "RTU",
+        "size": "25 reactions",
+        "kitContent": "25 Bottles - 90 mL",
+        "isReadyToUse": true,
+        "pcrTimeMin": "-",
+        "incubationTimeH": "24 ± 2",
+        "shelfLifeMonths": "12",
+        "storeTemp": "15°C to 25°C",
+        "dye": "-"
       }
     ],
     "features": [
@@ -1058,7 +1303,10 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Pre-PCR stage: designed as enrichment before DNA extraction and molecular analysis.",
       "Application in beverages and matrices requiring spoilage monitoring."
     ],
-    "mainIndustries": []
+    "mainIndustries": [
+      "Beer & Wine",
+      "Sauces and condiments"
+    ]
   },
   "augmentis_6_ysg_broth": {
     "key": "augmentis_6_ysg_broth",
@@ -1296,7 +1544,18 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Support for sample handling prior to microbiological or molecular analysis.",
       "Helps standardize initial sample preparation in the lab."
     ],
-    "mainIndustries": []
+    "mainIndustries": [
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Seafood"
+    ]
   },
   "clarixa_1": {
     "key": "clarixa_1",
@@ -1326,7 +1585,12 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Facilitates cell lysis: reduces sample viscosity and improves extraction efficiency.",
       "Validated for complex matrices such as 62% cocoa chocolate, cocoa liquor, skim milk powder and fruit concentrate."
     ],
-    "mainIndustries": []
+    "mainIndustries": [
+      "Beverage",
+      "Confectionery",
+      "Dairy",
+      "Sauces and condiments"
+    ]
   },
   "collectio_1_neutrosampling": {
     "key": "collectio_1_neutrosampling",
@@ -1379,7 +1643,23 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Integrated neutralization to preserve sample integrity during transport.",
       "Aligned with surface monitoring and hygiene verification workflows."
     ],
-    "mainIndustries": []
+    "mainIndustries": [
+      "Beer & Wine",
+      "Beverage",
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Pharmaceutical",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Seafood",
+      "Sterile products",
+      "Water"
+    ]
   },
   "collectio_2_surface_transport_buffer": {
     "key": "collectio_2_surface_transport_buffer",
@@ -1408,7 +1688,23 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Sample stabilization: helps preserve integrity before downstream analysis.",
       "Aligned with surface monitoring and environmental hygiene programs."
     ],
-    "mainIndustries": []
+    "mainIndustries": [
+      "Beer & Wine",
+      "Beverage",
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Pharmaceutical",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Seafood",
+      "Sterile products",
+      "Water"
+    ]
   },
   "collectio_3_letheensampling": {
     "key": "collectio_3_letheensampling",
@@ -1461,7 +1757,23 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Helps preserve sample integrity during transport to the lab.",
       "Aligned with hygiene verification and surface monitoring workflows."
     ],
-    "mainIndustries": []
+    "mainIndustries": [
+      "Beer & Wine",
+      "Beverage",
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Pharmaceutical",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Seafood",
+      "Sterile products",
+      "Water"
+    ]
   },
   "elevia_1_1_salmonella_spp": {
     "key": "elevia_1_1_salmonella_spp",
@@ -1485,8 +1797,23 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM and HEX"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Ultra-sensitive Salmonella spp. detection: AiGOR technology targets RNA from viable cells for earlier results and a better representation of real microbiological risk.",
+      "Shorter enrichment and hold times: supports faster release, better inventory rotation and shelf-life protection.",
+      "Automated magnetic-bead extraction: supports standardization, scalability and high operational throughput.",
+      "Ready-to-use SPID format: preloaded RT-qPCR strips that reduce handling, operational errors and prep time.",
+      "Integrated internal control and TxA: verify reaction performance and automate interpretation to increase analytical reliability."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "elevia_2_8_salmonella_spp_and_listeria_spp": {
     "key": "elevia_2_8_salmonella_spp_and_listeria_spp",
@@ -1510,8 +1837,21 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX and ROX"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "AiGOR multiplex on RNA targets: simultaneous detection of Salmonella spp. and Listeria spp. with a focus on viable microorganisms.",
+      "Earlier microbiological response: shorter enrichment times help reduce holds, optimize inventory and improve product rotation.",
+      "Standardized manual enzymatic extraction: integrated protocol designed to reduce operational complexity and improve analytical reproducibility.",
+      "Integrated internal control and TxA: verify reaction performance and automate interpretation to increase analytical reliability.",
+      "Ready-to-use SPID format: preloaded RT-qPCR strips that reduce handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "elevia_2_9_salmonella_spp_and_enterobacteria": {
     "key": "elevia_2_9_salmonella_spp_and_enterobacteria",
@@ -1535,8 +1875,21 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM, HEX and ROX"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "AiGOR multiplex on RNA targets: detection of Salmonella spp. and Enterobacteria with a focus on viable microorganisms on surfaces.",
+      "Earlier microbiological response: shorter enrichment times help accelerate corrective actions and reduce operational hold time.",
+      "Standardized manual enzymatic extraction: integrated protocol designed to reduce operational complexity and improve analytical reproducibility.",
+      "Integrated internal control and TxA: verify reaction performance and automate interpretation to increase analytical reliability.",
+      "Ready-to-use SPID format: preloaded RT-qPCR strips that reduce handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat"
+    ]
   },
   "magneus_1_bacteria": {
     "key": "magneus_1_bacteria",
@@ -1723,7 +2076,23 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "50 min extraction workflow for 24 samples with 20 min analyst hands-on time; room-temperature kit storage.",
       "Reduces repeats due to inhibition and makes it easier to prepare bacterial-pathogen PCR in plant labs without automation."
     ],
-    "mainIndustries": []
+    "mainIndustries": [
+      "Beer & Wine",
+      "Beverage",
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Pharmaceutical",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Seafood",
+      "Sterile products",
+      "Water"
+    ]
   },
   "nucleia_3_clean_q": {
     "key": "nucleia_3_clean_q",
@@ -1797,7 +2166,11 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "45 min extraction for 24 samples with 20 min analyst hands-on time; compatible with spoilage control in beverages and surfaces.",
       "Enables frequent spoilage monitoring to prevent shelf-life failures, turbidity, gas formation, sensory changes or complaints."
     ],
-    "mainIndustries": []
+    "mainIndustries": [
+      "Beer & Wine",
+      "Beverage",
+      "Sauces and condiments"
+    ]
   },
   "nucleia_4_bacteria_yeast_and_molds_plus": {
     "key": "nucleia_4_bacteria_yeast_and_molds_plus",
@@ -1821,7 +2194,13 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "-"
       }
     ],
-    "features": [],
+    "features": [
+      "Optimized for beverages: extraction of bacteria, yeasts and molds in unenriched beer and enriched samples of alcoholic and non-alcoholic beverages and concentrates.",
+      "Robust manual workflow for routine PCR: standardized steps with common lab equipment and strong compatibility with beverage matrices.",
+      "Two productivity options: standard 45-minute protocol for 24 samples and fast 36-minute protocol for 24 samples.",
+      "Safe stopping point: extracted genetic material can be stored for less than 24 hours at 2-8 C or up to 30 days at -25 C to -15 C.",
+      "Operational flexibility for beverage plants: allows extraction and PCR to be separated, speeds routine monitoring and supports response to quality deviations."
+    ],
     "mainIndustries": [
       "Beer & Wine",
       "Beverage",
@@ -1896,7 +2275,15 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Improves detection sensitivity by increasing recoverable microorganisms before molecular analysis.",
       "Simple integration: incorporated into standard enrichment protocols without additional complex steps."
     ],
-    "mainIndustries": []
+    "mainIndustries": [
+      "Confectionery",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "potentia_2_listeria": {
     "key": "potentia_2_listeria",
@@ -1925,7 +2312,18 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Supports enrichment prior to microbiological or molecular analysis.",
       "Aimed at workflows requiring Listeria spp. recovery."
     ],
-    "mainIndustries": []
+    "mainIndustries": [
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Seafood"
+    ]
   },
   "specio_00_1_bacteria": {
     "key": "specio_00_1_bacteria",
@@ -1949,8 +2347,27 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Broad spoilage-bacteria identification: detection and identification of more than 80 bacteria through melting profiles interpreted by KAi.",
+      "Predictive microbiological control: helps detect early spoilage trends before they affect shelf life, stability or product quality.",
+      "Lower instrumentation complexity: single fluorescent-channel detection in FAM simplifies laboratory implementation and operation.",
+      "Operational savings: reduces multiple individual assays and speeds microbiological decisions in beverages, foods and environmental samples.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beer & Wine",
+      "Beverage",
+      "Confectionery",
+      "Dairy",
+      "Fresh & Processed Produce",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Pharmaceutical",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Sterile products"
+    ]
   },
   "specio_00_2_yeast_molds": {
     "key": "specio_00_2_yeast_molds",
@@ -1974,8 +2391,25 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Broad yeast and mold identification: detection and identification of more than 50 spoilage organisms through melting profiles interpreted by KAi.",
+      "Predictive microbiological control: helps detect early spoilage trends before they affect shelf life, stability or product quality.",
+      "Lower instrumentation complexity: single fluorescent-channel detection in FAM simplifies laboratory implementation and operation.",
+      "Operational savings: reduces multiple individual assays and speeds microbiological decisions in beverages, juices, sauces, foods and environmental samples.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beer & Wine",
+      "Beverage",
+      "Confectionery",
+      "Dairy",
+      "Nutraceutical",
+      "Pet Food & Animal Feed",
+      "Pharmaceutical",
+      "Ready-to-eat",
+      "Sauces and condiments"
+    ]
   },
   "specio_1_1_salmonella_spp": {
     "key": "specio_1_1_salmonella_spp",
@@ -1999,8 +2433,19 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "KAi recognition of Salmonella spp.: identifies the target microorganism through intelligent melting-curve analysis and a specific thermal profile.",
+      "Lower instrumentation complexity: single fluorescent-channel detection in FAM simplifies laboratory implementation and operation.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Egg Products",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat"
+    ]
   },
   "specio_1_2_s_aureus": {
     "key": "specio_1_2_s_aureus",
@@ -2024,8 +2469,19 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "KAi recognition of Staphylococcus aureus: identifies the target microorganism through intelligent melting-curve analysis and a specific thermal profile.",
+      "Lower instrumentation complexity: single fluorescent-channel detection in FAM simplifies laboratory implementation and operation.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Dairy",
+      "Egg Products",
+      "Meat and Poultry",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "specio_1_3_e_coli": {
     "key": "specio_1_3_e_coli",
@@ -2049,8 +2505,19 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "KAi recognition of Escherichia coli: identifies the target microorganism through intelligent melting-curve analysis and a specific thermal profile.",
+      "Lower instrumentation complexity: single fluorescent-channel detection in FAM simplifies laboratory implementation and operation.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "specio_1_4_l_monocytogenes": {
     "key": "specio_1_4_l_monocytogenes",
@@ -2074,8 +2541,19 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "KAi recognition of Listeria monocytogenes: identifies the target microorganism through intelligent melting-curve analysis and a specific thermal profile.",
+      "Lower instrumentation complexity: single fluorescent-channel detection in FAM simplifies laboratory implementation and operation.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Dairy",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "specio_1_7_zygosaccharomyces_bailii_and_parabailii": {
     "key": "specio_1_7_zygosaccharomyces_bailii_and_parabailii",
@@ -2099,8 +2577,17 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "KAi detection of Z. bailii and Z. parabailii: identifies spoilage yeasts relevant to non-alcoholic beverages and acidic matrices.",
+      "Preventive spoilage control: supports early detection before stability, shelf life or sensory quality are affected.",
+      "Reduced analytical time: replaces separate assays with a PCR workflow oriented to faster microbiological decisions.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beverage",
+      "Sauces and condiments"
+    ]
   },
   "specio_1_8_listeria_spp": {
     "key": "specio_1_8_listeria_spp",
@@ -2124,8 +2611,19 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "KAi recognition of Listeria spp.: identifies the target microorganism through intelligent melting-curve analysis and a specific thermal profile.",
+      "Lower instrumentation complexity: single fluorescent-channel detection in FAM simplifies laboratory implementation and operation.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Dairy",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "specio_2_2_s_aureus_and_e_coli": {
     "key": "specio_2_2_s_aureus_and_e_coli",
@@ -2149,8 +2647,19 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Multipathogen coverage in one reaction: simultaneous detection of Staphylococcus aureus and Escherichia coli through melting-curve analysis.",
+      "Single-channel KAi architecture: differentiates targets by melting profiles in FAM, simplifying instrumentation versus multichannel multiplex workflows.",
+      "Higher operational productivity: consolidates separate analyses into one PCR workflow, reducing runs, reagents, plastics and labor.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Dairy",
+      "Meat and Poultry",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "specio_2_3_listeria_spp_and_l_monocytogenes": {
     "key": "specio_2_3_listeria_spp_and_l_monocytogenes",
@@ -2174,8 +2683,20 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Listeria coverage in one reaction: simultaneous detection of Listeria spp. and Listeria monocytogenes through melting-curve analysis.",
+      "Single-channel KAi architecture: differentiates targets by melting profiles in FAM, simplifying instrumentation versus multichannel multiplex workflows.",
+      "Higher operational productivity: consolidates separate analyses into one PCR workflow, reducing runs, reagents, plastics and labor.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Dairy",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "specio_2_4_e_coli_and_e_coli_o157_h7": {
     "key": "specio_2_4_e_coli_and_e_coli_o157_h7",
@@ -2199,8 +2720,19 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "E. coli and O157 coverage in one reaction: detection of E. coli and E. coli O157:H7 through melting-curve analysis.",
+      "Single-channel KAi architecture: differentiates targets by melting profiles in FAM, simplifying instrumentation versus multichannel multiplex workflows.",
+      "Higher operational productivity: consolidates separate analyses into one PCR workflow, reducing runs, reagents, plastics and labor.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "specio_2_5_salmonella_spp_and_l_monocytogenes": {
     "key": "specio_2_5_salmonella_spp_and_l_monocytogenes",
@@ -2224,8 +2756,21 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Salmonella and Listeria coverage in one reaction: simultaneous detection of Salmonella spp. and Listeria monocytogenes for critical food matrices.",
+      "Single-channel KAi architecture: differentiates targets by melting profiles in FAM, simplifying instrumentation versus multichannel multiplex workflows.",
+      "Higher operational productivity: consolidates separate analyses into one PCR workflow, reducing runs, reagents, plastics and labor.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Egg Products",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "specio_2_7_salmonella_spp_and_e_coli": {
     "key": "specio_2_7_salmonella_spp_and_e_coli",
@@ -2249,8 +2794,20 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Salmonella and E. coli coverage in one reaction: simultaneous detection of Salmonella spp. and Escherichia coli in food matrices and water.",
+      "Single-channel KAi architecture: differentiates targets by melting profiles in FAM, simplifying instrumentation versus multichannel multiplex workflows.",
+      "Higher operational productivity: consolidates separate analyses into one PCR workflow, reducing runs, reagents, plastics and labor.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat"
+    ]
   },
   "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7": {
     "key": "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
@@ -2274,8 +2831,23 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Three critical pathogens in one panel: simultaneous detection of Salmonella spp., Listeria monocytogenes and E. coli O157:H7 in a single reaction.",
+      "Single-channel KAi architecture: differentiates targets by melting profiles in FAM, simplifying instrumentation versus multichannel multiplex workflows.",
+      "Higher operational productivity: consolidates separate analyses into one PCR workflow, reducing runs, reagents, plastics and labor.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Seafood"
+    ]
   },
   "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus": {
     "key": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
@@ -2323,8 +2895,24 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Four-target panel in one reaction: simultaneous detection of Salmonella spp., Listeria monocytogenes, Escherichia coli and Staphylococcus aureus.",
+      "Single-channel KAi architecture: differentiates targets by melting profiles in FAM, simplifying instrumentation versus multichannel multiplex workflows.",
+      "Higher operational productivity: consolidates pathogens and indicators in one PCR workflow, reducing runs, reagents, plastics and labor.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "AOAC/PTM certification documented through extension of License Number 072101; available in ready-to-use SPID format with preloaded PCR strips."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Seafood"
+    ]
   },
   "specio_4_8_pathogens_hygiene_indicators": {
     "key": "specio_4_8_pathogens_hygiene_indicators",
@@ -2372,199 +2960,53 @@ export const PRODUCTS: Record<string, ProductDef> = {
         "dye": "FAM"
       }
     ],
-    "features": [],
-    "mainIndustries": []
+    "features": [
+      "Pathogens and hygiene indicators in one reaction: detection of Salmonella spp., Listeria monocytogenes, fecal indicators and poor-GMP indicators through KAi.",
+      "Preventive microbiological risk monitoring: integrates food safety and hygiene signals to anticipate process or sanitation failures.",
+      "Lower cost and higher productivity: consolidates multiple analyses into one PCR workflow, reducing reagents, plastics and labor.",
+      "Lower instrumentation complexity: single fluorescent-channel detection in FAM simplifies laboratory implementation and operation.",
+      "Integrated reaction control and TxA: verify amplification quality and automate melting-curve interpretation, reducing subjectivity.",
+      "AOAC-certified method for simultaneous detection of pathogens and indicators in validated matrices; available in ready-to-use SPID format with preloaded PCR strips."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Dairy",
+      "Egg Products",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat",
+      "Sauces and condiments",
+      "Seafood"
+    ]
   },
-  "unlisted_yeast_and_molds": {
-    "key": "unlisted_yeast_and_molds",
-    "name": "Yeast And Molds",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_augmentis_13_universal_listeria": {
-    "key": "unlisted_augmentis_13_universal_listeria",
-    "name": "Augmentis 13 Universal Listeria",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_enhanced_augmentis_91_bpw": {
-    "key": "unlisted_enhanced_augmentis_91_bpw",
-    "name": "Enhanced Augmentis 91 Bpw",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_ysg_broth": {
-    "key": "unlisted_ysg_broth",
-    "name": "Ysg Broth",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_captus_express_1": {
-    "key": "unlisted_captus_express_1",
-    "name": "Captus Express 1",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_yeast_molds": {
-    "key": "unlisted_yeast_molds",
-    "name": "Yeast Molds",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_tsbye": {
-    "key": "unlisted_tsbye",
-    "name": "Tsbye",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_ysg_broth_pdb": {
-    "key": "unlisted_ysg_broth_pdb",
-    "name": "Ysg Broth Pdb",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_tsye_broth": {
-    "key": "unlisted_tsye_broth",
-    "name": "Tsye Broth",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_potato_dextrose_broth_plus_tartaric_acid_10_w": {
-    "key": "unlisted_potato_dextrose_broth_plus_tartaric_acid_10_w",
-    "name": "Potato Dextrose Broth Plus Tartaric Acid 10 W",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_v": {
-    "key": "unlisted_v",
-    "name": "V",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_nucleia_4_bacteria": {
-    "key": "unlisted_nucleia_4_bacteria",
-    "name": "Nucleia 4 Bacteria",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_bpw_iso": {
-    "key": "unlisted_bpw_iso",
-    "name": "Bpw Iso",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_magneus_3_bacteria": {
-    "key": "unlisted_magneus_3_bacteria",
-    "name": "Magneus 3 Bacteria",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_augmentis_13_universal_listeria_augmentis_91_bpw": {
-    "key": "unlisted_augmentis_13_universal_listeria_augmentis_91_bpw",
-    "name": "Augmentis 13 Universal Listeria Augmentis 91 Bpw",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_captus_xpress_2": {
-    "key": "unlisted_captus_xpress_2",
+  "captus_xpress_2": {
+    "key": "captus_xpress_2",
     "name": "Captus Xpress 2",
-    "category": null,
-    "productLine": null,
-    "description": null,
+    "category": "Sampling Kit",
+    "productLine": "Captus",
+    "description": "Device for sponge-based surface sample collection and reduced enrichment of microorganisms from food-contact surfaces.",
     "descriptionEs": null,
     "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
+    "presentations": [
+      {
+        "catalogCode": "V-FL48",
+        "format": "Bottle",
+        "size": "25 reactions",
+        "kitContent": "• 25 Bottles Augmentis Xpress 1 - 30 mL\n• 25 Tubes Collectio 3 LetheenSampling - 10 mL\n• 25 Sponges",
+        "isReadyToUse": false,
+        "pcrTimeMin": "-",
+        "incubationTimeH": "-",
+        "shelfLifeMonths": "6",
+        "storeTemp": "2°C to 8°C",
+        "dye": "-"
+      }
+    ],
+    "features": [
+      "Supports collection and transport of sponge-based surface samples.",
+      "Integrates enrichment within the device workflow.",
+      "Designed for food-contact surface monitoring."
+    ],
     "mainIndustries": [
       "Confectionery",
       "Dairy",
@@ -2576,16 +3018,69 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Seafood"
     ]
   },
-  "unlisted_augmentis_xpress_1": {
-    "key": "unlisted_augmentis_xpress_1",
+  "augmentis_xpress_1": {
+    "key": "augmentis_xpress_1",
     "name": "Augmentis Xpress 1",
-    "category": null,
-    "productLine": null,
-    "description": null,
+    "category": "Growth Medium",
+    "productLine": "Augmentis",
+    "description": "Enrichment culture medium for reduced microbial growth from surface samples.",
     "descriptionEs": null,
     "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
+    "presentations": [
+      {
+        "catalogCode": "V-TB32",
+        "format": "RTU",
+        "size": "100 reactions",
+        "kitContent": "• 100 Tubes - 2.2 mL",
+        "isReadyToUse": true,
+        "pcrTimeMin": "-",
+        "incubationTimeH": "-",
+        "shelfLifeMonths": "6",
+        "storeTemp": "2°C to 25°C",
+        "dye": "-"
+      },
+      {
+        "catalogCode": "V-FL47",
+        "format": "RTU",
+        "size": "50 reactions",
+        "kitContent": "• 50 Bottles - 30 mL",
+        "isReadyToUse": true,
+        "pcrTimeMin": "-",
+        "incubationTimeH": "-",
+        "shelfLifeMonths": "6",
+        "storeTemp": "2°C to 25°C",
+        "dye": "-"
+      },
+      {
+        "catalogCode": "V-FL50",
+        "format": "RTU",
+        "size": "24 reactions",
+        "kitContent": "• 24 Bottles - 100 mL",
+        "isReadyToUse": true,
+        "pcrTimeMin": "-",
+        "incubationTimeH": "-",
+        "shelfLifeMonths": "6",
+        "storeTemp": "2°C to 25°C",
+        "dye": "-"
+      },
+      {
+        "catalogCode": "V-FP34",
+        "format": "Powder",
+        "size": "500 g",
+        "kitContent": "• 1 Jar - 500 g",
+        "isReadyToUse": false,
+        "pcrTimeMin": "-",
+        "incubationTimeH": "-",
+        "shelfLifeMonths": "6",
+        "storeTemp": "2°C to 25°C",
+        "dye": "-"
+      }
+    ],
+    "features": [
+      "Supports surface sample enrichment workflows.",
+      "Designed for reduced microbial growth from surface samples.",
+      "Intended to prepare surface samples for downstream molecular testing."
+    ],
     "mainIndustries": [
       "Confectionery",
       "Dairy",
@@ -2597,28 +3092,33 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Seafood"
     ]
   },
-  "unlisted_lactobacilli_mrs_broth": {
-    "key": "unlisted_lactobacilli_mrs_broth",
-    "name": "Lactobacilli Mrs Broth",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_captus_xpress_1": {
-    "key": "unlisted_captus_xpress_1",
+  "captus_xpress_1": {
+    "key": "captus_xpress_1",
     "name": "Captus Xpress 1",
-    "category": null,
-    "productLine": null,
-    "description": null,
+    "category": "Sampling Kit",
+    "productLine": "Captus",
+    "description": "Device for surface sample collection, transport, and in-device enrichment of microorganisms from food-contact surfaces.",
     "descriptionEs": null,
     "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
+    "presentations": [
+      {
+        "catalogCode": "V-TB37",
+        "format": "Tube",
+        "size": "100 reactions",
+        "kitContent": "• 100 Tubes Augmentis Xpress 1 - 2.2 mL\n• 100 Tubes Letheen - 250 µL\n• 100 Swabs",
+        "isReadyToUse": false,
+        "pcrTimeMin": "-",
+        "incubationTimeH": "-",
+        "shelfLifeMonths": "6",
+        "storeTemp": "2°C to 25°C",
+        "dye": "-"
+      }
+    ],
+    "features": [
+      "Supports collection and transport of surface samples.",
+      "Integrates enrichment within the device workflow.",
+      "Designed for food-contact surface monitoring."
+    ],
     "mainIndustries": [
       "Confectionery",
       "Dairy",
@@ -2629,41 +3129,5 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Ready-to-eat",
       "Seafood"
     ]
-  },
-  "unlisted_magneus_2_bacteria": {
-    "key": "unlisted_magneus_2_bacteria",
-    "name": "Magneus 2 Bacteria",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_bhi_broth": {
-    "key": "unlisted_bhi_broth",
-    "name": "Bhi Broth",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
-  },
-  "unlisted_nucleia_1_tez_q": {
-    "key": "unlisted_nucleia_1_tez_q",
-    "name": "Nucleia 1 Tez Q",
-    "category": null,
-    "productLine": null,
-    "description": null,
-    "descriptionEs": null,
-    "descriptionEstimated": true,
-    "presentations": [],
-    "features": [],
-    "mainIndustries": []
   }
 };

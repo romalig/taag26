@@ -27,6 +27,7 @@ const STAGE_PURPOSE: Record<string, string> = {
 };
 
 const DEFAULT_HERO = "/hero-elevia.jpg";
+const DEFAULT_KIT_IMAGE = "/kit-placeholder.png";
 
 function briefFromProtocol(p: Protocol): ValueBriefData {
   const pcrStage = p.chain.find(s => s.key === "pcr");
@@ -49,6 +50,8 @@ function briefFromProtocol(p: Protocol): ValueBriefData {
       name: s.chosen.name,
       cat: s.chosen.cat ?? "—",
       note: STAGE_PURPOSE[s.key] ?? "",
+      format: s.chosen.format,
+      size: s.chosen.size,
     });
   }
 
@@ -66,12 +69,17 @@ function briefFromProtocol(p: Protocol): ValueBriefData {
       technology: p.technology ?? "Real-Time PCR",
     },
     detects: p.detects.length ? p.detects.map(id => MICRO_BY_ID[id]?.shortName ?? id).join(", ") : null,
+    highlights: broc?.highlights ?? [],
     plant: broc ? broc.plant : [],
     lab: broc ? broc.lab : [],
+    pdfPlant: broc?.pdfPlant,
+    pdfLab: broc?.pdfLab,
+    pdfDescription: broc?.pdfDescription,
     comparisonRows: cmp ? cmp.rows : [],
     isAigor: (p.technology ?? "").includes("AiGOR"),
     isPcr: true,
     heroImage: DEFAULT_HERO,
+    kitImage: `/${p.id}.png`,
   };
 }
 
@@ -92,12 +100,14 @@ function briefFromStageOption(o: ResolvedStageOption): ValueBriefData {
     presentations: o.presentations,
     specs: null,
     detects: null,
+    highlights: [],
     plant: [],
     lab: [],
     comparisonRows: [],
     isAigor: false,
     isPcr: false,
     heroImage: DEFAULT_HERO,
+    kitImage: DEFAULT_KIT_IMAGE,
   };
 }
 
