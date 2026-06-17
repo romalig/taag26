@@ -120,12 +120,14 @@ console.log("TEST 8 — real catalog data (from protocols.ts)");
 {
   // smoke test against the real editable data
   const { PROTOCOLS } = require("./data/protocols");
+  // Same canonical form as workflowData.normMicroId (inlined to keep the test self-contained).
+  const normMicroId = (id: string): string => id.toLowerCase().replace(/[^a-z0-9]/g, "");
   const protos: SelectableProtocol[] = PROTOCOLS.map((p: any) => ({
-    id: p.id, name: p.name, detects: p.targets,
+    id: p.id, name: p.name, detects: p.targets.map(normMicroId),
     totalTimeHours: 1, // placeholder; set-cover tie-break not under test here
   }));
-  // pedir 3 patógenos clásicos de Dairy
-  const r = selectOptimalProtocols(["salmonella_spp", "listeria_monocytogenes", "e_coli_o157_h7"], protos);
+  // pedir 3 patógenos clásicos de Dairy (normalizados, como en producción)
+  const r = selectOptimalProtocols(["salmonella_spp", "listeria_monocytogenes", "escherichia_coli_o157_h7"].map(normMicroId), protos);
   check("cubre los 3 patógenos", r.uncoverable.length === 0, `no-cubribles: ${r.uncoverable}`);
   check("usa pocos protocolos (≤2)", r.protocols.length <= 2, `usó ${r.protocols.length}`);
   check("exacto", r.exact);

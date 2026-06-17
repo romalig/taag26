@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Document, Page, Text, View, StyleSheet, Image, Font, Svg, Defs, LinearGradient, Stop, Rect } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet, Image, Font, Svg, Defs, LinearGradient, Stop, Rect, Path, G } from "@react-pdf/renderer";
 import type { ValueBriefData } from "./ProductBrief";
+import type { ProductPresentation } from "./data/products";
 
 // ── FONTS ───────────────────────────────────────────────────────────
 Font.register({
@@ -15,7 +16,38 @@ Font.register({
   ],
 });
 
-const iconSrc = (key: string) => `/icons/${key}.png`;
+// Highlight icons as inline Lucide SVG paths (Lucide v0.383, viewBox 0 0 24 24, stroke-based).
+// Inline SVG renders crisply at any size and lets us set the brand color in code — and it keeps
+// the PDF visually consistent with the web modal, which uses the same Lucide set. Keys mirror
+// HIGHLIGHT_ICONS in ProductBrief.tsx. "rna" reuses the dna glyph.
+const ICON_PATHS: Record<string, string[]> = {
+  timer: ["M10 2h4", "M12 14l3-3", "M12 22a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"],
+  target: ["M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z", "M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12z", "M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"],
+  zap: ["M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"],
+  shield: ["M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"],
+  layers: ["M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z", "M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12", "M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"],
+  droplet: ["M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"],
+  thermometer: ["M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z"],
+  activity: ["M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"],
+  check: ["M20 6 9 17l-5-5"],
+  flask: ["M10 2v7.31", "M14 9.3V1.99", "M8.5 2h7", "M14 9.3a6.5 6.5 0 1 1-4 0", "M5.58 16.5h12.85"],
+  dna: ["M9.5 22c1.5-2 2.5-4 2.5-6 0-2-1-4-2.5-6", "M14.5 2c-1.5 2-2.5 4-2.5 6 0 2 1 4 2.5 6"],
+};
+ICON_PATHS.rna = ICON_PATHS.dna;
+const ICON_FALLBACK = "activity";
+
+function HighlightIcon({ icon, size = 24, color = "#FF270A" }: { icon?: string; size?: number; color?: string }) {
+  const paths = (icon && ICON_PATHS[icon]) || ICON_PATHS[ICON_FALLBACK];
+  return (
+    <Svg viewBox="0 0 24 24" width={size} height={size}>
+      <G>
+        {paths.map((d, i) => (
+          <Path key={i} d={d} stroke={color} strokeWidth={2} fill="none" />
+        ))}
+      </G>
+    </Svg>
+  );
+}
 
 // Disable automatic hyphenation: return the word as a single chunk so it wraps
 // to the next line whole instead of being split with a hyphen.
@@ -74,8 +106,13 @@ const styles = StyleSheet.create({
 
   // ── DESCRIPTION + HIGHLIGHTS (cara 2) — 3 columns on white ──
   threeCol: { flexDirection: "row", gap: 28 },
-  descCol: { width: "22%" },
+  descCol: { width: "22%", height: 404, flexDirection: "column" },
   descText: { fontSize: 11, color: C.gray, fontWeight: 400, lineHeight: 1.6 },
+  detectedWrap: { marginTop: 20 },
+  detectedTitle: { fontSize: 11, color: C.ink, fontWeight: 700, marginBottom: 6 },
+  detectedRow: { flexDirection: "row", marginBottom: 3 },
+  detectedBullet: { fontSize: 10, color: C.red, fontWeight: 700, marginRight: 5, lineHeight: 1.5 },
+  detectedItem: { fontSize: 10, color: C.red, fontWeight: 700, lineHeight: 1.5, flex: 1 },
   hlCol: { width: "46%" },
   hlGrid2: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
   hlCard2: { width: "48%", height: 195, backgroundColor: C.soft, borderRadius: 16, padding: 18, marginBottom: 14, flexDirection: "column" },
@@ -129,11 +166,11 @@ const styles = StyleSheet.create({
   tableCard: { backgroundColor: C.card, borderRadius: 18, overflow: "hidden", borderWidth: 0.5, borderColor: C.line },
   tableHeader: { flexDirection: "row", backgroundColor: C.soft, paddingVertical: 11, paddingHorizontal: 18, borderBottomWidth: 0.5, borderBottomColor: C.line },
   tableRow: { flexDirection: "row", paddingVertical: 9, paddingHorizontal: 18, borderBottomWidth: 0.5, borderBottomColor: C.line, alignItems: "flex-start" },
-  colFeature: { width: "16%", fontSize: 9.5, color: C.ink, fontWeight: 700, paddingRight: 10 },
-  colTaag: { width: "18%", fontSize: 9.5, color: C.red, fontWeight: 400, paddingRight: 14 },
-  colImpact: { width: "30%", fontSize: 8.5, color: C.gray, paddingRight: 24, lineHeight: 1.4, fontWeight: 400 },
-  colComp: { width: "17%", fontSize: 8.5, color: "#6B7280", fontWeight: 400, paddingRight: 14 },
-  colCompLast: { width: "17%", fontSize: 8.5, color: "#6B7280", fontWeight: 400 },
+  colFeature: { width: "14%", fontSize: 9.5, color: C.ink, fontWeight: 700, paddingRight: 10 },
+  colTaag: { width: "21%", fontSize: 9.5, color: C.red, fontWeight: 400, paddingRight: 14 },
+  colImpact: { width: "33%", fontSize: 8.5, color: C.gray, paddingRight: 24, lineHeight: 1.4, fontWeight: 400 },
+  colComp: { width: "15%", fontSize: 8.5, color: "#6B7280", fontWeight: 400, paddingRight: 14 },
+  colCompLast: { width: "17%", fontSize: 8.5, color: "#6B7280", fontWeight: 400, paddingLeft: 12 },
   th: { fontSize: 7.5, textTransform: "uppercase", letterSpacing: 1.2, fontWeight: 700, color: C.ink },
   thRed: { fontSize: 7.5, textTransform: "uppercase", letterSpacing: 1.2, fontWeight: 700, color: C.red },
   thMute: { fontSize: 7.5, textTransform: "uppercase", letterSpacing: 1.2, fontWeight: 700, color: C.mute },
@@ -161,6 +198,45 @@ const styles = StyleSheet.create({
   contactName: { fontSize: 12, color: C.ink, fontWeight: 800, letterSpacing: 1 },
   contactInfo: { fontSize: 8.5, color: C.gray, fontWeight: 600, textAlign: "right" },
   contactWeb: { fontSize: 8.5, color: C.red, fontWeight: 700, textAlign: "right", marginTop: 2 },
+
+  // ─── Non-PCR condensed brochure (single page, white bg) ───
+  npKicker: { fontSize: 7.5, color: C.red, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", marginTop: 22, marginBottom: 8 },
+  npTitle: { fontSize: 22, color: C.ink, fontWeight: 800, letterSpacing: -0.5, lineHeight: 1.05, marginBottom: 8 },
+  npDesc: { fontSize: 9, color: C.gray, fontWeight: 400, lineHeight: 1.5, marginBottom: 24 },
+  npRedBaseline: { position: "absolute", bottom: 0, left: 0, right: 0, height: 4, backgroundColor: C.red },
+  npSectionTitle: { fontSize: 11, color: C.ink, fontWeight: 800, letterSpacing: -0.2, marginTop: 14, marginBottom: 9 },
+  npPage: { backgroundColor: "#FFFFFF", fontFamily: "Sora", paddingTop: 48, paddingBottom: 42, paddingHorizontal: 44 },
+  npCols: { flexDirection: "row", flex: 1 },
+  npColLeft: { width: "45%", flexDirection: "column" },
+  npColSpacer: { width: "10%" },
+  npColRight: { width: "45%", flexDirection: "column" },
+  npKitImage: { width: "100%", borderRadius: 12, marginTop: 14, marginBottom: 0 },
+  npFeatureList: { flexDirection: "column", gap: 8 },
+  npFeatureRow: { flexDirection: "row", alignItems: "flex-start", gap: 8 },
+  npFeatureDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: C.red, marginTop: 4 },
+  npFeatureText: { fontSize: 8.5, color: "#333333", fontWeight: 500, lineHeight: 1.45, flex: 1 },
+  // Black contact card under the features (mirrors the PCR brief's contact card)
+  npContactCard: { backgroundColor: C.ink, borderRadius: 14, padding: 16, marginTop: 18, flexDirection: "column", justifyContent: "center" },
+  npContactName: { fontSize: 11, color: "#FFFFFF", fontWeight: 800, letterSpacing: -0.3, marginBottom: 3 },
+  npContactLine: { fontSize: 7, color: "rgba(255,255,255,0.6)", fontWeight: 400, marginBottom: 7 },
+  npContactInfoRow: { flexDirection: "row", gap: 12 },
+  npContactInfoTxt: { fontSize: 7.5, color: "rgba(255,255,255,0.85)", fontWeight: 600 },
+  npContactWebTxt: { fontSize: 7.5, color: C.red, fontWeight: 700 },
+  // Formats table — proportional columns so it fits the narrow Letter column
+  npTable: { flexDirection: "column", borderWidth: 1, borderColor: "#EAEAEA", borderRadius: 8, overflow: "hidden" },
+  npTableHead: { flexDirection: "row", backgroundColor: "#F4F4F4", paddingVertical: 5, paddingHorizontal: 7 },
+  npThCat: { width: "22%", fontSize: 5.5, color: C.gray, fontWeight: 700, letterSpacing: 0.3, textTransform: "uppercase" },
+  npThFmt: { width: "38%", fontSize: 5.5, color: C.gray, fontWeight: 700, letterSpacing: 0.3, textTransform: "uppercase" },
+  npThSpec: { width: "40%", fontSize: 5.5, color: C.gray, fontWeight: 700, letterSpacing: 0.3, textTransform: "uppercase" },
+  npTr: { flexDirection: "row", paddingVertical: 5, paddingHorizontal: 7, alignItems: "flex-start" },
+  npTrAlt: { backgroundColor: "#FAFAFA" },
+  npGroupHead: { backgroundColor: C.ink, paddingVertical: 4, paddingHorizontal: 7 },
+  npGroupName: { fontSize: 6.5, color: "#FFFFFF", fontWeight: 800, letterSpacing: 0.3 },
+  npTdCat: { width: "22%", fontSize: 6, color: C.red, fontWeight: 700 },
+  npTdFmt: { width: "38%", flexDirection: "column", paddingRight: 4 },
+  npTdFmtMain: { fontSize: 6.5, color: C.ink, fontWeight: 700 },
+  npTdFmtSub: { fontSize: 5.5, color: C.gray, fontWeight: 500, marginTop: 1 },
+  npTdSpec: { width: "40%", fontSize: 5.5, color: "#555555", fontWeight: 500, lineHeight: 1.35 },
 });
 
 function Header({ soft }: { soft?: boolean }) {
@@ -179,19 +255,151 @@ function Footer() {
   );
 }
 
-export default function ProductBriefDocument({ data }: { data: ValueBriefData }) {
+// Fixed template labels by language (en/es/pt). Kit content comes from `data`; these are the
+// structural labels of the brochure. Pass `lang` to ProductBriefDocument to localize them.
+export type BriefLang = "en" | "es" | "pt";
+const PDF_LABELS: Record<BriefLang, Record<string, string>> = {
+  en: {
+    kitDesc: "Kit description and highlights", detected: "Detected microorganisms:",
+    whyMatters: "Why it matters", forPlant: "For your plant", forLab: "For your lab",
+    howCompares: "How it compares", compareLede: "TAAG versus leading PCR and traditional culture methods.",
+    feature: "Feature", impact: "Business Impact", leadingPcr: "Leading PCR", traditional: "Traditional",
+    formats: "Formats & products",
+  },
+  es: {
+    kitDesc: "Descripción del kit y aspectos destacados", detected: "Microorganismos detectados:",
+    whyMatters: "Por qué importa", forPlant: "Para tu planta", forLab: "Para tu laboratorio",
+    howCompares: "Cómo se compara", compareLede: "TAAG frente a PCR líder y métodos tradicionales de cultivo.",
+    feature: "Característica", impact: "Impacto en el negocio", leadingPcr: "PCR líder", traditional: "Tradicional",
+    formats: "Formatos y productos",
+  },
+  pt: {
+    kitDesc: "Descrição do kit e destaques", detected: "Microrganismos detectados:",
+    whyMatters: "Por que importa", forPlant: "Para sua planta", forLab: "Para seu laboratório",
+    howCompares: "Como se compara", compareLede: "TAAG frente ao PCR líder e métodos tradicionais de cultura.",
+    feature: "Característica", impact: "Impacto no negócio", leadingPcr: "PCR líder", traditional: "Tradicional",
+    formats: "Formatos e produtos",
+  },
+};
+
+export default function ProductBriefDocument({ data, lang = "en" }: { data: ValueBriefData; lang?: BriefLang }) {
+  const L = PDF_LABELS[lang] ?? PDF_LABELS.en;
   const plant = data.pdfPlant && data.pdfPlant.length ? data.pdfPlant : data.plant;
   const lab = data.pdfLab && data.pdfLab.length ? data.pdfLab : data.lab;
   const hasComparison = data.comparisonRows.length > 0;
   const hasFormats = data.presentations.length > 0;
   const hasRelated = data.relatedProducts.length > 0;
 
+  // ─── Non-PCR products (consumables: media, extraction kits, sampling, supplements) get a
+  //     condensed 2-page brochure: a hero-less cover + a features/formats page with per-format
+  //     technical specs. They have no marketing highlights, plant/lab impact or competitor table. ───
+  if (!data.isPcr) {
+    const fmtSpecs = (pr: ProductPresentation): string[] => [
+      pr.shelfLifeMonths && pr.shelfLifeMonths !== "-" ? `Shelf life: ${pr.shelfLifeMonths} mo` : null,
+      pr.storeTemp && pr.storeTemp !== "-" ? `Storage: ${pr.storeTemp}` : null,
+      typeof pr.isReadyToUse === "boolean" ? (pr.isReadyToUse ? "Ready to use" : "Requires preparation") : null,
+      pr.incubationTimeH && pr.incubationTimeH !== "-" ? `Incubation: ${pr.incubationTimeH.replace(/\n/g, " · ")} h` : null,
+    ].filter((x): x is string => Boolean(x));
+    return (
+      <Document>
+        <Page size="LETTER" style={styles.npPage}>
+          <Header soft />
+          {/* Header block: category kicker + name + description (mirrors the modal, no hero) */}
+          {(data.category || data.productLine) && (
+            <Text style={styles.npKicker}>{[data.category, data.productLine].filter(Boolean).join("  ·  ")}</Text>
+          )}
+          <Text style={styles.npTitle}>{data.name}</Text>
+          {data.description ? <Text style={styles.npDesc}>{data.description}</Text> : null}
+
+          <View style={styles.npCols}>
+            {/* Col 1: key features + black contact card pinned to the bottom */}
+            <View style={styles.npColLeft}>
+              <Text style={styles.npSectionTitle}>Key features</Text>
+              <View style={styles.npFeatureList}>
+                {data.features.map((f, i) => (
+                  <View key={i} style={styles.npFeatureRow}>
+                    <View style={styles.npFeatureDot} />
+                    <Text style={styles.npFeatureText}>{f}</Text>
+                  </View>
+                ))}
+              </View>
+              {/* Spacer pushes the contact card down so it sits just above the red baseline */}
+              <View style={{ flexGrow: 1 }} />
+              {/* Black contact card (same as the PCR brief) */}
+              <View style={styles.npContactCard}>
+                <Text style={styles.npContactName}>Contact us</Text>
+                <Text style={styles.npContactLine}>Talk to our team about validation, pricing and getting started.</Text>
+                <View style={styles.npContactInfoRow}>
+                  <Text style={styles.npContactInfoTxt}>contact@taag.bio</Text>
+                  <Text style={styles.npContactWebTxt}>www.taag.bio</Text>
+                </View>
+              </View>
+            </View>
+            {/* 10% white-space spacer column */}
+            <View style={styles.npColSpacer} />
+            {/* Col 2: formats as a compact table so more rows fit (grouped by product when combined) */}
+            <View style={styles.npColRight}>
+              {/* Kit image — rounded corners, no background card; marginTop matches npSectionTitle so it
+                  lines up with "Key features" on the left. Same /V-XXXX.png convention as PCR. */}
+              <Image src={data.kitImage} style={styles.npKitImage} />
+              <Text style={styles.npSectionTitle}>{L.formats}</Text>
+              <View style={styles.npTable}>
+                {/* table header */}
+                <View style={styles.npTableHead}>
+                  <Text style={[styles.npThCat]}>Cat #</Text>
+                  <Text style={[styles.npThFmt]}>Format · Size</Text>
+                  <Text style={[styles.npThSpec]}>Specifications</Text>
+                </View>
+                {data.formatGroups && data.formatGroups.length ? (
+                  data.formatGroups.map((grp, gi) => (
+                    <View key={gi}>
+                      <View style={styles.npGroupHead}><Text style={styles.npGroupName}>{grp.name}</Text></View>
+                      {grp.presentations.map((pr, i) => {
+                        const specs = fmtSpecs(pr);
+                        return (
+                          <View key={i} style={[styles.npTr, i % 2 === 1 ? styles.npTrAlt : {}]}>
+                            <Text style={styles.npTdCat}>{pr.catalogCode ?? "—"}</Text>
+                            <View style={styles.npTdFmt}>
+                              <Text style={styles.npTdFmtMain}>{[pr.format, pr.size].filter(Boolean).join(" · ") || "—"}</Text>
+                              {pr.kitContent ? <Text style={styles.npTdFmtSub}>{pr.kitContent}</Text> : null}
+                            </View>
+                            <Text style={styles.npTdSpec}>{specs.join("  ·  ") || "—"}</Text>
+                          </View>
+                        );
+                      })}
+                    </View>
+                  ))
+                ) : (
+                  data.presentations.map((pr, i) => {
+                    const specs = fmtSpecs(pr);
+                    return (
+                      <View key={i} style={[styles.npTr, i % 2 === 1 ? styles.npTrAlt : {}]}>
+                        <Text style={styles.npTdCat}>{pr.catalogCode ?? "—"}</Text>
+                        <View style={styles.npTdFmt}>
+                          <Text style={styles.npTdFmtMain}>{[pr.format, pr.size].filter(Boolean).join(" · ") || "—"}</Text>
+                          {pr.kitContent ? <Text style={styles.npTdFmtSub}>{pr.kitContent}</Text> : null}
+                        </View>
+                        <Text style={styles.npTdSpec}>{specs.join("  ·  ") || "—"}</Text>
+                      </View>
+                    );
+                  })
+                )}
+              </View>
+            </View>
+          </View>
+          {/* Thin TAAG-red baseline at the foot of the page */}
+          <View style={styles.npRedBaseline} fixed />
+        </Page>
+      </Document>
+    );
+  }
+
   return (
     <Document>
       {/* ───────── CARA 1: COVER full-bleed — image is the protagonist ───────── */}
       <Page size={{ width: 1080, height: 612 }}>
         <View style={styles.cover}>
-          <Image src="/hero_brochure.png" style={styles.coverImg} />
+          <Image src={data.heroImage ?? "/hero_brochure.png"} style={styles.coverImg} />
           {/* Two stacked gradients: a stronger bottom band + a left wash → reads as bottom-left dark, right clean */}
           <Svg width="1080" height="612" style={styles.coverOverlay}>
             <Defs>
@@ -223,15 +431,33 @@ export default function ProductBriefDocument({ data }: { data: ValueBriefData })
       {/* ───────── CARA 2: KIT DESCRIPTION + HIGHLIGHTS + IMAGE (3 cols, white) ───────── */}
       <Page size={{ width: 1080, height: 612 }} style={styles.page}>
         <Header />
-        <Text style={styles.pageTitle}>Kit description and highlights</Text>
+        <Text style={styles.pageTitle}>{L.kitDesc}</Text>
         <View style={[styles.threeCol, { marginTop: 24 }]}>
-          {/* Col 1: description — modal description, prefixed with the kit name */}
+          {/* Col 1: description (top) + detected list (bottom-aligned with lower card row) */}
           <View style={styles.descCol}>
             {data.description && (
-              <Text style={styles.descText}>
-                The {data.name} is {startsWithVowel(data.description) ? "an" : "a"} {lowerFirst(data.description)}
-                {data.isAigor ? " It is powered by AiGOR\u2122, TAAG's RNA-based detection technology." : ""}
-              </Text>
+              data.descriptionIsCustom ? (
+                <Text style={styles.descText}>{data.description}</Text>
+              ) : (
+                <Text style={styles.descText}>
+                  The {data.name} is {startsWithVowel(data.description) ? "an" : "a"} {lowerFirst(data.description)}
+                  {data.isAigor ? " It is powered by AiGOR\u2122, TAAG's RNA-based detection technology." : ""}
+                </Text>
+              )
+            )}
+            {data.detectedList && data.detectedList.length > 0 && (
+              <>
+                <View style={{ flex: 1 }} />
+                <View style={styles.detectedWrap}>
+                  <Text style={styles.detectedTitle}>{L.detected}</Text>
+                  {data.detectedList.map((m, i) => (
+                    <View key={i} style={styles.detectedRow}>
+                      <Text style={styles.detectedBullet}>{"\u2022"}</Text>
+                      <Text style={styles.detectedItem}>{m}</Text>
+                    </View>
+                  ))}
+                </View>
+              </>
             )}
           </View>
           {/* Col 2: 4 highlight cards (light gray; title, description, red icon at bottom) */}
@@ -241,7 +467,7 @@ export default function ProductBriefDocument({ data }: { data: ValueBriefData })
                 <View key={i} style={styles.hlCard2}>
                   <Text style={styles.hlCard2Title}>{h.title}</Text>
                   <Text style={styles.hlCard2Sub}>{h.pdfText ?? h.subtitle}</Text>
-                  <Image src="/logo-red1.png" style={styles.hlCard2Icon} />
+                  <View style={styles.hlCard2Icon}><HighlightIcon icon={h.icon} size={26} color={C.red} /></View>
                 </View>
               ))}
             </View>
@@ -257,11 +483,11 @@ export default function ProductBriefDocument({ data }: { data: ValueBriefData })
       {/* ───────── CARA 3: WHY IT MATTERS — FOR YOUR PLANT ───────── */}
       <Page size={{ width: 1080, height: 612 }} style={styles.page}>
         <Header />
-        <Text style={styles.pageTitle}>Why it matters</Text>
+        <Text style={styles.pageTitle}>{L.whyMatters}</Text>
         <View style={[styles.threeCol, { marginTop: 24 }]}>
           {/* Col 1: intro */}
           <View style={styles.descCol}>
-            <Text style={styles.colHeading}>For your plant</Text>
+            <Text style={styles.colHeading}>{L.forPlant}</Text>
             <Text style={styles.descText}>What this kit changes for your production line — fewer stoppages, lower outbreak risk and leaner inventory.</Text>
           </View>
           {/* Col 2: 4 plant blocks as cards (long modal copy) */}
@@ -286,11 +512,11 @@ export default function ProductBriefDocument({ data }: { data: ValueBriefData })
       {/* ───────── CARA 4: WHY IT MATTERS — FOR YOUR LAB ───────── */}
       <Page size={{ width: 1080, height: 612 }} style={styles.page}>
         <Header />
-        <Text style={styles.pageTitle}>Why it matters</Text>
+        <Text style={styles.pageTitle}>{L.whyMatters}</Text>
         <View style={[styles.threeCol, { marginTop: 24 }]}>
           {/* Col 1: intro */}
           <View style={styles.descCol}>
-            <Text style={styles.colHeading}>For your lab</Text>
+            <Text style={styles.colHeading}>{L.forLab}</Text>
             <Text style={styles.descText}>The technical edge your team works with every day — faster, cleaner, more reliable results.</Text>
           </View>
           {/* Col 2: 4 lab blocks as cards (long modal copy) */}
@@ -317,16 +543,16 @@ export default function ProductBriefDocument({ data }: { data: ValueBriefData })
         <View style={styles.headerRow} fixed>
           <Image src="/logo-white.png" style={styles.logo} />
         </View>
-        <Text style={styles.pageTitleWhite}>How it compares</Text>
-        <Text style={styles.pageLedeWhite}>TAAG versus leading PCR and traditional culture methods.</Text>
+        <Text style={styles.pageTitleWhite}>{L.howCompares}</Text>
+        <Text style={styles.pageLedeWhite}>{L.compareLede}</Text>
         {hasComparison && (
           <View style={styles.tableCard}>
             <View style={styles.tableHeader}>
-              <Text style={[styles.colFeature, styles.th]}>Feature</Text>
+              <Text style={[styles.colFeature, styles.th]}>{L.feature}</Text>
               <Text style={[styles.colTaag, styles.thRed]}>TAAG</Text>
-              <Text style={[styles.colImpact, styles.th]}>Business Impact</Text>
-              <Text style={[styles.colComp, styles.thMute]}>Leading PCR</Text>
-              <Text style={[styles.colCompLast, styles.thMuteLast]}>Traditional</Text>
+              <Text style={[styles.colImpact, styles.th]}>{L.impact}</Text>
+              <Text style={[styles.colComp, styles.thMute]}>{L.leadingPcr}</Text>
+              <Text style={[styles.colCompLast, styles.thMuteLast]}>{L.traditional}</Text>
             </View>
             {data.comparisonRows.map((row, i) => (
               <View key={i} style={[styles.tableRow, i === data.comparisonRows.length - 1 ? { borderBottomWidth: 0 } : {}]}>
@@ -348,7 +574,7 @@ export default function ProductBriefDocument({ data }: { data: ValueBriefData })
       {/* ───────── CARA 6: FORMATS + SUPPLIES + TxA + CONTACT (2 cols, 2 cards each) ───────── */}
       <Page size={{ width: 1080, height: 612 }} style={styles.pageSoft}>
         <Header soft />
-        <Text style={styles.pageTitle}>Formats & products</Text>
+        <Text style={styles.pageTitle}>{L.formats}</Text>
         <View style={styles.c6Cols}>
           {/* COLUMN 1 */}
           <View style={styles.c6Col}>
@@ -361,6 +587,7 @@ export default function ProductBriefDocument({ data }: { data: ValueBriefData })
                   <View style={styles.c6RowMain}>
                     <Text style={styles.c6Name}>{data.name}</Text>
                     <Text style={styles.c6Meta}>{[pr.format, pr.size].filter(Boolean).join(" · ") || "—"}</Text>
+                    {pr.kitContent ? <Text style={styles.c6Meta}>{pr.kitContent}</Text> : null}
                   </View>
                 </View>
               ))}

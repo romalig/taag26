@@ -1,22 +1,38 @@
-// protocols.ts — EDIT BY HAND. Main data file, regenerated from the source workbook.
+// protocols.ts - EDIT BY HAND. Main data file, regenerated from the source workbook.
 // One entry per PCR kit (only kits that have protocol rows in the source are included).
 // Products (and their presentations/catalog codes) live in products.ts; stages reference a
 // product by `productKey`.
 //
 // NORMALIZATION RULES:
 //   1. Sample type: always `sampleTypes` (array), inferred from each row's matrix text.
-//   2. Time: option has flat `timeHours` (constant) — enrichment times come from the source;
+//   2. Time: option has flat `timeHours` (constant) - enrichment times come from the source;
 //      sampling times are an invented 0.25h placeholder (timeEstimated: true).
 //   3. `matrices[]` lists the matrices an enrichment option was validated on (when >1).
 //   4. mainIndustries = industries the kit DECLARES (source main_industries), mapped to the
 //      canonical industry names; used to filter which kits appear for a chosen industry.
 
-export type StageKey = "sampling" | "enrichment" | "extraction" | "pcr";
+export type StageKey = "sampling" | "enrichment" | "mediumSupplement" | "extractionSupplement" | "extraction" | "pcr";
 export type SampleType = "Environmental" | "Finished";
 export type ExecMode = "Manual" | "Automated";
+// How options within a group relate:
+//  - "parallel": ALL media in the group are used together.
+//  - "alternative": the user picks ONE medium from the group.
+export type GroupMode = "parallel" | "alternative";
+// A group bundles enrichment media that share a mode, scoped to a sample type. A stage's
+// final workflow for a given sample type = the union of its groups for that sample type:
+// every "parallel" group contributes ALL its media; every "alternative" group contributes ONE.
+// Media are referenced by productKey (they live in the stage's `options` list). If a stage has
+// no `groups`, every option is treated as a standalone alternative (safe default = pick one).
+export interface EnrichmentGroup {
+  id: string;
+  sampleType: SampleType;
+  mode: GroupMode;
+  productKeys: string[];
+}
 
 export interface StageOption {
   productKey: string;
+  catalogCode?: string[] | null;
   sampleTypes: SampleType[];
   mode?: ExecMode | null;
   timeHours?: number | null;
@@ -26,6 +42,7 @@ export interface StageOption {
 }
 export interface PcrUse {
   productKey: string;
+  catalogCode: string;
   timeHours: number | null;
   timeLabel?: string;        // shown instead of a formatted time when set (e.g. "X mins" = TODO)
   timeEstimated: boolean;
@@ -50,7 +67,9 @@ export interface ProtocolDef {
   // media and extraction kits per industry. Keyed by canonical industry name.
   stagesByIndustry: Record<string, {
     sampling: { options: StageOption[] };
-    enrichment: { options: StageOption[] };
+    enrichment: { options: StageOption[]; groups?: EnrichmentGroup[] };
+    mediumSupplement: { options: StageOption[] };
+    extractionSupplement: { options: StageOption[] };
     extraction: { options: StageOption[] };
     pcr: PcrUse;
   }>;
@@ -64,7 +83,7 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF97",
     "productKey": "ampliora_1_1_salmonella_spp",
     "targets": [
-      "salmonella_spp"
+      "Salmonella_spp."
     ],
     "mainIndustries": [
       "Confectionery",
@@ -110,11 +129,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -122,29 +146,65 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_1_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF97",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -153,11 +213,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -165,29 +230,65 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_1_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF97",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -196,11 +297,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -208,29 +314,65 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_1_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF97",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -239,11 +381,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -251,29 +398,65 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_1_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF97",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -282,11 +465,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -294,29 +482,65 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_1_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF97",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -325,11 +549,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -337,29 +566,65 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_1_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF97",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -368,11 +633,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -380,29 +650,65 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_1_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF97",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -411,11 +717,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -423,29 +734,65 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_1_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF97",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -454,11 +801,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -466,29 +818,65 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_1_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF97",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       }
@@ -501,7 +889,7 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF69",
     "productKey": "ampliora_1_3_e_coli",
     "targets": [
-      "escherichia_coli"
+      "Escherichia_coli"
     ],
     "mainIndustries": [
       "Confectionery",
@@ -545,11 +933,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -557,29 +950,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_3_e_coli",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF69",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -588,11 +1020,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -600,29 +1037,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_3_e_coli",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF69",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -631,11 +1107,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -643,29 +1124,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_3_e_coli",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF69",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -674,11 +1194,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -686,29 +1211,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_3_e_coli",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF69",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -717,11 +1281,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -729,29 +1298,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_3_e_coli",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF69",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -760,11 +1368,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -772,29 +1385,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_3_e_coli",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF69",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -803,11 +1455,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -815,29 +1472,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_1_3_e_coli",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF69",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       }
@@ -850,8 +1546,8 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF161",
     "productKey": "ampliora_2_10_acb_plus_guaiacol_producing_gene",
     "targets": [
-      "alicyclobacillus_spp",
-      "guaiacol_producing_bacteria"
+      "Alicyclobacillus_spp.",
+      "Guaiacol_producing_bacteria"
     ],
     "mainIndustries": [
       "Beverage",
@@ -893,11 +1589,31 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_6_ysg_broth",
+              "catalogCode": [
+                "V-FL49"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": [
+            {
+              "productKey": "clarixa_1",
+              "catalogCode": [
+                "V-PET02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
             }
           ]
         },
@@ -905,17 +1621,21 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_10_acb_plus_guaiacol_producing_gene",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF161",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -927,11 +1647,31 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_6_ysg_broth",
+              "catalogCode": [
+                "V-FL49"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": [
+            {
+              "productKey": "clarixa_1",
+              "catalogCode": [
+                "V-PET02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
             }
           ]
         },
@@ -939,17 +1679,21 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_10_acb_plus_guaiacol_producing_gene",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF161",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -962,8 +1706,8 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF46",
     "productKey": "ampliora_2_3_listeria_spp_and_l_monocytogenes",
     "targets": [
-      "listeria_spp",
-      "listeria_monocytogenes"
+      "Listeria_spp.",
+      "Listeria_monocytogenes"
     ],
     "mainIndustries": [
       "Dairy",
@@ -1005,11 +1749,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1017,29 +1766,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_3_listeria_spp_and_l_monocytogenes",
-          "timeHours": 1.58,
+          "catalogCode": "V-SF46",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -1048,11 +1834,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1060,29 +1851,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_3_listeria_spp_and_l_monocytogenes",
-          "timeHours": 1.58,
+          "catalogCode": "V-SF46",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -1091,11 +1919,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1103,29 +1936,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_3_listeria_spp_and_l_monocytogenes",
-          "timeHours": 1.58,
+          "catalogCode": "V-SF46",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -1134,11 +2004,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1146,29 +2021,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_3_listeria_spp_and_l_monocytogenes",
-          "timeHours": 1.58,
+          "catalogCode": "V-SF46",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -1177,11 +2089,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1189,29 +2106,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_3_listeria_spp_and_l_monocytogenes",
-          "timeHours": 1.58,
+          "catalogCode": "V-SF46",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       }
@@ -1224,8 +2178,8 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF44",
     "productKey": "ampliora_2_8_listeria_spp_and_salmonella_spp",
     "targets": [
-      "listeria_spp",
-      "salmonella_spp"
+      "Listeria_spp.",
+      "Salmonella_spp."
     ],
     "mainIndustries": [
       "Confectionery",
@@ -1270,11 +2224,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1282,37 +2241,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_8_listeria_spp_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF44",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -1321,11 +2355,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1333,37 +2372,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_8_listeria_spp_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF44",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -1372,11 +2486,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1384,37 +2503,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_8_listeria_spp_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF44",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -1423,11 +2617,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1435,37 +2634,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_8_listeria_spp_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF44",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -1474,11 +2748,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1486,37 +2765,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_8_listeria_spp_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF44",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -1525,11 +2879,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1537,37 +2896,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_8_listeria_spp_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF44",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -1576,11 +3010,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1588,37 +3027,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_8_listeria_spp_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF44",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -1627,11 +3141,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1639,37 +3158,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_2_8_listeria_spp_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF44",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       }
@@ -1682,9 +3276,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF98",
     "productKey": "ampliora_3_11_waterscan",
     "targets": [
-      "escherichia_coli",
-      "citrobacter_spp",
-      "klebsiella_spp"
+      "Escherichia_coli",
+      "Citrobacter_spp.",
+      "Klebsiella_spp."
     ],
     "mainIndustries": [
       "Beverage"
@@ -1724,21 +3318,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "enrichment": {
           "options": []
         },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_11_waterscan",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF98",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -1751,9 +3355,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF89",
     "productKey": "ampliora_3_12_waterscan",
     "targets": [
-      "enterococcus_spp",
-      "enterobacter_spp",
-      "escherichia_spp"
+      "Enterococcus_spp.",
+      "Enterobacter_spp.",
+      "Escherichia_spp."
     ],
     "mainIndustries": [
       "Beverage"
@@ -1779,7 +3383,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       }
     ],
     "features": [
-      "Detects Enterococcus, Enterobacter and Escherichia spp. in one reaction via Mila multiplex.",
+      "Detects E. coli, Citrobacter and Klebsiella in one reaction via Mila multiplex design.",
       "Three water indicators per test give a fuller process-water picture in one run.",
       "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
       "Quick result speeds process-water release decisions.",
@@ -1793,21 +3397,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "enrichment": {
           "options": []
         },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_12_waterscan",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF89",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -1820,9 +3434,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF160",
     "productKey": "ampliora_3_13_acb_guaiacol_producing_gene_plus_zygosaccharomyces_spp",
     "targets": [
-      "alicyclobacillus_spp",
-      "zygosaccharomyces_spp",
-      "guaiacol_producing_bacteria"
+      "Alicyclobacillus_spp.",
+      "Zygosaccharomyces_spp.",
+      "Guaiacol_producing_bacteria"
     ],
     "mainIndustries": [
       "Beverage",
@@ -1864,29 +3478,42 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_6_ysg_broth",
+              "catalogCode": [
+                "V-FL49"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_13_acb_guaiacol_producing_gene_plus_zygosaccharomyces_spp",
-          "timeHours": 1.58,
+          "catalogCode": "V-SF160",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -1898,29 +3525,42 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_6_ysg_broth",
+              "catalogCode": [
+                "V-FL49"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_13_acb_guaiacol_producing_gene_plus_zygosaccharomyces_spp",
-          "timeHours": 1.58,
+          "catalogCode": "V-SF160",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       }
@@ -1933,9 +3573,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF67",
     "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
     "targets": [
-      "salmonella_spp",
-      "listeria_monocytogenes",
-      "e_coli_o157_h7"
+      "Salmonella_spp.",
+      "Listeria_monocytogenes",
+      "Escherichia_coli_O157_H7"
     ],
     "mainIndustries": [
       "Confectionery",
@@ -1982,11 +3622,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -1994,45 +3639,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF67",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2041,11 +3738,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2053,45 +3755,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF67",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2100,11 +3854,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2112,45 +3871,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF67",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2159,11 +3970,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2171,45 +3987,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF67",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2218,11 +4086,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2230,45 +4103,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF67",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2277,11 +4202,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2289,45 +4219,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF67",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2336,11 +4318,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2348,45 +4335,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF67",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2395,11 +4434,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2407,45 +4451,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF67",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2454,11 +4550,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2466,45 +4567,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF67",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2513,11 +4666,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2525,45 +4683,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF67",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       }
@@ -2576,9 +4786,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF59",
     "productKey": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
     "targets": [
-      "salmonella_spp",
-      "listeria_monocytogenes",
-      "listeria_spp"
+      "Salmonella_spp.",
+      "Listeria_monocytogenes",
+      "Listeria_spp."
     ],
     "mainIndustries": [
       "Confectionery",
@@ -2624,11 +4834,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2636,37 +4851,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF59",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2675,11 +4965,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2687,37 +4982,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF59",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2726,11 +5096,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2738,37 +5113,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF59",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2777,11 +5227,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2789,37 +5244,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF59",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2828,11 +5358,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2840,37 +5375,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF59",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2879,11 +5489,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2891,37 +5506,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF59",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2930,11 +5620,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2942,37 +5637,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF59",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -2981,11 +5751,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -2993,37 +5768,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF59",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -3032,11 +5882,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -3044,37 +5899,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF59",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       }
@@ -3087,9 +6017,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF74",
     "productKey": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
     "targets": [
-      "salmonella_spp",
-      "listeria_monocytogenes",
-      "listeria_spp"
+      "Salmonella_spp.",
+      "Listeria_monocytogenes",
+      "Listeria_spp."
     ],
     "mainIndustries": [
       "Confectionery",
@@ -3135,11 +6065,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -3147,37 +6082,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.83,
+          "catalogCode": "V-SF74",
+          "timeHours": 1.833333333,
           "timeEstimated": false
         }
       },
@@ -3186,11 +6196,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -3198,37 +6213,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.83,
+          "catalogCode": "V-SF74",
+          "timeHours": 1.833333333,
           "timeEstimated": false
         }
       },
@@ -3237,11 +6327,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -3249,37 +6344,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.83,
+          "catalogCode": "V-SF74",
+          "timeHours": 1.833333333,
           "timeEstimated": false
         }
       },
@@ -3288,11 +6458,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -3300,37 +6475,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.83,
+          "catalogCode": "V-SF74",
+          "timeHours": 1.833333333,
           "timeEstimated": false
         }
       },
@@ -3339,11 +6589,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -3351,37 +6606,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.83,
+          "catalogCode": "V-SF74",
+          "timeHours": 1.833333333,
           "timeEstimated": false
         }
       },
@@ -3390,11 +6720,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -3402,37 +6737,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.83,
+          "catalogCode": "V-SF74",
+          "timeHours": 1.833333333,
           "timeEstimated": false
         }
       },
@@ -3441,11 +6851,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -3453,37 +6868,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.83,
+          "catalogCode": "V-SF74",
+          "timeHours": 1.833333333,
           "timeEstimated": false
         }
       },
@@ -3492,11 +6982,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -3504,37 +6999,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.83,
+          "catalogCode": "V-SF74",
+          "timeHours": 1.833333333,
           "timeEstimated": false
         }
       },
@@ -3543,11 +7113,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -3555,37 +7130,112 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-par",
+              "sampleType": "Environmental",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_5r_salmonella_spp_l_monocytogenes_and_listeria_spp",
-          "timeHours": 1.83,
+          "catalogCode": "V-SF74",
+          "timeHours": 1.833333333,
           "timeEstimated": false
         }
       }
@@ -3598,9 +7248,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF68",
     "productKey": "ampliora_3_9_e_coli_stec_e_coli_o157_h7_and_salmonella_spp",
     "targets": [
-      "e_coli_stec",
-      "e_coli_o157_h7",
-      "salmonella_spp"
+      "Escherichia_coli_STEC",
+      "Escherichia_coli_O157_H7",
+      "Salmonella_spp."
     ],
     "mainIndustries": [
       "Confectionery",
@@ -3645,29 +7295,43 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_9_e_coli_stec_e_coli_o157_h7_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF68",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -3679,29 +7343,43 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_9_e_coli_stec_e_coli_o157_h7_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF68",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -3713,29 +7391,43 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_9_e_coli_stec_e_coli_o157_h7_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF68",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -3747,29 +7439,43 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_9_e_coli_stec_e_coli_o157_h7_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF68",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -3781,29 +7487,43 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_3_9_e_coli_stec_e_coli_o157_h7_and_salmonella_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-SF68",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       }
@@ -3816,13 +7536,15 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF100",
     "productKey": "ampliora_4_3_yeast",
     "targets": [
-      "saccharomyces_cerevisiae",
-      "saccharomyces_spp",
-      "zygosaccharomyces_bailii_parabailii",
-      "zygosaccharomyces_group"
+      "Saccharomyces_cerevisiae",
+      "Saccharomyces_spp.",
+      "Zygosaccharomyces_bailii",
+      "Zygosaccharomyces_parabailii",
+      "Zygosaccharomyces_group_Zygosaccharomyces_bailii_Zygosaccharomyces_parabailii_Zygosaccharomyces_rouxii"
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer",
+      "Wine"
     ],
     "technology": "Real-Time PCR - Mila",
     "sensitivity": "Enriched Sample: From 6 CFU/mL\nDirect Sample: From 4x103 cells/mL\n\nSensitivity depends on the target microorganism.",
@@ -3852,7 +7574,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
-      "Beer & Wine": {
+      "Beer": {
         "sampling": {
           "options": []
         },
@@ -3860,28 +7582,88 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_2_wort",
+              "catalogCode": [
+                "V-FL34"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 68.0
+              "timeHours": 68,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_4_3_yeast",
+          "catalogCode": "V-SF100",
+          "timeHours": 1.75,
+          "timeEstimated": false
+        }
+      },
+      "Wine": {
+        "sampling": {
+          "options": []
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_2_wort",
+              "catalogCode": [
+                "V-FL34"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 68,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "ampliora_4_3_yeast",
+          "catalogCode": "V-SF100",
           "timeHours": 1.75,
           "timeEstimated": false
         }
@@ -3895,13 +7677,14 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF101",
     "productKey": "ampliora_4_4_yeast",
     "targets": [
-      "brettanomyces_bruxellensis",
-      "brettanomyces_spp",
-      "pichia_spp",
-      "saccharomyces_cerevisiae_var_diastaticus"
+      "Brettanomyces_bruxellensis",
+      "Brettanomyces_spp.",
+      "Pichia_spp.",
+      "Saccharomyces_cerevisiae_var_diastaticus"
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer",
+      "Wine"
     ],
     "technology": "Real-Time PCR - Mila",
     "sensitivity": "Enriched Sample: From 10 CFU/mL\nDirect Sample: From 1x103 cells/mL\n\nSensitivity depends on the target microorganism.",
@@ -3931,7 +7714,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
-      "Beer & Wine": {
+      "Beer": {
         "sampling": {
           "options": []
         },
@@ -3939,28 +7722,88 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_2_wort",
+              "catalogCode": [
+                "V-FL34"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 68.0
+              "timeHours": 68,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_4_4_yeast",
+          "catalogCode": "V-SF101",
+          "timeHours": 1.75,
+          "timeEstimated": false
+        }
+      },
+      "Wine": {
+        "sampling": {
+          "options": []
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_2_wort",
+              "catalogCode": [
+                "V-FL34"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 68,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "ampliora_4_4_yeast",
+          "catalogCode": "V-SF101",
           "timeHours": 1.75,
           "timeEstimated": false
         }
@@ -3974,13 +7817,13 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF102",
     "productKey": "ampliora_4_5_bacteria",
     "targets": [
-      "lactobacillus_brevis",
-      "lactobacillus_lindnerii",
-      "lactobacillus_group",
-      "pediococcus_spp"
+      "Levilactobacillus_brevis",
+      "Fructilactobacillus_lindneri",
+      "Lactobacillus_group_Furfurilactobacillus_rossiae_Lacticaseibacillus_casei_Lacticaseibacillus_paracasei_Lactiplantibacillus_plantarum_Lentilactobacillus_buchneri_and_Lentilactobacillus_parabuchneri",
+      "Pediococcus_spp."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer"
     ],
     "technology": "Real-Time PCR - Mila",
     "sensitivity": "Enriched Sample: From 6 CFU/mL\nDirect Sample: From 2×102 cells/mL\n\nSensitivity depends on the target microorganism.",
@@ -4010,27 +7853,37 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
-      "Beer & Wine": {
+      "Beer": {
         "sampling": {
           "options": []
         },
         "enrichment": {
           "options": []
         },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_4_5_bacteria",
+          "catalogCode": "V-SF102",
           "timeHours": 1.75,
           "timeEstimated": false
         }
@@ -4044,13 +7897,14 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF103",
     "productKey": "ampliora_4_6_bacteria",
     "targets": [
-      "lactobacillus_backii",
-      "lactobacillus_collinoides_paracollinoides",
-      "megasphaera_spp",
-      "pectinatus_spp"
+      "Loigolactobacillus_backii",
+      "Secundilactobacillus_collinoides",
+      "Secundilactobacillus_paracollinoides",
+      "Megasphaera_spp.",
+      "Pectinatus_spp."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer"
     ],
     "technology": "Real-Time PCR - Mila",
     "sensitivity": "Enriched Sample: From 3 CFU/mL\nDirect Sample: From 6×103 cells/mL\n\nSensitivity depends on the target microorganism.",
@@ -4080,27 +7934,37 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
-      "Beer & Wine": {
+      "Beer": {
         "sampling": {
           "options": []
         },
         "enrichment": {
           "options": []
         },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_4_6_bacteria",
+          "catalogCode": "V-SF103",
           "timeHours": 1.75,
           "timeEstimated": false
         }
@@ -4114,11 +7978,10 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF169",
     "productKey": "ampliora_4_7_low_ph_microorganisms",
     "targets": [
-      "acidophilic_bacteria",
-      "brettanomyces_spp",
-      "yeasts",
-      "molds",
-      "preservative_resistant_yeasts"
+      "Acidophilic_bacteria",
+      "Brettanomyces_spp.",
+      "Yeasts_and_molds",
+      "Preservative_resistant_yeasts_PRY"
     ],
     "mainIndustries": [
       "Beverage",
@@ -4160,41 +8023,57 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_4_spoilage_beverage",
+              "catalogCode": [
+                "V-FL41"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0,
+              "timeHours": 48,
               "matrices": [
                 "Carbonated soft drinks, Enhanced water, Ready-to-d",
                 "Fruit juices with and without pulp, Fruit concentr"
-              ]
+              ],
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_3_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA01"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 1,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.6,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_4_7_low_ph_microorganisms",
-          "timeHours": 1.33,
+          "catalogCode": "V-SF169",
+          "timeHours": 1.333333333,
           "timeEstimated": false
         }
       },
@@ -4206,41 +8085,164 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_4_spoilage_beverage",
+              "catalogCode": [
+                "V-FL41"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0,
+              "timeHours": 48,
               "matrices": [
                 "Carbonated soft drinks, Enhanced water, Ready-to-d",
                 "Fruit juices with and without pulp, Fruit concentr"
-              ]
+              ],
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_3_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA01"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 1,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.6,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_4_7_low_ph_microorganisms",
-          "timeHours": 1.33,
+          "catalogCode": "V-SF169",
+          "timeHours": 1.333333333,
+          "timeEstimated": false
+        }
+      }
+    }
+  },
+  {
+    "id": "V-EQ30",
+    "name": "Ampliora 4.7 Spoilage Beverage",
+    "productLine": "Ampliora",
+    "catalogCode": "V-EQ30",
+    "productKey": "ampliora_4_7_spoilage_beverage",
+    "targets": [
+      "Acidophilic_bacteria",
+      "Brettanomyces_spp.",
+      "Yeasts_and_molds",
+      "Preservative_resistant_yeasts_PRY"
+    ],
+    "mainIndustries": [
+      "Beverage"
+    ],
+    "technology": "Real-Time PCR - Mila",
+    "sensitivity": "1 CFU per sample",
+    "keyAdvantages": [
+      {
+        "title": "5 spoilage groups",
+        "subtitle": "low-pH panel, one reaction"
+      },
+      {
+        "title": "~80% fewer reactions",
+        "subtitle": "one assay, not five"
+      },
+      {
+        "title": "Built for low pH",
+        "subtitle": "acidified products"
+      },
+      {
+        "title": "Catches resistant spoilers",
+        "subtitle": "PRY and more"
+      }
+    ],
+    "features": [
+      "Detects five acidophilic spoilage groups — Brettanomyces, acidophilic bacteria, PRY, yeasts and molds — in one reaction.",
+      "Built for acidified products, targeting organisms that survive and spoil at low pH.",
+      "Five groups in one assay cut reagent and labor by ~80% versus separate tests.",
+      "Catches preservative-resistant spoilers that standard checks can miss.",
+      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
+    ],
+    "stagesByIndustry": {
+      "Beverage": {
+        "sampling": {
+          "options": []
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_4_spoilage_beverage",
+              "catalogCode": [
+                "V-FL41"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 48,
+              "matrices": [
+                "Carbonated soft drinks, Enhanced water, Ready-to-d",
+                "Fruit juices with and without pulp, Fruit concentr"
+              ],
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "magneus_3_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA01"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 1,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.6,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "ampliora_4_7_spoilage_beverage",
+          "catalogCode": "V-EQ30",
+          "timeHours": 1.333333333,
           "timeEstimated": false
         }
       }
@@ -4253,12 +8255,12 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF88",
     "productKey": "ampliora_6_1_waterscan_plus",
     "targets": [
-      "escherichia_coli",
-      "citrobacter_spp",
-      "klebsiella_spp",
-      "enterococcus_spp",
-      "enterobacter_spp",
-      "escherichia_spp"
+      "Escherichia_coli",
+      "Citrobacter_spp.",
+      "Klebsiella_spp.",
+      "Enterococcus_spp.",
+      "Enterobacter_spp.",
+      "Escherichia_spp."
     ],
     "mainIndustries": [
       "Beverage"
@@ -4298,21 +8300,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "enrichment": {
           "options": []
         },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_6_1_waterscan_plus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF88",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -4325,17 +8337,18 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF64",
     "productKey": "ampliora_8_1_yeast_plus",
     "targets": [
-      "brettanomyces_bruxellensis",
-      "brettanomyces_spp",
-      "pichia_spp",
-      "saccharomyces_cerevisiae",
-      "saccharomyces_cerevisiae_var_diastaticus",
-      "saccharomyces_spp",
-      "zygosaccharomyces_bailii_parabailii",
-      "zygosaccharomyces_group"
+      "Brettanomyces_bruxellensis",
+      "Brettanomyces_spp.",
+      "Pichia_spp.",
+      "Saccharomyces_cerevisiae",
+      "Saccharomyces_cerevisiae_var_diastaticus",
+      "Saccharomyces_spp.",
+      "Zygosaccharomyces_bailii",
+      "Zygosaccharomyces_parabailii",
+      "Zygosaccharomyces_group_Zygosaccharomyces_bailii_Zygosaccharomyces_parabailii_Zygosaccharomyces_rouxii"
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer"
     ],
     "technology": "Real-Time PCR - Mila",
     "sensitivity": "Enriched Sample: From 6 CFU/mL\nDirect Sample: From 1x103 cells/mL\n\nSensitivity depends on the target microorganism.",
@@ -4365,7 +8378,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
-      "Beer & Wine": {
+      "Beer": {
         "sampling": {
           "options": []
         },
@@ -4373,28 +8386,41 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_2_wort",
+              "catalogCode": [
+                "V-FL34"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 68.0
+              "timeHours": 68,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_8_1_yeast_plus",
+          "catalogCode": "V-SF64",
           "timeHours": 1.75,
           "timeEstimated": false
         }
@@ -4408,17 +8434,18 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF99",
     "productKey": "ampliora_8_2_bacteria_plus",
     "targets": [
-      "lactobacillus_backii",
-      "lactobacillus_brevis",
-      "lactobacillus_collinoides_paracollinoides",
-      "lactobacillus_lindnerii",
-      "lactobacillus_group",
-      "megasphaera_spp",
-      "pediococcus_spp",
-      "pectinatus_spp"
+      "Loigolactobacillus_backii",
+      "Levilactobacillus_brevis",
+      "Secundilactobacillus_collinoides",
+      "Secundilactobacillus_paracollinoides",
+      "Fructilactobacillus_lindneri",
+      "Lactobacillus_group_Furfurilactobacillus_rossiae_Lacticaseibacillus_casei_Lacticaseibacillus_paracasei_Lactiplantibacillus_plantarum_Lentilactobacillus_buchneri_and_Lentilactobacillus_parabuchneri",
+      "Megasphaera_spp.",
+      "Pediococcus_spp.",
+      "Pectinatus_spp."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer"
     ],
     "technology": "Real-Time PCR - Mila",
     "sensitivity": "Enriched Sample: From 3 CFU/mL\nDirect Sample: From 2×102 cells/mL\n\nSensitivity depends on the target microorganism.",
@@ -4448,27 +8475,37 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
-      "Beer & Wine": {
+      "Beer": {
         "sampling": {
           "options": []
         },
         "enrichment": {
           "options": []
         },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "ampliora_8_2_bacteria_plus",
+          "catalogCode": "V-SF99",
           "timeHours": 1.75,
           "timeEstimated": false
         }
@@ -4482,7 +8519,7 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-PAT04",
     "productKey": "elevia_1_1_salmonella_spp",
     "targets": [
-      "salmonella_spp"
+      "Salmonella_spp."
     ],
     "mainIndustries": [
       "Confectionery",
@@ -4526,44 +8563,105 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 3,
               "matrices": [
                 "Pre-sanitization stainless steel surface — sponge",
                 "Pre-sanitization stainless steel surface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 6.0
+              "timeHours": 8,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            },
+            {
+              "id": "fin",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_1_salmonella_spp",
+              "catalogCode": [
+                "V-PET06"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": [
+            {
+              "productKey": "clarixa_1",
+              "catalogCode": [
+                "V-PET02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
             }
           ]
         },
@@ -4571,33 +8669,43 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_1_1_salmonella_spp",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT04",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -4605,36 +8713,74 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 3,
               "matrices": [
                 "Pre-sanitization stainless steel surface — sponge",
                 "Pre-sanitization stainless steel surface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": [
+            {
+              "productKey": "clarixa_1",
+              "catalogCode": [
+                "V-PET02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
             }
           ]
         },
@@ -4642,33 +8788,43 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_1_1_salmonella_spp",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT04",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -4676,62 +8832,122 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 3,
               "matrices": [
                 "Pre-sanitization stainless steel surface — sponge",
                 "Pre-sanitization stainless steel surface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            },
+            {
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FP34"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 6,
+              "matrices": [
+                "Pre-sanitization stainless steel surface — sponge",
+                "Pre-sanitization stainless steel surface — swab"
+              ],
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_1_1_salmonella_spp",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT04",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -4739,62 +8955,96 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 3,
               "matrices": [
                 "Pre-sanitization stainless steel surface — sponge",
                 "Pre-sanitization stainless steel surface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_1_1_salmonella_spp",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT04",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -4802,78 +9052,127 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 3,
               "matrices": [
                 "Pre-sanitization stainless steel surface — sponge",
                 "Pre-sanitization stainless steel surface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 6.0
+              "timeHours": 6,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            },
+            {
+              "id": "fin",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_1_1_salmonella_spp",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT04",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -4881,78 +9180,127 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 3,
               "matrices": [
                 "Pre-sanitization stainless steel surface — sponge",
                 "Pre-sanitization stainless steel surface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 6.0
+              "timeHours": 6,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            },
+            {
+              "id": "fin",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_1_1_salmonella_spp",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT04",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -4960,78 +9308,127 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 3,
               "matrices": [
                 "Pre-sanitization stainless steel surface — sponge",
                 "Pre-sanitization stainless steel surface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": false,
-              "timeHours": 6.0
+              "timeHours": 6,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            },
+            {
+              "id": "fin",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_1_1_salmonella_spp",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT04",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -5039,62 +9436,96 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 3,
               "matrices": [
                 "Pre-sanitization stainless steel surface — sponge",
                 "Pre-sanitization stainless steel surface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_1_1_salmonella_spp",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT04",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       }
@@ -5107,8 +9538,8 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-PAT07",
     "productKey": "elevia_2_8_salmonella_spp_and_listeria_spp",
     "targets": [
-      "salmonella_spp",
-      "listeria_spp"
+      "Salmonella_spp.",
+      "Listeria_spp."
     ],
     "mainIndustries": [
       "Confectionery",
@@ -5150,55 +9581,94 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 4,
               "matrices": [
                 "Cooked processed meat product",
                 "Stainless steel\nsurface — sponge",
                 "Stainless steel\nsurface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            },
+            {
+              "id": "fin",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_8_salmonella_spp_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-PAT07",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -5206,55 +9676,94 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 4,
               "matrices": [
                 "Cooked processed meat product",
                 "Stainless steel\nsurface — sponge",
                 "Stainless steel\nsurface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            },
+            {
+              "id": "fin",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_8_salmonella_spp_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-PAT07",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -5262,55 +9771,122 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 4,
               "matrices": [
                 "Cooked processed meat product",
                 "Stainless steel\nsurface — sponge",
                 "Stainless steel\nsurface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            },
+            {
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL50",
+                "V-FP34"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 6,
+              "matrices": [
+                "Cooked processed meat product",
+                "Stainless steel\nsurface — sponge",
+                "Stainless steel\nsurface — swab"
+              ],
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            },
+            {
+              "id": "fin",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_8_salmonella_spp_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-PAT07",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -5318,55 +9894,94 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 4,
               "matrices": [
                 "Cooked processed meat product",
                 "Stainless steel\nsurface — sponge",
                 "Stainless steel\nsurface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            },
+            {
+              "id": "fin",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_8_salmonella_spp_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-PAT07",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -5374,55 +9989,122 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 4,
               "matrices": [
                 "Cooked processed meat product",
                 "Stainless steel\nsurface — sponge",
                 "Stainless steel\nsurface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            },
+            {
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL50",
+                "V-FP34"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 6,
+              "matrices": [
+                "Cooked processed meat product",
+                "Stainless steel\nsurface — sponge",
+                "Stainless steel\nsurface — swab"
+              ],
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            },
+            {
+              "id": "fin",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_8_salmonella_spp_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-PAT07",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       },
@@ -5430,55 +10112,94 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 3.0,
+              "timeHours": 4,
               "matrices": [
                 "Cooked processed meat product",
                 "Stainless steel\nsurface — sponge",
                 "Stainless steel\nsurface — swab"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
+            },
+            {
+              "id": "fin",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_8_salmonella_spp_and_listeria_spp",
-          "timeHours": 1.67,
+          "catalogCode": "V-PAT07",
+          "timeHours": 1.666666667,
           "timeEstimated": false
         }
       }
@@ -5491,8 +10212,8 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-PAT06",
     "productKey": "elevia_2_9_salmonella_spp_and_enterobacteria",
     "targets": [
-      "salmonella_spp",
-      "enterobacteria"
+      "Salmonella_spp.",
+      "Enterobacteria"
     ],
     "mainIndustries": [
       "Confectionery",
@@ -5534,50 +10255,81 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 3,
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_9_salmonella_spp_and_enterobacteria",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT06",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -5585,50 +10337,81 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 3,
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_9_salmonella_spp_and_enterobacteria",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT06",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -5636,50 +10419,81 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 3,
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_9_salmonella_spp_and_enterobacteria",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT06",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -5687,50 +10501,81 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 3,
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_9_salmonella_spp_and_enterobacteria",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT06",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -5738,50 +10583,81 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 3,
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_9_salmonella_spp_and_enterobacteria",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT06",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       },
@@ -5789,50 +10665,81 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "unlisted_captus_xpress_2",
+              "productKey": "captus_xpress_2",
+              "catalogCode": [
+                "V-FL48"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
         "enrichment": {
           "options": [
             {
-              "productKey": "unlisted_augmentis_xpress_1",
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FL47",
+                "V-TB32"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 3,
+              "timeEstimated": false
             },
             {
-              "productKey": "unlisted_captus_xpress_1",
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeLabel": "X mins",
+              "timeEstimated": true
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-route",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_xpress_1",
+                "captus_xpress_1"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_6_bacteria",
+              "catalogCode": [
+                "V-MA19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "elevia_2_9_salmonella_spp_and_enterobacteria",
-          "timeHours": 1.58,
+          "catalogCode": "V-PAT06",
+          "timeHours": 1.583333333,
           "timeEstimated": false
         }
       }
@@ -5845,10 +10752,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF14",
     "productKey": "specio_00_1_bacteria",
     "targets": [
-      "over_80_spoilage_bacteria"
+      "Spoilage_Bacteria"
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -5858,7 +10764,8 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Pharmaceutical",
       "Ready-to-eat",
       "Sauces and condiments",
-      "Sterile products"
+      "Sterile products",
+      "Beer"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
     "sensitivity": "From 1 CFU per sample\n\nSensitivity depends on the target microorganism.",
@@ -5888,91 +10795,21 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Broad early spoilage detection protects shelf life and prevents field complaints."
     ],
     "stagesByIndustry": {
-      "Beer & Wine": {
-        "sampling": {
-          "options": [
-            {
-              "productKey": "collectio_1_neutrosampling",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": true,
-              "timeHours": 0.25
-            }
-          ]
-        },
-        "enrichment": {
-          "options": [
-            {
-              "productKey": "augmentis_11_universal_bacteria",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": false,
-              "timeHours": 24.0
-            },
-            {
-              "productKey": "augmentis_51_lactobacillus",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": false,
-              "timeHours": 24.0
-            }
-          ]
-        },
-        "extraction": {
-          "options": [
-            {
-              "productKey": "magneus_1_bacteria",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
-            },
-            {
-              "productKey": "magneus_2_bacteria_yeast_molds",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
-            },
-            {
-              "productKey": "nucleia_2_tez_q_plus",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
-            },
-            {
-              "productKey": "nucleia_3_clean_q",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
-            }
-          ]
-        },
-        "pcr": {
-          "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
-          "timeEstimated": false
-        }
-      },
       "Beverage": {
         "sampling": {
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -5980,61 +10817,156 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FL10",
+                "V-FL32",
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6043,11 +10975,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6055,61 +10992,156 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FL10",
+                "V-FL32",
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6118,11 +11150,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6130,61 +11167,156 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FL10",
+                "V-FL32",
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6193,11 +11325,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6205,61 +11342,156 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FL10",
+                "V-FL32",
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6268,11 +11500,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6280,61 +11517,156 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FL10",
+                "V-FL32",
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6343,11 +11675,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6355,61 +11692,156 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FL10",
+                "V-FL32",
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6418,11 +11850,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6430,61 +11867,156 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FL10",
+                "V-FL32",
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6493,11 +12025,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6505,61 +12042,156 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FL10",
+                "V-FL32",
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6568,11 +12200,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6580,61 +12217,156 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FL10",
+                "V-FL32",
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6643,11 +12375,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6655,61 +12392,262 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FL11",
+                "V-FP02"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FL10",
+                "V-FL32",
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.666666667,
+              "timeEstimated": false
             },
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_1_bacteria",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
+          "timeEstimated": false
+        }
+      },
+      "Beer": {
+        "sampling": {
+          "options": [
+            {
+              "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            }
+          ]
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_11_universal_bacteria",
+              "catalogCode": [
+                "V-FP02",
+                "V-FL11"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_51_lactobacillus",
+              "catalogCode": [
+                "V-FP13"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "magneus_1_bacteria",
+              "catalogCode": [
+                "V-EQ40"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.666666667,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "specio_00_1_bacteria",
+          "catalogCode": "V-SF14",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -6722,11 +12660,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF15",
     "productKey": "specio_00_2_yeast_molds",
     "targets": [
-      "over_50_spoilage_yeast",
-      "molds"
+      "Yeasts_and_molds"
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -6734,7 +12670,9 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Pet Food & Animal Feed",
       "Pharmaceutical",
       "Ready-to-eat",
-      "Sauces and condiments"
+      "Sauces and condiments",
+      "Beer",
+      "Wine"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
     "sensitivity": "From 1 CFU per sample\n\nSensitivity depends on the target microorganism.",
@@ -6764,67 +12702,21 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Internal control monitors each reaction and supports automated TxA interpretation."
     ],
     "stagesByIndustry": {
-      "Beer & Wine": {
-        "sampling": {
-          "options": [
-            {
-              "productKey": "collectio_1_neutrosampling",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": true,
-              "timeHours": 0.25
-            }
-          ]
-        },
-        "enrichment": {
-          "options": [
-            {
-              "productKey": "augmentis_21_yeast_molds",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": false,
-              "timeHours": 48.0
-            }
-          ]
-        },
-        "extraction": {
-          "options": [
-            {
-              "productKey": "magneus_2_bacteria_yeast_molds",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
-            },
-            {
-              "productKey": "nucleia_3_clean_q",
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
-            }
-          ]
-        },
-        "pcr": {
-          "productKey": "specio_00_2_yeast_molds",
-          "timeHours": 2.0,
-          "timeEstimated": false
-        }
-      },
       "Beverage": {
         "sampling": {
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6832,45 +12724,88 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0
+              "timeHours": 48,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_31_universal_surfaces",
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_2_yeast_molds",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF15",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6879,11 +12814,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6891,45 +12831,88 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0
+              "timeHours": 48,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_31_universal_surfaces",
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_2_yeast_molds",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF15",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6938,11 +12921,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -6950,45 +12938,88 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0
+              "timeHours": 48,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_31_universal_surfaces",
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_2_yeast_molds",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF15",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -6997,11 +13028,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7009,45 +13045,88 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0
+              "timeHours": 48,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_31_universal_surfaces",
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_2_yeast_molds",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF15",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7056,11 +13135,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7068,45 +13152,88 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0
+              "timeHours": 48,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_31_universal_surfaces",
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_2_yeast_molds",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF15",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7115,11 +13242,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7127,45 +13259,88 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0
+              "timeHours": 48,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_31_universal_surfaces",
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_2_yeast_molds",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF15",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7174,11 +13349,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7186,45 +13366,88 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0
+              "timeHours": 48,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_31_universal_surfaces",
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_2_yeast_molds",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF15",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7233,11 +13456,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7245,45 +13473,234 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0
+              "timeHours": 48,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_31_universal_surfaces",
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.75,
+              "timeEstimated": false
             },
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_00_2_yeast_molds",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF15",
+          "timeHours": 2,
+          "timeEstimated": false
+        }
+      },
+      "Beer": {
+        "sampling": {
+          "options": [
+            {
+              "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            }
+          ]
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "specio_00_2_yeast_molds",
+          "catalogCode": "V-SF15",
+          "timeHours": 2,
+          "timeEstimated": false
+        }
+      },
+      "Wine": {
+        "sampling": {
+          "options": [
+            {
+              "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            }
+          ]
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "magneus_2_bacteria_yeast_molds",
+              "catalogCode": [
+                "V-MA10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "specio_00_2_yeast_molds",
+          "catalogCode": "V-SF15",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -7296,7 +13713,7 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF31",
     "productKey": "specio_1_1_salmonella_spp",
     "targets": [
-      "salmonella_spp"
+      "Salmonella_spp."
     ],
     "mainIndustries": [
       "Confectionery",
@@ -7338,11 +13755,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7350,37 +13772,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_1_salmonella_spp",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF31",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7389,11 +13863,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7401,37 +13880,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_1_salmonella_spp",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF31",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7440,11 +13971,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7452,37 +13988,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_1_salmonella_spp",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF31",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7491,11 +14079,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7503,37 +14096,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_1_salmonella_spp",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF31",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7542,11 +14187,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7554,37 +14204,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_1_salmonella_spp",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF31",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -7597,7 +14299,7 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF39",
     "productKey": "specio_1_2_s_aureus",
     "targets": [
-      "staphylococcus_aureus"
+      "Staphylococcus_aureus"
     ],
     "mainIndustries": [
       "Dairy",
@@ -7639,11 +14341,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7651,29 +14358,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_2_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF39",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7682,11 +14426,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7694,29 +14443,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_2_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF39",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7725,11 +14511,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7737,29 +14528,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_2_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF39",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7768,11 +14596,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7780,29 +14613,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_2_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF39",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7811,11 +14681,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7823,29 +14698,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_2_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF39",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -7858,7 +14770,7 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF167",
     "productKey": "specio_1_3_e_coli",
     "targets": [
-      "escherichia_coli"
+      "Escherichia_coli"
     ],
     "mainIndustries": [
       "Confectionery",
@@ -7900,11 +14812,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7912,37 +14829,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_3_e_coli",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF167",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -7951,11 +14920,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -7963,37 +14937,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_3_e_coli",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF167",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8002,11 +15028,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8014,37 +15045,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_3_e_coli",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF167",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8053,11 +15136,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8065,37 +15153,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_3_e_coli",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF167",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8104,11 +15244,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8116,37 +15261,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FL46",
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_3_e_coli",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF167",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -8159,7 +15356,7 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF28",
     "productKey": "specio_1_4_l_monocytogenes",
     "targets": [
-      "listeria_monocytogenes"
+      "Listeria_monocytogenes"
     ],
     "mainIndustries": [
       "Dairy",
@@ -8201,11 +15398,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8213,37 +15415,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_3_listeria_monocytogenes",
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_4_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF28",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8252,11 +15506,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8264,37 +15523,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_3_listeria_monocytogenes",
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_4_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF28",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8303,11 +15614,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8315,37 +15631,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_3_listeria_monocytogenes",
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_4_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF28",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8354,11 +15722,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8366,37 +15739,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_3_listeria_monocytogenes",
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_4_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF28",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8405,11 +15830,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8417,37 +15847,89 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
-              "productKey": "augmentis_3_listeria_monocytogenes",
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_4_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF28",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -8460,8 +15942,8 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF45",
     "productKey": "specio_1_7_zygosaccharomyces_bailii_and_parabailii",
     "targets": [
-      "zygosaccharomyces_bailii",
-      "zygosaccharomyces_bailii_parabailii"
+      "Zygosaccharomyces_bailii",
+      "Zygosaccharomyces_parabailii"
     ],
     "mainIndustries": [
       "Beverage",
@@ -8500,11 +15982,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8512,29 +15999,64 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0
+              "timeHours": 48,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_7_zygosaccharomyces_bailii_and_parabailii",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF45",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8543,11 +16065,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8555,29 +16082,64 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FP18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 48.0
+              "timeHours": 48,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_3_clean_q",
+              "catalogCode": [
+                "V-EQ18"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_7_zygosaccharomyces_bailii_and_parabailii",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF45",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -8590,7 +16152,7 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF52",
     "productKey": "specio_1_8_listeria_spp",
     "targets": [
-      "listeria_spp"
+      "Listeria_spp."
     ],
     "mainIndustries": [
       "Dairy",
@@ -8632,11 +16194,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8644,29 +16211,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_8_listeria_spp",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF52",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8675,11 +16279,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8687,29 +16296,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_8_listeria_spp",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF52",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8718,11 +16364,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8730,29 +16381,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_8_listeria_spp",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF52",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8761,11 +16449,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8773,29 +16466,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_8_listeria_spp",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF52",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8804,11 +16534,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8816,29 +16551,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_1_8_listeria_spp",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF52",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -8851,8 +16623,8 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF07",
     "productKey": "specio_2_2_s_aureus_and_e_coli",
     "targets": [
-      "staphylococcus_aureus",
-      "escherichia_coli"
+      "Staphylococcus_aureus",
+      "Escherichia_coli"
     ],
     "mainIndustries": [
       "Dairy",
@@ -8893,11 +16665,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8905,29 +16682,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_2_s_aureus_and_e_coli",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF07",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8936,11 +16752,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8948,29 +16769,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_2_s_aureus_and_e_coli",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF07",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -8979,11 +16839,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -8991,29 +16856,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_2_s_aureus_and_e_coli",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF07",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9022,11 +16926,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9034,29 +16943,68 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_2_s_aureus_and_e_coli",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF07",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -9069,8 +17017,8 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF04",
     "productKey": "specio_2_3_listeria_spp_and_l_monocytogenes",
     "targets": [
-      "listeria_spp",
-      "listeria_monocytogenes"
+      "Listeria_spp.",
+      "Listeria_monocytogenes"
     ],
     "mainIndustries": [
       "Dairy",
@@ -9112,11 +17060,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9124,29 +17077,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_3_listeria_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF04",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9155,11 +17145,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9167,29 +17162,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_3_listeria_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF04",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9198,11 +17230,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9210,29 +17247,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_3_listeria_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF04",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9241,11 +17315,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9253,29 +17332,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_3_listeria_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF04",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9284,11 +17400,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9296,29 +17417,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FL23",
+                "V-FL40",
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 27.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_3_listeria_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF04",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -9331,8 +17489,8 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF05",
     "productKey": "specio_2_4_e_coli_and_e_coli_o157_h7",
     "targets": [
-      "escherichia_coli",
-      "e_coli_o157_h7"
+      "Escherichia_coli",
+      "Escherichia_coli_O157_H7"
     ],
     "mainIndustries": [
       "Fresh & Processed Produce",
@@ -9373,11 +17531,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9385,37 +17548,91 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27",
+                "V-FL46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_4_e_coli_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF05",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9424,11 +17641,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9436,37 +17658,91 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27",
+                "V-FL46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_4_e_coli_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF05",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9475,11 +17751,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9487,37 +17768,91 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27",
+                "V-FL46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_4_e_coli_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF05",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9526,11 +17861,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9538,37 +17878,91 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27",
+                "V-FL46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_4_e_coli_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF05",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -9581,8 +17975,8 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF29",
     "productKey": "specio_2_5_salmonella_spp_and_l_monocytogenes",
     "targets": [
-      "salmonella_spp",
-      "listeria_monocytogenes"
+      "Salmonella_spp.",
+      "Listeria_monocytogenes"
     ],
     "mainIndustries": [
       "Confectionery",
@@ -9625,11 +18019,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9637,29 +18036,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_5_salmonella_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF29",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9668,11 +18104,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9680,29 +18121,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_5_salmonella_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF29",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9711,11 +18189,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9723,29 +18206,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_5_salmonella_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF29",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9754,11 +18274,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9766,29 +18291,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_5_salmonella_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF29",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9797,11 +18359,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9809,29 +18376,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_5_salmonella_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF29",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9840,11 +18444,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9852,29 +18461,66 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_41_universal_pathogens",
+              "catalogCode": [
+                "V-FP09",
+                "V-FP19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_2_5_salmonella_spp_and_l_monocytogenes",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF29",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
@@ -9887,9 +18533,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     "catalogCode": "V-SF56",
     "productKey": "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
     "targets": [
-      "salmonella_spp",
-      "listeria_monocytogenes",
-      "e_coli_o157_h7"
+      "Salmonella_spp.",
+      "Listeria_monocytogenes",
+      "Escherichia_coli_O157_H7"
     ],
     "mainIndustries": [
       "Confectionery",
@@ -9934,11 +18580,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -9946,45 +18597,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF56",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -9993,11 +18696,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10005,45 +18713,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF56",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10052,11 +18812,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10064,45 +18829,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF56",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10111,11 +18928,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10123,45 +18945,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF56",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10170,11 +19044,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10182,45 +19061,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF56",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10229,11 +19160,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10241,45 +19177,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF56",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10288,11 +19276,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10300,45 +19293,97 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF56",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10347,11 +19392,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10359,61 +19409,113 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-par",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_91_bpw"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF56",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
     }
   },
   {
-    "id": "V-SF95",
+    "id": "V-SF42",
     "name": "Specio 4.1 Salmonella spp., L. monocytogenes, E. coli and S. aureus",
     "productLine": "Specio",
-    "catalogCode": "V-SF95",
+    "catalogCode": "V-SF42",
     "productKey": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
     "targets": [
-      "salmonella_spp",
-      "staphylococcus_aureus",
-      "escherichia_coli",
-      "listeria_monocytogenes"
+      "Salmonella_spp.",
+      "Staphylococcus_aureus",
+      "Escherichia_coli",
+      "Listeria_monocytogenes"
     ],
     "mainIndustries": [
       "Confectionery",
@@ -10459,11 +19561,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10471,58 +19578,133 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Leafy green – Lettuce.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF42",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10531,11 +19713,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10543,58 +19730,133 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Leafy green – Lettuce.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF42",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10603,11 +19865,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10615,58 +19882,133 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Leafy green – Lettuce.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF42",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10675,11 +20017,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10687,58 +20034,133 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Leafy green – Lettuce.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF42",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10747,11 +20169,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10759,58 +20186,133 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Leafy green – Lettuce.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF42",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10819,11 +20321,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10831,58 +20338,133 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Leafy green – Lettuce.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF42",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10891,11 +20473,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10903,58 +20490,133 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Leafy green – Lettuce.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF42",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -10963,11 +20625,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -10975,58 +20642,133 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Leafy green – Lettuce.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF42",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -11035,11 +20777,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -11047,74 +20794,149 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Leafy green – Lettuce.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_1_salmonella_spp_l_monocytogenes_e_coli_and_s_aureus",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF42",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }
     }
   },
   {
-    "id": "V-SF193",
+    "id": "V-SF184",
     "name": "Specio 4.8 Pathogens + Hygiene Indicators",
     "productLine": "Specio",
-    "catalogCode": "V-SF193",
+    "catalogCode": "V-SF184",
     "productKey": "specio_4_8_pathogens_hygiene_indicators",
     "targets": [
-      "salmonella_spp",
-      "listeria_monocytogenes",
-      "fecal_microorganism_indicator",
-      "inadequate_gmp_indicator"
+      "Salmonella_spp.",
+      "Listeria_monocytogenes",
+      "Fecal_microorganism_indicator",
+      "Inadequate_GMP_indicator"
     ],
     "mainIndustries": [
       "Confectionery",
@@ -11160,11 +20982,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -11172,57 +20999,132 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_8_pathogens_hygiene_indicators",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF184",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -11231,11 +21133,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -11243,57 +21150,132 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_8_pathogens_hygiene_indicators",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF184",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -11302,11 +21284,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -11314,57 +21301,132 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_8_pathogens_hygiene_indicators",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF184",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -11373,11 +21435,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -11385,57 +21452,132 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_8_pathogens_hygiene_indicators",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF184",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -11444,11 +21586,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -11456,57 +21603,132 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_8_pathogens_hygiene_indicators",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF184",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -11515,11 +21737,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -11527,57 +21754,132 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_8_pathogens_hygiene_indicators",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF184",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -11586,11 +21888,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -11598,57 +21905,132 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_8_pathogens_hygiene_indicators",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF184",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -11657,11 +22039,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -11669,57 +22056,132 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_8_pathogens_hygiene_indicators",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF184",
+          "timeHours": 2,
           "timeEstimated": false
         }
       },
@@ -11728,11 +22190,16 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeHours": 0.25
+              "timeHours": 0.25,
+              "timeEstimated": true
             }
           ]
         },
@@ -11740,57 +22207,948 @@ export const PROTOCOLS: ProtocolDef[] = [
           "options": [
             {
               "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": false,
-              "timeHours": 24.0,
+              "timeHours": 24,
               "matrices": [
                 "Environmental stainless-steel surfaces.",
                 "Surface"
-              ]
+              ],
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_1_listeria",
+              "catalogCode": [
+                "V-FP26"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_3_listeria_monocytogenes",
+              "catalogCode": [
+                "V-FP32",
+                "V-FP33"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
             },
             {
               "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
               "sampleTypes": [
                 "Finished"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ],
+          "groups": [
+            {
+              "id": "env-surf",
+              "sampleType": "Environmental",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_31_universal_surfaces"
+              ]
+            },
+            {
+              "id": "fin-bpw",
+              "sampleType": "Finished",
+              "mode": "parallel",
+              "productKeys": [
+                "augmentis_91_bpw"
+              ]
+            },
+            {
+              "id": "fin-list",
+              "sampleType": "Finished",
+              "mode": "alternative",
+              "productKeys": [
+                "augmentis_1_listeria",
+                "augmentis_3_listeria_monocytogenes"
+              ]
             }
           ]
+        },
+        "mediumSupplement": {
+          "options": [
+            {
+              "productKey": "potentia_2_listeria",
+              "catalogCode": [
+                "V-PET05"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeEstimated": true
+            }
+          ]
+        },
+        "extractionSupplement": {
+          "options": []
         },
         "extraction": {
           "options": [
             {
               "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeEstimated": true,
-              "timeLabel": "X mins"
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
             }
           ]
         },
         "pcr": {
           "productKey": "specio_4_8_pathogens_hygiene_indicators",
-          "timeHours": 2.0,
+          "catalogCode": "V-SF184",
+          "timeHours": 2,
+          "timeEstimated": false
+        }
+      }
+    }
+  },
+  {
+    "id": "V-SF109",
+    "name": "Ampliora 3.10 V. cholerae, V. vulnificus and V. parahaemolyticus",
+    "productLine": "Ampliora",
+    "catalogCode": "V-SF109",
+    "productKey": "ampliora_3_10_v_cholerae_v_vulnificus_and_v_parahaemolyticus",
+    "targets": [
+      "Vibrio_cholerae",
+      "Vibrio_parahaemolyticus",
+      "Vibrio_vulnificus"
+    ],
+    "mainIndustries": [
+      "Seafood"
+    ],
+    "technology": "Real-Time PCR - Mila",
+    "sensitivity": "Vibrio parahaemolyticus. 1x102 CFU/25g and Vibrio vulnificus 1x101 CFU/25g.",
+    "keyAdvantages": [
+      {
+        "title": "Multiplex efficiency",
+        "subtitle": "more targets per run"
+      },
+      {
+        "title": "Cost per result",
+        "subtitle": "fewer runs, lower cost"
+      },
+      {
+        "title": "Reaction savings",
+        "subtitle": "~67% reaction savings"
+      }
+    ],
+    "features": [
+      "Identifies Vibrio cholerae, Vibrio parahaemolyticus and Vibrio vulnificus in one reaction via Mila multiplex.",
+      "Species-level Vibrio insight in one test sharpens corrective-action decisions.",
+      "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
+      "Internal control monitors each reaction and supports automated TxA interpretation.",
+      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
+    ],
+    "stagesByIndustry": {
+      "Seafood": {
+        "sampling": {
+          "options": []
+        },
+        "enrichment": {
+          "options": []
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "ampliora_3_10_v_cholerae_v_vulnificus_and_v_parahaemolyticus",
+          "catalogCode": "V-SF109",
+          "timeHours": 1.666666667,
+          "timeEstimated": false
+        }
+      }
+    }
+  },
+  {
+    "id": "V-SF179",
+    "name": "Ampliora 3.15 Zygosaccharomyces group, Saccharomyces spp. and Saccharomyces cerevisiae",
+    "productLine": "Ampliora",
+    "catalogCode": "V-SF179",
+    "productKey": "ampliora_3_15_zygosaccharomyces_group_saccharomyces_spp_and_saccharomyces_cerevisiae",
+    "targets": [
+      "Zygosaccharomyces_group_Zygosaccharomyces_bailii_Zygosaccharomyces_parabailii_Zygosaccharomyces_rouxii",
+      "Saccharomyces_cerevisiae",
+      "Saccharomyces_spp."
+    ],
+    "mainIndustries": [
+      "Beer",
+      "Wine"
+    ],
+    "technology": "Real-Time PCR - Mila",
+    "sensitivity": null,
+    "keyAdvantages": [
+      {
+        "title": "Multiplex efficiency",
+        "subtitle": "more targets per run"
+      },
+      {
+        "title": "Cost per result",
+        "subtitle": "fewer runs, lower cost"
+      },
+      {
+        "title": "Wine spoilage coverage",
+        "subtitle": "yeast-focused panel"
+      }
+    ],
+    "features": [
+      "Detects three core wine-spoilage yeasts in one reaction via Mila multiplex design.",
+      "Panel tuned specifically to the Saccharomyces and Zygosaccharomyces yeasts that spoil wine.",
+      "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
+      "Internal control monitors each reaction and supports automated TxA interpretation.",
+      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
+    ],
+    "stagesByIndustry": {
+      "Beer": {
+        "sampling": {
+          "options": []
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_5_pdb",
+              "catalogCode": [
+                "V-FL43"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "ampliora_3_15_zygosaccharomyces_group_saccharomyces_spp_and_saccharomyces_cerevisiae",
+          "catalogCode": "V-SF179",
+          "timeHours": 1.583333333,
+          "timeEstimated": false
+        }
+      },
+      "Wine": {
+        "sampling": {
+          "options": []
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_5_pdb",
+              "catalogCode": [
+                "V-FL43"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "nucleia_4_bacteria_yeast_and_molds_plus",
+              "catalogCode": [
+                "V-EQ46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "ampliora_3_15_zygosaccharomyces_group_saccharomyces_spp_and_saccharomyces_cerevisiae",
+          "catalogCode": "V-SF179",
+          "timeHours": 1.583333333,
+          "timeEstimated": false
+        }
+      }
+    }
+  },
+  {
+    "id": "V-SF25",
+    "name": "Specio 2.7 Salmonella spp. and E. coli",
+    "productLine": "Specio",
+    "catalogCode": "V-SF25",
+    "productKey": "specio_2_7_salmonella_spp_and_e_coli",
+    "targets": [
+      "Escherichia_coli",
+      "Salmonella_spp."
+    ],
+    "mainIndustries": [
+      "Confectionery",
+      "Fresh & Processed Produce",
+      "Meat and Poultry",
+      "Pet Food & Animal Feed",
+      "Ready-to-eat"
+    ],
+    "technology": "Real-time PCR with melting curve  - KAi",
+    "sensitivity": null,
+    "keyAdvantages": [
+      {
+        "title": "Simple setup",
+        "subtitle": "FAM-only simplicity"
+      },
+      {
+        "title": "Multiplex efficiency",
+        "subtitle": "more targets per run"
+      },
+      {
+        "title": "Reaction savings",
+        "subtitle": "~50% reaction savings"
+      }
+    ],
+    "features": [
+      "Detects Salmonella and E. coli together in one reaction via KAi melting-curve.",
+      "Two pathogens in one assay halves reagent and labor versus separate tests.",
+      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
+      "Internal control monitors each reaction and supports automated TxA interpretation.",
+      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
+    ],
+    "stagesByIndustry": {
+      "Confectionery": {
+        "sampling": {
+          "options": [
+            {
+              "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            }
+          ]
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27",
+                "V-FL46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "specio_2_7_salmonella_spp_and_e_coli",
+          "catalogCode": "V-SF25",
+          "timeHours": 2,
+          "timeEstimated": false
+        }
+      },
+      "Fresh & Processed Produce": {
+        "sampling": {
+          "options": [
+            {
+              "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            }
+          ]
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27",
+                "V-FL46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "specio_2_7_salmonella_spp_and_e_coli",
+          "catalogCode": "V-SF25",
+          "timeHours": 2,
+          "timeEstimated": false
+        }
+      },
+      "Meat and Poultry": {
+        "sampling": {
+          "options": [
+            {
+              "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            }
+          ]
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27",
+                "V-FL46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "specio_2_7_salmonella_spp_and_e_coli",
+          "catalogCode": "V-SF25",
+          "timeHours": 2,
+          "timeEstimated": false
+        }
+      },
+      "Pet Food & Animal Feed": {
+        "sampling": {
+          "options": [
+            {
+              "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            }
+          ]
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27",
+                "V-FL46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "specio_2_7_salmonella_spp_and_e_coli",
+          "catalogCode": "V-SF25",
+          "timeHours": 2,
+          "timeEstimated": false
+        }
+      },
+      "Ready-to-eat": {
+        "sampling": {
+          "options": [
+            {
+              "productKey": "collectio_1_neutrosampling",
+              "catalogCode": [
+                "V-FP16",
+                "V-TB09",
+                "V-TB10"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            }
+          ]
+        },
+        "enrichment": {
+          "options": [
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL06",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_14_universal_gram_negative",
+              "catalogCode": [
+                "V-FP27",
+                "V-FL46"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_91_bpw",
+              "catalogCode": [
+                "V-FL45",
+                "V-FP25",
+                "V-FP31"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "mediumSupplement": {
+          "options": []
+        },
+        "extractionSupplement": {
+          "options": []
+        },
+        "extraction": {
+          "options": [
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_2_tez_q_plus",
+              "catalogCode": [
+                "V-EQ19"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 0.833333333,
+              "timeEstimated": false
+            }
+          ]
+        },
+        "pcr": {
+          "productKey": "specio_2_7_salmonella_spp_and_e_coli",
+          "catalogCode": "V-SF25",
+          "timeHours": 2,
           "timeEstimated": false
         }
       }

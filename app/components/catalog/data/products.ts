@@ -385,7 +385,8 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer",
+      "Wine"
     ]
   },
   "ampliora_3_2_salmonella_spp_l_monocytogenes_and_e_coli_o157_h7": {
@@ -580,7 +581,8 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer",
+      "Wine"
     ]
   },
   "ampliora_4_4_yeast": {
@@ -613,7 +615,8 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer",
+      "Wine"
     ]
   },
   "ampliora_4_5_bacteria": {
@@ -646,7 +649,7 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer"
     ]
   },
   "ampliora_4_6_bacteria": {
@@ -679,7 +682,7 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer"
     ]
   },
   "ampliora_4_7_low_ph_microorganisms": {
@@ -780,7 +783,7 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer"
     ]
   },
   "ampliora_8_2_bacteria_plus": {
@@ -813,7 +816,7 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer"
     ]
   },
   "augmentis_1_listeria": {
@@ -924,7 +927,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Improved recovery: supports bacterial growth to increase detection rates and result reliability."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -934,7 +936,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Pharmaceutical",
       "Ready-to-eat",
       "Sauces and condiments",
-      "Sterile products"
+      "Sterile products",
+      "Beer",
+      "Wine"
     ]
   },
   "augmentis_14_universal_gram_negative": {
@@ -1018,7 +1022,8 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Beverage application: useful for microbiological spoilage monitoring in fermentative matrices."
     ],
     "mainIndustries": [
-      "Beer & Wine"
+      "Beer",
+      "Wine"
     ]
   },
   "augmentis_21_yeast_molds": {
@@ -1063,7 +1068,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Greater operational sensitivity: promotes target growth to improve detection rates and reliability."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -1071,7 +1075,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Pet Food & Animal Feed",
       "Pharmaceutical",
       "Ready-to-eat",
-      "Sauces and condiments"
+      "Sauces and condiments",
+      "Beer",
+      "Wine"
     ]
   },
   "augmentis_3_listeria_monocytogenes": {
@@ -1304,8 +1310,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Application in beverages and matrices requiring spoilage monitoring."
     ],
     "mainIndustries": [
-      "Beer & Wine",
-      "Sauces and condiments"
+      "Sauces and condiments",
+      "Beer",
+      "Wine"
     ]
   },
   "augmentis_6_ysg_broth": {
@@ -1390,7 +1397,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Greater target recovery: improves growth conditions for more reliable results."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -1400,7 +1406,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Pharmaceutical",
       "Ready-to-eat",
       "Sauces and condiments",
-      "Sterile products"
+      "Sterile products",
+      "Beer",
+      "Wine"
     ]
   },
   "augmentis_91_bpw": {
@@ -1644,7 +1652,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Aligned with surface monitoring and hygiene verification workflows."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -1658,7 +1665,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Sauces and condiments",
       "Seafood",
       "Sterile products",
-      "Water"
+      "Water",
+      "Beer",
+      "Wine"
     ]
   },
   "collectio_2_surface_transport_buffer": {
@@ -1689,7 +1698,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Aligned with surface monitoring and environmental hygiene programs."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -1703,7 +1711,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Sauces and condiments",
       "Seafood",
       "Sterile products",
-      "Water"
+      "Water",
+      "Beer",
+      "Wine"
     ]
   },
   "collectio_3_letheensampling": {
@@ -1758,7 +1768,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Aligned with hygiene verification and surface monitoring workflows."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -1772,7 +1781,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Sauces and condiments",
       "Seafood",
       "Sterile products",
-      "Water"
+      "Water",
+      "Beer",
+      "Wine"
     ]
   },
   "elevia_1_1_salmonella_spp": {
@@ -1920,7 +1931,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Reduces the extraction bottleneck in complex matrices and helps accelerate batch release, investigation or hold decisions."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -1931,7 +1941,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Pharmaceutical",
       "Ready-to-eat",
       "Sauces and condiments",
-      "Sterile products"
+      "Sterile products",
+      "Beer",
+      "Wine"
     ]
   },
   "magneus_2_bacteria_yeast_molds": {
@@ -1963,7 +1975,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Allows standardizing spoilage monitoring in viscous or complex matrices and processing samples with less analyst dependence."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -1973,7 +1984,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Pharmaceutical",
       "Ready-to-eat",
       "Sauces and condiments",
-      "Sterile products"
+      "Sterile products",
+      "Beer",
+      "Wine"
     ]
   },
   "magneus_3_bacteria_yeast_molds": {
@@ -2077,7 +2090,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Reduces repeats due to inhibition and makes it easier to prepare bacterial-pathogen PCR in plant labs without automation."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -2091,7 +2103,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Sauces and condiments",
       "Seafood",
       "Sterile products",
-      "Water"
+      "Water",
+      "Beer",
+      "Wine"
     ]
   },
   "nucleia_3_clean_q": {
@@ -2124,7 +2138,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Allows extending control beyond pathogens to indicators and spoilage, while keeping a simple manual workflow for QA/QC."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -2134,7 +2147,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Pharmaceutical",
       "Ready-to-eat",
       "Sauces and condiments",
-      "Sterile products"
+      "Sterile products",
+      "Beer",
+      "Wine"
     ]
   },
   "nucleia_4_bacteria_yeast_and_molds": {
@@ -2167,9 +2182,10 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Enables frequent spoilage monitoring to prevent shelf-life failures, turbidity, gas formation, sensory changes or complaints."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
-      "Sauces and condiments"
+      "Sauces and condiments",
+      "Beer",
+      "Wine"
     ]
   },
   "nucleia_4_bacteria_yeast_and_molds_plus": {
@@ -2202,9 +2218,10 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Operational flexibility for beverage plants: allows extraction and PCR to be separated, speeds routine monitoring and supports response to quality deviations."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
-      "Sauces and condiments"
+      "Sauces and condiments",
+      "Beer",
+      "Wine"
     ]
   },
   "nucleia_8_ultra": {
@@ -2356,7 +2373,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -2366,7 +2382,8 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Pharmaceutical",
       "Ready-to-eat",
       "Sauces and condiments",
-      "Sterile products"
+      "Sterile products",
+      "Beer"
     ]
   },
   "specio_00_2_yeast_molds": {
@@ -2400,7 +2417,6 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
     ],
     "mainIndustries": [
-      "Beer & Wine",
       "Beverage",
       "Confectionery",
       "Dairy",
@@ -2408,7 +2424,9 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Pet Food & Animal Feed",
       "Pharmaceutical",
       "Ready-to-eat",
-      "Sauces and condiments"
+      "Sauces and condiments",
+      "Beer",
+      "Wine"
     ]
   },
   "specio_1_1_salmonella_spp": {
@@ -3128,6 +3146,41 @@ export const PRODUCTS: Record<string, ProductDef> = {
       "Pet Food & Animal Feed",
       "Ready-to-eat",
       "Seafood"
+    ]
+  },
+  "ampliora_4_7_spoilage_beverage": {
+    "key": "ampliora_4_7_spoilage_beverage",
+    "name": "Ampliora 4.7 Spoilage Beverage",
+    "category": "PCR Kit",
+    "productLine": "Ampliora",
+    "description": "Multiplex real-time PCR kit for low-pH spoilage organisms (Brettanomyces, acidophilic bacteria, preservative-resistant yeasts, molds) — targeted control for acidified products.",
+    "descriptionEs": null,
+    "descriptionEstimated": false,
+    "presentations": [
+      {
+        "catalogCode": "V-EQ30",
+        "format": "SPID",
+        "size": "96 reactions",
+        "kitContent": "• 12 Preloaded PCR strips\n• 1 Tube of Ampliora 4.7 Positive control – 100 µL\n• 1 Tube of Negative control – 352 µL",
+        "isReadyToUse": true,
+        "pcrTimeMin": "80",
+        "incubationTimeH": "-",
+        "shelfLifeMonths": "6",
+        "storeTemp": "-25°C to -15°C",
+        "dye": "FAM, HEX, ROX, Cy5 and Cy5.5"
+      }
+    ],
+    "features": [
+      "Panel for low-pH beverages: detection of acidophilic bacteria, preservative-resistant yeasts, spoilage yeasts and molds.",
+      "Specialized PRY detection: identifies preservative-resistant yeasts that are critical in beverages and acidified products.",
+      "Quality and shelf-life protection: early detection of spoilage organisms helps prevent sensory deviations, economic losses and reduced product stability.",
+      "Faster operational decisions: supports release, hold, deviation investigations and process adjustments through an optimized molecular workflow.",
+      "Integrated internal control and TxA: monitor the reaction and automate interpretation to reduce subjectivity, standardize reports and improve traceability.",
+      "Ready-to-use SPID format: preloaded PCR strips that reduce pipetting, handling, operational errors and prep time."
+    ],
+    "mainIndustries": [
+      "Beverage",
+      "Sauces and condiments"
     ]
   }
 };

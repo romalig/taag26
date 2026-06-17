@@ -5,7 +5,7 @@
 
 export interface TopCard { category: "technical"|"operational"; title: string|null; subtitle: string|null; }
 export interface ComparisonRow { feature: string|null; taag: string|null; leadingPcr: string|null; traditional: string|null; businessImpact: string|null; }
-export interface ProtocolComparison { template: string|null; top_cards: TopCard[]; rows: ComparisonRow[]; }
+export interface ProtocolComparison { template: string|null; top_cards: TopCard[]; rows: ComparisonRow[]; needsReview?: boolean; }
 
 export const COMPARISONS: Record<string, ProtocolComparison> = {
   "V-SF97": {
@@ -1131,7 +1131,7 @@ export const COMPARISONS: Record<string, ProtocolComparison> = {
     "top_cards": [
       {
         "category": "technical",
-        "title": "Five low-pH spoilage groups, one reaction",
+        "title": "Four low-pH spoilage groups, one reaction",
         "subtitle": "Brettanomyces, acidophilic bacteria, PRY, yeasts and molds"
       },
       {
@@ -1147,23 +1147,30 @@ export const COMPARISONS: Record<string, ProtocolComparison> = {
       {
         "category": "operational",
         "title": "Fewer runs, lower cost",
-        "subtitle": "Five spoilage groups in one assay"
+        "subtitle": "Four spoilage groups in one assay"
       }
     ],
     "rows": [
       {
         "feature": "Low-pH Spoilage Panel",
-        "taag": "5 acidophilic spoilage groups in one reaction",
+        "taag": "4 acidophilic spoilage groups in one reaction",
         "leadingPcr": "Limited low-pH coverage",
         "traditional": "Slow selective culture, easily missed",
         "businessImpact": "Covers the preservative-resistant organisms that survive acidified products — the spoilers most likely to slip through standard checks."
       },
       {
+        "feature": "Time to Results",
+        "taag": "Fast, 52 hours",
+        "leadingPcr": "72-96 hours",
+        "traditional": "Slow, 5-7 days",
+        "businessImpact": "Rapid results enable confident product release and fast corrective actions in the event of contamination, helping prevent cross-contamination."
+      },
+      {
         "feature": "Direct Savings",
-        "taag": "5 targets in 1 reaction — ~80% fewer reactions",
+        "taag": "4 targets in 1 reaction — ~80% fewer reactions",
         "leadingPcr": "Pays for a reaction per target",
         "traditional": "A full method per target",
-        "businessImpact": "Running one reaction instead of 5 cuts reagent and consumable spend by about 80% per sample."
+        "businessImpact": "Running one reaction instead of 4 cuts reagent and consumable spend by about 80% per sample."
       },
       {
         "feature": "Operational Savings",
@@ -2620,6 +2627,448 @@ export const COMPARISONS: Record<string, ProtocolComparison> = {
         "leadingPcr": "Pays for a reaction per target",
         "traditional": "A full method per target",
         "businessImpact": "Running one reaction instead of 4 cuts reagent and consumable spend by about 75% per sample."
+      },
+      {
+        "feature": "Operational Savings",
+        "taag": "Less labor, equipment time & bench space",
+        "leadingPcr": "More runs, more hands-on time",
+        "traditional": "Heavy labor and incubator capacity",
+        "businessImpact": "Fewer runs free up analyst hours, thermocycler capacity and bench space — letting the same team process more samples."
+      },
+      {
+        "feature": "Cost per Result",
+        "taag": "Lowest total cost of ownership",
+        "leadingPcr": "Typically higher cost per target",
+        "traditional": "High labor-driven cost",
+        "businessImpact": "Beyond reagents, open instruments and free interpretation remove the equipment lock-in and software fees competitors charge."
+      },
+      {
+        "feature": "Open Platform",
+        "taag": "Runs on thermocyclers you already own",
+        "leadingPcr": "Often a closed, proprietary ecosystem",
+        "traditional": "Dedicated lab infrastructure",
+        "businessImpact": "No instrument lock-in or forced capital purchase — deploy on existing equipment across sites."
+      },
+      {
+        "feature": "Free AI Interpretation",
+        "taag": "Automated result calling, included",
+        "leadingPcr": "Interpretation often behind a paid subscription",
+        "traditional": "Manual reading, analyst-dependent",
+        "businessImpact": "Removes analyst subjectivity and a recurring software fee that competitors typically charge."
+      }
+    ]
+  },
+  "V-SF42": {
+    "template": "Specio_Pathogens",
+    "top_cards": [
+      {
+        "category": "technical",
+        "title": "Four pathogens, one reaction",
+        "subtitle": "Salmonella, L. mono, E. coli and S. aureus via melting-curve"
+      },
+      {
+        "category": "technical",
+        "title": "FAM-only simplicity",
+        "subtitle": "Single-channel detection runs on basic open thermocyclers"
+      },
+      {
+        "category": "operational",
+        "title": "Broadest safety per test",
+        "subtitle": "Four key pathogens cleared in one workflow"
+      },
+      {
+        "category": "operational",
+        "title": "Faster lot release",
+        "subtitle": "Wide coverage per run speeds decisions"
+      }
+    ],
+    "rows": [
+      {
+        "feature": "Four Pathogens Together",
+        "taag": "Salmonella, L. monocytogenes, E. coli + S. aureus in 1 reaction",
+        "leadingPcr": "Often split across reactions",
+        "traditional": "4 separate selective methods",
+        "businessImpact": "Four key pathogens cleared in a single test — the broadest pathogen safety coverage per sample."
+      },
+      {
+        "feature": "Direct Savings",
+        "taag": "4 targets in 1 reaction — ~75% fewer reactions",
+        "leadingPcr": "Pays for a reaction per target",
+        "traditional": "A full method per target",
+        "businessImpact": "Running one reaction instead of 4 cuts reagent and consumable spend by about 75% per sample."
+      },
+      {
+        "feature": "Operational Savings",
+        "taag": "Less labor, equipment time & bench space",
+        "leadingPcr": "More runs, more hands-on time",
+        "traditional": "Heavy labor and incubator capacity",
+        "businessImpact": "Fewer runs free up analyst hours, thermocycler capacity and bench space — letting the same team process more samples."
+      },
+      {
+        "feature": "Cost per Result",
+        "taag": "Lowest total cost of ownership",
+        "leadingPcr": "Typically higher cost per target",
+        "traditional": "High labor-driven cost",
+        "businessImpact": "Beyond reagents, open instruments and free interpretation remove the equipment lock-in and software fees competitors charge."
+      },
+      {
+        "feature": "Open Platform",
+        "taag": "Runs on thermocyclers you already own",
+        "leadingPcr": "Often a closed, proprietary ecosystem",
+        "traditional": "Dedicated lab infrastructure",
+        "businessImpact": "No instrument lock-in or forced capital purchase — deploy on existing equipment across sites."
+      },
+      {
+        "feature": "Free AI Interpretation",
+        "taag": "Automated result calling, included",
+        "leadingPcr": "Interpretation often behind a paid subscription",
+        "traditional": "Manual reading, analyst-dependent",
+        "businessImpact": "Removes analyst subjectivity and a recurring software fee that competitors typically charge."
+      }
+    ]
+  },
+  "V-SF25": {
+    "template": "Specio_Pathogens",
+    "top_cards": [
+      {
+        "category": "technical",
+        "title": "Two indicators, one reaction",
+        "subtitle": "S. aureus and E. coli detected together via KAi melting-curve"
+      },
+      {
+        "category": "technical",
+        "title": "FAM-only simplicity",
+        "subtitle": "Single-channel detection runs on basic open thermocyclers"
+      },
+      {
+        "category": "operational",
+        "title": "Broader hygiene per test",
+        "subtitle": "Two key indicators cleared in one workflow"
+      },
+      {
+        "category": "operational",
+        "title": "Fewer runs, lower cost",
+        "subtitle": "One assay instead of two per sample"
+      }
+    ],
+    "rows": [
+      {
+        "feature": "Two Indicators Together",
+        "taag": "S. aureus + E. coli in 1 reaction",
+        "leadingPcr": "Often one target per reaction",
+        "traditional": "2 separate methods",
+        "businessImpact": "Two key hygiene indicators in one test broadens monitoring per sample."
+      },
+      {
+        "feature": "Direct Savings",
+        "taag": "2 targets in 1 reaction — ~50% fewer reactions",
+        "leadingPcr": "Pays for a reaction per target",
+        "traditional": "A full method per target",
+        "businessImpact": "Running one reaction instead of 2 cuts reagent and consumable spend by about 50% per sample."
+      },
+      {
+        "feature": "Operational Savings",
+        "taag": "Less labor, equipment time & bench space",
+        "leadingPcr": "More runs, more hands-on time",
+        "traditional": "Heavy labor and incubator capacity",
+        "businessImpact": "Fewer runs free up analyst hours, thermocycler capacity and bench space — letting the same team process more samples."
+      },
+      {
+        "feature": "Cost per Result",
+        "taag": "Lowest total cost of ownership",
+        "leadingPcr": "Typically higher cost per target",
+        "traditional": "High labor-driven cost",
+        "businessImpact": "Beyond reagents, open instruments and free interpretation remove the equipment lock-in and software fees competitors charge."
+      },
+      {
+        "feature": "Open Platform",
+        "taag": "Runs on thermocyclers you already own",
+        "leadingPcr": "Often a closed, proprietary ecosystem",
+        "traditional": "Dedicated lab infrastructure",
+        "businessImpact": "No instrument lock-in or forced capital purchase — deploy on existing equipment across sites."
+      },
+      {
+        "feature": "Free AI Interpretation",
+        "taag": "Automated result calling, included",
+        "leadingPcr": "Interpretation often behind a paid subscription",
+        "traditional": "Manual reading, analyst-dependent",
+        "businessImpact": "Removes analyst subjectivity and a recurring software fee that competitors typically charge."
+      }
+    ]
+  },
+  "V-SF184": {
+    "template": "Specio_Path+Indicator",
+    "top_cards": [
+      {
+        "category": "technical",
+        "title": "Pathogens + indicators together",
+        "subtitle": "Pioneering single-reaction design pairing pathogens with hygiene indicators"
+      },
+      {
+        "category": "technical",
+        "title": "FAM-only, ~75% fewer reactions",
+        "subtitle": "One assay replaces several on a simple single channel"
+      },
+      {
+        "category": "operational",
+        "title": "Prevent, don't react",
+        "subtitle": "Hygiene indicators flag process risk before it becomes a recall"
+      },
+      {
+        "category": "operational",
+        "title": "Safety + hygiene in one test",
+        "subtitle": "Production gets both from a single assay"
+      }
+    ],
+    "rows": [
+      {
+        "feature": "Prevention by Design",
+        "taag": "Pathogens + hygiene indicators in one reaction",
+        "leadingPcr": "Pathogen detection only, no indicators",
+        "traditional": "Separate pathogen and indicator testing",
+        "businessImpact": "A pioneering single-reaction design that pairs pathogen detection with process-hygiene indicators — you catch process drift before it becomes a recall."
+      },
+      {
+        "feature": "Direct Savings",
+        "taag": "4 targets in 1 reaction — ~75% fewer reactions",
+        "leadingPcr": "Pays for a reaction per target",
+        "traditional": "A full method per target",
+        "businessImpact": "Running one reaction instead of 4 cuts reagent and consumable spend by about 75% per sample."
+      },
+      {
+        "feature": "Operational Savings",
+        "taag": "Less labor, equipment time & bench space",
+        "leadingPcr": "More runs, more hands-on time",
+        "traditional": "Heavy labor and incubator capacity",
+        "businessImpact": "Fewer runs free up analyst hours, thermocycler capacity and bench space — letting the same team process more samples."
+      },
+      {
+        "feature": "Cost per Result",
+        "taag": "Lowest total cost of ownership",
+        "leadingPcr": "Typically higher cost per target",
+        "traditional": "High labor-driven cost",
+        "businessImpact": "Beyond reagents, open instruments and free interpretation remove the equipment lock-in and software fees competitors charge."
+      },
+      {
+        "feature": "Open Platform",
+        "taag": "Runs on thermocyclers you already own",
+        "leadingPcr": "Often a closed, proprietary ecosystem",
+        "traditional": "Dedicated lab infrastructure",
+        "businessImpact": "No instrument lock-in or forced capital purchase — deploy on existing equipment across sites."
+      },
+      {
+        "feature": "Free AI Interpretation",
+        "taag": "Automated result calling, included",
+        "leadingPcr": "Interpretation often behind a paid subscription",
+        "traditional": "Manual reading, analyst-dependent",
+        "businessImpact": "Removes analyst subjectivity and a recurring software fee that competitors typically charge."
+      }
+    ]
+  },
+  "V-SF109": {
+    "template": "Ampliora_Multiplex",
+    "top_cards": [
+      {
+        "category": "technical",
+        "title": "Three Vibrio species, one reaction",
+        "subtitle": "V. cholerae, V. vulnificus and V. parahaemolyticus via Mila multiplex"
+      },
+      {
+        "category": "technical",
+        "title": "Internal reaction control",
+        "subtitle": "Monitors every run and supports automated TxA calling"
+      },
+      {
+        "category": "operational",
+        "title": "Seafood safety per test",
+        "subtitle": "Three key Vibrio pathogens cleared in one workflow"
+      },
+      {
+        "category": "operational",
+        "title": "Lower price, open platform",
+        "subtitle": "Below leading systems, runs on instruments you own"
+      }
+    ],
+    "rows": [
+      {
+        "feature": "Three Vibrio Together",
+        "taag": "V. cholerae, V. vulnificus + V. parahaemolyticus in 1 reaction",
+        "leadingPcr": "Often split across reactions",
+        "traditional": "Separate selective methods (e.g. TCBS)",
+        "businessImpact": "The three Vibrio species of seafood concern cleared in one test \u2014 comprehensive safety coverage per sample."
+      },
+      {
+        "feature": "Direct Savings",
+        "taag": "3 targets in 1 reaction \u2014 ~67% fewer reactions",
+        "leadingPcr": "Pays for a reaction per target",
+        "traditional": "A full method per target",
+        "businessImpact": "Running one reaction instead of 3 cuts reagent and consumable spend by about 67% per sample."
+      },
+      {
+        "feature": "Operational Savings",
+        "taag": "Less labor, equipment time & bench space",
+        "leadingPcr": "More runs, more hands-on time",
+        "traditional": "Heavy labor and incubator capacity",
+        "businessImpact": "Fewer runs free up analyst hours, thermocycler capacity and bench space \u2014 letting the same team process more samples."
+      },
+      {
+        "feature": "Time to Result",
+        "taag": "Enriched molecular result",
+        "leadingPcr": "Comparable enriched PCR",
+        "traditional": "Multi-day selective culture",
+        "businessImpact": "A molecular Vibrio answer well before culture confirmation keeps seafood lots moving and shortens holds."
+      },
+      {
+        "feature": "Cost per Result",
+        "taag": "Lowest total cost of ownership",
+        "leadingPcr": "Typically higher cost per target",
+        "traditional": "High labor-driven cost",
+        "businessImpact": "Beyond reagents, open instruments and free interpretation remove the equipment lock-in and software fees competitors charge."
+      },
+      {
+        "feature": "Open Platform",
+        "taag": "Runs on thermocyclers you already own",
+        "leadingPcr": "Often a closed, proprietary ecosystem",
+        "traditional": "Dedicated lab infrastructure",
+        "businessImpact": "No instrument lock-in or forced capital purchase \u2014 deploy on existing equipment across sites."
+      },
+      {
+        "feature": "Free AI Interpretation",
+        "taag": "Automated result calling, included",
+        "leadingPcr": "Interpretation often behind a paid subscription",
+        "traditional": "Manual reading, analyst-dependent",
+        "businessImpact": "Removes analyst subjectivity and a recurring software fee that competitors typically charge."
+      }
+    ]
+  },
+  "V-SF179": {
+    "template": "Ampliora_Multiplex",
+    "top_cards": [
+      {
+        "category": "technical",
+        "title": "Three spoilage yeasts, one reaction",
+        "subtitle": "Zygosaccharomyces group, Saccharomyces spp. and S. cerevisiae via Mila multiplex"
+      },
+      {
+        "category": "technical",
+        "title": "Internal reaction control",
+        "subtitle": "Monitors every run and supports automated TxA calling"
+      },
+      {
+        "category": "operational",
+        "title": "Protects wine & beer quality",
+        "subtitle": "Early spoilage-yeast detection prevents refermentation and off-flavors"
+      },
+      {
+        "category": "operational",
+        "title": "Lower price, open platform",
+        "subtitle": "Below leading systems, runs on instruments you own"
+      }
+    ],
+    "rows": [
+      {
+        "feature": "Three Yeasts Together",
+        "taag": "Zygosaccharomyces, Saccharomyces spp. + S. cerevisiae in 1 reaction",
+        "leadingPcr": "Often one yeast target per run",
+        "traditional": "Days of selective culture",
+        "businessImpact": "The core wine- and beer-spoilage yeasts cleared in one test \u2014 full spoilage coverage per sample."
+      },
+      {
+        "feature": "Direct Savings",
+        "taag": "3 targets in 1 reaction \u2014 ~67% fewer reactions",
+        "leadingPcr": "Pays for a reaction per target",
+        "traditional": "A full method per target",
+        "businessImpact": "Running one reaction instead of 3 cuts reagent and consumable spend by about 67% per sample."
+      },
+      {
+        "feature": "Operational Savings",
+        "taag": "Less labor, equipment time & bench space",
+        "leadingPcr": "More runs, more hands-on time",
+        "traditional": "Heavy labor and incubator capacity",
+        "businessImpact": "Fewer runs free up analyst hours, thermocycler capacity and bench space \u2014 letting the same team process more samples."
+      },
+      {
+        "feature": "Time to Result",
+        "taag": "Enriched molecular result",
+        "leadingPcr": "Comparable enriched PCR",
+        "traditional": "Multi-day selective culture",
+        "businessImpact": "A molecular spoilage-yeast answer ahead of plating lets blends and lots release sooner with less risk of refermentation."
+      },
+      {
+        "feature": "Cost per Result",
+        "taag": "Lowest total cost of ownership",
+        "leadingPcr": "Typically higher cost per target",
+        "traditional": "High labor-driven cost",
+        "businessImpact": "Beyond reagents, open instruments and free interpretation remove the equipment lock-in and software fees competitors charge."
+      },
+      {
+        "feature": "Open Platform",
+        "taag": "Runs on thermocyclers you already own",
+        "leadingPcr": "Often a closed, proprietary ecosystem",
+        "traditional": "Dedicated lab infrastructure",
+        "businessImpact": "No instrument lock-in or forced capital purchase \u2014 deploy on existing equipment across sites."
+      },
+      {
+        "feature": "Free AI Interpretation",
+        "taag": "Automated result calling, included",
+        "leadingPcr": "Interpretation often behind a paid subscription",
+        "traditional": "Manual reading, analyst-dependent",
+        "businessImpact": "Removes analyst subjectivity and a recurring software fee that competitors typically charge."
+      }
+    ]
+  },
+  "V-EQ30": {
+    "template": "Ampliora_Spoilage",
+    "top_cards": [
+      {
+        "category": "technical",
+        "title": "Four low-pH spoilage groups, one reaction",
+        "subtitle": "Brettanomyces, acidophilic bacteria, PRY, yeasts and molds"
+      },
+      {
+        "category": "technical",
+        "title": "Built for acidified products",
+        "subtitle": "Targets organisms that survive and spoil at low pH"
+      },
+      {
+        "category": "operational",
+        "title": "Protects shelf life",
+        "subtitle": "Catches preservative-resistant spoilers early"
+      },
+      {
+        "category": "operational",
+        "title": "Fewer runs, lower cost",
+        "subtitle": "Four spoilage groups in one assay"
+      }
+    ],
+    "rows": [
+      {
+        "feature": "Low-pH Spoilage Panel",
+        "taag": "4 acidophilic spoilage groups in one reaction",
+        "leadingPcr": "Limited low-pH coverage",
+        "traditional": "Slow selective culture, easily missed",
+        "businessImpact": "Covers the preservative-resistant organisms that survive acidified products — the spoilers most likely to slip through standard checks."
+      },
+      {
+        "feature": "Validated by Coca-Cola Company",
+        "taag": "Yes — validated with hundreds of samples across multiple matrices, achieving 99.55% accuracy.",
+        "leadingPcr": "Not validated by Coca-Cola Company",
+        "traditional": "Yes, slow traditional methods",
+        "businessImpact": "Coca-Cola validation demonstrates real-world industrial performance, enabling faster product release, reduced contamination risk, and greater confidence in beverage quality decisions."
+      },
+      {
+        "feature": "Time to Results",
+        "taag": "Fast, 52 hours",
+        "leadingPcr": "72-96 hours",
+        "traditional": "Slow, 5-7 days",
+        "businessImpact": "Rapid results enable confident product release and fast corrective actions in the event of contamination, helping prevent cross-contamination."
+      },
+      {
+        "feature": "Direct Savings",
+        "taag": "4 targets in 1 reaction — ~80% fewer reactions",
+        "leadingPcr": "Pays for a reaction per target",
+        "traditional": "A full method per target",
+        "businessImpact": "Running one reaction instead of 4 cuts reagent and consumable spend by about 80% per sample."
       },
       {
         "feature": "Operational Savings",

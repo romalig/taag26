@@ -100,7 +100,7 @@ export default function SolutionModal() {
       {/* WRAPPER SCROLLEABLE */}
       <div
         ref={scrollRef}
-        className="absolute inset-0 overflow-y-auto overflow-x-hidden py-12 md:py-20 flex items-start justify-center"
+        className="absolute inset-0 overflow-y-auto overflow-x-hidden py-12 md:py-20 flex items-start justify-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         onClick={closeAll}
       >
         

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import {
   FileText, Mail, Timer, Activity, Zap, Download, Loader2,
   Target, Shield, Layers, Droplet, Thermometer, Check, FlaskConical, Dna,
@@ -8,7 +9,7 @@ import {
 } from "lucide-react";
 import type { ProductPresentation, KeyAdvantage } from "./workflowData";
 
-// Maps the brochure icon key → a lucide icon for the web. PDF uses /icons/<key>.png.
+// Maps the brochure icon key → a lucide icon for the web. PDF uses /icon/<key>.png.
 // Keep keys in sync with HIGHLIGHT_ICON_KEYS in data/brochures.ts.
 const HIGHLIGHT_ICONS: Record<string, LucideIcon> = {
   timer: Timer, target: Target, zap: Zap, rna: Dna, shield: Shield,
@@ -35,15 +36,22 @@ export interface ValueBriefData {
   techDetails: BriefTechDetail[];
   relatedProducts: BriefRelated[];
   presentations: ProductPresentation[];
+  // For combined (parallel-media) briefs: formats grouped by product, shown as
+  // "Product A title + its formats, then Product B title + its formats".
+  formatGroups?: { name: string; presentations: ProductPresentation[] }[];
   specs: { time: string; sensitivity: string; technology: string } | null;
   detects: string | null;
+  detectedList?: string[] | null;
+  descriptionIsCustom?: boolean;
   highlights: BriefHighlight[];
   plant: { title: string; body: string }[];
   lab: { title: string; body: string }[];
   comparisonRows: BriefRow[];
   isAigor: boolean;
   isPcr: boolean;
-  heroImage: string;
+  category?: string | null;     // non-PCR brief header (e.g. "Growth Medium")
+  productLine?: string | null;  // non-PCR brief header (e.g. "Augmentis")
+  heroImage: string | null;
   kitImage: string;
   // Optional short copy for the PDF (falls back to plant/lab if absent).
   pdfPlant?: { title: string; body: string }[];
@@ -56,9 +64,10 @@ export default function ProductBrief({
   onRequestQuote,
 }: {
   data: ValueBriefData;
-  onRequestQuote: () => void;
+  onRequestQuote?: () => void;   // optional: contexts without a quote flow (e.g. the catalog) omit it
 }) {
   const [pdfState, setPdfState] = useState<"idle" | "loading" | "error">("idle");
+  const [zoom, setZoom] = useState(false);
 
   // Generates the PDF only when the user clicks — react-pdf and the document
   // component are imported dynamically so they never load with the modal itself.
@@ -91,18 +100,39 @@ export default function ProductBrief({
       {/* UI PRINCIPAL */}
       <div className="w-full bg-white pb-8">
         
-        {/* HERO IMAGE */}
-        <div className="relative w-full h-[220px] md:h-[320px] bg-[#111111]">
-          <img src="/foods2.png" alt="hero_img" className="w-full h-full object-cover object-center opacity-90" />
-
-        </div>
+        {/* HERO IMAGE — only for PCR kits; non-PCR products (consumables) have no hero */}
+        {data.isPcr && (
+          <div className="relative w-full h-[220px] md:h-[320px] bg-[#111111]">
+            <img
+              src={data.heroImage ?? "/foods2.png"}
+              alt="hero_img"
+              className="w-full h-full object-cover object-center opacity-90"
+              onError={(e) => { const t = e.currentTarget; if (!t.src.endsWith("/foods2.png")) t.src = "/foods2.png"; }}
+            />
+          </div>
+        )}
 
         {/* TITLE BLOCK */}
         <div className="px-8 md:px-12 pt-12 md:pt-16 pb-2 bg-white w-full">
           <div className="max-w-5xl mx-auto w-full">
-            <span className="text-[#FF270A] font-bold uppercase tracking-widest text-[10px] md:text-xs mb-4 block">Product Value Brief</span>
+            <span className="text-[#FF270A] font-bold uppercase tracking-widest text-[10px] md:text-xs mb-4 block">
+              {!data.isPcr && (data.category || data.productLine)
+                ? [data.category, data.productLine].filter(Boolean).join(" · ")
+                : "Product Value Brief"}
+            </span>
             <h2 className="text-3xl md:text-5xl font-extrabold text-[#111111] tracking-tight leading-tight mb-4">{data.name}</h2>
-            {data.detects && <p className="text-sm md:text-base font-bold text-[#FF270A] mb-4">Detects: {data.detects}</p>}
+            {data.detectedList && data.detectedList.length ? (
+              <div className="mb-4">
+                <p className="text-sm md:text-base font-bold text-[#111111] mb-1">Detected microorganisms:</p>
+                <ul className="list-disc pl-5 space-y-0.5 marker:text-[#FF270A]">
+                  {data.detectedList.map((m, i) => (
+                    <li key={i} className="text-sm md:text-base font-bold text-[#FF270A]">{m}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              data.detects && <p className="text-sm md:text-base font-bold text-[#FF270A] mb-4">Detects: {data.detects}</p>
+            )}
             {data.description && (
               <p className="text-base md:text-lg text-gray-600 leading-relaxed">{data.description}</p>
             )}
@@ -144,6 +174,21 @@ export default function ProductBrief({
 
         <div className="px-8 md:px-12 py-10 md:py-12 bg-white w-full">
           <div className="flex flex-col gap-16 max-w-5xl mx-auto w-full">
+
+            {/* KEY FEATURES — non-PCR products lead with their feature list */}
+            {!data.isPcr && data.features.length > 0 && (
+              <div>
+                <h3 className="text-2xl md:text-3xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">Key features</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {data.features.map((f, i) => (
+                    <div key={i} className="flex items-start gap-3 p-5 bg-gray-50 rounded-2xl">
+                      <Check className="w-5 h-5 text-[#FF270A] shrink-0 mt-0.5" strokeWidth={2.5} />
+                      <p className="text-sm md:text-base text-gray-700 font-medium leading-snug">{f}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* HIGHLIGHTS (non-AiGOR kits show them here; AiGOR kits show them in the banner) */}
             {!data.isAigor && (data.highlights ?? []).length > 0 && (
@@ -243,28 +288,71 @@ export default function ProductBrief({
               </div>
             )}
 
-            {/* 5. FORMATS */}
-            {data.presentations.length > 0 && (
-              <div>
-                <h3 className="text-2xl md:text-3xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">Formats</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-                  <div className="md:col-span-2 flex flex-col gap-2 h-full">
-                    {data.presentations.map((pr, i) => (
-                      <div key={i} className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl gap-4 flex-1">
-                        <div className="min-w-0">
-                          <span className="text-sm md:text-base font-bold text-[#111111] block">{data.name}</span>
-                          <span className="text-xs md:text-sm text-gray-500 font-medium">{[pr.format, pr.size].filter(Boolean).join(" · ") || "—"}</span>
+            {/* 5. FORMATS — grouped by product for combined (parallel-media) briefs, else flat */}
+            {(data.formatGroups?.length || data.presentations.length > 0) && (() => {
+              const specChips = (pr: ProductPresentation) => [
+                pr.shelfLifeMonths && pr.shelfLifeMonths !== "-" ? `Shelf life: ${pr.shelfLifeMonths} mo` : null,
+                pr.storeTemp && pr.storeTemp !== "-" ? `Storage: ${pr.storeTemp}` : null,
+                typeof pr.isReadyToUse === "boolean" ? (pr.isReadyToUse ? "Ready to use" : "Requires preparation") : null,
+                pr.incubationTimeH && pr.incubationTimeH !== "-" ? `Incubation: ${pr.incubationTimeH.replace(/\n/g, " · ")} h` : null,
+              ].filter(Boolean) as string[];
+              const renderRow = (pr: ProductPresentation, label: string, key: number) => {
+                const specs = specChips(pr);
+                return (
+                  <div key={key} className="flex items-start justify-between p-5 bg-gray-50 rounded-2xl gap-4 flex-1">
+                    <div className="min-w-0">
+                      <span className="text-sm md:text-base font-bold text-[#111111] block">{label}</span>
+                      <span className="text-xs md:text-sm text-gray-500 font-medium">{[pr.format, pr.size].filter(Boolean).join(" · ") || "—"}</span>
+                      {pr.kitContent && <span className="text-xs text-gray-400 font-medium block mt-0.5">{pr.kitContent}</span>}
+                      {!data.isPcr && specs.length > 0 && (
+                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
+                          {specs.map((s, j) => (
+                            <span key={j} className="text-[10px] md:text-xs text-gray-500 font-medium bg-white px-2 py-0.5 rounded-full border border-gray-200">{s}</span>
+                          ))}
                         </div>
-                        <span className="text-xs font-mono font-bold text-[#FF270A] tracking-[0.1em] shrink-0">Cat #{pr.catalogCode ?? "null"}</span>
+                      )}
+                    </div>
+                    <span className="text-xs font-mono font-bold text-[#FF270A] tracking-[0.1em] shrink-0">Cat #{pr.catalogCode ?? "null"}</span>
+                  </div>
+                );
+              };
+              return (
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">Formats &amp; products</h3>
+                  {data.formatGroups?.length ? (
+                    <div className="flex flex-col gap-8">
+                      {data.formatGroups.map((grp, gi) => (
+                        <div key={gi}>
+                          <h4 className="text-base md:text-lg font-bold text-[#111111] mb-3">{grp.name}</h4>
+                          <div className="flex flex-col gap-2">
+                            {grp.presentations.map((pr, i) => renderRow(pr, grp.name, i))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+                      <div className="md:col-span-2 flex flex-col gap-2 h-full">
+                        {data.presentations.map((pr, i) => renderRow(pr, data.name, i))}
                       </div>
-                    ))}
-                  </div>
-                  <div className="rounded-2xl overflow-hidden bg-gray-50 h-56">
-                    <img src={data.kitImage} alt={data.name} className="w-full h-full object-cover" />
-                  </div>
+                      <div className={data.isPcr ? "rounded-2xl overflow-hidden h-56" : "h-56 flex items-center justify-center"}>
+                        <img
+                          src={data.kitImage}
+                          alt={data.name}
+                          onClick={() => setZoom(true)}
+                          className={
+                            data.isPcr
+                              ? "w-full h-full object-cover cursor-zoom-in"
+                              : "max-h-56 max-w-full rounded-2xl object-contain cursor-zoom-in"
+                          }
+                          onError={(e) => { const t = e.currentTarget; if (!t.src.endsWith("/kit-placeholder.png")) t.src = "/kit-placeholder.png"; }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             {/* 6. RELATED PRODUCTS */}
             {data.relatedProducts.length > 0 && (
@@ -325,14 +413,31 @@ export default function ProductBrief({
               )}
             </button>
 
-            <button 
-              onClick={onRequestQuote} 
-              className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg"
-            >
-              <Mail className="w-4 h-4" /> Request Quote
-            </button>
+            {onRequestQuote && (
+              <button 
+                onClick={onRequestQuote} 
+                className="flex-1 py-4 px-6 bg-[#111111] hover:bg-[#FF270A] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center justify-center gap-2 shadow-lg"
+              >
+                <Mail className="w-4 h-4" /> Request Quote
+              </button>
+            )}
          </div>
       </div>
+
+      {zoom && typeof document !== "undefined" && createPortal(
+        <div
+          className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center p-6 cursor-zoom-out"
+          onClick={() => setZoom(false)}
+        >
+          <img
+            src={data.kitImage}
+            alt={data.name}
+            className="max-w-[90vw] max-h-[90vh] object-contain rounded-2xl shadow-2xl"
+            onError={(e) => { const t = e.currentTarget; if (!t.src.endsWith("/kit-placeholder.png")) t.src = "/kit-placeholder.png"; }}
+          />
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

@@ -286,5 +286,96 @@ export const MICROORGANISMS: Microorganism[] = [
     "name": "Zygosaccharomyces spp.",
     "shortName": "Zygosaccharomyces spp.",
     "type": "SPOILAGE"
+  },
+  {
+    "id": "escherichiacolio157h7",
+    "name": "Escherichia coli O157 H7",
+    "shortName": "Escherichia coli O157 H7",
+    "type": "PATHOGEN",
+    "needsReview": true
+  },
+  {
+    "id": "escherichiacolistec",
+    "name": "Escherichia coli STEC",
+    "shortName": "Escherichia coli STEC",
+    "type": "PATHOGEN",
+    "needsReview": true
+  },
+  {
+    "id": "fructilactobacilluslindneri",
+    "name": "Fructilactobacillus lindneri",
+    "shortName": "Fructilactobacillus lindneri",
+    "type": "SPOILAGE",
+    "needsReview": true
+  },
+  {
+    "id": "lactobacillusgroupfurfurilactobacillusrossiaelacticaseibacilluscaseilacticaseibacillusparacaseilactiplantibacillusplantarumlentilactobacillusbuchneriandlentilactobacillusparabuchneri",
+    "name": "Lactobacillus group (multiple species)",
+    "shortName": "Lactobacillus group",
+    "type": "SPOILAGE",
+    "needsReview": true
+  },
+  {
+    "id": "levilactobacillusbrevis",
+    "name": "Levilactobacillus brevis",
+    "shortName": "Levilactobacillus brevis",
+    "type": "SPOILAGE",
+    "needsReview": true
+  },
+  {
+    "id": "loigolactobacillusbackii",
+    "name": "Loigolactobacillus backii",
+    "shortName": "Loigolactobacillus backii",
+    "type": "SPOILAGE",
+    "needsReview": true
+  },
+  {
+    "id": "preservativeresistantyeastspry",
+    "name": "Preservative resistant yeasts PRY",
+    "shortName": "Preservative resistant yeasts PRY",
+    "type": "SPOILAGE",
+    "needsReview": true
+  },
+  {
+    "id": "secundilactobacilluscollinoides",
+    "name": "Secundilactobacillus collinoides",
+    "shortName": "Secundilactobacillus collinoides",
+    "type": "SPOILAGE",
+    "needsReview": true
+  },
+  {
+    "id": "secundilactobacillusparacollinoides",
+    "name": "Secundilactobacillus paracollinoides",
+    "shortName": "Secundilactobacillus paracollinoides",
+    "type": "SPOILAGE",
+    "needsReview": true
+  },
+  {
+    "id": "spoilagebacteria",
+    "name": "Spoilage Bacteria",
+    "shortName": "Spoilage Bacteria",
+    "type": "SPOILAGE",
+    "needsReview": true
+  },
+  {
+    "id": "yeastsandmolds",
+    "name": "Yeasts and molds",
+    "shortName": "Yeasts and molds",
+    "type": "SPOILAGE",
+    "needsReview": true
+  },
+  {
+    "id": "zygosaccharomycesgroupzygosaccharomycesbailiizygosaccharomycesparabailiizygosaccharomycesrouxii",
+    "name": "Zygosaccharomyces group (bailii, parabailii, rouxii)",
+    "shortName": "Zygosaccharomyces group",
+    "type": "SPOILAGE",
+    "needsReview": true
+  },
+  {
+    "id": "zygosaccharomycesparabailii",
+    "name": "Zygosaccharomyces parabailii",
+    "shortName": "Zygosaccharomyces parabailii",
+    "type": "SPOILAGE",
+    "needsReview": true
   }
 ];
