@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { PRODUCTS, type ProductDef, type ProductPresentation } from "./data/products";
 import { PROTOCOLS } from "./data/protocols";
+import ScrollX from "./ScrollX";
 import { INDUSTRIES as INDUSTRY_DEFS } from "./data/industries";
 import {
   INDUSTRIES, getResolvedProtocolsForIndustry, getAvailableSampleTypes, resolveChain, formatTime,
@@ -370,7 +371,7 @@ export default function ProductCatalog() {
         </div>
 
         {/* TYPE TABS */}
-        <div className="flex overflow-x-auto no-scrollbar gap-2 md:gap-3 border-b border-gray-200/60 pb-4 mb-6">
+        <ScrollX className="flex overflow-x-auto no-scrollbar gap-2 md:gap-3 border-b border-gray-200/60 pb-4 mb-6">
           {TYPE_TABS.map(tab => (
             <button key={tab.label} onClick={() => setSelectedTab(tab.label)}
               className={`px-5 py-2.5 rounded-full text-xs md:text-sm font-bold whitespace-nowrap transition-colors inline-flex items-center gap-1.5 ${selectedTab === tab.label ? "bg-[#111111] text-white" : "bg-transparent text-gray-400 hover:text-[#111111] hover:bg-gray-50"}`}>
@@ -378,7 +379,7 @@ export default function ProductCatalog() {
               {tab.label}
             </button>
           ))}
-        </div>
+        </ScrollX>
 
         {/* RESULT COUNT */}
         <div className="flex items-center justify-between mb-6">
@@ -523,7 +524,7 @@ export default function ProductCatalog() {
                 <X className="w-5 h-5 text-[#111111]" />
               </button>
             </div>
-            <div className="overflow-x-auto overflow-y-auto w-full h-full bg-white">
+            <ScrollX wrapperClassName="h-full min-h-0" className="overflow-x-auto overflow-y-auto w-full h-full bg-white">
               <div className="flex flex-col min-w-full">
                 <div className="flex items-stretch bg-gray-50/40 w-full">
                   <div className="w-32 md:w-56 shrink-0 p-4 md:p-6 border-b border-gray-100"></div>
@@ -549,7 +550,7 @@ export default function ProductCatalog() {
                   </div>
                 ))}
               </div>
-            </div>
+            </ScrollX>
           </div>
         </div>
       )}
