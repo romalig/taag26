@@ -548,22 +548,22 @@ export default function WorkflowBuilder() {
           <div className="flex items-center gap-2 md:gap-8 w-full justify-start overflow-x-hidden no-scrollbar pb-2 md:pb-0">
             <button onClick={() => setStep(1)} className={`text-[10px] font-black flex items-center gap-2 transition-colors shrink-0 uppercase tracking-[0.15em] ${step === 1 ? "text-[#FF270A]" : step > 1 ? "text-[#111111]" : "text-gray-300"}`}>
               <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] shrink-0 transition-colors ${step === 1 ? "bg-[#FF270A] text-white" : step > 1 ? "bg-[#111111] text-white" : "bg-gray-200 text-gray-400"}`}>1</span>
-              <span>Industry</span>
+              <span className={step === 1 ? "" : "hidden sm:inline"}>Industry</span>
             </button>
             <div className="w-4 md:w-16 h-px bg-gray-200 shrink-0" />
             <button onClick={() => { if (step > 1) setStep(2); }} disabled={step < 2} className={`text-[10px] font-black flex items-center gap-2 transition-colors shrink-0 uppercase tracking-[0.15em] ${step === 2 ? "text-[#FF270A]" : step > 2 ? "text-[#111111]" : "text-gray-300"} ${step > 1 ? "cursor-pointer" : "cursor-default"}`}>
               <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] shrink-0 transition-colors ${step === 2 ? "bg-[#FF270A] text-white" : step > 2 ? "bg-[#111111] text-white" : "bg-gray-200 text-gray-400"}`}>2</span>
-              <span>Targets</span>
+              <span className={step === 2 ? "" : "hidden sm:inline"}>Targets</span>
             </button>
             <div className="w-4 md:w-16 h-px bg-gray-200 shrink-0" />
             <button disabled className={`text-[10px] font-black flex items-center gap-2 transition-colors shrink-0 uppercase tracking-[0.15em] cursor-default ${step === 3 ? "text-[#FF270A]" : "text-gray-300"}`}>
               <span className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-[10px] shrink-0 transition-colors ${step === 3 ? "bg-[#FF270A] text-white" : "bg-gray-200 text-gray-400"}`}>3</span>
-              <span>Protocol</span>
+              <span className={step === 3 ? "" : "hidden sm:inline"}>Protocol</span>
             </button>
           </div>
 
           {step > 1 && (
-            <div className="flex items-center bg-white rounded-full p-1 shrink-0 max-w-full overflow-visible">
+            <div className="flex items-center bg-white rounded-full p-1 w-full sm:w-auto sm:shrink-0 overflow-visible">
               <div className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-black text-[#111111] uppercase tracking-[0.12em] border-r border-gray-100 min-w-0">
                 <CurrentIndustryIcon className="w-6 h-6 shrink-0 text-[#FF270A]" strokeWidth={1.5} />
                 <span className="truncate">{selectedIndustry}</span>
@@ -668,12 +668,12 @@ export default function WorkflowBuilder() {
               {availableSampleTypes.length > 1 && (
                 <div className="flex flex-col gap-2 mb-8 md:mb-10 w-full sm:w-fit">
                   <span className="text-[9px] font-black text-gray-400 uppercase tracking-[0.15em] pl-2">Sample type</span>
-                  <div className="flex items-center bg-white p-1 rounded-full">
+                  <div className="flex items-center bg-white p-1 rounded-full w-full sm:w-fit">
                     {availableSampleTypes.map(st => (
                       <button
                         key={st}
                         onClick={() => { setSampleType(st); setProtocolConfirmed(false); setStageOverrides({}); setEnrichFormatOverrides({}); }}
-                        className={`flex-1 sm:flex-none px-5 md:px-7 py-2.5 rounded-full text-xs font-black uppercase tracking-[0.1em] transition-colors leading-tight whitespace-nowrap ${sampleType === st ? "bg-[#111111] text-white" : "text-gray-400 hover:text-[#111111]"}`}
+                        className={`flex-1 sm:flex-none px-3 md:px-7 py-2.5 rounded-full text-[11px] md:text-xs font-black uppercase tracking-[0.06em] md:tracking-[0.1em] transition-colors leading-tight text-center ${sampleType === st ? "bg-[#111111] text-white" : "text-gray-400 hover:text-[#111111]"}`}
                       >{st === "Finished" ? "Finished product" : "Environmental"}</button>
                     ))}
                   </div>
@@ -930,6 +930,33 @@ export default function WorkflowBuilder() {
                               <Clock className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
                               <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{stageTimeText(rs.chosen)}</span>
                             </div>
+                            {(() => {
+                              const memberKeys = new Set(members.map(m => m.productKey));
+                              const formatCount = rs.options.filter(o => memberKeys.has(o.productKey)).length;
+                              const optionCount = countStageOptions(rs);
+                              return (
+                                <>
+                                  {formatCount > 1 && (
+                                    <button onClick={() => openStagePicker(activeProtocol.id, stage, "formats")} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                      <ChevronRight className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                                      <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{formatCount} formats</span>
+                                    </button>
+                                  )}
+                                  {optionCount > 1 && (
+                                    <button onClick={() => openStagePicker(activeProtocol.id, stage, "options")} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                      <ChevronRight className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                                      <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{optionCount} options</span>
+                                    </button>
+                                  )}
+                                </>
+                              );
+                            })()}
+                            {isPcr && pcrAlternatives.length > 1 && (
+                              <button onClick={() => openPcrPicker()} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                <ChevronRight className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{pcrAlternatives.length} kit options</span>
+                              </button>
+                            )}
                             {isPcr ? (
                               <button onClick={() => openBrief(briefFromProtocol(activeProtocol, selectedIndustry))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
                                 <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />

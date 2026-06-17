@@ -206,6 +206,8 @@ export function combinedBriefFromStage(rs: { groups?: { mode: string; options: R
     const o = byKey.get(k)!;
     return { name: o.name, presentations: o.presentations };
   });
+  // Representative image for the combination: the first member's kit photo (no single combined photo exists).
+  const firstCat = byKey.get(orderedKeys[0])?.cat;
   return {
     name: combo.name,
     description: combo.description,
@@ -227,6 +229,6 @@ export function combinedBriefFromStage(rs: { groups?: { mode: string; options: R
     category: combo.category,
     productLine: combo.productLine,
     heroImage: null,
-    kitImage: DEFAULT_KIT_IMAGE,
+    kitImage: firstCat ? `/${firstCat}.png` : DEFAULT_KIT_IMAGE,
   };
 }

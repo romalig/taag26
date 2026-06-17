@@ -320,15 +320,26 @@ export default function ProductBrief({
                 <div>
                   <h3 className="text-2xl md:text-3xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">Formats &amp; products</h3>
                   {data.formatGroups?.length ? (
-                    <div className="flex flex-col gap-8">
-                      {data.formatGroups.map((grp, gi) => (
-                        <div key={gi}>
-                          <h4 className="text-base md:text-lg font-bold text-[#111111] mb-3">{grp.name}</h4>
-                          <div className="flex flex-col gap-2">
-                            {grp.presentations.map((pr, i) => renderRow(pr, grp.name, i))}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+                      <div className="md:col-span-2 flex flex-col gap-8">
+                        {data.formatGroups.map((grp, gi) => (
+                          <div key={gi}>
+                            <h4 className="text-base md:text-lg font-bold text-[#111111] mb-3">{grp.name}</h4>
+                            <div className="flex flex-col gap-2">
+                              {grp.presentations.map((pr, i) => renderRow(pr, grp.name, i))}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                      <div className="h-56 flex items-center justify-center">
+                        <img
+                          src={data.kitImage}
+                          alt={data.name}
+                          onClick={() => setZoom(true)}
+                          className="max-h-56 max-w-full rounded-2xl object-contain cursor-zoom-in"
+                          onError={(e) => { const t = e.currentTarget; if (!t.src.endsWith("/kit-placeholder.png")) t.src = "/kit-placeholder.png"; }}
+                        />
+                      </div>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
