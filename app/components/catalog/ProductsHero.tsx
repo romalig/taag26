@@ -33,8 +33,15 @@ export default function ProductsHero() {
 
   useEffect(() => {
     // One trigger for the whole hero: title sequence (Discover lens → workflows build), then the
-    // standfirst and buttons fade in after it. Replays every time the title scrolls into view.
-    const titleObs = new IntersectionObserver(([entry]) => setPlayTitle(entry.isIntersecting), { threshold: 0.6 });
+    // standfirst and buttons fade in after it. LATCH: it plays once when the title first scrolls
+    // into view and then stays — scrolling away never resets it, so the standfirst and buttons
+    // (and the rest of the title) don't disappear once revealed.
+    const titleObs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setPlayTitle(true);
+        titleObs.disconnect();
+      }
+    }, { threshold: 0.6 });
     if (titleRef.current) titleObs.observe(titleRef.current);
 
     return () => { titleObs.disconnect(); };

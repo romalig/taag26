@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import ScrollX from "./ScrollX";
 import {
   FileText, Mail, Timer, Activity, Zap, Download, Loader2,
   Target, Shield, Layers, Droplet, Thermometer, Check, FlaskConical, Dna,
@@ -243,7 +242,7 @@ export default function ProductBrief({
             {data.comparisonRows.length > 0 && (
               <div>
                 <h3 className="text-2xl md:text-3xl font-extrabold text-[#111111] tracking-tight leading-tight mb-6">How it compares</h3>
-                <ScrollX className="rounded-2xl overflow-hidden border border-gray-100 overflow-x-auto">
+                <div className="rounded-2xl overflow-hidden border border-gray-100 overflow-x-auto">
                   <table className="w-full text-xs">
                     <thead>
                       <tr className="bg-gray-50">
@@ -266,7 +265,7 @@ export default function ProductBrief({
                       ))}
                     </tbody>
                   </table>
-                </ScrollX>
+                </div>
               </div>
             )}
 

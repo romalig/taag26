@@ -524,7 +524,7 @@ export default function ProductCatalog() {
                 <X className="w-5 h-5 text-[#111111]" />
               </button>
             </div>
-            <ScrollX wrapperClassName="h-full min-h-0" className="overflow-x-auto overflow-y-auto w-full h-full bg-white">
+            <div className="overflow-x-auto overflow-y-auto w-full h-full bg-white">
               <div className="flex flex-col min-w-full">
                 <div className="flex items-stretch bg-gray-50/40 w-full">
                   <div className="w-32 md:w-56 shrink-0 p-4 md:p-6 border-b border-gray-100"></div>
@@ -550,7 +550,7 @@ export default function ProductCatalog() {
                   </div>
                 ))}
               </div>
-            </ScrollX>
+            </div>
           </div>
         </div>
       )}

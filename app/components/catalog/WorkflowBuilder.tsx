@@ -16,7 +16,6 @@ import {
 import ProductBrief, { type ValueBriefData } from "./ProductBrief";
 import { briefFromProtocol, briefFromStageOption, combinedBriefFromStage, comparisonRowsForBrief } from "./briefData";
 import { useModal } from "./ModalProvider";
-import ScrollX from "./ScrollX";
 
 type CompetitorKey = "leadingPcr" | "traditional";
 
@@ -389,7 +388,7 @@ export default function WorkflowBuilder() {
       <div className="w-full px-7 sm:px-10 md:px-14 pt-12 md:pt-16 pb-10 md:pb-14">
         <span className="text-[11px] font-black text-[#FF270A] uppercase tracking-[0.2em] mb-2 block">How we compare</span>
         <h3 className="text-2xl md:text-4xl font-black text-[#111111] tracking-tight mb-8 md:mb-10">{proto.name}</h3>
-        <ScrollX className="rounded-2xl border border-gray-100 overflow-x-auto">
+        <div className="rounded-2xl border border-gray-100 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-gray-50">
@@ -410,7 +409,7 @@ export default function WorkflowBuilder() {
               ))}
             </tbody>
           </table>
-        </ScrollX>
+        </div>
       </div>
     );
   };
@@ -974,6 +973,20 @@ export default function WorkflowBuilder() {
                       );
                     })}
                   </div>
+                  {chainOf(activeProtocol).length > 1 && (
+                    <div className="flex justify-center gap-2 mt-4">
+                      {chainOf(activeProtocol).map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            const el = productsScrollRef.current;
+                            if (el) el.scrollTo({ left: idx * (el.clientWidth * 0.8 + 12), behavior: "smooth" });
+                          }}
+                          className={`rounded-full transition-all duration-300 ${activeProdDot === idx ? "w-5 h-2 bg-[#FF270A]" : "w-2 h-2 bg-gray-300"}`}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
