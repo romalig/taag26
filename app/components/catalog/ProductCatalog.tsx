@@ -128,7 +128,7 @@ function optionFromProduct(key: string): ResolvedStageOption | null {
 
 // Spec rows shown in the comparison modal, keyed per category so same-category products align.
 const SPEC_TEMPLATE: Record<string, string[]> = {
-  "PCR Kit": ["Full workflow", "Targets", "Technology", "Sensitivity", "PCR run time", "Detection dye", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
+  "PCR Kit": ["Technology advantage", "Full workflow", "Targets", "Technology", "Sensitivity", "PCR run time", "Detection dye", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
   "Growth Medium": ["Process time", "Incubation (h)", "Ready to use", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
   "Medium supplement": ["Process time", "Incubation (h)", "Ready to use", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
   "Extraction Kit": ["Process time", "Ready to use", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
@@ -136,6 +136,13 @@ const SPEC_TEMPLATE: Record<string, string[]> = {
   "Sampling Kit": ["Process time", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
 };
 const DEFAULT_SPEC_KEYS = ["Process time", "Formats", "Catalog codes", "Shelf life", "Storage temp"];
+
+// "Key advantage" comparison row (PCR kits only) — the headline benefit per product line.
+const LINE_ADVANTAGE: Record<string, string> = {
+  Elevia: "Fastest results — same-day answers in hours, not days",
+  Ampliora: "Powerful multiplexing — multiple targets in a single reaction",
+  Specio: "Most cost-effective — broad coverage at the lowest cost per result",
+};
 
 interface CatalogProduct {
   id: string;
@@ -161,7 +168,7 @@ function buildCatalog(): CatalogProduct[] {
 
     const targets = isPcr && proto ? proto.targets.map(prettyTarget).join(", ") : null;
     const technology = isPcr && proto ? proto.technology : null;
-    const sensitivity = proto?.sensitivity ? proto.sensitivity.split("\n")[0] : null;
+    const sensitivity = proto?.sensitivity ? proto.sensitivity.replace(/\n{2,}/g, "\n").trim() : null;
     const aoac = !!proto && AOAC_SET.has(proto.id);
 
     // (1) PCR kit → the complete workflow time. Any other product → only its own process time.
@@ -174,6 +181,7 @@ function buildCatalog(): CatalogProduct[] {
     const keys = SPEC_TEMPLATE[prod.category ?? ""] ?? DEFAULT_SPEC_KEYS;
     const specVal = (key: string): string => {
       switch (key) {
+        case "Technology advantage": return LINE_ADVANTAGE[prod.productLine ?? ""] ?? "—";
         case "Full workflow":
         case "Process time": return timeStr;
         case "Targets": return targets ?? "—";
