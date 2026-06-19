@@ -31,6 +31,15 @@ export interface SupplementRule {
 
 // Keyed by PCR kit id (protocol id).
 export const SUPPLEMENT_RULES: Record<string, SupplementRule[]> = {
+  // Specio 1.4 L. monocytogenes — Potentia 2 Listeria only when Augmentis 3 Listeria
+  // monocytogenes is chosen (never with Augmentis 1 Listeria).
+  "V-SF28": [
+    {
+      stage: "mediumSupplement",
+      supplementKey: "potentia_2_listeria",
+      whenMediumIs: ["augmentis_3_listeria_monocytogenes"],
+    },
+  ],
   // Specio 4.1 — Potentia 2 Listeria only when Augmentis 3 Listeria monocytogenes is chosen.
   "V-SF42": [
     {

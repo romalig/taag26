@@ -61,6 +61,14 @@ function lowerFirst(s: string): string {
 function startsWithVowel(s: string): boolean {
   return /^[aeiou]/i.test(s.trim());
 }
+// Turns a bulleted/newline kit-content string into a single inline list separated by " · ".
+function inlineKit(s: string): string {
+  return s
+    .split(/\n+/)
+    .map(x => x.replace(/^[\u2022•\-\s]+/, "").trim())
+    .filter(Boolean)
+    .join("  \u00B7  ");
+}
 
 // Title line-breaking for the cover:
 //  • Prefer 2 words per line. If that fits in ≤4 lines, use it.
@@ -126,13 +134,24 @@ const styles = StyleSheet.create({
   // ── Cara 6: Formats + Supplies + TxA + Contact ──
   c6Cols: { flexDirection: "row", gap: 24, marginTop: 20, height: 438 },
   c6Col: { flex: 1, flexDirection: "column", gap: 20 },
-  c6CardTop: { backgroundColor: C.card, borderRadius: 18, padding: 22, borderWidth: 0.5, borderColor: C.line, height: 209 },
-  c6CardBottom: { backgroundColor: C.card, borderRadius: 18, padding: 22, borderWidth: 0.5, borderColor: C.line, height: 209 },
+  c6CardTop: { backgroundColor: C.card, borderRadius: 18, padding: 22, borderWidth: 0.5, borderColor: C.line, height: 260 },
+  c6CardBottom: { backgroundColor: C.card, borderRadius: 18, padding: 22, borderWidth: 0.5, borderColor: C.line, height: 158 },
   c6Row: { flexDirection: "row", paddingVertical: 7, borderBottomWidth: 0.5, borderBottomColor: C.soft, alignItems: "flex-start" },
   c6Cat: { width: "26%", fontSize: 8, color: C.red, fontWeight: 700, paddingRight: 8 },
   c6RowMain: { width: "74%" },
   c6Name: { fontSize: 9, color: C.ink, fontWeight: 700, marginBottom: 1 },
   c6Meta: { fontSize: 7.5, color: C.gray, fontWeight: 400, lineHeight: 1.35 },
+  // Formats: presentations stacked vertically; each format's components inline ("·"-separated)
+  c6KitName: { fontSize: 9.5, color: C.ink, fontWeight: 700, marginBottom: 6 },
+  c6FmtStack: { paddingTop: 7, marginTop: 7, borderTopWidth: 0.5, borderTopColor: C.soft },
+  c6FmtHead: { flexDirection: "row", alignItems: "baseline", marginBottom: 2 },
+  c6FmtCat: { fontSize: 8, color: C.red, fontWeight: 700, marginRight: 10 },
+  c6FmtSize: { fontSize: 7.5, color: C.gray, fontWeight: 700 },
+  c6FmtContent: { fontSize: 7, color: C.gray, fontWeight: 400, lineHeight: 1.4 },
+  c6SupName: { fontSize: 9, color: C.ink, fontWeight: 700 },
+  // AOAC logo above the detected-microorganisms list (Cara 2, col 1)
+  aoacWrap: { alignItems: "flex-start", marginBottom: 10 },
+  aoacLogo: { width: 84, height: 30, objectFit: "contain" },
   c6TxaCard: { backgroundColor: C.card, borderRadius: 18, overflow: "hidden", borderWidth: 0.5, borderColor: C.line, height: 326, position: "relative" },
   c6TxaText: { position: "absolute", top: 24, left: 24, width: "52%", fontSize: 13, color: C.ink, fontWeight: 400, letterSpacing: -0.2, lineHeight: 1.3, zIndex: 2 },
   c6TxaImg: { position: "absolute", bottom: 0, right: 0, width: "82%", height: "72%", objectFit: "contain", objectPosition: "bottom right" },
@@ -445,18 +464,25 @@ export default function ProductBriefDocument({ data, lang = "en" }: { data: Valu
                 </Text>
               )
             )}
-            {data.detectedList && data.detectedList.length > 0 && (
+            {(data.isAoac || (data.detectedList && data.detectedList.length > 0)) && (
               <>
                 <View style={{ flex: 1 }} />
-                <View style={styles.detectedWrap}>
-                  <Text style={styles.detectedTitle}>{L.detected}</Text>
-                  {data.detectedList.map((m, i) => (
-                    <View key={i} style={styles.detectedRow}>
-                      <Text style={styles.detectedBullet}>{"\u2022"}</Text>
-                      <Text style={styles.detectedItem}>{m}</Text>
-                    </View>
-                  ))}
-                </View>
+                {data.isAoac && (
+                  <View style={styles.aoacWrap}>
+                    <Image src="/AOAC.png" style={styles.aoacLogo} />
+                  </View>
+                )}
+                {data.detectedList && data.detectedList.length > 0 && (
+                  <View style={styles.detectedWrap}>
+                    <Text style={styles.detectedTitle}>{L.detected}</Text>
+                    {data.detectedList.map((m, i) => (
+                      <View key={i} style={styles.detectedRow}>
+                        <Text style={styles.detectedBullet}>{"\u2022"}</Text>
+                        <Text style={styles.detectedItem}>{m}</Text>
+                      </View>
+                    ))}
+                  </View>
+                )}
               </>
             )}
           </View>
@@ -581,28 +607,27 @@ export default function ProductBriefDocument({ data, lang = "en" }: { data: Valu
             {/* Formats card */}
             <View style={styles.c6CardTop}>
               <Text style={styles.listHeading}>Formats</Text>
+              <Text style={styles.c6KitName}>{data.name}</Text>
               {data.presentations.map((pr, i) => (
-                <View key={i} style={styles.c6Row}>
-                  <Text style={styles.c6Cat}>Cat #{pr.catalogCode ?? "—"}</Text>
-                  <View style={styles.c6RowMain}>
-                    <Text style={styles.c6Name}>{data.name}</Text>
-                    <Text style={styles.c6Meta}>{[pr.format, pr.size].filter(Boolean).join(" · ") || "—"}</Text>
-                    {pr.kitContent ? <Text style={styles.c6Meta}>{pr.kitContent}</Text> : null}
+                <View key={i} style={styles.c6FmtStack}>
+                  <View style={styles.c6FmtHead}>
+                    <Text style={styles.c6FmtCat}>Cat #{pr.catalogCode ?? "—"}</Text>
+                    <Text style={styles.c6FmtSize}>{[pr.format, pr.size].filter(Boolean).join(" · ") || "—"}</Text>
                   </View>
+                  {pr.kitContent ? <Text style={styles.c6FmtContent}>{inlineKit(pr.kitContent)}</Text> : null}
                 </View>
               ))}
             </View>
-            {/* Additional supplies card */}
+            {/* Additional supplies card — same format as Formats */}
             <View style={styles.c6CardBottom}>
               <Text style={styles.listHeading}>Additional supplies</Text>
               {data.relatedProducts.map((r, i) => (
-                <View key={i} style={styles.c6Row}>
-                  <Text style={styles.c6Cat}>Cat #{r.cat}</Text>
-                  <View style={styles.c6RowMain}>
-                    <Text style={styles.c6Name}>{r.name}</Text>
-                    {(r.format || r.size) && <Text style={styles.c6Meta}>{[r.format, r.size].filter(Boolean).join(" · ")}</Text>}
-                    {r.note && <Text style={styles.c6Meta}>{r.note}</Text>}
+                <View key={i} style={styles.c6FmtStack}>
+                  <View style={styles.c6FmtHead}>
+                    <Text style={styles.c6FmtCat}>Cat #{r.cat}</Text>
+                    <Text style={styles.c6SupName}>{r.name}</Text>
                   </View>
+                  <Text style={styles.c6FmtContent}>{[[r.format, r.size].filter(Boolean).join(" · "), r.note].filter(Boolean).join("  \u00B7  ")}</Text>
                 </View>
               ))}
             </View>

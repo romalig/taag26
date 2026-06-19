@@ -7,8 +7,7 @@
 //   1. Sample type: always `sampleTypes` (array), inferred from each row's matrix text.
 //   2. Time: option has flat `timeHours` (constant) - enrichment times come from the source;
 //      sampling times are an invented 0.25h placeholder (timeEstimated: true).
-//   3. `matrices[]` lists the matrices an enrichment option was validated on (when >1).
-//   4. mainIndustries = industries the kit DECLARES (source main_industries), mapped to the
+//   3. mainIndustries = industries the kit DECLARES (source main_industries), mapped to the
 //      canonical industry names; used to filter which kits appear for a chosen industry.
 
 export type StageKey = "sampling" | "enrichment" | "mediumSupplement" | "extractionSupplement" | "extraction" | "pcr";
@@ -37,8 +36,15 @@ export interface StageOption {
   mode?: ExecMode | null;
   timeHours?: number | null;
   timeLabel?: string;        // shown instead of a formatted time when set (e.g. "X mins" = TODO)
-  matrices?: string[];
   timeEstimated: boolean;
+  // Sampling-gated enrichment: if set, this (enrichment) option only applies when the chosen
+  // sampling product is one of these productKeys. Lets a sampling choice drive whether enrichment
+  // is part of the protocol (e.g. captus_zero_1 = direct/no-enrichment vs captus_xpress = with it).
+  requiresSampling?: string[];
+  // In-device enrichment: the enrichment is performed inside the sampling device (same tube). When
+  // true, this option is NOT a separate stage — it is folded into the sampling stage, which becomes
+  // "Sampling & Enrichment" and takes this option's time. Pair with `requiresSampling`.
+  inDevice?: boolean;
 }
 export interface PcrUse {
   productKey: string;
@@ -61,8 +67,7 @@ export interface ProtocolDef {
   mainIndustries: string[];
   technology: string | null;
   sensitivity: string | null;
-  keyAdvantages: KeyAdvantage[];   // top "value brief" cards; shown above features
-  features: string[];
+  keyAdvantages: KeyAdvantage[];   // top "value brief" cards (PCR value brief)
   // Stages depend on the (kit, industry) pair: the same kit can use different enrichment
   // media and extraction kits per industry. Keyed by canonical industry name.
   stagesByIndustry: Record<string, {
@@ -115,13 +120,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "Lower price",
         "subtitle": "below leading platforms"
       }
-    ],
-    "features": [
-      "Mila AI-designed primers give specific, reliable Salmonella amplification with low cross-reactivity.",
-      "Molecular result well before culture confirmation speeds lot release.",
-      "Runs on open thermocyclers you already own — no proprietary instrument.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Confectionery": {
@@ -920,13 +918,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "below leading platforms"
       }
     ],
-    "features": [
-      "Mila AI-designed primers give specific, reliable E. coli detection with low cross-reactivity.",
-      "Quick indicator result speeds hygiene verification and sanitation decisions.",
-      "Runs on open thermocyclers you already own — no proprietary instrument.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Confectionery": {
         "sampling": {
@@ -1573,13 +1564,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "direct workflow"
       }
     ],
-    "features": [
-      "Targets the guaiacol-producing gene — the molecular taint marker — not just the organism.",
-      "Detects Alicyclobacillus and the guaiacol gene together in one reaction.",
-      "Early guaiacol-risk detection protects beverage flavor and brand.",
-      "Direct ~2 h screening keeps juice and concentrate lines moving.",
-      "Internal control monitors each reaction and supports automated TxA interpretation."
-    ],
     "stagesByIndustry": {
       "Beverage": {
         "sampling": {
@@ -1587,6 +1571,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_6_ysg_broth",
               "catalogCode": [
@@ -1645,6 +1641,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_6_ysg_broth",
               "catalogCode": [
@@ -1735,13 +1743,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "Open platform",
         "subtitle": "runs on your instruments"
       }
-    ],
-    "features": [
-      "Distinguishes L. monocytogenes from Listeria spp. in one reaction via Mila multiplex design.",
-      "Species-level answer in one assay guides the right corrective action immediately.",
-      "Two targets in one reaction halve reagent and labor versus separate tests.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Dairy": {
@@ -2210,13 +2211,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "Open platform",
         "subtitle": "runs on your instruments"
       }
-    ],
-    "features": [
-      "Detects Salmonella and Listeria together in one reaction via Mila multiplex design.",
-      "Two pathogens in one assay halve reagent and labor versus separate tests.",
-      "Combined result speeds the production release decision.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Confectionery": {
@@ -3281,7 +3275,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Klebsiella_spp."
     ],
     "mainIndustries": [
-      "Beverage"
+      "Water"
     ],
     "technology": "Real-Time PCR - Mila",
     "sensitivity": "From 4 CFU/filter\n\nSensitivity depends on the target microorganism.",
@@ -3303,20 +3297,26 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "runs on your instruments"
       }
     ],
-    "features": [
-      "Detects E. coli, Citrobacter and Klebsiella in one reaction via Mila multiplex design.",
-      "Three water indicators per test give a fuller process-water picture in one run.",
-      "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
-      "Quick result speeds process-water release decisions.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
-      "Beverage": {
+      "Water": {
         "sampling": {
           "options": []
         },
         "enrichment": {
-          "options": []
+          "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
         },
         "mediumSupplement": {
           "options": []
@@ -3360,7 +3360,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Escherichia_spp."
     ],
     "mainIndustries": [
-      "Beverage"
+      "Water"
     ],
     "technology": "Real-Time PCR - Mila",
     "sensitivity": "From 4 CFU/filter\n\nSensitivity depends on the target microorganism.",
@@ -3382,20 +3382,26 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "runs on your instruments"
       }
     ],
-    "features": [
-      "Detects E. coli, Citrobacter and Klebsiella in one reaction via Mila multiplex design.",
-      "Three water indicators per test give a fuller process-water picture in one run.",
-      "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
-      "Quick result speeds process-water release decisions.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
-      "Beverage": {
+      "Water": {
         "sampling": {
           "options": []
         },
         "enrichment": {
-          "options": []
+          "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
         },
         "mediumSupplement": {
           "options": []
@@ -3462,13 +3468,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "protects flavor"
       }
     ],
-    "features": [
-      "Detects Alicyclobacillus, Zygosaccharomyces and the guaiacol gene together in one reaction.",
-      "Targets the guaiacol-producing gene — the molecular taint marker — not just the organism.",
-      "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
-      "Early detection protects beverage flavor and shelf life.",
-      "Internal control monitors each reaction and supports automated TxA interpretation."
-    ],
     "stagesByIndustry": {
       "Beverage": {
         "sampling": {
@@ -3476,6 +3475,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_6_ysg_broth",
               "catalogCode": [
@@ -3523,6 +3534,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_6_ysg_broth",
               "catalogCode": [
@@ -3609,13 +3632,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "runs on your instruments"
       }
     ],
-    "features": [
-      "Detects Salmonella, L. monocytogenes and E. coli O157:H7 in one reaction via Mila multiplex.",
-      "Three pathogens in one assay cut reagent and labor by two-thirds versus separate tests.",
-      "Broad pathogen coverage per sample lowers recall risk.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Confectionery": {
         "sampling": {
@@ -3646,8 +3662,8 @@ export const PROTOCOLS: ProtocolDef[] = [
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeEstimated": false,
+              "timeHours": 24
             },
             {
               "productKey": "augmentis_1_listeria",
@@ -3762,8 +3778,8 @@ export const PROTOCOLS: ProtocolDef[] = [
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeEstimated": false,
+              "timeHours": 24
             },
             {
               "productKey": "augmentis_1_listeria",
@@ -3878,8 +3894,8 @@ export const PROTOCOLS: ProtocolDef[] = [
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeEstimated": false,
+              "timeHours": 24
             },
             {
               "productKey": "augmentis_1_listeria",
@@ -3994,8 +4010,8 @@ export const PROTOCOLS: ProtocolDef[] = [
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeEstimated": false,
+              "timeHours": 24
             },
             {
               "productKey": "augmentis_1_listeria",
@@ -4110,8 +4126,8 @@ export const PROTOCOLS: ProtocolDef[] = [
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeEstimated": false,
+              "timeHours": 24
             },
             {
               "productKey": "augmentis_1_listeria",
@@ -4226,8 +4242,8 @@ export const PROTOCOLS: ProtocolDef[] = [
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeEstimated": false,
+              "timeHours": 24
             },
             {
               "productKey": "augmentis_1_listeria",
@@ -4342,8 +4358,8 @@ export const PROTOCOLS: ProtocolDef[] = [
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeEstimated": false,
+              "timeHours": 24
             },
             {
               "productKey": "augmentis_1_listeria",
@@ -4458,8 +4474,8 @@ export const PROTOCOLS: ProtocolDef[] = [
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeEstimated": false,
+              "timeHours": 24
             },
             {
               "productKey": "augmentis_1_listeria",
@@ -4574,8 +4590,8 @@ export const PROTOCOLS: ProtocolDef[] = [
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeEstimated": false,
+              "timeHours": 24
             },
             {
               "productKey": "augmentis_1_listeria",
@@ -4690,8 +4706,8 @@ export const PROTOCOLS: ProtocolDef[] = [
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeEstimated": false,
+              "timeHours": 24
             },
             {
               "productKey": "augmentis_1_listeria",
@@ -4820,13 +4836,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "Open platform",
         "subtitle": "runs on your instruments"
       }
-    ],
-    "features": [
-      "Detects Salmonella, L. monocytogenes and Listeria spp. in one reaction via Mila multiplex.",
-      "Pathogen plus species-level Listeria in one test sharpens corrective-action decisions.",
-      "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Confectionery": {
@@ -6052,13 +6061,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "runs on your instruments"
       }
     ],
-    "features": [
-      "Detects Salmonella, L. monocytogenes and Listeria spp. in one reaction via Mila multiplex.",
-      "Pathogen plus species-level Listeria in one test sharpens corrective-action decisions.",
-      "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Confectionery": {
         "sampling": {
@@ -7279,13 +7281,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "runs on your instruments"
       }
     ],
-    "features": [
-      "Identifies STEC strains, E. coli O157:H7 and Salmonella in one reaction via Mila multiplex.",
-      "Differentiates STEC strains rather than only generic E. coli.",
-      "Covers the exact E. coli risks that drive meat and produce recalls.",
-      "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Confectionery": {
         "sampling": {
@@ -7293,6 +7288,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_91_bpw",
               "catalogCode": [
@@ -7342,6 +7349,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         "enrichment": {
           "options": [
             {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
               "productKey": "augmentis_91_bpw",
               "catalogCode": [
                 "V-FP25",
@@ -7389,6 +7408,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_91_bpw",
               "catalogCode": [
@@ -7438,6 +7469,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         "enrichment": {
           "options": [
             {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
               "productKey": "augmentis_91_bpw",
               "catalogCode": [
                 "V-FP25",
@@ -7485,6 +7528,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_91_bpw",
               "catalogCode": [
@@ -7566,13 +7621,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "early detection"
       }
     ],
-    "features": [
-      "Detects four core beer-spoilage yeasts in one reaction via Mila multiplex design.",
-      "Panel tuned specifically to the Saccharomyces and Zygosaccharomyces yeasts that spoil beer.",
-      "Four targets in one assay cut reagent and labor by three-quarters versus separate tests.",
-      "Direct ~2.5 h screening lets production release beer faster.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Beer": {
         "sampling": {
@@ -7580,6 +7628,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_2_wort",
               "catalogCode": [
@@ -7627,6 +7687,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_2_wort",
               "catalogCode": [
@@ -7706,13 +7778,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "early detection"
       }
     ],
-    "features": [
-      "Detects four wild and diastatic beer-spoilage yeasts in one reaction via Mila multiplex.",
-      "Panel tuned to the Brettanomyces, Pichia and S. diastaticus strains behind beer faults.",
-      "Four targets in one assay cut reagent and labor by three-quarters versus separate tests.",
-      "Direct ~2.5 h screening lets production release beer faster.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Beer": {
         "sampling": {
@@ -7720,6 +7785,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_2_wort",
               "catalogCode": [
@@ -7767,6 +7844,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_2_wort",
               "catalogCode": [
@@ -7845,20 +7934,26 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "early detection"
       }
     ],
-    "features": [
-      "Detects four dominant beer-spoilage bacteria in one reaction via Mila multiplex design.",
-      "Panel tuned to the Lactobacillus and Pediococcus groups that spoil beer.",
-      "Four targets in one assay cut reagent and labor by three-quarters versus separate tests.",
-      "Direct ~2.5 h screening lets production release beer faster.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Beer": {
         "sampling": {
           "options": []
         },
         "enrichment": {
-          "options": []
+          "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
         },
         "mediumSupplement": {
           "options": []
@@ -7926,20 +8021,26 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "direct beer workflow"
       }
     ],
-    "features": [
-      "Detects Pectinatus, Megasphaera and related strict-anaerobe beer spoilers in one reaction.",
-      "Targets organisms that anaerobe culture often fails to recover.",
-      "Four targets in one assay cut reagent and labor by three-quarters versus separate tests.",
-      "Direct ~2.5 h screening lets production release beer faster.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Beer": {
         "sampling": {
           "options": []
         },
         "enrichment": {
-          "options": []
+          "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
         },
         "mediumSupplement": {
           "options": []
@@ -8007,13 +8108,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "PRY and more"
       }
     ],
-    "features": [
-      "Detects five acidophilic spoilage groups — Brettanomyces, acidophilic bacteria, PRY, yeasts and molds — in one reaction.",
-      "Built for acidified products, targeting organisms that survive and spoil at low pH.",
-      "Five groups in one assay cut reagent and labor by ~80% versus separate tests.",
-      "Catches preservative-resistant spoilers that standard checks can miss.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Beverage": {
         "sampling": {
@@ -8021,6 +8115,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_4_spoilage_beverage",
               "catalogCode": [
@@ -8030,10 +8136,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Finished"
               ],
               "timeHours": 48,
-              "matrices": [
-                "Carbonated soft drinks, Enhanced water, Ready-to-d",
-                "Fruit juices with and without pulp, Fruit concentr"
-              ],
               "timeEstimated": false
             }
           ]
@@ -8084,6 +8186,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         "enrichment": {
           "options": [
             {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
+            {
               "productKey": "augmentis_4_spoilage_beverage",
               "catalogCode": [
                 "V-FL41"
@@ -8092,10 +8206,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Finished"
               ],
               "timeHours": 48,
-              "matrices": [
-                "Carbonated soft drinks, Enhanced water, Ready-to-d",
-                "Fruit juices with and without pulp, Fruit concentr"
-              ],
               "timeEstimated": false
             }
           ]
@@ -8176,13 +8286,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "PRY and more"
       }
     ],
-    "features": [
-      "Detects five acidophilic spoilage groups — Brettanomyces, acidophilic bacteria, PRY, yeasts and molds — in one reaction.",
-      "Built for acidified products, targeting organisms that survive and spoil at low pH.",
-      "Five groups in one assay cut reagent and labor by ~80% versus separate tests.",
-      "Catches preservative-resistant spoilers that standard checks can miss.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Beverage": {
         "sampling": {
@@ -8190,6 +8293,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_4_spoilage_beverage",
               "catalogCode": [
@@ -8199,10 +8314,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Finished"
               ],
               "timeHours": 48,
-              "matrices": [
-                "Carbonated soft drinks, Enhanced water, Ready-to-d",
-                "Fruit juices with and without pulp, Fruit concentr"
-              ],
               "timeEstimated": false
             }
           ]
@@ -8263,7 +8374,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Escherichia_spp."
     ],
     "mainIndustries": [
-      "Beverage"
+      "Water"
     ],
     "technology": "Real-Time PCR - Mila",
     "sensitivity": "From 4 CFU/filter\n\nSensitivity depends on the target microorganism.",
@@ -8285,20 +8396,26 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "runs on your instruments"
       }
     ],
-    "features": [
-      "Covers six water indicator organisms in a single reaction via Mila multiplex design.",
-      "Broadest indicator coverage per sample for water programs in one assay.",
-      "Six targets in one reaction cut reagent and labor by ~83% versus separate tests.",
-      "One assay clears multiple indicators for faster process-water decisions.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
-      "Beverage": {
+      "Water": {
         "sampling": {
           "options": []
         },
         "enrichment": {
-          "options": []
+          "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
         },
         "mediumSupplement": {
           "options": []
@@ -8370,13 +8487,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "direct beer workflow"
       }
     ],
-    "features": [
-      "Covers eight beer-spoilage yeasts in a single reaction — the full yeast risk profile.",
-      "Mila-designed panel screens what would otherwise need several separate assays.",
-      "Eight targets in one reaction cut reagent and labor by ~89% versus separate tests.",
-      "Direct ~2.5 h screening lets production release beer faster.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Beer": {
         "sampling": {
@@ -8384,6 +8494,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_2_wort",
               "catalogCode": [
@@ -8467,20 +8589,26 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "direct beer workflow"
       }
     ],
-    "features": [
-      "Covers eight beer-spoilage bacteria in a single reaction, including hard-to-culture anaerobes.",
-      "Mila-designed panel screens the full beer-bacteria risk profile in one assay.",
-      "Eight targets in one reaction cut reagent and labor by ~89% versus separate tests.",
-      "Direct ~2.5 h screening lets production release beer faster.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Beer": {
         "sampling": {
           "options": []
         },
         "enrichment": {
-          "options": []
+          "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
         },
         "mediumSupplement": {
           "options": []
@@ -8523,13 +8651,9 @@ export const PROTOCOLS: ProtocolDef[] = [
     ],
     "mainIndustries": [
       "Confectionery",
-      "Dairy",
-      "Egg Products",
-      "Fresh & Processed Produce",
       "Meat and Poultry",
-      "Pet Food & Animal Feed",
-      "Ready-to-eat",
-      "Seafood"
+      "Dairy",
+      "Pet Food & Animal Feed"
     ],
     "technology": "RT-qPCR - AiGOR",
     "sensitivity": "Food sample: 1 CFU/375 g\nSurface sample: 1 CFU/100 cm2",
@@ -8551,21 +8675,36 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "shorter holds, faster turnover"
       }
     ],
-    "features": [
-      "AiGOR RNA chemistry detects only viable Salmonella, avoiding dead-cell false positives that trigger needless holds.",
-      "Up to 10,000x more sensitive than standard PCR, catching contamination at very low loads.",
-      "Environmental results in ~3 h and finished-product release in ~9 h — both same-day.",
-      "Internal control monitors every reaction and supports automated TxA result calling.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Confectionery": {
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -8580,29 +8719,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "matrices": [
-                "Pre-sanitization stainless steel surface — sponge",
-                "Pre-sanitization stainless steel surface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
               "productKey": "augmentis_91_bpw",
@@ -8615,25 +8759,6 @@ export const PROTOCOLS: ProtocolDef[] = [
               ],
               "timeHours": 8,
               "timeEstimated": false
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
-            },
-            {
-              "id": "fin",
-              "sampleType": "Finished",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_91_bpw"
-              ]
             }
           ]
         },
@@ -8713,9 +8838,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -8730,40 +8877,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "matrices": [
-                "Pre-sanitization stainless steel surface — sponge",
-                "Pre-sanitization stainless steel surface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -8832,9 +8973,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -8849,29 +9012,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "matrices": [
-                "Pre-sanitization stainless steel surface — sponge",
-                "Pre-sanitization stainless steel surface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
               "productKey": "augmentis_xpress_1",
@@ -8882,22 +9050,7 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Finished"
               ],
               "timeHours": 6,
-              "matrices": [
-                "Pre-sanitization stainless steel surface — sponge",
-                "Pre-sanitization stainless steel surface — swab"
-              ],
               "timeEstimated": false
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
             }
           ]
         },
@@ -8955,9 +9108,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -8972,40 +9147,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "matrices": [
-                "Pre-sanitization stainless steel surface — sponge",
-                "Pre-sanitization stainless steel surface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -9052,9 +9221,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -9069,29 +9260,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "matrices": [
-                "Pre-sanitization stainless steel surface — sponge",
-                "Pre-sanitization stainless steel surface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
               "productKey": "augmentis_91_bpw",
@@ -9104,25 +9300,6 @@ export const PROTOCOLS: ProtocolDef[] = [
               ],
               "timeHours": 6,
               "timeEstimated": false
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
-            },
-            {
-              "id": "fin",
-              "sampleType": "Finished",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_91_bpw"
-              ]
             }
           ]
         },
@@ -9180,9 +9357,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -9197,29 +9396,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "matrices": [
-                "Pre-sanitization stainless steel surface — sponge",
-                "Pre-sanitization stainless steel surface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
               "productKey": "augmentis_91_bpw",
@@ -9232,25 +9436,6 @@ export const PROTOCOLS: ProtocolDef[] = [
               ],
               "timeHours": 6,
               "timeEstimated": false
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
-            },
-            {
-              "id": "fin",
-              "sampleType": "Finished",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_91_bpw"
-              ]
             }
           ]
         },
@@ -9308,9 +9493,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -9325,29 +9532,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "matrices": [
-                "Pre-sanitization stainless steel surface — sponge",
-                "Pre-sanitization stainless steel surface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
               "productKey": "augmentis_91_bpw",
@@ -9360,25 +9572,6 @@ export const PROTOCOLS: ProtocolDef[] = [
               ],
               "timeHours": 6,
               "timeEstimated": false
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
-            },
-            {
-              "id": "fin",
-              "sampleType": "Finished",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_91_bpw"
-              ]
             }
           ]
         },
@@ -9436,9 +9629,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -9453,40 +9668,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "matrices": [
-                "Pre-sanitization stainless steel surface — sponge",
-                "Pre-sanitization stainless steel surface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -9541,14 +9750,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Salmonella_spp.",
       "Listeria_spp."
     ],
-    "mainIndustries": [
-      "Confectionery",
-      "Fresh & Processed Produce",
-      "Meat and Poultry",
-      "Pet Food & Animal Feed",
-      "Ready-to-eat",
-      "Seafood"
-    ],
+    "mainIndustries": [],
     "technology": "RT-qPCR - AiGOR",
     "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
@@ -9569,21 +9771,36 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "Salmonella + Listeria together"
       }
     ],
-    "features": [
-      "AiGOR RNA chemistry detects only viable Salmonella and Listeria, avoiding dead-cell false positives.",
-      "Up to 10,000x more sensitive than standard PCR across both targets.",
-      "Environmental results in ~4 h and finished-product release in ~9 h — both same-day.",
-      "Two pathogens in one reaction halves reagent and labor versus separate tests.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Confectionery": {
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -9598,49 +9815,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 4,
-              "matrices": [
-                "Cooked processed meat product",
-                "Stainless steel\nsurface — sponge",
-                "Stainless steel\nsurface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
-            },
-            {
-              "id": "fin",
-              "sampleType": "Finished",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1"
-              ]
+              "timeHours": 4,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -9676,9 +9878,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -9693,49 +9917,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 4,
-              "matrices": [
-                "Cooked processed meat product",
-                "Stainless steel\nsurface — sponge",
-                "Stainless steel\nsurface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
-            },
-            {
-              "id": "fin",
-              "sampleType": "Finished",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1"
-              ]
+              "timeHours": 4,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -9771,9 +9980,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -9788,66 +10019,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 4,
-              "matrices": [
-                "Cooked processed meat product",
-                "Stainless steel\nsurface — sponge",
-                "Stainless steel\nsurface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
-            },
-            {
-              "productKey": "captus_xpress_1",
-              "catalogCode": [
-                "V-TB37"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "inDevice": true
             },
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL50",
-                "V-FP34"
+                "V-FL47"
               ],
               "sampleTypes": [
-                "Finished"
+                "Environmental"
               ],
-              "timeHours": 6,
-              "matrices": [
-                "Cooked processed meat product",
-                "Stainless steel\nsurface — sponge",
-                "Stainless steel\nsurface — swab"
+              "timeHours": 4,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
-            },
-            {
-              "id": "fin",
-              "sampleType": "Finished",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1"
-              ]
+              "inDevice": true
             }
           ]
         },
@@ -9869,17 +10068,6 @@ export const PROTOCOLS: ProtocolDef[] = [
               ],
               "timeHours": 0.75,
               "timeEstimated": false
-            },
-            {
-              "productKey": "nucleia_8_ultra",
-              "catalogCode": [
-                "V-EE03"
-              ],
-              "sampleTypes": [
-                "Finished"
-              ],
-              "timeHours": 0.75,
-              "timeEstimated": false
             }
           ]
         },
@@ -9894,9 +10082,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -9911,49 +10121,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 4,
-              "matrices": [
-                "Cooked processed meat product",
-                "Stainless steel\nsurface — sponge",
-                "Stainless steel\nsurface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
-            },
-            {
-              "id": "fin",
-              "sampleType": "Finished",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1"
-              ]
+              "timeHours": 4,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -9989,9 +10184,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10006,66 +10223,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 4,
-              "matrices": [
-                "Cooked processed meat product",
-                "Stainless steel\nsurface — sponge",
-                "Stainless steel\nsurface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
-            },
-            {
-              "productKey": "captus_xpress_1",
-              "catalogCode": [
-                "V-TB37"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
+              "inDevice": true
             },
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL50",
-                "V-FP34"
+                "V-FL47"
               ],
               "sampleTypes": [
-                "Finished"
+                "Environmental"
               ],
-              "timeHours": 6,
-              "matrices": [
-                "Cooked processed meat product",
-                "Stainless steel\nsurface — sponge",
-                "Stainless steel\nsurface — swab"
+              "timeHours": 4,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
-            },
-            {
-              "id": "fin",
-              "sampleType": "Finished",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1"
-              ]
+              "inDevice": true
             }
           ]
         },
@@ -10087,17 +10272,6 @@ export const PROTOCOLS: ProtocolDef[] = [
               ],
               "timeHours": 0.75,
               "timeEstimated": false
-            },
-            {
-              "productKey": "nucleia_8_ultra",
-              "catalogCode": [
-                "V-EE03"
-              ],
-              "sampleTypes": [
-                "Finished"
-              ],
-              "timeHours": 0.75,
-              "timeEstimated": false
             }
           ]
         },
@@ -10112,9 +10286,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10129,49 +10325,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 4,
-              "matrices": [
-                "Cooked processed meat product",
-                "Stainless steel\nsurface — sponge",
-                "Stainless steel\nsurface — swab"
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
               ],
-              "timeEstimated": false
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
-            },
-            {
-              "id": "fin",
-              "sampleType": "Finished",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1"
-              ]
+              "timeHours": 4,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -10215,14 +10396,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Salmonella_spp.",
       "Enterobacteria"
     ],
-    "mainIndustries": [
-      "Confectionery",
-      "Egg Products",
-      "Fresh & Processed Produce",
-      "Meat and Poultry",
-      "Pet Food & Animal Feed",
-      "Ready-to-eat"
-    ],
+    "mainIndustries": [],
     "technology": "RT-qPCR - AiGOR",
     "sensitivity": "Surface sample: 1 CFU/100 cm2 for Salmonella spp. and 10 CFU/100 cm2 for Enterobacteria",
     "keyAdvantages": [
@@ -10243,21 +10417,36 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "viable-cell RNA detection"
       }
     ],
-    "features": [
-      "Detects Salmonella plus Enterobacteria as a process-hygiene indicator, flagging drift before it becomes a pathogen event.",
-      "AiGOR RNA chemistry targets only viable cells, avoiding dead-cell false positives.",
-      "Up to 10,000x more sensitive than standard PCR for early risk detection.",
-      "Environmental results in ~3 h and finished-product release in ~9 h — both same-day.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Confectionery": {
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10272,36 +10461,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "timeEstimated": false
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -10317,6 +10504,17 @@ export const PROTOCOLS: ProtocolDef[] = [
               "productKey": "magneus_6_bacteria",
               "catalogCode": [
                 "V-MA19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10337,9 +10535,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10354,36 +10574,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "timeEstimated": false
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -10399,6 +10617,17 @@ export const PROTOCOLS: ProtocolDef[] = [
               "productKey": "magneus_6_bacteria",
               "catalogCode": [
                 "V-MA19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10419,9 +10648,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10436,36 +10687,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "timeEstimated": false
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -10481,6 +10730,17 @@ export const PROTOCOLS: ProtocolDef[] = [
               "productKey": "magneus_6_bacteria",
               "catalogCode": [
                 "V-MA19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10501,9 +10761,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10518,36 +10800,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "timeEstimated": false
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -10563,6 +10843,17 @@ export const PROTOCOLS: ProtocolDef[] = [
               "productKey": "magneus_6_bacteria",
               "catalogCode": [
                 "V-MA19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10583,9 +10874,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10600,36 +10913,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "timeEstimated": false
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -10651,6 +10962,17 @@ export const PROTOCOLS: ProtocolDef[] = [
               ],
               "timeHours": 0.75,
               "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
             }
           ]
         },
@@ -10665,9 +10987,31 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
+              "productKey": "captus_zero_1",
+              "catalogCode": [
+                "V-TB36"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.25,
+              "timeEstimated": true
+            },
+            {
+              "productKey": "captus_xpress_1",
+              "catalogCode": [
+                "V-TB37"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10682,36 +11026,34 @@ export const PROTOCOLS: ProtocolDef[] = [
             {
               "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-FL47",
                 "V-TB32"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
               "timeHours": 3,
-              "timeEstimated": false
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             },
             {
-              "productKey": "captus_xpress_1",
+              "productKey": "augmentis_xpress_1",
               "catalogCode": [
-                "V-TB37"
+                "V-FL47"
               ],
               "sampleTypes": [
                 "Environmental"
               ],
-              "timeLabel": "X mins",
-              "timeEstimated": true
-            }
-          ],
-          "groups": [
-            {
-              "id": "env-route",
-              "sampleType": "Environmental",
-              "mode": "alternative",
-              "productKeys": [
-                "augmentis_xpress_1",
-                "captus_xpress_1"
-              ]
+              "timeHours": 3,
+              "timeEstimated": false,
+              "requiresSampling": [
+                "captus_xpress_1",
+                "captus_xpress_2"
+              ],
+              "inDevice": true
             }
           ]
         },
@@ -10727,6 +11069,17 @@ export const PROTOCOLS: ProtocolDef[] = [
               "productKey": "magneus_6_bacteria",
               "catalogCode": [
                 "V-MA19"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 0.75,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "nucleia_8_ultra",
+              "catalogCode": [
+                "V-EE03"
               ],
               "sampleTypes": [
                 "Environmental"
@@ -10786,13 +11139,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "Protects shelf life",
         "subtitle": "broad early detection"
       }
-    ],
-    "features": [
-      "Identifies 80+ spoilage bacteria in a single reaction via KAi melting-curve analysis — breadth no competitor matches.",
-      "Single FAM channel keeps the setup simple while covering a huge organism range.",
-      "One assay replaces whole panels of separate spoilage tests, cutting cost and labor.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Broad early spoilage detection protects shelf life and prevents field complaints."
     ],
     "stagesByIndustry": {
       "Beverage": {
@@ -12694,13 +13040,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "FAM-only, simple setup"
       }
     ],
-    "features": [
-      "Identifies 50+ spoilage yeasts and molds in one reaction via KAi melting-curve — breadth no competitor matches.",
-      "Single FAM channel keeps setup simple while covering a huge fungal range.",
-      "Molecular detection in hours versus the 5–7+ days fungal culture can require.",
-      "One assay replaces whole panels of separate fungal tests, cutting cost and labor.",
-      "Internal control monitors each reaction and supports automated TxA interpretation."
-    ],
     "stagesByIndustry": {
       "Beverage": {
         "sampling": {
@@ -13742,13 +14081,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "below leading platforms"
       }
     ],
-    "features": [
-      "Specific Salmonella identification by KAi melting-curve analysis with AI calling.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Molecular result well before culture confirmation speeds lot release.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Confectionery": {
         "sampling": {
@@ -14328,13 +14660,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "below leading platforms"
       }
     ],
-    "features": [
-      "Specific S. aureus identification by KAi melting-curve analysis with AI calling.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Quick result speeds hygiene verification and sanitation decisions.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Dairy": {
         "sampling": {
@@ -14798,13 +15123,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "Lower price",
         "subtitle": "below leading platforms"
       }
-    ],
-    "features": [
-      "Specific E. coli identification by KAi melting-curve analysis with AI calling.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Quick indicator result speeds hygiene verification and sanitation decisions.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Confectionery": {
@@ -15385,13 +15703,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "below leading platforms"
       }
     ],
-    "features": [
-      "Specific L. monocytogenes identification by KAi melting-curve analysis with AI calling.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Quick result clears Listeria status for line release in environmental monitoring.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Dairy": {
         "sampling": {
@@ -15969,13 +16280,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "open instruments"
       }
     ],
-    "features": [
-      "Targets Zygosaccharomyces bailii/parabailii, a preservative-resistant yeast that spoils acidified products.",
-      "Specific identification by KAi melting-curve analysis with AI calling.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Early detection of this resistant spoiler protects shelf life.",
-      "Internal control monitors each reaction and supports automated TxA interpretation."
-    ],
     "stagesByIndustry": {
       "Beverage": {
         "sampling": {
@@ -16180,13 +16484,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "Lower price",
         "subtitle": "below leading platforms"
       }
-    ],
-    "features": [
-      "Specific Listeria spp. identification by KAi melting-curve analysis with AI calling.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Result well before culture confirmation speeds environmental decisions.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Dairy": {
@@ -16652,13 +16949,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "below leading platforms"
       }
     ],
-    "features": [
-      "Detects S. aureus and E. coli together in one reaction via KAi melting-curve.",
-      "Two hygiene indicators in one assay halves reagent and labor versus separate tests.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Dairy": {
         "sampling": {
@@ -17046,13 +17336,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "FAM-only setup",
         "subtitle": "open instruments"
       }
-    ],
-    "features": [
-      "Distinguishes L. monocytogenes from Listeria spp. in one reaction via KAi melting-curve.",
-      "Species-level answer in one assay guides the right corrective action immediately.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Dairy": {
@@ -17517,13 +17800,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "FAM-only setup",
         "subtitle": "open instruments"
       }
-    ],
-    "features": [
-      "Separates generic E. coli from pathogenic O157:H7 in one reaction via KAi melting-curve.",
-      "Distinguishing indicator from pathogen in one assay sharpens risk decisions.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Strong fit for meat and produce, where these E. coli risks drive recalls.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Fresh & Processed Produce": {
@@ -18005,13 +18281,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "FAM-only setup",
         "subtitle": "open instruments"
       }
-    ],
-    "features": [
-      "Detects Salmonella and L. monocytogenes together in one reaction via KAi melting-curve.",
-      "Two pathogens in one assay halves reagent and labor versus separate tests.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Confectionery": {
@@ -18566,13 +18835,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "FAM-only setup",
         "subtitle": "open instruments"
       }
-    ],
-    "features": [
-      "Detects Salmonella, L. monocytogenes and E. coli O157:H7 in one reaction via KAi melting-curve.",
-      "Three pathogens in one assay cuts reagent and labor by two-thirds versus separate tests.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Broad pathogen coverage per sample lowers recall risk and protects the brand.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Confectionery": {
@@ -19548,13 +19810,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "open instruments"
       }
     ],
-    "features": [
-      "Detects Salmonella, L. monocytogenes, E. coli and S. aureus in one reaction via KAi melting-curve.",
-      "Four pathogens in one assay cuts reagent and labor by three-quarters versus separate tests.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Broadest pathogen coverage per sample speeds release and lowers recall risk.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Confectionery": {
         "sampling": {
@@ -19586,11 +19841,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Leafy green – Lettuce.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -19738,11 +19988,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Leafy green – Lettuce.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -19890,11 +20135,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Leafy green – Lettuce.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -20042,11 +20282,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Leafy green – Lettuce.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -20194,11 +20429,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Leafy green – Lettuce.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -20346,11 +20576,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Leafy green – Lettuce.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -20498,11 +20723,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Leafy green – Lettuce.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -20650,11 +20870,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Leafy green – Lettuce.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -20802,11 +21017,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Leafy green – Lettuce.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -20969,13 +21179,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "open instruments"
       }
     ],
-    "features": [
-      "Pioneering design pairs pathogen detection with hygiene indicators in a single reaction.",
-      "Hygiene indicators flag process drift before it becomes a recall — prevention, not reaction.",
-      "Four targets in one assay cuts reagent and labor by three-quarters versus separate tests.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Confectionery": {
         "sampling": {
@@ -21007,10 +21210,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -21158,10 +21357,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -21309,10 +21504,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -21460,10 +21651,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -21611,10 +21798,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -21762,10 +21945,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -21913,10 +22092,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -22064,10 +22239,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -22215,10 +22386,6 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
-              "matrices": [
-                "Environmental stainless-steel surfaces.",
-                "Surface"
-              ],
               "timeEstimated": false
             },
             {
@@ -22368,20 +22535,26 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "~67% reaction savings"
       }
     ],
-    "features": [
-      "Identifies Vibrio cholerae, Vibrio parahaemolyticus and Vibrio vulnificus in one reaction via Mila multiplex.",
-      "Species-level Vibrio insight in one test sharpens corrective-action decisions.",
-      "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Seafood": {
         "sampling": {
           "options": []
         },
         "enrichment": {
-          "options": []
+          "options": [
+            {
+              "productKey": "augmentis_31_universal_surfaces",
+              "catalogCode": [
+                "V-FL18",
+                "V-FP08"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            }
+          ]
         },
         "mediumSupplement": {
           "options": []
@@ -22444,13 +22617,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "subtitle": "yeast-focused panel"
       }
     ],
-    "features": [
-      "Detects three core wine-spoilage yeasts in one reaction via Mila multiplex design.",
-      "Panel tuned specifically to the Saccharomyces and Zygosaccharomyces yeasts that spoil wine.",
-      "Three targets in one assay cut reagent and labor by two-thirds versus separate tests.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
-    ],
     "stagesByIndustry": {
       "Beer": {
         "sampling": {
@@ -22458,6 +22624,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_5_pdb",
               "catalogCode": [
@@ -22505,6 +22683,18 @@ export const PROTOCOLS: ProtocolDef[] = [
         },
         "enrichment": {
           "options": [
+            {
+              "productKey": "augmentis_21_yeast_molds",
+              "catalogCode": [
+                "V-FL12",
+                "V-FP18"
+              ],
+              "sampleTypes": [
+                "Environmental"
+              ],
+              "timeHours": 48,
+              "timeEstimated": false
+            },
             {
               "productKey": "augmentis_5_pdb",
               "catalogCode": [
@@ -22580,13 +22770,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "title": "Reaction savings",
         "subtitle": "~50% reaction savings"
       }
-    ],
-    "features": [
-      "Detects Salmonella and E. coli together in one reaction via KAi melting-curve.",
-      "Two pathogens in one assay halves reagent and labor versus separate tests.",
-      "Single FAM channel runs on basic open thermocyclers — no proprietary instrument.",
-      "Internal control monitors each reaction and supports automated TxA interpretation.",
-      "Ready-to-use SPID format with preloaded strips cuts handling and speeds the run."
     ],
     "stagesByIndustry": {
       "Confectionery": {

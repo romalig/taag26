@@ -8,6 +8,26 @@ import { BROCHURES, PCR_TECH_DETAILS, AOAC_KIT_IDS } from "./data/brochures";
 import { COMBINATION_BRIEFS, combinationKey } from "./data/combinationBriefs";
 import { STAGE_LABELS, MICRO_BY_ID, formatTime, type Protocol, type ResolvedStageOption } from "./workflowData";
 import { type ValueBriefData, type BriefTechDetail, type BriefRelated, type BriefRow } from "./ProductBrief";
+import { PRODUCTS } from "./data/products";
+import { heroImageForKit, heroImageForIndustry, heroImageForIndustries } from "./data/industryHeroImages";
+
+// Turns a raw protocol target (e.g. "Escherichia_coli_O157_H7", "Lactobacillus_group_…")
+// into a clean display name, so every kit can show a "Detected microorganisms" list even
+// when the brochure doesn't curate one.
+function humanizeTarget(t: string): string {
+  let s = t;
+  const gi = s.indexOf("_group_");           // collapse "X_group_<long list>" -> "X group"
+  if (gi >= 0) s = s.slice(0, gi) + " group";
+  s = s.replace(/_/g, " ").replace(/\s+/g, " ").trim();
+  return s
+    .replace(/\bEscherichia coli\b/g, "E. coli")
+    .replace(/\bListeria monocytogenes\b/g, "L. monocytogenes")
+    .replace(/\bStaphylococcus aureus\b/g, "S. aureus")
+    .replace(/\bO157 H7\b/g, "O157:H7");
+}
+function targetsToDetected(targets?: string[]): string[] | null {
+  return targets && targets.length ? targets.map(humanizeTarget) : null;
+}
 
 const STAGE_PURPOSE: Record<string, string> = {
   sampling: "Collects and stabilizes the sample for testing",
@@ -15,21 +35,9 @@ const STAGE_PURPOSE: Record<string, string> = {
   extraction: "Releases and purifies nucleic acids for PCR",
 };
 
-// Hero image resolution (modal + PDF), in priority order:
-//   1. Per-kit override (KIT_HERO) — wins over everything, for one specific kit.
-//   2. Per-industry override (INDUSTRY_HERO) — applies to all kits in that industry.
-//   3. null — each surface keeps its own default (modal: /foods2.png, PDF: /hero_brochure.png).
-const KIT_HERO: Record<string, string> = {
-  "V-EQ30": "/Coca_cola.jpg",
-};
-const INDUSTRY_HERO: Record<string, string> = {
-  "Beverage": "/bottling_plant.png",
-  "Beer": "/beer.png",
-  "Wine": "/wine.png",
-};
-function heroForKit(kitId: string | null, industry: string | null): string | null {
-  return (kitId && KIT_HERO[kitId]) || (industry && INDUSTRY_HERO[industry]) || null;
-}
+// Hero image (modal + PDF) is derived from the industries a kit serves (mainIndustries): its
+// primary industry's image, or /foods.png when it spans >4 industries or declares none.
+// The industry→image map and the rule live in ./data/industryHeroImages.
 const DEFAULT_KIT_IMAGE = "/kit-placeholder.png";
 
 // --- Time to results: every PCR brief shows it with an hours number, in highlights AND the comparison.
@@ -120,7 +128,7 @@ export function briefFromProtocol(p: Protocol, industry: string | null): ValueBr
     description: broc?.description ?? p.description.en,
     descriptionIsCustom: !!broc?.description,
     keyAdvantages: p.keyAdvantages,
-    features: p.features,
+    features: [],
     techDetails: tech,
     relatedProducts: related,
     presentations: pcrStage ? pcrStage.chosen.presentations : [],
@@ -130,7 +138,7 @@ export function briefFromProtocol(p: Protocol, industry: string | null): ValueBr
       technology: p.technology ?? "Real-Time PCR",
     },
     detects: p.detects.length ? p.detects.map(id => MICRO_BY_ID[id]?.shortName ?? id).join(", ") : null,
-    detectedList: broc?.detectedList ?? null,
+    detectedList: broc?.detectedList ?? targetsToDetected(p._def?.targets),
     highlights,
     plant: broc?.plant ?? [],
     lab: broc?.lab ?? [],
@@ -139,8 +147,13 @@ export function briefFromProtocol(p: Protocol, industry: string | null): ValueBr
     pdfDescription: broc?.pdfDescription,
     comparisonRows,
     isAigor: (p.technology ?? "").includes("AiGOR"),
+    isAoac,
     isPcr: true,
-    heroImage: heroForKit(p.id, industry),
+    // Protocol selector passes the selected industry -> hero = that industry's image.
+    // Products Explorer passes null -> hero = the kit's curated primary-industry image.
+    heroImage: industry
+      ? heroImageForIndustry(industry)
+      : heroImageForKit(p.id, p._def.mainIndustries),
     // Use the curated brochure image when present (e.g. "/Elevia_29.png"); else fall back to the
     // catalog-code name. The modal/PDF add their own onError/placeholder when the file is missing.
     kitImage: broc?.kitImage ?? `/${p.id}.png`,
@@ -167,7 +180,7 @@ export function briefFromStageOption(o: ResolvedStageOption): ValueBriefData {
     isPcr: false,
     category: o.category,
     productLine: o.productLine,
-    heroImage: null,
+    heroImage: heroImageForIndustries(PRODUCTS[o.productKey]?.mainIndustries ?? []),
     // Non-PCR kits follow the same naming as PCR (`/${catalogCode}.png`); fall back to the
     // placeholder when the option has no catalog code. Previously every non-PCR kit was hardcoded
     // to the placeholder, so none of their real images ever loaded.
@@ -208,6 +221,7 @@ export function combinedBriefFromStage(rs: { groups?: { mode: string; options: R
   });
   // Representative image for the combination: the first member's kit photo (no single combined photo exists).
   const firstCat = byKey.get(orderedKeys[0])?.cat;
+  const comboIndustries = [...new Set(memberOpts.flatMap(o => PRODUCTS[o.productKey]?.mainIndustries ?? []))];
   return {
     name: combo.name,
     description: combo.description,
@@ -228,7 +242,7 @@ export function combinedBriefFromStage(rs: { groups?: { mode: string; options: R
     isPcr: false,
     category: combo.category,
     productLine: combo.productLine,
-    heroImage: null,
+    heroImage: heroImageForIndustries(comboIndustries),
     kitImage: firstCat ? `/${firstCat}.png` : DEFAULT_KIT_IMAGE,
   };
 }

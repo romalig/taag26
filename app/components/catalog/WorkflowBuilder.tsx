@@ -214,11 +214,12 @@ export default function WorkflowBuilder() {
 
   const sectionRef = useRef<HTMLElement>(null);
   const protocolsScrollRef = useRef<HTMLDivElement>(null);
+  const microStepRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
   const availableMicros: Microorganism[] = useMemo(
-    () => getMicroorganismsForIndustry(selectedIndustry),
+    () => [...getMicroorganismsForIndustry(selectedIndustry)].sort((a, b) => a.shortName.localeCompare(b.shortName)),
     [selectedIndustry]
   );
 
@@ -248,7 +249,7 @@ export default function WorkflowBuilder() {
     return { ...basePlan, protocols, coverageByProtocol: coverage };
   }, [basePlan, pcrSubstitutions, stageOverrides, enrichFormatOverrides, sampleType, selectedIndustry]);
 
-  const availableSampleTypes = useMemo(() => getAvailableSampleTypes(selectedIndustry), [selectedIndustry]);
+  const availableSampleTypes = useMemo(() => getAvailableSampleTypes(selectedIndustry, selectedMicroorganisms), [selectedIndustry, selectedMicroorganisms]);
 
   useEffect(() => {
     if (availableSampleTypes.length && !availableSampleTypes.includes(sampleType)) setSampleType(availableSampleTypes[0]);
@@ -369,7 +370,7 @@ export default function WorkflowBuilder() {
       const covers = coversById[p.id] ?? [];
       text += `Protocol ${idx + 1} — ${p.name} (${formatTime(p.totalTimeHours)})\n`;
       text += `  Detects: ${microNames(covers)}\n`;
-      p.chain.forEach(s => { stageMembers(s).forEach(o => { text += `  - ${STAGE_LABELS[s.key]}: ${productLine(o)}\n`; }); });
+      p.chain.forEach(s => { stageMembers(s).forEach(o => { text += `  - ${s.label ?? STAGE_LABELS[s.key]}: ${productLine(o)}\n`; }); });
       text += `\n`;
     });
     if (plan.uncoverable.length) text += `Not covered by current catalog: ${microNames(plan.uncoverable)}\n\n`;
@@ -518,6 +519,7 @@ export default function WorkflowBuilder() {
                 className={`text-left p-5 rounded-2xl border transition-colors ${isChosen ? "bg-[#111111] border-[#111111]" : "bg-gray-50 border-transparent hover:bg-gray-100"}`}>
                 <p className={`font-black text-base mb-1 ${isChosen ? "text-white" : "text-[#111111]"}`}>{opt.name}</p>
                 <p className={`text-xs font-medium ${isChosen ? "text-gray-400" : "text-gray-500"}`}>{[`Cat #${opt.cat ?? "null"}`, opt.format, opt.size].filter(Boolean).join(" · ")}</p>
+                {opt.description && <p className={`text-xs mt-1.5 leading-snug ${isChosen ? "text-gray-300" : "text-gray-500"}`}>{opt.description}</p>}
                 {opt.kitContent && <p className={`text-xs mt-1 ${isChosen ? "text-gray-500" : "text-gray-400"}`}>{opt.kitContent}</p>}
               </button>
             );
@@ -603,7 +605,7 @@ export default function WorkflowBuilder() {
                 return (
                   <button
                     key={industry.name}
-                    onClick={() => { setSelectedIndustry(industry.name); setSelectedMicroorganisms([]); setProtocolConfirmed(false); setPcrSubstitutions({}); setStageOverrides({}); setEnrichFormatOverrides({}); setStep(2); }}
+                    onClick={() => { setSelectedIndustry(industry.name); setSelectedMicroorganisms([]); setProtocolConfirmed(false); setPcrSubstitutions({}); setStageOverrides({}); setEnrichFormatOverrides({}); setStep(2); setTimeout(() => microStepRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50); }}
                     className="p-6 md:p-10 bg-white rounded-2xl md:rounded-[2rem] transition-all duration-300 flex flex-col items-center justify-center text-center min-h-[130px] md:min-h-[160px] gap-4 md:gap-5 group hover:bg-[#111111]"
                   >
                     <Icon className="w-9 h-9 md:w-12 md:h-12 shrink-0 text-gray-200 group-hover:text-[#FF270A] transition-colors" strokeWidth={1.5} />
@@ -619,7 +621,7 @@ export default function WorkflowBuilder() {
         {step === 2 && (
           <div className="flex flex-col items-center justify-center flex-grow animate-in fade-in slide-in-from-right-8 duration-500">
             <img src="/bacteria.png" alt="Bacteria" className="w-16 h-16 md:w-24 md:h-24 object-contain mb-8 md:mb-10 opacity-70" />
-            <div className="text-center mb-10 md:mb-14">
+            <div ref={microStepRef} className="text-center mb-10 md:mb-14 scroll-mt-24">
               <h3 className="text-3xl md:text-5xl font-black text-[#111111] mb-3 tracking-tighter leading-none">Select target microorganisms</h3>
               <p className="text-gray-400 font-medium text-sm">Targets validated for {selectedIndustry}. Choose the pathogens, indicators, or spoilage organisms you need to detect.</p>
             </div>
@@ -685,7 +687,7 @@ export default function WorkflowBuilder() {
                   <div className="flex items-start gap-3 bg-orange-50 border border-orange-100 rounded-2xl p-4 mb-6 max-w-2xl">
                     <AlertTriangle className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
                     <p className="text-xs text-orange-700 font-medium leading-relaxed">
-                      No catalog protocol currently covers: <span className="font-black">{microNames(plan.uncoverable)}</span>. Our team can advise on alternatives.
+                      No {sampleType === "Environmental" ? "environmental" : "finished-product"} protocol currently covers: <span className="font-black">{microNames(plan.uncoverable)}</span>. Our team can advise on alternatives.
                     </p>
                   </div>
                 )}
@@ -800,7 +802,7 @@ export default function WorkflowBuilder() {
                       <Fragment key={stage}>
                         <div className="bg-white p-6 md:p-8 rounded-2xl md:rounded-[2rem] flex flex-col">
                           <span className="text-[9px] font-black text-[#111111] uppercase tracking-[0.2em] mb-5 block">
-                            {String(sIdx + 1).padStart(2, "0")} — {STAGE_LABELS[stage]}
+                            {String(sIdx + 1).padStart(2, "0")} — {rs.label ?? STAGE_LABELS[stage]}
                           </span>
                           <div className="flex-grow">
                             <h5 className="text-lg md:text-xl font-black text-[#111111] leading-tight tracking-tight mb-2">{prodName}</h5>
@@ -858,10 +860,16 @@ export default function WorkflowBuilder() {
                               </button>
                             )}
                             {isPcr ? (
-                              <button onClick={() => openBrief(briefFromProtocol(activeProtocol, selectedIndustry))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
-                                <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
-                              </button>
+                              <>
+                                <button onClick={() => openBrief(briefFromProtocol(activeProtocol, selectedIndustry))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                  <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
+                                </button>
+                                <a href={`/datasheets/${activeProtocol.id}.pdf`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                  <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Technical data sheet</span>
+                                </a>
+                              </>
                             ) : rs.chosen.features.length > 0 && (
                               <button onClick={() => openBrief(combinedBriefFromStage(rs) ?? briefFromStageOption(rs.chosen))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
                                 <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
@@ -902,7 +910,7 @@ export default function WorkflowBuilder() {
                       return (
                         <div key={stage} className="snap-start shrink-0 w-[80vw] bg-white p-6 rounded-2xl flex flex-col">
                           <span className="text-[9px] font-black text-[#111111] uppercase tracking-[0.2em] mb-5 block">
-                            {String(sIdx + 1).padStart(2, "0")} — {STAGE_LABELS[stage]}
+                            {String(sIdx + 1).padStart(2, "0")} — {rs.label ?? STAGE_LABELS[stage]}
                           </span>
                           <div className="flex-grow">
                             <h5 className="text-xl font-black text-[#111111] leading-tight tracking-tight mb-2">{prodName}</h5>
@@ -958,10 +966,16 @@ export default function WorkflowBuilder() {
                               </button>
                             )}
                             {isPcr ? (
-                              <button onClick={() => openBrief(briefFromProtocol(activeProtocol, selectedIndustry))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
-                                <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
-                              </button>
+                              <>
+                                <button onClick={() => openBrief(briefFromProtocol(activeProtocol, selectedIndustry))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                  <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
+                                </button>
+                                <a href={`/datasheets/${activeProtocol.id}.pdf`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                  <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
+                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Technical data sheet</span>
+                                </a>
+                              </>
                             ) : rs.chosen.features.length > 0 && (
                               <button onClick={() => openBrief(combinedBriefFromStage(rs) ?? briefFromStageOption(rs.chosen))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
                                 <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />

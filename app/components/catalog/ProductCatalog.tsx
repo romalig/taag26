@@ -147,7 +147,7 @@ interface CatalogProduct {
   technology: string | null;   // PCR only
   targets: string | null;      // PCR only, prettified
   aoac: boolean;
-  industries: string[];        // mainIndustries; [] = all
+  industries: string[];        // mainIndustries (finished scope); [] = no restriction -> shown in all industries
   timeHours: number | null;    // PCR → full workflow; others → own process. Sort key.
   timeLabel: string;           // "full workflow" | "enrichment" | "extraction" | "sampling" | …
   specs: Record<string, string>;
@@ -233,7 +233,7 @@ export default function ProductCatalog() {
   const { openModal } = useModal();
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTab, setSelectedTab] = useState("All");
+  const [selectedTab, setSelectedTab] = useState("PCR Kit");
   const [selectedIndustry, setSelectedIndustry] = useState("All Industries");
   const [isIndustryDropdownOpen, setIsIndustryDropdownOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -312,7 +312,7 @@ export default function ProductCatalog() {
   const specKeys = comparedProductsData.length > 0 ? Object.keys(comparedProductsData[0].specs) : [];
 
   return (
-    <section id="catalog" className="pt-24 pb-32 px-4 md:px-6 w-full max-w-[1400px] mx-auto font-sans relative">
+    <section id="catalog" className="pt-24 pb-6 px-4 md:px-6 w-full max-w-[1400px] mx-auto font-sans relative">
 
       {compareAlert && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-[200] bg-red-50 text-[#FF270A] border border-[#FF270A]/20 px-6 py-3 rounded-full text-sm font-bold shadow-[0_8px_30px_rgb(255,39,10,0.12)] flex items-center gap-3 animate-in slide-in-from-top-4 fade-in duration-300">
@@ -325,7 +325,7 @@ export default function ProductCatalog() {
       <div className="mb-10 md:mb-12 text-center flex flex-col items-center">
         <h2 className="text-4xl md:text-5xl font-black text-[#111111] mb-4 tracking-tighter leading-tight">Product Explorer</h2>
         <p className="text-base md:text-lg text-gray-500 font-medium leading-relaxed max-w-2xl mx-auto">
-          Search by microorganism, filter by product type, and compare specifications. PCR kits are ordered by the fastest complete workflow.
+          Search by microorganism, filter by product type, and compare specifications.
         </p>
       </div>
 
@@ -436,10 +436,12 @@ export default function ProductCatalog() {
                         className="flex items-center gap-2 text-[#111111] font-bold text-[10px] md:text-xs uppercase tracking-tight hover:text-[#FF270A] transition-colors">
                         <FileText className="w-4 h-4 text-[#FF270A]" /><span>Product Value Brief</span>
                       </button>
-                      <a href={datasheetHref(product.id)}
-                        className="flex items-center gap-2 text-[#111111] font-bold text-[10px] md:text-xs uppercase tracking-tight hover:text-[#FF270A] transition-colors">
-                        <FileDown className="w-4 h-4 text-[#FF270A]" /><span>Technical Data Sheet</span>
-                      </a>
+                      {product.isPcr && (
+                        <a href={datasheetHref(product.id)}
+                          className="flex items-center gap-2 text-[#111111] font-bold text-[10px] md:text-xs uppercase tracking-tight hover:text-[#FF270A] transition-colors">
+                          <FileDown className="w-4 h-4 text-[#FF270A]" /><span>Technical Data Sheet</span>
+                        </a>
+                      )}
                     </div>
                   </div>
 

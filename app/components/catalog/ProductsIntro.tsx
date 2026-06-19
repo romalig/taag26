@@ -34,12 +34,12 @@ const PRODUCT_FEATURES: ProductFeature[] = [
     badgeColor: "text-gray-800",
     title: "Elevia Line",
     description:
-      "Get answers the same day. Powered by AiGOR RNA technology, Elevia detects live cells down to 1 CFU without enrichment — so you release product sooner and act on contamination faster.",
+      "Get answers the same day. Powered by AiGOR RNA technology, Elevia kits detect down to 1 CFU without or with a short enrichment.",
     href: "/aigor",
     highlights: [
       { icon: Timer, title: "Results as fast as 3 hours", subtitle: "Skip the long enrichment steps." },
       { icon: TrendingUp, title: "10,000x higher sensitivity", subtitle: "Compared to traditional real-time PCR." },
-      { icon: Dna, title: "RNA detection", subtitle: "Targeting only active cells." },
+      { icon: Dna, title: "RNA detection", subtitle: "Targeting active cells." },
     ],
   },
   {
@@ -48,7 +48,7 @@ const PRODUCT_FEATURES: ProductFeature[] = [
     badgeColor: "text-blue-600",
     title: "Multiplex PCR Kits",
     description:
-      "Detect several pathogens in a single reaction. Our Ampliora and Specio kits deliver lab-grade accuracy with a simple, standardized protocol — fewer steps, fewer errors, and a clear answer you can trust.",
+      "Detect several pathogens in a single workflow. Our Ampliora and Specio kits deliver fast, simple, cost-effecitve and efficient PCR results.",
     href: "/industrial",
     highlights: [
       { icon: Layers, title: "Multiple targets, one reaction", subtitle: "Several pathogens at once." },
@@ -62,11 +62,11 @@ const PRODUCT_FEATURES: ProductFeature[] = [
     badgeColor: "text-purple-600",
     title: "TxA Ecosystem",
     description:
-      "Run your testing digitally. TxA ties your samples, results and reports into one platform — full traceability, fewer manual steps, and audit-ready records whenever you need them.",
+      "Run your testing digitally. TxA uses AI to tie your samples, results and reports into one platform.",
     href: "/TxA",
     highlights: [
       { icon: BrainCircuit, title: "AI-powered insights", subtitle: "From data to decisions." },
-      { icon: RefreshCw, title: "Automated results", subtitle: "No manual transcription." },
+      { icon: RefreshCw, title: "Automated results", subtitle: "No manual interpretation or transcription." },
       { icon: ShieldCheck, title: "Lab management & QA system", subtitle: "Traceable and audit-ready." },
     ],
   },
@@ -76,7 +76,7 @@ const PRODUCT_FEATURES: ProductFeature[] = [
     badgeColor: "text-[#FF270A]",
     title: "MILA",
     description:
-      "Need to detect something specific? MILA, our AI design engine, builds custom multiplex panels for your targets in weeks — so your testing menu fits your process, not the other way around.",
+      "Need to detect something specific? MILA, our AI design engine, builds custom multiplex panels for your targets in weeks.",
     href: "/customized",
     highlights: [
       { icon: CalendarClock, title: "Custom panels in weeks", subtitle: "From target to validated kit." },

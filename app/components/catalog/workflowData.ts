@@ -21,7 +21,7 @@
 
 import {
   Milk, Drumstick, CupSoda, Utensils, Leaf, Globe, Wine, Beer, Egg, Beef,
-  Pill, Fish, Candy, Soup, PawPrint, ShieldCheck, Factory,
+  Pill, Fish, Candy, Soup, PawPrint, ShieldCheck, Factory, Droplet,
   type LucideIcon,
 } from "lucide-react";
 
@@ -83,6 +83,7 @@ export interface ResolvedStage {
   chosen: ResolvedStageOption;          // primary selection (first group's chosen) — back-compat
   options: ResolvedStageOption[];        // all available options for this stage (flat)
   groups?: ResolvedGroup[];              // enrichment grouping; when present, drives display/time
+  label?: string;                        // overrides STAGE_LABELS[key] (e.g. "Sampling & Enrichment")
 }
 
 export interface Protocol {
@@ -95,7 +96,6 @@ export interface Protocol {
   sensitivity: string | null;
   description: { en: string | null };
   keyAdvantages: KeyAdvantage[];
-  features: string[];
   comparison: ProtocolComparison | null;
   chain: ResolvedStage[];
   totalTimeHours: number;
@@ -108,7 +108,7 @@ export interface Industry { name: string; icon: LucideIcon; }
 
 const INDUSTRY_ICONS: Record<string, LucideIcon> = {
   "Dairy": Milk, "Meat and Poultry": Drumstick, "Meat & Poultry": Beef,
-  "Beverage": CupSoda, "Beer": Beer, "Wine": Wine, "Ready-to-eat": Utensils,
+  "Beverage": CupSoda, "Water": Droplet, "Beer": Beer, "Wine": Wine, "Ready-to-eat": Utensils,
   "Fresh & Processed Produce": Leaf, "Egg Products": Egg, "Confectionery": Candy,
   "Sauces and condiments": Soup, "Seafood": Fish, "Nutraceutical": Pill,
   "Pharmaceutical": Pill, "Pet Food & Animal Feed": PawPrint,
@@ -276,11 +276,12 @@ function buildEnrichmentGroups(
     if (out.length) return out;
     // groups exist but none matched this sample type → fall through to default
   }
-  // default: each applicable medium is its own alternative group
-  return media.flatMap(o => {
-    const rg = resolveGroup(o.productKey, "alternative", [o.productKey]);
-    return rg ? [rg] : [];
-  });
+  // default: when a kit declares no groups, ALL applicable media for this sample type form ONE
+  // "alternative" group — the user picks a single medium (not several media combined in parallel).
+  // Genuine parallel/two-step enrichment must be declared explicitly via a "parallel" group.
+  const defaultKeys = [...new Set(media.map(o => o.productKey))];
+  const rg = resolveGroup("enrichment", "alternative", defaultKeys);
+  return rg ? [rg] : [];
 }
 
 // -----------------------------------------------------------------------------
@@ -295,6 +296,9 @@ export function resolveChain(def: ProtocolDef, preferred?: Partial<Record<StageK
   // enrichment stage resolves, then read when the supplement stages resolve (enrichment comes
   // first in STAGE_ORDER, so it's always known by then).
   const activeMediaKeys = new Set<string>();
+  // The sampling product chosen for this chain (Environmental only). Read when enrichment resolves
+  // (sampling precedes enrichment in STAGE_ORDER) to gate sampling-conditional enrichment options.
+  let activeSamplingKey: string | undefined;
 
   // Stages depend on the (kit, industry) pair. Pick the industry's stage set; if none is
   // selected or the kit doesn't declare that industry, fall back to any available set so the
@@ -309,7 +313,7 @@ export function resolveChain(def: ProtocolDef, preferred?: Partial<Record<StageK
       id: def.id, name: def.name, line: def.productLine, cat: def.catalogCode,
       detects: def.targets.map(normMicroId), technology: def.technology, sensitivity: def.sensitivity,
       description: { en: pcrProdX ? pcrProdX.description : null },
-      keyAdvantages: def.keyAdvantages, features: def.features,
+      keyAdvantages: def.keyAdvantages,
       comparison: COMPARISONS[def.id] ?? null,
       chain: [], totalTimeHours: 0, timeEstimated: true,
       extraTargets: 0, _def: def,
@@ -348,13 +352,27 @@ export function resolveChain(def: ProtocolDef, preferred?: Partial<Record<StageK
       let rawSampling = stages.sampling?.options ?? [];
       if (!rawSampling.length) rawSampling = kitSamplingOptions(def); // propagate across industries
       if (!rawSampling.length) continue;                // kit not surface-validated → no sampling
-      const resolvedS = rawSampling.flatMap(o => resolveOptions(o, key));
+      // In-device enrichment: a sampling device may run the enrichment in the same tube. Such an
+      // enrichment option (inDevice + requiresSampling) is folded INTO the sampling stage rather
+      // than shown as a separate stage — the stage becomes "Sampling & Enrichment" and takes the
+      // enrichment's time. Devices without an in-device enrichment keep their own collection time.
+      const enrOpts = stages.enrichment?.options ?? [];
+      const inDeviceEnrFor = (samplingKey: string) =>
+        enrOpts.find(o => o.inDevice && optionMatchesSample(o, sampleType) && (o.requiresSampling?.includes(samplingKey) ?? false));
+      const resolvedS = rawSampling.flatMap(o => resolveOptions(o, key)).map(opt => {
+        const enr = inDeviceEnrFor(opt.productKey);
+        return (enr && enr.timeHours != null)
+          ? { ...opt, timeHours: enr.timeHours, timeEstimated: enr.timeEstimated }
+          : opt;
+      });
       let chosenS: ResolvedStageOption | undefined;
       if (preferred && preferred[key]) chosenS = resolvedS.find(o => o.optionId === preferred[key]);
       if (!chosenS) chosenS = resolvedS.slice().sort((a, b) => (a.timeHours ?? 1e9) - (b.timeHours ?? 1e9))[0];
       if (chosenS.timeHours != null) total += chosenS.timeHours;
       if (chosenS.timeEstimated || chosenS.timeHours == null) estimated = true;
-      chain.push({ key, chosen: chosenS, options: resolvedS });
+      activeSamplingKey = chosenS.productKey;   // drives sampling-gated enrichment below
+      const samplingLabel = inDeviceEnrFor(chosenS.productKey) ? "Sampling & Enrichment" : undefined;
+      chain.push({ key, chosen: chosenS, options: resolvedS, label: samplingLabel });
       continue;
     }
 
@@ -406,7 +424,20 @@ export function resolveChain(def: ProtocolDef, preferred?: Partial<Record<StageK
     // MAXIMUM over all active media — never the sum. (A parallel group contributes all its media;
     // an alternative group contributes only its chosen medium.)
     if (key === "enrichment") {
-      const groups = buildEnrichmentGroups(stages.enrichment, usable, sampleType, preferred?.enrichment, enrichFormats);
+      // Enrichment is optional, sample-type-specific, AND conditional on the chosen sampling device.
+      // No raw fallback (unlike extraction): if nothing applies, the kit simply has no enrichment.
+      // An option may declare `requiresSampling` (the sampling products it pairs with) — it is kept
+      // only when the active sampling is one of them. So captus_zero_1 (direct) yields no enrichment,
+      // while switching to captus_xpress brings the enrichment step back into the protocol.
+      const samplingGated = filtered.filter(o => {
+        if (o.inDevice) return false;          // in-device enrichment is folded into the sampling stage
+        const req = o.requiresSampling;
+        return !req || !req.length || (activeSamplingKey != null && req.includes(activeSamplingKey));
+      });
+      if (!samplingGated.length) continue;
+      const resolvedEnr = samplingGated.flatMap(o => resolveOptions(o, key));
+      const groups = buildEnrichmentGroups(stages.enrichment, samplingGated, sampleType, preferred?.enrichment, enrichFormats);
+      if (!groups.length) continue;          // nothing applies -> omit the stage entirely
       let stageTime = 0; let anyTime = false;
       for (const g of groups) {
         if (g.mode === "parallel") {
@@ -422,7 +453,7 @@ export function resolveChain(def: ProtocolDef, preferred?: Partial<Record<StageK
         }
       }
       if (anyTime) total += stageTime;
-      chain.push({ key, chosen: groups[0]?.chosen ?? chosen, options: resolved, groups });
+      chain.push({ key, chosen: groups[0]?.chosen ?? chosen, options: resolvedEnr, groups });
       continue;
     }
 
@@ -436,7 +467,7 @@ export function resolveChain(def: ProtocolDef, preferred?: Partial<Record<StageK
     id: def.id, name: def.name, line: def.productLine, cat: def.catalogCode,
     detects: def.targets.map(normMicroId), technology: def.technology, sensitivity: def.sensitivity,
     description: { en: pcrProd ? pcrProd.description : null },
-    keyAdvantages: def.keyAdvantages, features: def.features,
+    keyAdvantages: def.keyAdvantages,
     comparison: COMPARISONS[def.id] ?? null,
     chain, totalTimeHours: Math.round(total * 100) / 100, timeEstimated: estimated,
     extraTargets: 0, _def: def,
@@ -448,8 +479,11 @@ export function resolveChain(def: ProtocolDef, preferred?: Partial<Record<StageK
  *  workflow (enrichment/extraction/pcr), which every kit does. */
 export function protocolSampleTypes(def: ProtocolDef): SampleType[] {
   const out: SampleType[] = [];
-  if (kitIsSurfaceValidated(def)) out.push("Environmental");
-  out.push("Finished");
+  const surface = kitIsSurfaceValidated(def);
+  if (surface) out.push("Environmental");
+  // Finished only if the kit declares at least one industry. No industries
+  // (mainIndustries: []) means surface-only: shown in Environmental, never in Finished.
+  if (def.mainIndustries.length > 0) out.push("Finished");
   return out;
 }
 
@@ -475,6 +509,8 @@ export function getMicroorganismsForIndustry(industry: string | null): Microorga
   // still resolve to their microorganism entry.
   const seen = new Set<string>();
   const micros: Microorganism[] = [];
+  // The picker lists the organisms of kits that have FINISHED products in this industry
+  // (kits that declare it). Surface-only kits (no industries) contribute no organisms here.
   for (const def of defsForIndustry(industry)) {
     for (const target of def.targets) {
       const m = MICRO_BY_ID[normMicroId(target)];
@@ -494,16 +530,39 @@ function defsForIndustry(industry: string | null): ProtocolDef[] {
 }
 
 export function getResolvedProtocolsForIndustry(industry: string | null, sampleType?: SampleType): Protocol[] {
-  // Environmental (surface) only lists kits validated for surfaces (have a sampling stage in
-  // at least one industry — cross-industry rule). Finished lists all kits in the industry.
-  return defsForIndustry(industry)
-    .filter(d => sampleType !== "Environmental" || kitIsSurfaceValidated(d))
+  // Sample-type semantics differ on the INDUSTRY axis:
+  //  • Finished      → industry-scoped (matrix-specific enrichment): only kits that DECLARE the
+  //                    industry in mainIndustries.
+  //  • Environmental → industry-INDEPENDENT: surface monitoring is generic (a swab is a swab), so
+  //                    EVERY surface-validated kit is offered regardless of the selected industry.
+  //                    resolveChain falls back to the kit's own stage set; the target filter
+  //                    downstream narrows to the requested organisms.
+  //                    governs Finished via protocolSampleTypes().
+  const defs = sampleType === "Environmental"
+    ? PROTOCOLS.filter(kitIsSurfaceValidated)
+    : defsForIndustry(industry);
+  return defs
+    .filter(d => sampleType == null || protocolSampleTypes(d).includes(sampleType))
     .map(d => resolveChain(d, undefined, sampleType, industry));
 }
 
-export function getAvailableSampleTypes(industry: string | null): SampleType[] {
+export function getAvailableSampleTypes(industry: string | null, targets?: string[]): SampleType[] {
+  // Target-aware: a sample type is offered only when at least one REQUESTED target is coverable in
+  // it — mirroring getResolvedProtocolsForIndustry so the toggle never offers a dead end (e.g.
+  // Seafood + Vibrio cholerae used to offer Environmental even though no surface kit covers it).
+  //   • Finished      → kits that DECLARE the industry.
+  //   • Environmental → every surface-validated kit (cross-industry).
+  // With no targets (catalog enumeration) the request is treated as "any".
+  const req = (targets ?? []).map(normMicroId);
+  const covers = (d: ProtocolDef) =>
+    req.length === 0 || req.some(t => d.targets.map(normMicroId).includes(t));
   const set = new Set<SampleType>();
-  defsForIndustry(industry).forEach(d => protocolSampleTypes(d).forEach(s => set.add(s)));
+  defsForIndustry(industry).forEach(d => {
+    if (covers(d) && protocolSampleTypes(d).includes("Finished")) set.add("Finished");
+  });
+  PROTOCOLS.filter(kitIsSurfaceValidated).forEach(d => {
+    if (covers(d) && protocolSampleTypes(d).includes("Environmental")) set.add("Environmental");
+  });
   return (["Environmental", "Finished"] as SampleType[]).filter(s => set.has(s));
 }
 
@@ -519,7 +578,13 @@ export function getPcrAlternatives(requested: string[], industry: string | null,
   // All kits (in the selected industry) that detect the requested target(s). Ordered by
   // fewest extra targets first, then lowest time — so the most specific kit leads and is the
   // recommended one. No tier cutoff: every valid kit for the missing target is offered.
-  return defsForIndustry(industry)
+  // Surfaces are cross-industry (see getResolvedProtocolsForIndustry): Environmental considers
+  // every surface-validated kit; Finished only kits declaring the industry.
+  const altDefs = sampleType === "Environmental"
+    ? PROTOCOLS.filter(kitIsSurfaceValidated)
+    : defsForIndustry(industry);
+  return altDefs
+    .filter(d => sampleType == null || protocolSampleTypes(d).includes(sampleType))
     .filter(d => [...req].every(t => d.targets.map(normMicroId).includes(t)))
     .map(d => {
       const p = resolveChain(d, undefined, sampleType, industry);

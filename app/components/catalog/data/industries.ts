@@ -16,6 +16,7 @@ export interface IndustryDef {
 
 export const INDUSTRIES: IndustryDef[] = [
   { "name": "Beer" },
+  { "name": "Wine" },
   { "name": "Beverage" },
   { "name": "Confectionery" },
   { "name": "Dairy" },
@@ -29,5 +30,5 @@ export const INDUSTRIES: IndustryDef[] = [
   { "name": "Sauces and condiments" },
   { "name": "Seafood" },
   { "name": "Sterile products" },
-  { "name": "Wine" },
+  { "name": "Water" },
 ];

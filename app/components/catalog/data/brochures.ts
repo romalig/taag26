@@ -19,7 +19,7 @@ export const HIGHLIGHT_ICON_KEYS = [
 ] as const;
 
 // PCR kits whose "Extensive validation" item shows the AOAC logo.
-export const AOAC_KIT_IDS: string[] = ["V-SF95", "V-SF193", "V-SF68", "V-PAT04"];
+export const AOAC_KIT_IDS: string[] = ["V-SF95", "V-SF193", "V-SF68", "V-PAT04", "V-SF42", "V-SF184"];
 
 export const PCR_TECH_DETAILS: TechDetailItem[] = [
   {
@@ -72,20 +72,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Ultra-high sensitivity",
-        "body": "AiGOR amplifies RNA from viable cells, detecting contamination at far lower loads than standard DNA PCR — catching risk that other methods miss."
+        "title": "Two pathogens, one reaction",
+        "body": "Salmonella spp. and Enterobacteria are detected together in a single AiGOR reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
+      },
+      {
+        "title": "Same-day results",
+        "body": "Environmental results in ~4 h and finished product in ~9 h — every sample is read inside the working day, with no overnight wait."
+      },
+      {
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Fewer false positives",
-        "body": "Targeting RNA from living cells avoids the dead-cell signals that cause false positives in DNA-based assays, reducing needless re-testing and holds in the lab."
-      },
-      {
-        "title": "Two answers, one reaction",
-        "body": "Pathogen and hygiene indicator are detected together, halving reactions, reagent use and hands-on time versus running them separately."
-      },
-      {
-        "title": "Open platform, free interpretation",
-        "body": "Runs on thermocyclers the lab already owns, with automated TxA result calling included — no proprietary instrument or interpretation subscription."
+        "body": "Targeting RNA from viable cells avoids the dead-cell signals that drive false positives in DNA assays, cutting needless re-testing in the lab."
       }
     ],
     "highlights": [
@@ -93,7 +93,7 @@ export const BROCHURES: Record<string, KitBrochure> = {
         "icon": "timer",
         "title": "Results in 3 h",
         "subtitle": "Skip long enrichments",
-        "pdfText": "AiGOR™ amplifies RNA directly from the sample, with no overnight enrichment. Swabs return in ~3 h and finished product in ~9 h, both within one shift — a multi-day wait becomes a same-day decision."
+        "pdfText": "AiGOR amplifies RNA directly from the sample, with no enrichment. Swabs return in ~3 h and finished product in ~9 h, both within one shift — a multi-day wait becomes a same-day decision."
       },
       {
         "icon": "target",
@@ -111,7 +111,7 @@ export const BROCHURES: Record<string, KitBrochure> = {
         "icon": "rna",
         "title": "RNA detection",
         "subtitle": "Targets active cells",
-        "pdfText": "Conventional PCR reads DNA, which lingers after cells die and can cause false positives. AiGOR™ reads RNA, which degrades fast once a cell dies — so results reflect live, active organisms and action follows real risk."
+        "pdfText": "Conventional PCR reads DNA, which lingers after cells die and can cause false positives. AiGOR reads RNA, which degrades fast once a cell dies — so results reflect live, active organisms and action follows real risk."
       }
     ],
     "pdfPlant": [
@@ -200,19 +200,19 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Specific by AI design",
-        "body": "Mila-designed primers and probes target Salmonella spp. tightly, cutting cross-reactivity and giving analysts unambiguous calls that hold up under review."
+        "body": "Mila-designed primers and probes target Salmonella spp. tightly, cutting cross-reactivity so analysts get unambiguous calls they can stand behind."
       },
       {
-        "title": "Faster than culture",
-        "body": "A molecular answer is ready before culture confirmation would be, shortening turnaround and freeing bench time and incubator space for other work."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware, no instrument lock-in and no forced capital purchase."
+        "title": "TxA runs the bench",
+        "body": "TxA interprets every run automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Lower cost per result",
-        "body": "Open instruments and competitive reagent pricing keep the per-test cost below the closed proprietary systems competitors charge for."
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -264,19 +264,19 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Specific by AI design",
-        "body": "Mila-designed primers target E. coli with high specificity, giving analysts a dependable hygiene-indicator result with minimal cross-reactivity."
+        "body": "Mila-designed primers and probes target E. coli tightly, cutting cross-reactivity so analysts get unambiguous calls they can stand behind."
       },
       {
-        "title": "Faster than culture",
-        "body": "Hygiene results come in well before culture confirmation, removing a long incubation wait and speeding sanitation verification for the lab."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware, lock-in or forced capital purchase."
+        "title": "TxA runs the bench",
+        "body": "TxA interprets every run automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Lower cost per result",
-        "body": "Open instruments and competitive reagent pricing keep the per-test cost below closed proprietary systems."
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -327,20 +327,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Targets the taint marker",
-        "body": "The assay detects the guaiacol-producing gene directly, identifying the molecular cause of off-flavor rather than inferring it from organism presence alone."
+        "title": "Two targets, one reaction",
+        "body": "Alicyclobacillus spp. and Guaiacol producing bacteria are detected together in a single reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "ACB plus marker in one run",
-        "body": "Alicyclobacillus and the spoilage marker are screened together in a single reaction, halving the work versus running separate assays."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Direct two-hour workflow",
-        "body": "A streamlined ~2 h protocol keeps hands-on time and turnaround low for routine acidified-beverage spoilage screening."
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or instrument lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -391,20 +391,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Species and genus in one",
-        "body": "The assay separates L. monocytogenes from the broader Listeria genus in a single reaction, giving a sharper result than a generic Listeria call."
+        "title": "Two pathogens, one reaction",
+        "body": "Listeria spp. and L. monocytogenes are detected together in a single reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~50% fewer reactions",
-        "body": "Both targets resolve in one assay rather than two, cutting reagent use, hands-on time and thermocycler load per sample by about half."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Sharper decisions",
-        "body": "A species-level answer reduces ambiguous results and the repeat testing they trigger, keeping the lab's workflow clean."
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or instrument lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -456,19 +456,19 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Two pathogens, one reaction",
-        "body": "Salmonella spp. and Listeria spp. are detected together in a single assay, delivering a combined safety read without running them as separate tests."
+        "body": "Listeria spp. and Salmonella spp. are detected together in a single reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~50% fewer reactions",
-        "body": "One combined assay instead of two cuts reagent use, hands-on time and thermocycler load per sample by about half."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Faster release",
-        "body": "A single combined result removes a sequential testing step, shortening turnaround and clearing both pathogens at once."
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or instrument lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -519,20 +519,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Three indicators, one reaction",
-        "body": "Three key water indicators are detected together in a single assay, giving a complete water read without running separate tests for each."
+        "title": "Three pathogens, one reaction",
+        "body": "E. coli, Citrobacter spp. and Klebsiella spp. are detected together in a single reaction — one assay instead of three separate assays, about 67% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~67% fewer reactions",
-        "body": "One combined assay instead of three cuts reagent use, hands-on time and thermocycler load per sample by roughly two-thirds."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Faster than culture",
-        "body": "Molecular results arrive before culture confirmation, speeding water-release decisions for the lab."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all three targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -583,20 +583,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Three indicators, one reaction",
-        "body": "Three key water indicators are detected together in a single assay, giving a complete water read without running separate tests for each."
+        "title": "Three targets, one reaction",
+        "body": "Enterococcus spp., Enterobacter spp. and Escherichia spp. are detected together in a single reaction — one assay instead of three separate assays, about 67% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~67% fewer reactions",
-        "body": "One combined assay instead of three cuts reagent use, hands-on time and thermocycler load per sample by roughly two-thirds."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Faster than culture",
-        "body": "Molecular results arrive before culture confirmation, speeding water-release decisions for the lab."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all three targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -647,20 +647,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Three spoilage targets, one run",
-        "body": "ACB, Zygosaccharomyces and the guaiacol gene are screened together in a single reaction, covering the core acidified-beverage spoilage risks at once."
+        "title": "Three targets, one reaction",
+        "body": "Alicyclobacillus spp., Zygosaccharomyces spp. and Guaiacol producing bacteria are detected together in a single reaction — one assay instead of three separate assays, about 67% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~67% fewer reactions",
-        "body": "One combined assay instead of three cuts reagent use, hands-on time and thermocycler load per sample by roughly two-thirds."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Targets the taint marker",
-        "body": "Detecting the guaiacol gene directly identifies the molecular cause of off-flavor rather than inferring it from organism presence."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all three targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -712,19 +712,19 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Three pathogens, one reaction",
-        "body": "Salmonella, L. monocytogenes and E. coli O157:H7 are detected together in a single assay for a complete safety read."
+        "body": "Salmonella spp., L. monocytogenes and E. coli O157:H7 are detected together in a single reaction — one assay instead of three separate assays, about 67% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~67% fewer reactions",
-        "body": "One combined assay instead of three cuts reagent use, hands-on time and thermocycler load per sample by roughly two-thirds."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Comprehensive safety",
-        "body": "Three critical pathogens screened at once reduce the chance a relevant target is missed on any sample."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all three targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -775,20 +775,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Three targets, one reaction",
-        "body": "Salmonella plus L. monocytogenes and the Listeria genus are detected together in a single assay for a sharper combined read."
+        "title": "Three pathogens, one reaction",
+        "body": "Salmonella spp., L. monocytogenes and Listeria spp. are detected together in a single reaction — one assay instead of three separate assays, about 67% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~67% fewer reactions",
-        "body": "One combined assay instead of three cuts reagent use, hands-on time and thermocycler load per sample by roughly two-thirds."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Species-level clarity",
-        "body": "Distinguishing L. monocytogenes from the genus reduces ambiguous results and the repeat testing they trigger."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all three targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -839,20 +839,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Three targets, one reaction",
-        "body": "Salmonella plus L. monocytogenes and the Listeria genus are detected together in a single assay for a sharper combined read."
+        "title": "Three pathogens, one reaction",
+        "body": "Salmonella spp., L. monocytogenes and Listeria spp. are detected together in a single reaction — one assay instead of three separate assays, about 67% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~67% fewer reactions",
-        "body": "One combined assay instead of three cuts reagent use, hands-on time and thermocycler load per sample by roughly two-thirds."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Species-level clarity",
-        "body": "Distinguishing L. monocytogenes from the genus reduces ambiguous results and the repeat testing they trigger."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all three targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -903,20 +903,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Full STEC panel, one reaction",
-        "body": "STEC, O157:H7 and Salmonella are detected together in a single assay, covering the core STEC program at once."
+        "title": "Three pathogens, one reaction",
+        "body": "E. coli STEC, E. coli O157:H7 and Salmonella spp. are detected together in a single reaction — one assay instead of three separate assays, about 67% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~67% fewer reactions",
-        "body": "One combined assay instead of three cuts reagent use, hands-on time and thermocycler load per sample by roughly two-thirds."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "STEC strain ID",
-        "body": "Resolves Shiga toxin-producing strains specifically, going beyond a generic E. coli result to the pathogenic strains."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all three targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -967,20 +967,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Four beer yeasts, one reaction",
-        "body": "The four main beer-spoilage yeasts are detected together in a single assay, giving a complete yeast read without four separate tests."
+        "title": "Five targets, one reaction",
+        "body": "Five targets run together in a single reaction — one assay instead of five separate assays, about 80% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~75% fewer reactions",
-        "body": "One combined assay instead of four cuts reagent use, hands-on time and thermocycler load per sample by about three-quarters."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "~2.5 h direct workflow",
-        "body": "A streamlined ~2.5 h beer protocol keeps hands-on time and turnaround low for routine spoilage screening."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all five targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Protects shelf life",
-        "body": "Early detection of spoilage yeast lets the brewery act before a batch is compromised."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1031,20 +1031,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Four beer yeasts, one reaction",
-        "body": "The four main beer-spoilage yeasts are detected together in a single assay, giving a complete yeast read without four separate tests."
+        "title": "Four targets, one reaction",
+        "body": "Four targets run together in a single reaction — one assay instead of four separate assays, about 75% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~75% fewer reactions",
-        "body": "One combined assay instead of four cuts reagent use, hands-on time and thermocycler load per sample by about three-quarters."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "~2.5 h direct workflow",
-        "body": "A streamlined ~2.5 h beer protocol keeps hands-on time and turnaround low for routine spoilage screening."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all four targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Protects shelf life",
-        "body": "Early detection of spoilage yeast lets the brewery act before a batch is compromised."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1095,20 +1095,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Four beer bacteria, one reaction",
-        "body": "The four main beer-spoilage bacteria are detected together in a single assay, giving a complete bacterial read without four separate tests."
+        "title": "Four targets, one reaction",
+        "body": "Four targets run together in a single reaction — one assay instead of four separate assays, about 75% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~75% fewer reactions",
-        "body": "One combined assay instead of four cuts reagent use, hands-on time and thermocycler load per sample by about three-quarters."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "~2.5 h direct workflow",
-        "body": "A streamlined ~2.5 h beer protocol keeps hands-on time and turnaround low for routine spoilage screening."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all four targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Protects shelf life",
-        "body": "Early detection of spoilage bacteria lets the brewery act before a batch is compromised."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1159,20 +1159,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Four anaerobe spoilers, one reaction",
-        "body": "Four strict-anaerobe beer spoilers are detected together in a single assay, covering hard-to-recover organisms at once."
+        "title": "Five targets, one reaction",
+        "body": "Five targets run together in a single reaction — one assay instead of five separate assays, about 80% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~75% fewer reactions",
-        "body": "One combined assay instead of four cuts reagent use, hands-on time and thermocycler load per sample by about three-quarters."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Catches what culture misses",
-        "body": "Molecular detection finds strict anaerobes that conventional plating frequently fails to recover."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all five targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "~2.5 h direct workflow",
-        "body": "A streamlined ~2.5 h beer protocol keeps hands-on time and turnaround low for routine screening."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1223,20 +1223,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "One run, four groups",
-        "body": "Covering four spoilage groups in a single reaction gives a comprehensive low-pH risk read per sample without running four separate tests, simplifying a complex screening problem."
+        "title": "Four targets, one reaction",
+        "body": "Four targets run together in a single reaction — one assay instead of four separate assays, about 75% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "High matrix compatibility",
-        "body": "Validated for complex beverage matrices — high-sugar, low-pH and high-pulp — so it performs across the difficult sample types this category produces."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Internationally validated",
-        "body": "Validated across dozens of different matrices and hundreds of samples, with performance proven on the demanding sample diversity of large-scale beverage production."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all four targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Fast, open-platform setup",
-        "body": "Designed as an open-platform solution compatible with standard real-time PCR instruments and flexible lab setups, so implementation is quick and requires no proprietary hardware."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ],
     "detectedList": [
@@ -1294,20 +1294,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Six indicators, one reaction",
-        "body": "Six water-quality indicators are detected together in a single assay, the broadest single-run water read available."
+        "title": "Six pathogens, one reaction",
+        "body": "Six pathogens run together in a single reaction — one assay instead of six separate assays, about 83% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~83% fewer reactions",
-        "body": "One combined assay instead of six cuts reagent use, hands-on time and thermocycler load per sample by roughly five-sixths."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Broadest coverage",
-        "body": "The extended panel delivers the widest indicator coverage per water sample for high-assurance monitoring."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all six targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1358,20 +1358,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Eight beer yeasts, one reaction",
-        "body": "Eight beer-spoilage yeasts are detected together in a single assay for a comprehensive yeast read."
+        "title": "Nine targets, one reaction",
+        "body": "Nine targets run together in a single reaction — one assay instead of nine separate assays, about 89% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~89% fewer reactions",
-        "body": "One combined assay instead of eight cuts reagent, hands-on time and thermocycler load per sample by nearly nine-tenths."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Full yeast coverage",
-        "body": "Eight spoilage yeasts in one assay leave little chance a relevant organism goes unscreened."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all nine targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "~2.5 h direct workflow",
-        "body": "A streamlined ~2.5 h beer protocol keeps hands-on time and turnaround low for routine screening."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1422,20 +1422,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Eight beer bacteria, one reaction",
-        "body": "Eight beer-spoilage bacteria are detected together in a single assay for a comprehensive bacterial read."
+        "title": "Nine targets, one reaction",
+        "body": "Nine targets run together in a single reaction — one assay instead of nine separate assays, about 89% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~89% fewer reactions",
-        "body": "One combined assay instead of eight cuts reagent, hands-on time and thermocycler load per sample by nearly nine-tenths."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Full bacterial coverage",
-        "body": "Eight spoilage bacteria in one assay leave little chance a relevant organism goes unscreened."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all nine targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "~2.5 h direct workflow",
-        "body": "A streamlined ~2.5 h beer protocol keeps hands-on time and turnaround low for routine screening."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1486,20 +1486,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "80+ bacteria, one reaction",
-        "body": "A single assay screens for more than eighty spoilage bacteria — a breadth no competing kit matches — from one reaction."
+        "title": "Confirmed by melting curve",
+        "body": "KAi melting-curve analysis confirms Spoilage Bacteria by its signature, giving analysts clean, unambiguous calls and fewer ambiguous repeats."
       },
       {
-        "title": "Replaces entire panels",
-        "body": "One Specio reaction covers what would otherwise require many targeted assays, cutting reagent use and hands-on time."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "FAM-only melting curve",
-        "body": "AI-interpreted melting-curve analysis on a single FAM channel resolves many organisms with no complex multi-dye setup."
+        "title": "TxA runs the bench",
+        "body": "TxA interprets every run automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1550,20 +1550,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "50+ yeasts & molds, one reaction",
-        "body": "A single assay screens for more than fifty spoilage yeasts and molds — a fungal breadth no competing kit matches."
+        "title": "Confirmed by melting curve",
+        "body": "KAi melting-curve analysis confirms Yeasts and molds by its signature, giving analysts clean, unambiguous calls and fewer ambiguous repeats."
       },
       {
-        "title": "Days faster than culture",
-        "body": "Molecular detection returns results in hours versus the days slow molds take to grow on plates."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "FAM-only melting curve",
-        "body": "AI-interpreted melting-curve analysis on a single FAM channel resolves many organisms with no complex multi-dye setup."
+        "title": "TxA runs the bench",
+        "body": "TxA interprets every run automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Replaces entire panels",
-        "body": "One Specio reaction covers what would otherwise require many targeted fungal assays."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1614,20 +1614,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Specific Salmonella ID",
-        "body": "KAi's AI-interpreted melting curve identifies Salmonella spp. with high specificity for confident, review-ready calls."
+        "title": "Confirmed by melting curve",
+        "body": "KAi melting-curve analysis confirms Salmonella spp. by its signature, giving analysts clean, unambiguous calls and fewer ambiguous repeats."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Faster than culture",
-        "body": "A molecular answer is ready before culture confirmation, shortening turnaround and freeing bench time."
+        "title": "TxA runs the bench",
+        "body": "TxA interprets every run automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Lower cost per result",
-        "body": "Open instruments and competitive reagent pricing keep the per-test cost below closed proprietary systems."
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1678,20 +1678,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Specific S. aureus ID",
-        "body": "KAi's AI-interpreted melting curve identifies S. aureus with high specificity for a dependable hygiene result."
+        "title": "Confirmed by melting curve",
+        "body": "KAi melting-curve analysis confirms S. aureus by its signature, giving analysts clean, unambiguous calls and fewer ambiguous repeats."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Faster hygiene checks",
-        "body": "Results come before culture confirmation, speeding sanitation verification."
+        "title": "TxA runs the bench",
+        "body": "TxA interprets every run automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Lower cost per result",
-        "body": "Open instruments and competitive reagent pricing keep the per-test cost below closed proprietary systems."
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1742,20 +1742,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Specific E. coli ID",
-        "body": "KAi's AI-interpreted melting curve identifies E. coli with high specificity for a dependable hygiene result."
+        "title": "Confirmed by melting curve",
+        "body": "KAi melting-curve analysis confirms E. coli by its signature, giving analysts clean, unambiguous calls and fewer ambiguous repeats."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Faster hygiene checks",
-        "body": "Results come before culture confirmation, speeding sanitation verification."
+        "title": "TxA runs the bench",
+        "body": "TxA interprets every run automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Lower cost per result",
-        "body": "Open instruments and competitive reagent pricing keep the per-test cost below closed proprietary systems."
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1806,20 +1806,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Specific L. mono ID",
-        "body": "KAi's AI-interpreted melting curve identifies L. monocytogenes with high specificity for confident calls on the regulated species."
+        "title": "Confirmed by melting curve",
+        "body": "KAi melting-curve analysis confirms L. monocytogenes by its signature, giving analysts clean, unambiguous calls and fewer ambiguous repeats."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Fast EMP screening",
-        "body": "Rapid environmental results clear lines for release within the monitoring cycle."
+        "title": "TxA runs the bench",
+        "body": "TxA interprets every run automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Lower cost per result",
-        "body": "Open instruments and competitive reagent pricing keep the per-test cost below closed proprietary systems."
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1870,20 +1870,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Key spoilage yeast ID",
-        "body": "Targets Z. bailii and parabailii, the resistant yeasts most responsible for acidified-product spoilage, with specific detection."
+        "title": "Two targets, one reaction",
+        "body": "Zygosaccharomyces bailii and Zygosaccharomyces parabailii are detected together in a single reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "KAi melting curve",
-        "body": "AI-interpreted melting-curve analysis resolves these spoilage yeasts specifically, with automated calling."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Protects shelf life",
-        "body": "Early detection of resistant spoilage yeasts protects acidified-product shelf life."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1934,20 +1934,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Specific Listeria ID",
-        "body": "KAi's AI-interpreted melting curve identifies the Listeria genus with high specificity for dependable monitoring results."
+        "title": "Confirmed by melting curve",
+        "body": "KAi melting-curve analysis confirms Listeria spp. by its signature, giving analysts clean, unambiguous calls and fewer ambiguous repeats."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Fast EMP screening",
-        "body": "Rapid environmental results speed monitoring and release decisions."
+        "title": "TxA runs the bench",
+        "body": "TxA interprets every run automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Lower cost per result",
-        "body": "Open instruments and competitive reagent pricing keep the per-test cost below closed proprietary systems."
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -1998,20 +1998,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Two indicators, one reaction",
-        "body": "S. aureus and E. coli are detected together in a single assay, giving a combined hygiene read without separate tests."
+        "title": "Two pathogens, one reaction",
+        "body": "S. aureus and E. coli are detected together in a single reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~50% fewer reactions",
-        "body": "One combined assay instead of two cuts reagent use, hands-on time and thermocycler load per sample by about half."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Lower cost per result",
-        "body": "Open instruments and competitive reagent pricing keep the per-test cost below closed proprietary systems."
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2062,20 +2062,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Species and genus in one",
-        "body": "The assay separates L. monocytogenes from the broader Listeria genus in a single reaction for a sharper result."
+        "title": "Two pathogens, one reaction",
+        "body": "Listeria spp. and L. monocytogenes are detected together in a single reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~50% fewer reactions",
-        "body": "Both targets resolve in one assay rather than two, cutting reagent, hands-on time and thermocycler load by about half."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Sharper decisions",
-        "body": "A species-level answer reduces ambiguous results and the repeat testing they trigger."
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2126,20 +2126,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "E. coli and O157:H7 in one",
-        "body": "Generic E. coli and the pathogenic O157:H7 serotype are resolved in a single reaction, separating indicator from pathogen."
+        "title": "Two pathogens, one reaction",
+        "body": "E. coli and E. coli O157:H7 are detected together in a single reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~50% fewer reactions",
-        "body": "Both targets resolve in one assay rather than two, cutting reagent, hands-on time and thermocycler load by about half."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Strain-level clarity",
-        "body": "A strain-level answer reduces ambiguity and the repeat testing a generic result can trigger."
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2191,19 +2191,19 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Two pathogens, one reaction",
-        "body": "Salmonella and L. monocytogenes are detected together in a single assay for a combined safety read."
+        "body": "Salmonella spp. and L. monocytogenes are detected together in a single reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~50% fewer reactions",
-        "body": "One combined assay instead of two cuts reagent, hands-on time and thermocycler load per sample by about half."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Faster release",
-        "body": "A single combined result removes a sequential testing step, shortening turnaround."
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2255,19 +2255,19 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Three pathogens, one reaction",
-        "body": "Salmonella, L. monocytogenes and E. coli O157:H7 are detected together in a single assay for a complete safety read."
+        "body": "Salmonella spp., L. monocytogenes and E. coli O157:H7 are detected together in a single reaction — one assay instead of three separate assays, about 67% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~67% fewer reactions",
-        "body": "One combined assay instead of three cuts reagent, hands-on time and thermocycler load per sample by roughly two-thirds."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Comprehensive safety",
-        "body": "Three critical pathogens at once reduce the chance a relevant target is missed on any sample."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all three targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2319,19 +2319,19 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Four pathogens, one reaction",
-        "body": "Salmonella, L. monocytogenes, E. coli and S. aureus are detected together in a single assay — the broadest single-run pathogen panel."
+        "body": "Four pathogens run together in a single reaction — one assay instead of four separate assays, about 75% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~75% fewer reactions",
-        "body": "One combined assay instead of four cuts reagent, hands-on time and thermocycler load per sample by about three-quarters."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Broadest safety",
-        "body": "Four key pathogens at once minimize the chance a relevant target is missed on any sample."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all four targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2383,19 +2383,19 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Pathogens plus indicators",
-        "body": "In one pioneering reaction, critical pathogens are screened alongside hygiene indicators, uniting safety and process monitoring."
+        "body": "Critical pathogens are screened alongside hygiene indicators in a single reaction — one assay instead of four separate runs, about 75% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~75% fewer reactions",
-        "body": "One combined assay instead of four cuts reagent, hands-on time and thermocycler load per sample by about three-quarters."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Prevent, don't react",
-        "body": "Hygiene indicators flag process drift before it becomes a pathogen event, enabling earlier action."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all four targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2405,7 +2405,7 @@ export const BROCHURES: Record<string, KitBrochure> = {
         "icon": "timer",
         "title": "Results in 3 h",
         "subtitle": "Surfaces, one shift",
-        "pdfText": "AiGOR amplifies RNA directly from the sample with no overnight enrichment, so environmental swabs return in about three hours, giving your team an answer within a single working shift."
+        "pdfText": "AiGOR amplifies RNA directly from the sample with no enrichment, so environmental swabs return in about three hours, giving your team an answer within a single working shift."
       },
       {
         "icon": "timer",
@@ -2447,19 +2447,19 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Ultra-high sensitivity",
-        "body": "AiGOR amplifies RNA from viable cells, detecting Salmonella at far lower loads than standard DNA PCR and catching contamination other methods miss."
+        "body": "AiGOR amplifies RNA from viable cells, detecting Salmonella spp. at far lower loads than standard DNA PCR and giving the lab a confident call from one reaction."
+      },
+      {
+        "title": "Same-day results",
+        "body": "Environmental results in ~3 h and finished product in ~9 h — every sample is read inside the working day, with no overnight wait."
+      },
+      {
+        "title": "TxA runs the bench",
+        "body": "TxA interprets every run automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Fewer false positives",
-        "body": "Targeting RNA from living cells avoids the dead-cell signals that cause false positives in DNA assays, reducing needless re-testing and holds."
-      },
-      {
-        "title": "Results within a shift",
-        "body": "Environmental results in ~3 h and finished product in ~9 h keep turnaround inside a single working day."
-      },
-      {
-        "title": "Open platform",
-        "body": "Runs on thermocyclers the lab already owns, with automated TxA result calling included and no proprietary instrument."
+        "body": "Targeting RNA from viable cells avoids the dead-cell signals that drive false positives in DNA assays, cutting needless re-testing in the lab."
       }
     ]
   },
@@ -2469,7 +2469,7 @@ export const BROCHURES: Record<string, KitBrochure> = {
         "icon": "timer",
         "title": "Results in 4 h",
         "subtitle": "Surfaces, one shift",
-        "pdfText": "AiGOR amplifies RNA directly from the sample with no overnight enrichment, so environmental swabs return in about four hours, giving your team an answer within a single working shift."
+        "pdfText": "AiGOR amplifies RNA directly from the sample with no enrichment, so environmental swabs return in about four hours, giving your team an answer within a single working shift."
       },
       {
         "icon": "timer",
@@ -2511,19 +2511,19 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Two pathogens, one reaction",
-        "body": "Salmonella and Listeria are detected together in a single AiGOR reaction, combining ultra-fast detection with a complete safety read."
+        "body": "Salmonella spp. and Listeria spp. are detected together in a single AiGOR reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "Ultra-high sensitivity",
-        "body": "AiGOR amplifies RNA from viable cells, detecting both pathogens at far lower loads than standard DNA PCR."
+        "title": "Same-day results",
+        "body": "Environmental results in ~4 h and finished product in ~9 h — every sample is read inside the working day, with no overnight wait."
+      },
+      {
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Fewer false positives",
-        "body": "Targeting RNA from living cells avoids dead-cell signals that cause false positives, reducing needless re-testing and holds."
-      },
-      {
-        "title": "Results within a shift",
-        "body": "Environmental results in ~4 h and finished product in ~9 h keep turnaround inside a single working day."
+        "body": "Targeting RNA from viable cells avoids the dead-cell signals that drive false positives in DNA assays, cutting needless re-testing in the lab."
       }
     ]
   },
@@ -2533,7 +2533,7 @@ export const BROCHURES: Record<string, KitBrochure> = {
         "icon": "target",
         "title": "4 pathogens, 1 reaction",
         "subtitle": "Broadest single-assay panel",
-        "pdfText": "Salmonella, L. monocytogenes, E. coli and S. aureus are screened together in one reaction, the broadest single-assay pathogen panel Specio offers for comprehensive safety screening."
+        "pdfText": "Salmonella, L. monocytogenes, E. coli and S. aureus are screened together in one reaction, the broadest single-assay pathogen panel offered for comprehensive safety screening."
       },
       {
         "icon": "zap",
@@ -2557,7 +2557,7 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "plant": [
       {
         "title": "Broadest single-assay safety",
-        "body": "Screening Salmonella, L. monocytogenes, E. coli and S. aureus together gives the plant the most comprehensive safety read available from a single sample, covering four key targets in one run."
+        "body": "Salmonella, L. monocytogenes, E. coli and S. aureus are detected together in a single assay — the broadest single-run pathogen panel."
       },
       {
         "title": "Cut cost per sample",
@@ -2575,23 +2575,24 @@ export const BROCHURES: Record<string, KitBrochure> = {
     "lab": [
       {
         "title": "Four pathogens, one reaction",
-        "body": "Salmonella, L. monocytogenes, E. coli and S. aureus are detected together in a single assay — the broadest single-run pathogen panel."
+        "body": "Four pathogens run together in a single reaction — one assay instead of four separate assays, about 75% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~75% fewer reactions",
-        "body": "One combined assay instead of four cuts reagent, hands-on time and thermocycler load per sample by about three-quarters."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Broadest safety",
-        "body": "Four key pathogens at once minimize the chance a relevant target is missed on any sample."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all four targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
   "V-SF184": {
+    "detectedList": ["Salmonella spp.", "Listeria monocytogenes", "Fecal microorganism indicator", "Inadequate GMP indicator"],
     "highlights": [
       {
         "icon": "target",
@@ -2638,20 +2639,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Pathogens plus indicators",
-        "body": "In one pioneering reaction, critical pathogens are screened alongside hygiene indicators, uniting safety and process monitoring."
+        "title": "Four pathogens, one reaction",
+        "body": "Four pathogens run together in a single reaction — one assay instead of four separate assays, about 75% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~75% fewer reactions",
-        "body": "One combined assay instead of four cuts reagent, hands-on time and thermocycler load per sample by about three-quarters."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Prevent, don't react",
-        "body": "Hygiene indicators flag process drift before it becomes a pathogen event, enabling earlier action."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all four targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2702,20 +2703,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Two targets, one reaction",
-        "body": "Salmonella and E. coli are detected together in a single assay, pairing pathogen and indicator without separate tests."
+        "title": "Two pathogens, one reaction",
+        "body": "E. coli and Salmonella spp. are detected together in a single reaction — one assay instead of two separate assays, about 50% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~50% fewer reactions",
-        "body": "One combined assay instead of two cuts reagent, hands-on time and thermocycler load per sample by about half."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "FAM-only setup",
-        "body": "A single-channel FAM configuration runs on open instruments with no multi-dye complexity."
+        "title": "TxA runs the bench",
+        "body": "TxA calls both targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Lower cost per result",
-        "body": "Open instruments and competitive reagent pricing keep the per-test cost below closed proprietary systems."
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2766,20 +2767,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Three Vibrio species, one reaction",
-        "body": "V. cholerae, V. vulnificus and V. parahaemolyticus are detected together in a single assay, covering the key seafood Vibrio risks at once."
+        "title": "Three pathogens, one reaction",
+        "body": "Vibrio cholerae, Vibrio parahaemolyticus and Vibrio vulnificus are detected together in a single reaction — one assay instead of three separate assays, about 67% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~67% fewer reactions",
-        "body": "One combined assay instead of three cuts reagent use, hands-on time and thermocycler load per sample by roughly two-thirds."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
+      },
+      {
+        "title": "TxA runs the bench",
+        "body": "TxA calls all three targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
         "title": "Lower cost per result",
-        "body": "Fewer runs per sample plus open instruments keep the per-test cost below closed proprietary systems."
-      },
-      {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2830,20 +2831,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "Wine yeast panel, one reaction",
-        "body": "The Zygosaccharomyces group, Saccharomyces spp. and S. cerevisiae are detected together in a single assay, covering key spoilage yeasts at once."
+        "title": "Three targets, one reaction",
+        "body": "Zygosaccharomyces group Zygosaccharomyces bailii Zygosaccharomyces parabailii Zygosaccharomyces rouxii, Saccharomyces cerevisiae and Saccharomyces spp. are detected together in a single reaction — one assay instead of three separate assays, about 67% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "~67% fewer reactions",
-        "body": "One combined assay instead of three cuts reagent use, hands-on time and thermocycler load per sample by roughly two-thirds."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Yeast-focused coverage",
-        "body": "Targets the spoilage yeasts most relevant to wine and beverage production in one panel."
+        "title": "TxA runs the bench",
+        "body": "TxA calls all three targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Runs on your instruments",
-        "body": "Deploys on the real-time PCR platforms the lab already owns, with no proprietary hardware or lock-in."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ]
   },
@@ -2894,20 +2895,20 @@ export const BROCHURES: Record<string, KitBrochure> = {
     ],
     "lab": [
       {
-        "title": "One run, four groups",
-        "body": "Covering four spoilage groups in a single reaction gives a comprehensive low-pH risk read per sample without running four separate tests, simplifying a complex screening problem."
+        "title": "Four targets, one reaction",
+        "body": "Four targets run together in a single reaction — one assay instead of four separate assays, about 75% fewer reactions, more samples per shift and a lower cost per result."
       },
       {
-        "title": "High matrix compatibility",
-        "body": "Validated for complex beverage matrices — high-sugar, low-pH and high-pulp — so it performs across the difficult sample types this category produces."
+        "title": "Molecular, not culture",
+        "body": "A molecular result is ready in hours instead of the 2–5 days a culture confirmation takes, freeing bench time and incubator space for other work."
       },
       {
-        "title": "Designed & Validated by Coca-Cola Company",
-        "body": "Validated across dozens of different matrices and hundreds of Coca-Cola samples, with performance proven on the sample diversity of Coca-Cola products. Sensitivity: 99.22%, Specificity: 99.89% and Accuracy: 99.55%"
+        "title": "TxA runs the bench",
+        "body": "TxA calls all four targets automatically and publishes the result without manual transcription — standardized reads, no analyst subjectivity and less hands-on time per sample."
       },
       {
-        "title": "Fast, open-platform setup",
-        "body": "Designed as an open-platform solution compatible with standard real-time PCR instruments and flexible lab setups, so implementation is quick and requires no proprietary hardware."
+        "title": "Lower cost per result",
+        "body": "Runs on the real-time PCR platforms the lab already owns — no proprietary hardware, no instrument lock-in — keeping cost per test below closed proprietary systems."
       }
     ],
     "detectedList": [

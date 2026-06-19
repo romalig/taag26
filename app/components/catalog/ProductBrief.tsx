@@ -48,6 +48,7 @@ export interface ValueBriefData {
   lab: { title: string; body: string }[];
   comparisonRows: BriefRow[];
   isAigor: boolean;
+  isAoac?: boolean;
   isPcr: boolean;
   category?: string | null;     // non-PCR brief header (e.g. "Growth Medium")
   productLine?: string | null;  // non-PCR brief header (e.g. "Augmentis")
