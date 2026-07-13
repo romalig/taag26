@@ -811,7 +811,7 @@ export default function WorkflowBuilder() {
                                 {members.map(m => (
                                   <div key={m.optionId}>
                                     <p className="text-[11px] font-bold text-[#111111] leading-tight">{m.name}</p>
-                                    <p className="text-[10px] text-gray-500 font-medium">{[`Cat #${m.cat ?? "null"}`, m.mode, m.format, m.size].filter(Boolean).join(" · ")}</p>
+                                    <p className="text-[10px] text-gray-500 font-medium">{[m.cat ? `Cat #${m.cat}` : null, m.mode, m.format, m.size].filter(Boolean).join(" · ")}</p>
                                     {m.description && <p className="text-[13px] text-gray-400 font-medium leading-relaxed mt-0.5">{m.description}</p>}
                                   </div>
                                 ))}
@@ -819,16 +819,16 @@ export default function WorkflowBuilder() {
                             ) : (
                               <>
                                 <p className="text-[10px] text-gray-500 font-medium">
-                                  {[`Cat #${rs.chosen.cat ?? "null"}`, rs.chosen.mode, rs.chosen.format, rs.chosen.size].filter(Boolean).join(" · ")}
+                                  {[rs.chosen.cat ? `Cat #${rs.chosen.cat}` : null, rs.chosen.mode, rs.chosen.format, rs.chosen.size].filter(Boolean).join(" · ")}
                                 </p>
                                 {rs.chosen.description && <p className="text-[13px] text-gray-400 font-medium leading-relaxed mt-2">{rs.chosen.description}</p>}
                               </>
                             )}
                           </div>
-                          <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col gap-3">
-                            <div className="flex items-center gap-2 h-5">
+                          <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col gap-3 text-left">
+                            <div className="flex items-start gap-2 leading-tight">
                               <Clock className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">
                                 {stageTimeText(rs.chosen)}
                               </span>
                             </div>
@@ -839,41 +839,41 @@ export default function WorkflowBuilder() {
                               return (
                                 <>
                                   {formatCount > 1 && (
-                                    <button onClick={() => openStagePicker(activeProtocol.id, stage, "formats")} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                    <button onClick={() => openStagePicker(activeProtocol.id, stage, "formats")} className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                       <ChevronRight className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                      <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{formatCount} formats</span>
+                                      <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">{formatCount} formats</span>
                                     </button>
                                   )}
                                   {optionCount > 1 && (
-                                    <button onClick={() => openStagePicker(activeProtocol.id, stage, "options")} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                    <button onClick={() => openStagePicker(activeProtocol.id, stage, "options")} className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                       <ChevronRight className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                      <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{optionCount} options</span>
+                                      <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">{optionCount} options</span>
                                     </button>
                                   )}
                                 </>
                               );
                             })()}
                             {isPcr && pcrAlternatives.length > 1 && (
-                              <button onClick={() => openPcrPicker()} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                              <button onClick={() => openPcrPicker()} className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                 <ChevronRight className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{pcrAlternatives.length} kit options</span>
+                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">{pcrAlternatives.length} kit options</span>
                               </button>
                             )}
                             {isPcr ? (
                               <>
-                                <button onClick={() => openBrief(briefFromProtocol(activeProtocol, selectedIndustry))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                <button onClick={() => openBrief(briefFromProtocol(activeProtocol, selectedIndustry))} className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                   <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
+                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">Product Value Brief</span>
                                 </button>
-                                <a href={`/datasheets/${activeProtocol.id}.pdf`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                <a href={`/datasheets/${activeProtocol.id}.pdf`} target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                   <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Technical data sheet</span>
+                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">Technical data sheet</span>
                                 </a>
                               </>
                             ) : rs.chosen.features.length > 0 && (
-                              <button onClick={() => openBrief(combinedBriefFromStage(rs) ?? briefFromStageOption(rs.chosen))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                              <button onClick={() => openBrief(combinedBriefFromStage(rs) ?? briefFromStageOption(rs.chosen))} className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                 <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
+                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">Product Value Brief</span>
                               </button>
                             )}
                           </div>
@@ -919,7 +919,7 @@ export default function WorkflowBuilder() {
                                 {members.map(m => (
                                   <div key={m.optionId}>
                                     <p className="text-[11px] font-bold text-[#111111] leading-tight">{m.name}</p>
-                                    <p className="text-[10px] text-gray-500 font-medium">{[`Cat #${m.cat ?? "null"}`, m.mode, m.format, m.size].filter(Boolean).join(" · ")}</p>
+                                    <p className="text-[10px] text-gray-500 font-medium">{[m.cat ? `Cat #${m.cat}` : null, m.mode, m.format, m.size].filter(Boolean).join(" · ")}</p>
                                     {m.description && <p className="text-[13px] text-gray-400 font-medium leading-relaxed mt-0.5">{m.description}</p>}
                                   </div>
                                 ))}
@@ -927,16 +927,16 @@ export default function WorkflowBuilder() {
                             ) : (
                               <>
                                 <p className="text-[10px] text-gray-500 font-medium">
-                                  {[`Cat #${rs.chosen.cat ?? "null"}`, rs.chosen.mode, rs.chosen.format, rs.chosen.size].filter(Boolean).join(" · ")}
+                                  {[rs.chosen.cat ? `Cat #${rs.chosen.cat}` : null, rs.chosen.mode, rs.chosen.format, rs.chosen.size].filter(Boolean).join(" · ")}
                                 </p>
                                 {rs.chosen.description && <p className="text-[13px] text-gray-400 font-medium leading-relaxed mt-2">{rs.chosen.description}</p>}
                               </>
                             )}
                           </div>
-                          <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col gap-3">
-                            <div className="flex items-center gap-2 h-5">
+                          <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col gap-3 text-left">
+                            <div className="flex items-start gap-2 leading-tight">
                               <Clock className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{stageTimeText(rs.chosen)}</span>
+                              <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">{stageTimeText(rs.chosen)}</span>
                             </div>
                             {(() => {
                               const memberKeys = new Set(members.map(m => m.productKey));
@@ -945,41 +945,41 @@ export default function WorkflowBuilder() {
                               return (
                                 <>
                                   {formatCount > 1 && (
-                                    <button onClick={() => openStagePicker(activeProtocol.id, stage, "formats")} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                    <button onClick={() => openStagePicker(activeProtocol.id, stage, "formats")} className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                       <ChevronRight className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                      <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{formatCount} formats</span>
+                                      <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">{formatCount} formats</span>
                                     </button>
                                   )}
                                   {optionCount > 1 && (
-                                    <button onClick={() => openStagePicker(activeProtocol.id, stage, "options")} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                    <button onClick={() => openStagePicker(activeProtocol.id, stage, "options")} className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                       <ChevronRight className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                      <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{optionCount} options</span>
+                                      <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">{optionCount} options</span>
                                     </button>
                                   )}
                                 </>
                               );
                             })()}
                             {isPcr && pcrAlternatives.length > 1 && (
-                              <button onClick={() => openPcrPicker()} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                              <button onClick={() => openPcrPicker()} className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                 <ChevronRight className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">{pcrAlternatives.length} kit options</span>
+                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">{pcrAlternatives.length} kit options</span>
                               </button>
                             )}
                             {isPcr ? (
                               <>
-                                <button onClick={() => openBrief(briefFromProtocol(activeProtocol, selectedIndustry))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                <button onClick={() => openBrief(briefFromProtocol(activeProtocol, selectedIndustry))} className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                   <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
+                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">Product Value Brief</span>
                                 </button>
-                                <a href={`/datasheets/${activeProtocol.id}.pdf`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                                <a href={`/datasheets/${activeProtocol.id}.pdf`} target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                   <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Technical data sheet</span>
+                                  <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">Technical data sheet</span>
                                 </a>
                               </>
                             ) : rs.chosen.features.length > 0 && (
-                              <button onClick={() => openBrief(combinedBriefFromStage(rs) ?? briefFromStageOption(rs.chosen))} className="flex items-center gap-2 h-5 hover:opacity-60 transition-opacity">
+                              <button onClick={() => openBrief(combinedBriefFromStage(rs) ?? briefFromStageOption(rs.chosen))} className="flex items-start gap-2 leading-tight hover:opacity-60 transition-opacity">
                                 <FileText className="w-3.5 h-3.5 text-[#FF270A] shrink-0" />
-                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em]">Product Value Brief</span>
+                                <span className="text-[10px] font-black text-[#111111] uppercase tracking-[0.1em] text-left">Product Value Brief</span>
                               </button>
                             )}
                           </div>

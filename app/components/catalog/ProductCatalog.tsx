@@ -68,6 +68,16 @@ function processNoun(cat: string): string {
 //     OPTION_BY_KEY[key]           = a representative resolved option for that product (brief source).
 const FULL_WORKFLOW_HOURS: Record<string, number> = {};
 const OWN_TIME_HOURS: Record<string, number> = {};
+// Manual enrichment-time additions (hours) for PCR kits whose FASTEST catalog path omits enrichment.
+// These KAi/melting-curve spoilage kits always require enrichment, but have a Beer/Wine + Finished
+// sampleType path with no enrichment medium, so the computed "fastest workflow" is PCR-only. We add
+// the enrichment time here so the catalog shows the true full-workflow duration.
+// NOTE: if a real enrichment medium is later added to those Finished paths, remove the entry here to
+// avoid double-counting.
+const WORKFLOW_TIME_ADD: Record<string, number> = {
+  specio_00_1_bacteria: 24,
+  specio_00_2_yeast_molds: 48,
+};
 const PROTOCOL_BY_KEY: Record<string, Protocol> = {};
 const OPTION_BY_KEY: Record<string, ResolvedStageOption> = {};
 (() => {
@@ -128,7 +138,7 @@ function optionFromProduct(key: string): ResolvedStageOption | null {
 
 // Spec rows shown in the comparison modal, keyed per category so same-category products align.
 const SPEC_TEMPLATE: Record<string, string[]> = {
-  "PCR Kit": ["Technology advantage", "Full workflow", "Targets", "Technology", "Sensitivity", "PCR run time", "Detection dye", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
+  "PCR Kit": ["Key advantage", "Full workflow", "Targets", "Technology", "Sensitivity", "PCR run time", "Detection dye", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
   "Growth Medium": ["Process time", "Incubation (h)", "Ready to use", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
   "Medium supplement": ["Process time", "Incubation (h)", "Ready to use", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
   "Extraction Kit": ["Process time", "Ready to use", "Formats", "Catalog codes", "Shelf life", "Storage temp"],
@@ -161,7 +171,7 @@ interface CatalogProduct {
 }
 
 function buildCatalog(): CatalogProduct[] {
-  return Object.values(PRODUCTS).map((prod): CatalogProduct => {
+  return Object.values(PRODUCTS).filter(prod => prod.category !== "Commercial medium").map((prod): CatalogProduct => {
     const proto = PROTO_BY_PRODUCT_KEY[prod.key];
     const isPcr = prod.category === "PCR Kit";
     const pres0: ProductPresentation | undefined = prod.presentations[0];
@@ -173,7 +183,7 @@ function buildCatalog(): CatalogProduct[] {
 
     // (1) PCR kit → the complete workflow time. Any other product → only its own process time.
     const timeHours = isPcr
-      ? (FULL_WORKFLOW_HOURS[prod.key] ?? null)
+      ? (FULL_WORKFLOW_HOURS[prod.key] != null ? FULL_WORKFLOW_HOURS[prod.key] + (WORKFLOW_TIME_ADD[prod.key] ?? 0) : null)
       : (OWN_TIME_HOURS[prod.key] ?? parseHours(pres0?.incubationTimeH));
     const timeLabel = isPcr ? "full workflow" : processNoun(prod.category ?? "");
     const timeStr = timeHours != null ? formatTime(timeHours) : "—";
@@ -181,7 +191,7 @@ function buildCatalog(): CatalogProduct[] {
     const keys = SPEC_TEMPLATE[prod.category ?? ""] ?? DEFAULT_SPEC_KEYS;
     const specVal = (key: string): string => {
       switch (key) {
-        case "Technology advantage": return LINE_ADVANTAGE[prod.productLine ?? ""] ?? "—";
+        case "Key advantage": return LINE_ADVANTAGE[prod.productLine ?? ""] ?? "—";
         case "Full workflow":
         case "Process time": return timeStr;
         case "Targets": return targets ?? "—";

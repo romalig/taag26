@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
   // ── Cara 6: Formats + Supplies + TxA + Contact ──
   c6Cols: { flexDirection: "row", gap: 24, marginTop: 20, height: 438 },
   c6Col: { flex: 1, flexDirection: "column", gap: 20 },
-  c6CardTop: { backgroundColor: C.card, borderRadius: 18, padding: 22, borderWidth: 0.5, borderColor: C.line, height: 260 },
-  c6CardBottom: { backgroundColor: C.card, borderRadius: 18, padding: 22, borderWidth: 0.5, borderColor: C.line, height: 158 },
+  c6CardTop: { backgroundColor: C.card, borderRadius: 18, padding: 22, borderWidth: 0.5, borderColor: C.line, flex: 1 },
+  c6CardBottom: { backgroundColor: C.card, borderRadius: 18, padding: 22, borderWidth: 0.5, borderColor: C.line, flex: 1 },
   c6Row: { flexDirection: "row", paddingVertical: 7, borderBottomWidth: 0.5, borderBottomColor: C.soft, alignItems: "flex-start" },
   c6Cat: { width: "26%", fontSize: 8, color: C.red, fontWeight: 700, paddingRight: 8 },
   c6RowMain: { width: "74%" },
@@ -148,7 +148,10 @@ const styles = StyleSheet.create({
   c6FmtCat: { fontSize: 8, color: C.red, fontWeight: 700, marginRight: 10 },
   c6FmtSize: { fontSize: 7.5, color: C.gray, fontWeight: 700 },
   c6FmtContent: { fontSize: 7, color: C.gray, fontWeight: 400, lineHeight: 1.4 },
-  c6SupName: { fontSize: 9, color: C.ink, fontWeight: 700 },
+  c6SupName: { fontSize: 9, color: C.ink, fontWeight: 700, marginRight: 6 },
+  c6SupHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", marginBottom: 2 },
+  c6SupLeft: { flexDirection: "row", alignItems: "baseline", flex: 1 },
+  c6SupDesc: { fontSize: 7.5, color: C.gray, fontWeight: 400, lineHeight: 1.4, marginTop: 1 },
   // AOAC logo above the detected-microorganisms list (Cara 2, col 1)
   aoacWrap: { alignItems: "flex-start", marginBottom: 10 },
   aoacLogo: { width: 84, height: 30, objectFit: "contain" },
@@ -623,11 +626,14 @@ export default function ProductBriefDocument({ data, lang = "en" }: { data: Valu
               <Text style={styles.listHeading}>Additional supplies</Text>
               {data.relatedProducts.map((r, i) => (
                 <View key={i} style={styles.c6FmtStack}>
-                  <View style={styles.c6FmtHead}>
-                    <Text style={styles.c6FmtCat}>Cat #{r.cat}</Text>
-                    <Text style={styles.c6SupName}>{r.name}</Text>
+                  <View style={styles.c6SupHead}>
+                    <View style={styles.c6SupLeft}>
+                      <Text style={styles.c6SupName}>{r.name}</Text>
+                      <Text style={styles.c6FmtCat}>Cat #{r.cat}</Text>
+                    </View>
+                    <Text style={styles.c6FmtSize}>{[r.format, r.size].filter(Boolean).join(" · ") || "—"}</Text>
                   </View>
-                  <Text style={styles.c6FmtContent}>{[[r.format, r.size].filter(Boolean).join(" · "), r.note].filter(Boolean).join("  \u00B7  ")}</Text>
+                  {r.note ? <Text style={styles.c6SupDesc}>{r.note}</Text> : null}
                 </View>
               ))}
             </View>

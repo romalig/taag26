@@ -102,7 +102,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "Specific Salmonella ID",
@@ -2193,7 +2193,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "2 pathogens, 1 reaction",
@@ -3315,6 +3315,17 @@ export const PROTOCOLS: ProtocolDef[] = [
               ],
               "timeHours": 24,
               "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FP34"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 15,
+              "timeEstimated": false
             }
           ]
         },
@@ -3399,6 +3410,17 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FP34"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 15,
               "timeEstimated": false
             }
           ]
@@ -3613,7 +3635,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "From 8 CFU per sample\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "3 pathogens, 1 reaction",
@@ -4818,7 +4840,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "3 targets, 1 reaction",
@@ -6042,7 +6064,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "3 targets, 1 reaction",
@@ -7602,7 +7624,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Wine"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Enriched Sample: 1 CFU/sample\nDirect Sample: From 100 cells/filter",
+    "sensitivity": "Enriched Sample: From 6 CFU/mL\nDirect Sample: From 4x103 cells/mL\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "4 beer yeasts",
@@ -7759,7 +7781,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Wine"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Enriched Sample: 1 CFU/sample\nDirect Sample: From 1,000 cells/filter",
+    "sensitivity": "Enriched Sample: From 10 CFU/mL\nDirect Sample: From 1x103 cells/mL\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "4 beer yeasts",
@@ -7915,7 +7937,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Beer"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Enriched Sample: 1 CFU/sample\nDirect Sample: from 200 cells/filter",
+    "sensitivity": "Enriched Sample: From 6 CFU/mL\nDirect Sample: From 2×102 cells/mL\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "4 beer bacteria",
@@ -7951,6 +7973,15 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "lactobacilli_mrs_broth",
+              "catalogCode": null,
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 68,
               "timeEstimated": false
             }
           ]
@@ -8002,7 +8033,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Beer"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Enriched Sample: 1 CFU/sample\nDirect Sample: From 1,000 cells/filter.",
+    "sensitivity": "Enriched Sample: From 3 CFU/mL\nDirect Sample: From 6×103 cells/mL\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "4 anaerobe spoilers",
@@ -8038,6 +8069,15 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "lactobacilli_mrs_broth",
+              "catalogCode": null,
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 68,
               "timeEstimated": false
             }
           ]
@@ -8377,7 +8417,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Water"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Enriched sample: 1 CFU/sample.",
+    "sensitivity": "From 4 CFU/filter\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "6 water indicators",
@@ -8413,6 +8453,17 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "augmentis_xpress_1",
+              "catalogCode": [
+                "V-FP34"
+              ],
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 15,
               "timeEstimated": false
             }
           ]
@@ -8468,7 +8519,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Beer"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Enriched Sample: 1 CFU/sample\nDirect Sample: From 1,000 cells/filter",
+    "sensitivity": "Enriched Sample: From 6 CFU/mL\nDirect Sample: From 1x103 cells/mL\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "8 beer yeasts",
@@ -8570,7 +8621,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Beer"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Enriched Sample: 1 CFU/sample\nDirect Sample: From 200 cells/filter.",
+    "sensitivity": "Enriched Sample: From 3 CFU/mL\nDirect Sample: From 2×102 cells/mL\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "8 beer bacteria",
@@ -8606,6 +8657,15 @@ export const PROTOCOLS: ProtocolDef[] = [
                 "Environmental"
               ],
               "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "lactobacilli_mrs_broth",
+              "catalogCode": null,
+              "sampleTypes": [
+                "Finished"
+              ],
+              "timeHours": 68,
               "timeEstimated": false
             }
           ]
@@ -9752,7 +9812,7 @@ export const PROTOCOLS: ProtocolDef[] = [
     ],
     "mainIndustries": [],
     "technology": "RT-qPCR - AiGOR",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "4 h on surfaces",
@@ -9775,17 +9835,6 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Confectionery": {
         "sampling": {
           "options": [
-            {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
             {
               "productKey": "captus_xpress_2",
               "catalogCode": [
@@ -9878,17 +9927,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
-            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
@@ -9979,17 +10017,6 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Meat and Poultry": {
         "sampling": {
           "options": [
-            {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
             {
               "productKey": "captus_xpress_2",
               "catalogCode": [
@@ -10082,17 +10109,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
-            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
@@ -10184,17 +10200,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
-            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
@@ -10285,17 +10290,6 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood": {
         "sampling": {
           "options": [
-            {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
             {
               "productKey": "captus_xpress_2",
               "catalogCode": [
@@ -10422,17 +10416,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
-            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
@@ -10534,17 +10517,6 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Egg Products": {
         "sampling": {
           "options": [
-            {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
             {
               "productKey": "captus_xpress_2",
               "catalogCode": [
@@ -10648,17 +10620,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
-            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
@@ -10760,17 +10721,6 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Meat and Poultry": {
         "sampling": {
           "options": [
-            {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
             {
               "productKey": "captus_xpress_2",
               "catalogCode": [
@@ -10874,17 +10824,6 @@ export const PROTOCOLS: ProtocolDef[] = [
         "sampling": {
           "options": [
             {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
-            {
               "productKey": "captus_xpress_2",
               "catalogCode": [
                 "V-FL48"
@@ -10986,17 +10925,6 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Ready-to-eat": {
         "sampling": {
           "options": [
-            {
-              "productKey": "captus_zero_1",
-              "catalogCode": [
-                "V-TB36"
-              ],
-              "sampleTypes": [
-                "Environmental"
-              ],
-              "timeHours": 0.25,
-              "timeEstimated": true
-            },
             {
               "productKey": "captus_xpress_2",
               "catalogCode": [
@@ -11121,7 +11049,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Beer"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "From 1 CFU per sample.",
+    "sensitivity": "From 1 CFU per sample\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "80+ bacteria detected",
@@ -13021,7 +12949,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Wine"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "From 1 CFU per sample.",
+    "sensitivity": "From 1 CFU per sample\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "50+ yeasts & molds",
@@ -14062,7 +13990,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Ready-to-eat"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "Specific Salmonella ID",
@@ -14641,7 +14569,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "Specific S. aureus ID",
@@ -15105,7 +15033,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "Specific E. coli ID",
@@ -15684,7 +15612,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "Specific L. mono ID",
@@ -16261,7 +16189,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Sauces and condiments"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "<5 CFU/25 g",
     "keyAdvantages": [
       {
         "title": "Key spoilage yeast",
@@ -16466,7 +16394,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "From 6 CFU/25 g\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "Specific Listeria ID",
@@ -16930,7 +16858,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "2 indicators, 1 reaction",
@@ -17318,7 +17246,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g",
     "keyAdvantages": [
       {
         "title": "Species + genus",
@@ -17782,7 +17710,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "E. coli + O157:H7",
@@ -18263,7 +18191,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "2 pathogens, 1 reaction",
@@ -18817,7 +18745,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "From 8 CFU per sample\n\nSensitivity depends on the target microorganism.",
     "keyAdvantages": [
       {
         "title": "3 pathogens, 1 reaction",
@@ -19791,7 +19719,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "4 pathogens, 1 reaction",
@@ -21160,7 +21088,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": "Food sample: 1 CFU/25 g\nSurface sample: 1 CFU/100 cm2",
     "keyAdvantages": [
       {
         "title": "Pathogens + indicators",
@@ -22520,7 +22448,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Seafood"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Food sample: 1 CFU/25 g.",
+    "sensitivity": "Vibrio parahaemolyticus. 1x102 CFU/25g and Vibrio vulnificus 1x101 CFU/25g.",
     "keyAdvantages": [
       {
         "title": "Multiplex efficiency",
@@ -22550,6 +22478,15 @@ export const PROTOCOLS: ProtocolDef[] = [
               ],
               "sampleTypes": [
                 "Environmental"
+              ],
+              "timeHours": 24,
+              "timeEstimated": false
+            },
+            {
+              "productKey": "alkaline_peptone_water_apw",
+              "catalogCode": null,
+              "sampleTypes": [
+                "Finished"
               ],
               "timeHours": 24,
               "timeEstimated": false
@@ -22602,7 +22539,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Wine"
     ],
     "technology": "Real-Time PCR - Mila",
-    "sensitivity": "Enriched sample: 1 CFU/sample\nDirect sample: 100 CFU/filter",
+    "sensitivity": null,
     "keyAdvantages": [
       {
         "title": "Multiplex efficiency",
@@ -22756,7 +22693,7 @@ export const PROTOCOLS: ProtocolDef[] = [
       "Ready-to-eat"
     ],
     "technology": "Real-time PCR with melting curve  - KAi",
-    "sensitivity": "Food sample: 1 CFU/25 g.\nSurface sample: 1 CFU/100 cm2",
+    "sensitivity": null,
     "keyAdvantages": [
       {
         "title": "Simple setup",

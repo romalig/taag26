@@ -32,6 +32,8 @@ function targetsToDetected(targets?: string[]): string[] | null {
 const STAGE_PURPOSE: Record<string, string> = {
   sampling: "Collects and stabilizes the sample for testing",
   enrichment: "Promotes target growth before detection",
+  mediumSupplement: "Boosts target recovery in the enrichment medium",
+  extractionSupplement: "Reduces inhibitors before extraction",
   extraction: "Releases and purifies nucleic acids for PCR",
 };
 

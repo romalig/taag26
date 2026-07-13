@@ -2787,5 +2787,25 @@ export const PRODUCTS: Record<string, ProductDef> = {
     "mainIndustries": [
       "Beverage"
     ]
+  },
+  "alkaline_peptone_water_apw": {
+    "key": "alkaline_peptone_water_apw",
+    "name": "Alkaline Peptone Water (APW)",
+    "category": "Commercial medium",
+    "productLine": null,
+    "description": "Generic commercial medium — available from any standard microbiology supplier, not a TAAG product.",
+    "features": [],
+    "mainIndustries": [],
+    "presentations": []
+  },
+  "lactobacilli_mrs_broth": {
+    "key": "lactobacilli_mrs_broth",
+    "name": "Lactobacilli MRS broth",
+    "category": "Commercial medium",
+    "productLine": null,
+    "description": "Generic commercial medium — available from any standard microbiology supplier, not a TAAG product.",
+    "features": [],
+    "mainIndustries": [],
+    "presentations": []
   }
 };
