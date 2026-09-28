@@ -1,7 +1,8 @@
 "use client";
 
 import Header from "../components/Header";
-import AboutUs from "../components/AboutUs/AboutUs";
+import AboutHero from "../components/AboutUs/AboutHero";
+import AboutUs from "../components/AboutUs/AboutUs2";
 import InnovationsTimeline from "../components/AboutUs/InnovationsTimeline";
 import OurValues from "../components/AboutUs/OurValues";
 import FinalCTA from "../components/FinalCTA";
@@ -13,6 +14,7 @@ export default function IndustrialPage() {
     <ModalProvider>
       <main className="bg-white min-h-screen font-sans selection:bg-[#FF270A] selection:text-white">
         <Header/>
+        <AboutHero/>
         <AboutUs/>
         <InnovationsTimeline/>
         <FinalCTA />
