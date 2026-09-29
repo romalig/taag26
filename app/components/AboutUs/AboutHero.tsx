@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef } from "react";
 import { Target, Lightbulb } from "lucide-react";
 
 // ── Animación del paisaje alpino (coordenadas en el sistema 2048 × 768 de la imagen) ──
@@ -63,19 +63,153 @@ const GLIMMERS = [
   { d: "M771 618h61m52 13h126m-87 8h65m-275-42h60m-72-19h40", w: 1, two: true },
 ];
 
-type CSSVars = CSSProperties & Record<`--${string}`, string>;
+// Sol: sale desde detrás de la cordillera y queda completo sobre ella
+const SUN = { cx: 1068, r: 40, fromY: 392, toY: 270, rise: 9 };
+
+// ── Utilidades de animación ──
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+const smooth = (t: number) => t * t * (3 - 2 * t); // ease-in-out
+const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+const mod1 = (v: number) => ((v % 1) + 1) % 1;
+/** Interpola una lista de keyframes [posición 0-1, valor] con suavizado entre cada par */
+function kf(frames: [number, number][], p: number) {
+  for (let i = 1; i < frames.length; i++) {
+    const [p0, v0] = frames[i - 1];
+    const [p1, v1] = frames[i];
+    if (p <= p1) return v0 + (v1 - v0) * smooth(clamp01((p - p0) / (p1 - p0)));
+  }
+  return frames[frames.length - 1][1];
+}
 
 export default function AboutHero() {
   const bandRef = useRef<HTMLDivElement>(null);
-  const [offscreen, setOffscreen] = useState(false);
+  const svgRef = useRef<SVGSVGElement>(null);
 
-  // Pausa las animaciones cuando la banda no está visible
+  /*
+   * Las animaciones se calculan en JS y se escriben como atributos SVG (transform / opacity).
+   * No depende de transformaciones CSS sobre SVG, que en Safari iOS reciente fallan
+   * dentro de grupos con clip-path. Funciona igual en Safari, Chrome, Firefox y Android.
+   */
   useEffect(() => {
-    const el = bandRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([entry]) => setOffscreen(!entry.isIntersecting));
-    io.observe(el);
-    return () => io.disconnect();
+    const svg = svgRef.current;
+    const band = bandRef.current;
+    if (!svg || !band) return;
+
+    const q = <T extends Element>(sel: string) => Array.from(svg.querySelectorAll<T>(sel));
+    const sun = svg.querySelector<SVGGElement>("[data-sun]");
+    const birds = q<SVGGElement>("[data-bird]");
+    const wings = q<SVGPathElement>("[data-wing]");
+    const smokes = q<SVGPathElement>("[data-smoke]");
+    const waves = q<SVGPathElement>("[data-wave]");
+    const glimmers = q<SVGGElement>("[data-glimmer]");
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const start = performance.now();
+
+    const render = (now: number) => {
+      const t = (now - start) / 1000;
+
+      // Sol
+      if (sun) {
+        const p = easeOut(clamp01(t / SUN.rise));
+        const y = SUN.fromY + (SUN.toY - SUN.fromY) * p;
+        sun.setAttribute("transform", `translate(${SUN.cx} ${y})`);
+      }
+
+      // Aves
+      birds.forEach((el, i) => {
+        const b = BIRDS[i];
+        const p = mod1((t - b.delay) / b.duration);
+        const x = -110 + 2320 * p;
+        const y = -14 * p;
+        el.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+        el.setAttribute("opacity", kf([[0, 0], [0.05, 0.78], [0.9, 0.78], [1, 0]], p).toFixed(3));
+      });
+      wings.forEach((el, i) => {
+        const p = mod1(t / 1.6 + i * 0.13);
+        const sy = 0.35 + 0.65 * (0.5 - 0.5 * Math.cos(p * Math.PI * 2));
+        el.setAttribute("transform", `scale(1 ${sy.toFixed(3)})`);
+      });
+
+      // Humo (ciclo de 10 s, sube, se expande y se desvanece)
+      smokes.forEach((el) => {
+        const p = mod1((t - Number(el.dataset.delay)) / 10);
+        const e = easeOut(p);
+        const tx = 27 * e;
+        const ty = 4 - 71 * e;
+        const sc = 0.55 + 1.45 * e;
+        el.setAttribute(
+          "transform",
+          `translate(${(tx + 0.5).toFixed(2)} ${(ty - 17.5).toFixed(2)}) scale(${sc.toFixed(3)}) translate(-0.5 17.5)`
+        );
+        el.setAttribute("opacity", kf([[0, 0], [0.2, 0.48], [0.55, 0.3], [1, 0]], p).toFixed(3));
+      });
+
+      // Oleaje
+      waves.forEach((el, i) => {
+        const [, period, offset, x, y, w] = WAVES[i];
+        const p = mod1((t - offset) / period);
+        const tx = kf([[0, -16], [0.55, 6], [1, 24]], p);
+        const ty = kf([[0, -2], [0.55, 2], [1, 5]], p);
+        const sx = kf([[0, 0.85], [0.55, 1.08], [1, 1.2]], p);
+        const cx = x + 2 * w;
+        el.setAttribute(
+          "transform",
+          `translate(${(tx + cx).toFixed(2)} ${(ty + y).toFixed(2)}) scale(${sx.toFixed(3)} 1) translate(${-cx} ${-y})`
+        );
+        el.setAttribute("opacity", kf([[0, 0], [0.25, 0.26], [0.55, 0.46], [0.85, 0.2], [1, 0]], p).toFixed(3));
+      });
+
+      // Destellos
+      glimmers.forEach((el, i) => {
+        const p = mod1(t / 10 + i * 0.5);
+        const c = Math.cos(p * Math.PI * 2);
+        el.setAttribute("transform", `translate(${(-15 * c).toFixed(2)} 0)`);
+        el.setAttribute("opacity", (0.21 - 0.21 * c).toFixed(3));
+      });
+    };
+
+    // Movimiento reducido: un solo cuadro estático con el sol ya arriba
+    if (reduced) {
+      render(start + SUN.rise * 1000 + 12000);
+      return;
+    }
+
+    let raf = 0;
+    let visible = true;
+    const loop = (now: number) => {
+      render(now);
+      raf = requestAnimationFrame(loop);
+    };
+    const play = () => {
+      if (!raf && visible && !document.hidden) raf = requestAnimationFrame(loop);
+    };
+    const stop = () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+    };
+
+    // Pausa si la banda sale de pantalla o la pestaña se oculta
+    const io =
+      "IntersectionObserver" in window
+        ? new IntersectionObserver(([entry]) => {
+            visible = entry.isIntersecting;
+            if (visible) play();
+            else stop();
+          })
+        : null;
+    io?.observe(band);
+    const onVisibility = () => (document.hidden ? stop() : play());
+    document.addEventListener("visibilitychange", onVisibility);
+
+    render(start);
+    play();
+
+    return () => {
+      stop();
+      io?.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, []);
 
   return (
@@ -96,172 +230,96 @@ export default function AboutHero() {
       </div>
 
       {/* Imagen anclada al borde inferior de la pantalla */}
-      <div className="relative w-full shrink-0">
-        {/* Banda de imagen: ilustración original + elementos animados */}
-        <div
-          ref={bandRef}
-          className={`alpine relative w-full overflow-hidden aspect-[16/9] sm:aspect-[2/1] md:aspect-[16/5] max-h-[50svh] ${offscreen ? "paused" : ""}`}
+      <div
+        ref={bandRef}
+        className="relative w-full shrink-0 overflow-hidden aspect-[16/9] sm:aspect-[2/1] md:aspect-[16/5] max-h-[50svh]"
+      >
+        <svg
+          ref={svgRef}
+          viewBox="0 0 2048 768"
+          preserveAspectRatio="xMidYMid slice"
+          className="absolute inset-0 w-full h-full"
+          role="img"
+          aria-label="Illustrated Swiss Alpine landscape with the Matterhorn, a lake and a village"
         >
-          <svg
-            viewBox="0 0 2048 768"
-            preserveAspectRatio="xMidYMid slice"
-            className="absolute inset-0 w-full h-full"
-            role="img"
-            aria-label="Illustrated Swiss Alpine landscape with the Matterhorn, a lake and a village"
-          >
-            <defs>
-              <clipPath id="taag-sky"><path d={SKY_CLIP} /></clipPath>
-              <clipPath id="taag-lake"><path d={LAKE_CLIP} /></clipPath>
-              <filter id="taag-soft" x="-100%" y="-100%" width="300%" height="300%">
-                <feGaussianBlur stdDeviation="2.4" />
-              </filter>
-              <radialGradient id="taag-sun">
-                <stop stopColor="#ffdf98" stopOpacity=".8" />
-                <stop offset=".95" stopColor="#f5d08c" stopOpacity=".65" />
-                <stop offset="1" stopColor="#f5d08c" stopOpacity="0" />
-              </radialGradient>
-            </defs>
+          <defs>
+            <clipPath id="taag-sky"><path d={SKY_CLIP} /></clipPath>
+            <clipPath id="taag-lake"><path d={LAKE_CLIP} /></clipPath>
+            <filter id="taag-soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2.4" />
+            </filter>
+            <radialGradient id="taag-sun">
+              <stop stopColor="#ffdf98" stopOpacity=".85" />
+              <stop offset=".95" stopColor="#f5d08c" stopOpacity=".75" />
+              <stop offset="1" stopColor="#f5d08c" stopOpacity="0" />
+            </radialGradient>
+          </defs>
 
-            <image href="/swiss-landscape.webp" x="0" y="0" width="2048" height="768" />
+          <image href="/swiss-landscape.webp" x="0" y="0" width="2048" height="768" />
 
-            {/* Sol y aves: recortados al cielo, quedan detrás de las montañas */}
-            <g clipPath="url(#taag-sky)">
-              <circle className="sun" cx="1068" cy="341" r="40" fill="url(#taag-sun)" />
-              {BIRDS.map((b, i) => (
-                <g
-                  key={i}
-                  className="bird-flight"
-                  style={{ "--duration": `${b.duration}s`, "--delay": `${b.delay}s` } as CSSVars}
-                >
-                  <g transform={`translate(${b.x} ${b.y}) scale(${b.scale})`}>
-                    <path
-                      className="wings"
-                      d="M-8-3Q-3-5 0 0Q3-5 8-3"
-                      fill="none"
-                      stroke="#214a60"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </g>
-                </g>
-              ))}
+          {/* Sol y aves: recortados al cielo, pasan detrás de las montañas */}
+          <g clipPath="url(#taag-sky)">
+            <g data-sun transform={`translate(${SUN.cx} ${SUN.fromY})`}>
+              <circle r={SUN.r} fill="url(#taag-sun)" />
             </g>
-
-            {/* Humo de las chimeneas */}
-            {CHIMNEYS.map(([x, y]) =>
-              SMOKE_DELAYS.map((d) => (
-                <g key={`${x}-${d}`} transform={`translate(${x} ${y})`}>
+            {BIRDS.map((b, i) => (
+              <g key={i} data-bird opacity="0">
+                <g transform={`translate(${b.x} ${b.y}) scale(${b.scale})`}>
                   <path
-                    className="smoke"
-                    style={{ "--delay": `${d}s` } as CSSVars}
-                    d="M0 0C-7-8 7-12 1-20S-5-28 2-35"
-                    stroke="#e8e9e3"
-                    strokeWidth="8"
-                    strokeLinecap="round"
+                    data-wing
+                    d="M-8-3Q-3-5 0 0Q3-5 8-3"
                     fill="none"
-                    filter="url(#taag-soft)"
+                    stroke="#214a60"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
                   />
                 </g>
-              ))
-            )}
+              </g>
+            ))}
+          </g>
 
-            {/* Oleaje del lago */}
-            <g className="water-motion" clipPath="url(#taag-lake)" fill="none" strokeLinecap="round">
-              {WAVES.map(([light, period, offset, x, y, w], i) => (
+          {/* Humo: un solo filtro por chimenea (más liviano en móviles) */}
+          {CHIMNEYS.map(([x, y]) => (
+            <g key={x} transform={`translate(${x} ${y})`} filter="url(#taag-soft)">
+              {SMOKE_DELAYS.map((d) => (
                 <path
-                  key={i}
-                  className={`wave ${light ? "wave-light" : "wave-shadow"}`}
-                  style={{ "--period": `${period}s`, "--offset": `${offset}s` } as CSSVars}
-                  d={`M${x} ${y}q${w} -1.8 ${w * 2} 0t${w * 2} 0`}
+                  key={d}
+                  data-smoke
+                  data-delay={d}
+                  opacity="0"
+                  d="M0 0C-7-8 7-12 1-20S-5-28 2-35"
+                  stroke="#e8e9e3"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  fill="none"
                 />
               ))}
             </g>
-            <g clipPath="url(#taag-lake)" fill="none" stroke="#fff6d8" strokeLinecap="round">
-              {GLIMMERS.map((g, i) => (
-                <g key={i} className={`glimmer ${g.two ? "two" : ""}`}>
-                  <path d={g.d} strokeWidth={g.w} />
-                </g>
-              ))}
-            </g>
-          </svg>
-        </div>
+          ))}
+
+          {/* Oleaje y destellos del lago */}
+          <g clipPath="url(#taag-lake)" fill="none" strokeLinecap="round">
+            {WAVES.map(([light, , , x, y, w], i) => (
+              <path
+                key={i}
+                data-wave
+                opacity="0"
+                stroke={light ? "#fff4cb" : "#246b89"}
+                strokeWidth={light ? 1.6 : 1.2}
+                d={`M${x} ${y}q${w} -1.8 ${w * 2} 0t${w * 2} 0`}
+              />
+            ))}
+            {GLIMMERS.map((g, i) => (
+              <g key={i} data-glimmer opacity="0" stroke="#fff6d8">
+                <path d={g.d} strokeWidth={g.w} />
+              </g>
+            ))}
+          </g>
+        </svg>
       </div>
 
       <style jsx>{`
         .font-sora { font-family: var(--font-sora), sans-serif; }
-
-        .sun {
-          animation: sunrise 75s ease-in-out infinite alternate;
-          transform-origin: 1068px 341px;
-        }
-        @keyframes sunrise {
-          from { transform: translate(-5px, 12px); opacity: 0.55; }
-          to   { transform: translate(15px, -25px); opacity: 0.9; }
-        }
-
-        .bird-flight {
-          animation: flight var(--duration) linear infinite;
-          animation-delay: var(--delay);
-        }
-        @keyframes flight {
-          0%      { transform: translate(-110px, 0); opacity: 0; }
-          5%, 90% { opacity: 0.78; }
-          100%    { transform: translate(2210px, -14px); opacity: 0; }
-        }
-        .wings {
-          animation: wingbeat 1.6s ease-in-out infinite;
-          transform-box: fill-box;
-          transform-origin: center;
-        }
-        @keyframes wingbeat {
-          0%, 100% { transform: scaleY(0.35); }
-          50%      { transform: scaleY(1); }
-        }
-
-        .smoke {
-          animation: smoke 10s ease-out infinite;
-          animation-delay: var(--delay);
-          opacity: 0;
-          transform-box: fill-box;
-          transform-origin: center;
-        }
-        @keyframes smoke {
-          0%   { transform: translate(0, 4px) scale(0.55); opacity: 0; }
-          20%  { opacity: 0.48; }
-          55%  { opacity: 0.3; }
-          100% { transform: translate(27px, -67px) scale(2); opacity: 0; }
-        }
-
-        .wave {
-          animation: waterflow var(--period) ease-in-out infinite;
-          animation-delay: var(--offset);
-          opacity: 0;
-          transform-box: fill-box;
-          transform-origin: center;
-        }
-        .wave-shadow { stroke: #246b89; stroke-width: 1.2; }
-        .wave-light  { stroke: #fff4cb; stroke-width: 1.6; }
-        @keyframes waterflow {
-          0%   { transform: translate(-16px, -2px) scaleX(0.85); opacity: 0; }
-          25%  { opacity: 0.26; }
-          55%  { transform: translate(6px, 2px) scaleX(1.08); opacity: 0.46; }
-          85%  { opacity: 0.2; }
-          100% { transform: translate(24px, 5px) scaleX(1.2); opacity: 0; }
-        }
-
-        .glimmer { animation: glimmer 5s ease-in-out infinite; opacity: 0; }
-        .glimmer.two { animation-delay: -5s; }
-        @keyframes glimmer {
-          0%, 100% { opacity: 0; transform: translateX(-15px); }
-          50%      { opacity: 0.42; transform: translateX(15px); }
-        }
-
-        .alpine.paused * { animation-play-state: paused !important; }
-
-        @media (prefers-reduced-motion: reduce) {
-          .alpine * { animation: none !important; }
-          .sun, .bird-flight, .smoke, .glimmer, .water-motion { display: none; }
-        }
       `}</style>
     </section>
   );
