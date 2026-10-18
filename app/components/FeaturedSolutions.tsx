@@ -27,21 +27,21 @@ const useReveal = () => {
   return { ref, visible };
 };
 
-// --- Contenedor común de tarjeta: contenido centrado, pie con logo opcional + flecha ---
+// --- Contenedor común de tarjeta ---
+// - Título: fijo arriba, misma altura en todas las tarjetas, fuera del flujo
+//   (no afecta el centrado).
+// - Mensaje completo (texto + extra: logo, calugas, emoji) centrado como un
+//   solo bloque, vertical y horizontalmente.
 const Card = ({
   href,
-  footer,
-  decoration,
-  alignTop = false,
-  dark = false,
+  title,
+  extra,
   className = "",
   children,
 }: {
   href: string;
-  footer?: ReactNode;
-  decoration?: ReactNode;
-  alignTop?: boolean; // título fijo arriba (alinea títulos entre tarjetas)
-  dark?: boolean;
+  title?: ReactNode;
+  extra?: ReactNode;
   className?: string;
   children: ReactNode;
 }) => {
@@ -51,23 +51,25 @@ const Card = ({
       href={href}
       ref={ref}
       data-card
-      className={`group snap-center shrink-0 relative overflow-hidden rounded-[2rem] p-8 md:p-12 flex flex-col gap-8 h-[600px] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#111111] ${dark ? "bg-[#111111] text-white" : "bg-white text-[#111111]"} ${className}`}
+      className={`group snap-center shrink-0 relative overflow-hidden rounded-[2rem] p-8 md:p-12 h-[600px] bg-white text-[#111111] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#111111] ${className}`}
     >
-      {decoration}
+      {title && (
+        <div className="absolute top-8 md:top-12 inset-x-8 md:inset-x-12 flex justify-center text-center">
+          {title}
+        </div>
+      )}
       <div
-        className={`relative z-10 flex-1 flex flex-col items-center ${alignTop ? "justify-start pt-2 md:pt-4" : "justify-center"} text-center transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        className={`h-full flex flex-col items-center justify-center text-center transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
       >
         {children}
+        {extra}
       </div>
-      <div className="relative z-10 flex items-end justify-between gap-4">
-        <div>{footer}</div>
-        <span
-          aria-hidden
-          className={`w-11 h-11 rounded-full flex items-center justify-center ${dark ? "bg-white/10 text-white group-hover:bg-white group-hover:text-[#111111]" : "bg-[#F5F5F7] text-[#111111] group-hover:bg-[#111111] group-hover:text-white"}`}
-        >
-          <ArrowRight className="w-5 h-5" strokeWidth={1.75} />
-        </span>
-      </div>
+      <span
+        aria-hidden
+        className="absolute bottom-8 right-8 md:bottom-12 md:right-12 w-11 h-11 rounded-full flex items-center justify-center bg-[#F5F5F7] text-[#111111] group-hover:bg-[#111111] group-hover:text-white"
+      >
+        <ArrowRight className="w-5 h-5" strokeWidth={1.75} />
+      </span>
     </Link>
   );
 };
@@ -77,7 +79,7 @@ const HERO =
   "font-sora font-semibold tracking-tighter leading-[0.95] text-[3rem] sm:text-[4.5rem] md:text-[5.5rem]";
 
 const Eyebrow = ({ children }: { children: ReactNode }) => (
-  <p className="mb-9 md:mb-10 text-base md:text-lg font-medium">{children}</p>
+  <p className="text-base md:text-lg leading-6 md:leading-7 font-medium">{children}</p>
 );
 
 const Support = ({ children }: { children: ReactNode }) => (
@@ -118,11 +120,11 @@ const AigorLogo = ({ className = "" }: { className?: string }) => (
     className={`p-[4px] rounded-[1.4rem] md:rounded-[1.6rem] ${className}`}
     style={{ background: "linear-gradient(135deg, #FF270A 0%, #c22c98 45%, #9333EA 75%, #2563EB 100%)" }}
   >
-    <div className="w-[7.5rem] h-[7.5rem] md:w-36 md:h-36 rounded-[calc(1.4rem-4px)] md:rounded-[calc(1.6rem-4px)] bg-[#0a0a0a] flex flex-col items-center justify-center">
-      <span className="font-sora font-extrabold tracking-tighter leading-none text-[2rem] md:text-[2.4rem] text-white">
+    <div className="w-24 h-24 md:w-28 md:h-28 rounded-[calc(1.4rem-4px)] md:rounded-[calc(1.6rem-4px)] bg-[#0a0a0a] flex flex-col items-center justify-center">
+      <span className="font-sora font-extrabold tracking-tighter leading-none text-[1.5rem] md:text-[1.75rem] text-white">
         AiGOR
       </span>
-      <span className="mt-2 font-sora font-bold uppercase tracking-[0.18em] text-[7.5px] md:text-[9px] text-[#FF270A]">
+      <span className="mt-1.5 font-sora font-bold uppercase tracking-[0.16em] text-[6px] md:text-[7px] text-[#FF270A]">
         RNA Technology
       </span>
     </div>
@@ -199,7 +201,7 @@ export default function FeaturedSolutions() {
   return (
     <section className="bg-[#F5F5F7] pt-24 md:pt-28 pb-16 md:pb-24 overflow-hidden relative">
       <div className="max-w-[1280px] mx-auto px-6 md:px-10">
-        <div className="flex items-end justify-between gap-6 mb-10 md:mb-16">
+        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6 mb-10 md:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#111111] font-sora tracking-tight leading-[1.1]">
             Featured solutions
           </h2>
@@ -207,7 +209,7 @@ export default function FeaturedSolutions() {
             href="/solutions" /* TODO: URL real */
             className="shrink-0 inline-flex items-center gap-1.5 text-sm md:text-base font-medium text-[#111111] hover:underline underline-offset-4 outline-none focus-visible:underline"
           >
-            All solutions <ArrowRight className="w-4 h-4" strokeWidth={1.75} />
+            All featured solutions <ArrowRight className="w-4 h-4" strokeWidth={1.75} />
           </Link>
         </div>
 
@@ -220,80 +222,92 @@ export default function FeaturedSolutions() {
           className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-28 md:pb-16 no-scrollbar"
           style={{ paddingLeft: edgePadding, paddingRight: edgePadding }}
         >
-          {/* 0 — AiGOR */}
-          <Card href="/technology/aigor" /* TODO: URL real */ className="w-[85vw] md:w-[560px]">
-            <AigorLogo className="mb-8 md:mb-10" />
+          {/* 0 — AiGOR (sin título) */}
+          <Card
+            href="/technology/aigor" /* TODO: URL real */
+            className="w-[85vw] md:w-[560px]"
+            title={<AigorLogo />}
+          >
             <GradientHero>Ultra-fast.</GradientHero>
             <Support>Results within the same shift.</Support>
           </Card>
 
-          {/* 1 — ELEVIA 1.1 (ancha) */}
+          {/* 1 — ELEVIA 1.1 */}
           <Card
             href="/products/elevia-1-1" /* TODO: URL real */
             className="w-[85vw] md:w-[720px]"
+            title={<Eyebrow>Salmonella results in</Eyebrow>}
+            extra={
+              <Image
+                src="/aoac_elevia11.png"
+                alt="AOAC Performance Tested Method certification"
+                width={160}
+                height={64}
+                className="mt-10 md:mt-12 h-12 md:h-16 w-auto"
+              />
+            }
           >
-            <Eyebrow>Salmonella results in</Eyebrow>
-            <div className="flex flex-wrap items-end justify-center gap-x-12 gap-y-6">
-              <div>
+            <div className="flex flex-wrap items-start justify-center gap-x-12 gap-y-6">
+              <div className="flex flex-col items-center">
                 <Big value="3–6" unit="h" gradient />
                 <Support>in environmental samples</Support>
               </div>
-              <div className="hidden sm:block w-px h-28 bg-[#111111]/10" />
-              <div>
+              <div className="hidden sm:block self-center w-px h-28 bg-[#111111]/10" />
+              <div className="flex flex-col items-center">
                 <Big value="7–10" unit="h" gradient />
                 <Support>in finished product</Support>
               </div>
             </div>
-            <Image
-              src="/aoac_elevia11.png"
-              alt="AOAC Performance Tested Method certification"
-              width={160}
-              height={64}
-              className="mt-10 md:mt-12 h-12 md:h-16 w-auto"
-            />
           </Card>
 
           {/* 2 — CAMARÓN */}
-          <Card href="/solutions/seafood" /* TODO: URL real */ alignTop className="w-[85vw] md:w-[440px]">
-            <Eyebrow>Salmonella testing in shrimp</Eyebrow>
+          <Card
+            href="/solutions/seafood" /* TODO: URL real */
+            className="w-[85vw] md:w-[440px]"
+            title={<Eyebrow>Salmonella testing in shrimp</Eyebrow>}
+            extra={<span aria-hidden className="mt-6 text-5xl md:text-6xl leading-none select-none">🦐</span>}
+          >
             <GradientHero>
               Same
               <br />
               shift.
             </GradientHero>
             <Support>Results before the shift ends.</Support>
-            <span aria-hidden className="mt-6 text-5xl md:text-6xl leading-none select-none">🦐</span>
           </Card>
 
           {/* 3 — SPOILAGE */}
-          <Card href="/solutions/beverage-spoilage" /* TODO: URL real */ alignTop className="w-[85vw] md:w-[480px]">
-            <Eyebrow>Beverage spoilage testing</Eyebrow>
+          <Card
+            href="/solutions/beverage-spoilage" /* TODO: URL real */
+            className="w-[85vw] md:w-[480px]"
+            title={<Eyebrow>Beverage spoilage testing</Eyebrow>}
+            extra={
+              <ul className="mt-6 w-[260px] md:w-[300px] flex flex-col gap-1.5">
+                {spoilageTargets.map((t) => (
+                  <li
+                    key={t}
+                    className="rounded-full bg-white border-[1.5px] border-[#FF270A] px-4 py-1.5 text-sm font-semibold text-[#111111] text-center whitespace-nowrap"
+                  >
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            }
+          >
             <Big value="4" unit="in 1" />
             <Support>spoilage threats in one PCR reaction</Support>
-            <ul className="mt-8 w-full max-w-[300px] flex flex-col gap-2">
-              {spoilageTargets.map((t) => (
-                <li
-                  key={t}
-                  className="rounded-full bg-white border-[1.5px] border-[#FF270A] px-4 py-2 text-sm font-semibold text-[#111111] text-center whitespace-nowrap"
-                >
-                  {t}
-                </li>
-              ))}
-            </ul>
           </Card>
 
-          {/* 4 — LABORATORY SERVICES (ancha) */}
-          <Card href="/laboratory-services" /* TODO: URL real */ alignTop className="w-[85vw] md:w-[620px]">
-            <Eyebrow>The future of laboratory services</Eyebrow>
-            <div>
-              <GradientHero>Same-day</GradientHero>
-              <Support>results for pathogens</Support>
-            </div>
-            <div className="my-8 md:my-10 h-[2px] w-full max-w-[320px] rounded-full" style={{ background: RANGE_GRADIENT }} />
-            <div>
-              <GradientHero>AI-powered</GradientHero>
-              <Support>data analysis</Support>
-            </div>
+          {/* 4 — LABORATORY SERVICES */}
+          <Card
+            href="/laboratory-services" /* TODO: URL real */
+            className="w-[85vw] md:w-[620px]"
+            title={<Eyebrow>The future of laboratory services</Eyebrow>}
+          >
+            <GradientHero>Same-day</GradientHero>
+            <Support>results for pathogens</Support>
+            <div className="my-8 md:my-10 h-[2px] w-[260px] md:w-[320px] rounded-full" style={{ background: RANGE_GRADIENT }} />
+            <GradientHero>AI-powered</GradientHero>
+            <Support>data analysis</Support>
           </Card>
           <div className="shrink-0 w-[1px]" />
         </div>
