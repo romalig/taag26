@@ -36,22 +36,31 @@ const Card = ({
   href,
   title,
   extra,
+  glow = false,
   className = "",
   children,
 }: {
   href: string;
   title?: ReactNode;
   extra?: ReactNode;
+  glow?: boolean; // halo AiGOR animado alrededor del contorno
   className?: string;
   children: ReactNode;
 }) => {
   const { ref, visible } = useReveal();
   return (
+    <div data-card className={`snap-center shrink-0 relative ${className}`}>
+      {glow && (
+        <div
+          aria-hidden
+          className="aigor-glow pointer-events-none absolute -inset-[2px] rounded-[calc(2rem+2px)]"
+          style={{ backgroundImage: GLOW_GRADIENT }}
+        />
+      )}
     <Link
       href={href}
       ref={ref}
-      data-card
-      className={`group snap-center shrink-0 relative overflow-hidden rounded-[2rem] p-8 md:p-12 h-[600px] bg-white text-[#111111] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#111111] ${className}`}
+      className="group relative block w-full overflow-hidden rounded-[2rem] p-8 md:p-12 h-[600px] bg-white text-[#111111] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#111111]"
     >
       {title && (
         <div className="absolute top-14 md:top-12 inset-x-8 md:inset-x-12 flex justify-center text-center">
@@ -71,6 +80,7 @@ const Card = ({
         <ArrowRight className="w-5 h-5" strokeWidth={1.75} />
       </span>
     </Link>
+    </div>
   );
 };
 
@@ -91,6 +101,10 @@ const Support = ({ children }: { children: ReactNode }) => (
 const SLATE_GRADIENT = "linear-gradient(180deg, #1A1E24 0%, #434B56 50%, #8A95A3 100%)";
 
 // Degradado AiGOR oficial (mismo que --aigor-gradient en la landing de Elevia)
+// Degradado de ida y vuelta para el glow (se desplaza sin cortes)
+const GLOW_GRADIENT =
+  "linear-gradient(100deg, #FF270A 0%, #c22c98 19%, #9333EA 34%, #2563EB 50%, #9333EA 66%, #c22c98 81%, #FF270A 100%)";
+
 const RANGE_GRADIENT = "linear-gradient(100deg, #FF270A 0%, #c22c98 38%, #9333EA 68%, #2563EB 100%)";
 
 const Big = ({ value, unit, gradient = false }: { value: string; unit?: string; gradient?: boolean }) =>
@@ -201,7 +215,7 @@ export default function FeaturedSolutions() {
   return (
     <section className="bg-[#F5F5F7] pt-24 md:pt-28 pb-16 md:pb-24 overflow-hidden relative">
       <div className="max-w-[1280px] mx-auto px-6 md:px-10">
-        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6 mb-10 md:mb-16">
+        <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-6 mb-2 md:mb-8">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#111111] font-sora tracking-tight leading-[1.1]">
             Featured solutions
           </h2>
@@ -219,12 +233,13 @@ export default function FeaturedSolutions() {
         <div
           ref={carouselRef}
           onScroll={checkScroll}
-          className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-28 md:pb-16 no-scrollbar"
+          className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pt-8 pb-28 md:pb-16 no-scrollbar"
           style={{ paddingLeft: edgePadding, paddingRight: edgePadding }}
         >
           {/* 0 — AiGOR (sin título) */}
           <Card
             href="/technology/aigor" /* TODO: URL real */
+            glow
             className="w-[78vw] md:w-[560px]"
             title={<AigorLogo />}
           >
@@ -339,6 +354,25 @@ export default function FeaturedSolutions() {
         .font-sora { font-family: var(--font-sora), sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Glow AiGOR: el color recorre el contorno y respira suavemente */
+        .aigor-glow {
+          background-size: 200% 100%;
+          filter: blur(8px);
+          opacity: 0.55;
+          animation: glowFlow 10s linear infinite alternate, glowBreath 5s ease-in-out infinite;
+        }
+        @keyframes glowFlow {
+          from { background-position: 0% 50%; }
+          to { background-position: 100% 50%; }
+        }
+        @keyframes glowBreath {
+          0%, 100% { opacity: 0.45; }
+          50% { opacity: 0.7; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .aigor-glow { animation: none; }
+        }
 
       `}</style>
     </section>
