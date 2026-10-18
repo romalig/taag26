@@ -88,7 +88,7 @@ const Support = ({ children }: { children: ReactNode }) => (
 
 // gradient: rojo → violeta → azul sobre número + unidad; la unidad baja a la línea base
 // Degradado grafito vertical (estilo Apple): oscuro arriba, gris pizarra abajo
-const SLATE_GRADIENT = "linear-gradient(180deg, #1A1E24 0%, #434B56 50%, #8A95A3 100%)";
+const SLATE_GRADIENT = "linear-gradient(180deg, #050608 0%, #39414C 30%, #A3AEBB 100%)";
 
 // Degradado AiGOR oficial (mismo que --aigor-gradient en la landing de Elevia)
 const RANGE_GRADIENT = "linear-gradient(100deg, #FF270A 0%, #c22c98 38%, #9333EA 68%, #2563EB 100%)";
