@@ -83,7 +83,7 @@ const Eyebrow = ({ children }: { children: ReactNode }) => (
 );
 
 const Support = ({ children }: { children: ReactNode }) => (
-  <p className="mt-3 text-base md:text-lg opacity-60">{children}</p>
+  <p className="mt-3 mx-auto max-w-[220px] sm:max-w-[280px] md:max-w-[320px] text-base md:text-lg opacity-60 [text-wrap:balance]">{children}</p>
 );
 
 // gradient: rojo → violeta → azul sobre número + unidad; la unidad baja a la línea base
@@ -273,7 +273,7 @@ export default function FeaturedSolutions() {
               <br />
               shift
             </GradientHero>
-            <Support>Salmonella results before <br /> the shift ends</Support>
+            <Support>Salmonella results before the shift ends</Support>
           </Card>
 
           {/* 3 — SPOILAGE */}
@@ -295,7 +295,7 @@ export default function FeaturedSolutions() {
             }
           >
             <Big value="4" unit="in 1" />
-            <Support>Fast detection of main spoilage <br /> threats in one PCR reaction </Support>
+            <Support>Fast detection of main spoilage threats in one PCR reaction </Support>
           </Card>
 
           {/* 4 — LABORATORY SERVICES */}
