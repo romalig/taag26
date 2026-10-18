@@ -54,7 +54,7 @@ const Card = ({
       className={`group snap-center shrink-0 relative overflow-hidden rounded-[2rem] p-8 md:p-12 h-[600px] bg-white text-[#111111] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#111111] ${className}`}
     >
       {title && (
-        <div className="absolute top-8 md:top-12 inset-x-8 md:inset-x-12 flex justify-center text-center">
+        <div className="absolute top-14 md:top-12 inset-x-8 md:inset-x-12 flex justify-center text-center">
           {title}
         </div>
       )}
@@ -76,10 +76,10 @@ const Card = ({
 
 // --- Sistema tipográfico común: contexto → mensaje grande → apoyo ---
 const HERO =
-  "font-sora font-semibold tracking-tighter leading-[0.95] text-[3rem] sm:text-[4.5rem] md:text-[5.5rem]";
+  "font-sora font-semibold tracking-tighter leading-[0.95] text-[2.5rem] sm:text-[4.5rem] md:text-[5.5rem]";
 
 const Eyebrow = ({ children }: { children: ReactNode }) => (
-  <p className="text-base md:text-lg leading-6 md:leading-7 font-medium">{children}</p>
+  <p className="text-lg md:text-xl leading-7 md:leading-8 font-medium">{children}</p>
 );
 
 const Support = ({ children }: { children: ReactNode }) => (
@@ -219,13 +219,13 @@ export default function FeaturedSolutions() {
         <div
           ref={carouselRef}
           onScroll={checkScroll}
-          className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-28 md:pb-16 no-scrollbar"
+          className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:gap-6 pb-28 md:pb-16 no-scrollbar"
           style={{ paddingLeft: edgePadding, paddingRight: edgePadding }}
         >
           {/* 0 — AiGOR (sin título) */}
           <Card
             href="/technology/aigor" /* TODO: URL real */
-            className="w-[85vw] md:w-[560px]"
+            className="w-[78vw] md:w-[560px]"
             title={<AigorLogo />}
           >
             <GradientHero>Ultra-fast.</GradientHero>
@@ -235,7 +235,7 @@ export default function FeaturedSolutions() {
           {/* 1 — ELEVIA 1.1 */}
           <Card
             href="/products/elevia-1-1" /* TODO: URL real */
-            className="w-[85vw] md:w-[720px]"
+            className="w-[78vw] md:w-[720px]"
             title={<Eyebrow>Salmonella results in</Eyebrow>}
             extra={
               <Image
@@ -263,7 +263,7 @@ export default function FeaturedSolutions() {
           {/* 2 — CAMARÓN */}
           <Card
             href="/solutions/seafood" /* TODO: URL real */
-            className="w-[85vw] md:w-[440px]"
+            className="w-[78vw] md:w-[440px]"
             title={<Eyebrow>Salmonella testing in shrimp</Eyebrow>}
             extra={<span aria-hidden className="mt-6 text-5xl md:text-6xl leading-none select-none">🦐</span>}
           >
@@ -278,10 +278,10 @@ export default function FeaturedSolutions() {
           {/* 3 — SPOILAGE */}
           <Card
             href="/solutions/beverage-spoilage" /* TODO: URL real */
-            className="w-[85vw] md:w-[480px]"
+            className="w-[78vw] md:w-[480px]"
             title={<Eyebrow>Beverage spoilage testing</Eyebrow>}
             extra={
-              <ul className="mt-6 w-[260px] md:w-[300px] flex flex-col gap-1.5">
+              <ul className="mt-6 w-full max-w-[260px] md:max-w-[300px] flex flex-col gap-1.5">
                 {spoilageTargets.map((t) => (
                   <li
                     key={t}
@@ -300,12 +300,12 @@ export default function FeaturedSolutions() {
           {/* 4 — LABORATORY SERVICES */}
           <Card
             href="/laboratory-services" /* TODO: URL real */
-            className="w-[85vw] md:w-[620px]"
+            className="w-[78vw] md:w-[620px]"
             title={<Eyebrow>The future of laboratory services</Eyebrow>}
           >
             <GradientHero>Same-day</GradientHero>
             <Support>results for pathogens</Support>
-            <div className="my-8 md:my-10 h-[2px] w-[260px] md:w-[320px] rounded-full" style={{ background: RANGE_GRADIENT }} />
+            <div className="my-8 md:my-10 h-[2px] w-full max-w-[260px] md:max-w-[320px] rounded-full" style={{ background: RANGE_GRADIENT }} />
             <GradientHero>AI-powered</GradientHero>
             <Support>data analysis</Support>
           </Card>
@@ -339,6 +339,7 @@ export default function FeaturedSolutions() {
         .font-sora { font-family: var(--font-sora), sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
       `}</style>
     </section>
   );
