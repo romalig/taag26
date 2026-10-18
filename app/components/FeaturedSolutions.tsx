@@ -228,15 +228,15 @@ export default function FeaturedSolutions() {
             className="w-[78vw] md:w-[560px]"
             title={<AigorLogo />}
           >
-            <GradientHero>Ultra-fast.</GradientHero>
-            <Support>Pathogen results within the same shift.</Support>
+            <GradientHero>Ultra-fast</GradientHero>
+            <Support>Pathogen results within the same shift</Support>
           </Card>
 
           {/* 1 — ELEVIA 1.1 */}
           <Card
             href="/products/elevia-1-1" /* TODO: URL real */
             className="w-[78vw] md:w-[720px]"
-            title={<Eyebrow>Elevia 1.1 Salmonella kit.</Eyebrow>}
+            title={<Eyebrow>Elevia 1.1 Salmonella kit</Eyebrow>}
             extra={
               <Image
                 src="/aoac_elevia11.png"
@@ -271,9 +271,9 @@ export default function FeaturedSolutions() {
             <GradientHero>
               Same
               <br />
-              shift.
+              shift
             </GradientHero>
-            <Support>Salmonella results before <br /> the shift ends.</Support>
+            <Support>Salmonella results before <br /> the shift ends</Support>
           </Card>
 
           {/* 3 — SPOILAGE */}
