@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/app/seo/page-metadata";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
+import FeaturedSolutions from "./components/FeaturedSolutions";
 import AigorSection from "./components/AigorSection";
 import SystemModules from "./components/SystemModules";
 import SolutionFinder from "./components/SolutionFinder";
@@ -31,6 +32,7 @@ export default function Home() {
       {/* 1. Hero Section (Imagen científica + CTA) */}
       
       <Hero />
+      <FeaturedSolutions />
 
       {/* 4. Tarjetas de Productos (Estilo Hims/Lilly) */}
       <SystemModules />
