@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 
-// --- Hook: aparece una sola vez al entrar en pantalla ---
+// --- Hook: se activa cada vez que la tarjeta entra en pantalla y se reinicia al salir ---
 const useReveal = () => {
   const ref = useRef<HTMLAnchorElement>(null);
   const [visible, setVisible] = useState(false);
@@ -13,13 +13,8 @@ const useReveal = () => {
     const node = ref.current;
     if (!node) return;
     const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setVisible(true);
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.3 }
+      ([e]) => setVisible(e.isIntersecting),
+      { threshold: 0.35 }
     );
     obs.observe(node);
     return () => obs.disconnect();
@@ -59,7 +54,7 @@ const Card = ({
         </div>
       )}
       <div
-        className={`h-full flex flex-col items-center justify-center text-center transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        className={`h-full flex flex-col items-center justify-center text-center transition-all duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-10 scale-[0.96]"}`}
       >
         {children}
         {extra}
