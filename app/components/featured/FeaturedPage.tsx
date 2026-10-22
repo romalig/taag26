@@ -114,6 +114,7 @@ const InnovationField = () => {
       const cy = visibleH / 2;
       const unit = visibleH * 0.5;
       const s = t / 1000;
+      const density = w < 768 ? 0.6 : 1; // menos puntos en el celular
 
       // Anillos de puntos (los de abajo pasan por detrás de las tarjetas)
       RINGS.forEach((ring, ri) => {
@@ -126,8 +127,9 @@ const InnovationField = () => {
         const drift = s * 0.06 * dir;
         const radius = unit * ring.r * e;
         const offset = ri * 0.32;
-        for (let k = 0; k < ring.n; k++) {
-          const ang = (k / ring.n) * Math.PI * 2 + offset + spinIn + drift;
+        const count = Math.max(6, Math.round(ring.n * density));
+        for (let k = 0; k < count; k++) {
+          const ang = (k / count) * Math.PI * 2 + offset + spinIn + drift;
           const x = cx + Math.cos(ang) * radius;
           const y = cy + Math.sin(ang) * radius;
           const [r, g, b] = orbitColor(ang + Math.PI / 2);
@@ -220,7 +222,7 @@ const InnovationField = () => {
     <div
       ref={wrapRef}
       aria-hidden
-      className="relative w-full mt-12 md:mt-16"
+      className="relative -mx-5 sm:-mx-10 md:mx-0 mt-12 md:mt-16"
       style={{
         height: "var(--orbit-h)",
         // Desvanecido arriba y abajo: los puntos aparecen y se pierden en los bordes
