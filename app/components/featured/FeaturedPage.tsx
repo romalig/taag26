@@ -429,8 +429,8 @@ export default function FeaturedPage() {
       {/* 1. HERO — mismos espacios que IndustrialHero */}
       <section className="pt-40 pb-10 px-4 md:px-6 max-w-7xl mx-auto text-center">
         <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-[#111111] mb-12 md:mb-18 tracking-tight leading-tight md:leading-[1.1] max-w-6xl mx-auto">
-          What’s new in <br className="hidden md:block" />
-          <span className="text-gray-400 inline-block">Microbiological Solutions.</span>
+          Where microbiology <br className="hidden md:block" />
+          <span className="text-gray-400 inline-block">meets innovation.</span>
         </h1>
         <p className="text-lg md:text-2xl text-gray-500 max-w-3xl mx-auto font-medium leading-relaxed px-2 mb-6">
           New products, newly validated matrices, software features and services, all in one place.
@@ -449,7 +449,7 @@ export default function FeaturedPage() {
           <div className="relative text-center max-w-2xl mx-auto">
             <p className="text-xs font-bold uppercase tracking-widest text-[#FF270A] mb-4">Featured solutions</p>
             <h2 className="font-sora font-bold tracking-tight leading-[1.1] text-4xl md:text-5xl text-[#111111] [text-wrap:balance]">
-              This is what the future looks like.
+              Science never<br />stands still
             </h2>
           </div>
 
