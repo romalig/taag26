@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Info, ChevronDown } from "lucide-react";
 
 /* ============================================================
@@ -219,6 +219,31 @@ const FLOWS: Flow[] = [
   { id: "rinse", site: "Plant Santiago", name: "CIP final rinse water", finalRisk: 0.03, prevRisk: 0.034, stages: RINSE_STAGES },
 ];
 
+// --- Límites sugeridos (basados en riesgo) ---
+// Para cada indicador intermedio, el modelo calcula el mayor resultado que
+// mantiene el riesgo del agua final en o bajo el objetivo elegido.
+// Clave: "flujo:etapa:indicador". ⚠️ Valores ficticios.
+const TARGETS = [0.01, 0.02, 0.05] as const;
+type Target = (typeof TARGETS)[number];
+type Suggestion = { limits: Record<Target, number>; finalRiskAtLimit: number };
+
+const HPC = "Heterotrophic plate count";
+const SUGGESTED: Record<string, Suggestion> = {
+  [`line2:raw:${HPC}`]: { limits: { 0.01: 420, 0.02: 520, 0.05: 650 }, finalRiskAtLimit: 0.016 },
+  "line2:raw:Total coliforms": { limits: { 0.01: 6, 0.02: 9, 0.05: 14 }, finalRiskAtLimit: 0.022 },
+  [`line2:multimedia:${HPC}`]: { limits: { 0.01: 240, 0.02: 310, 0.05: 420 }, finalRiskAtLimit: 0.019 },
+  [`line2:carbon:${HPC}`]: { limits: { 0.01: 280, 0.02: 360, 0.05: 520 }, finalRiskAtLimit: 0.047 },
+  [`line2:softener:${HPC}`]: { limits: { 0.01: 260, 0.02: 340, 0.05: 450 }, finalRiskAtLimit: 0.013 },
+  [`line2:ro:${HPC}`]: { limits: { 0.01: 22, 0.02: 35, 0.05: 60 }, finalRiskAtLimit: 0.028 },
+  [`line2:uv:${HPC}`]: { limits: { 0.01: 6, 0.02: 9, 0.05: 15 }, finalRiskAtLimit: 0.021 },
+  [`line1:raw:${HPC}`]: { limits: { 0.01: 380, 0.02: 470, 0.05: 600 }, finalRiskAtLimit: 0.025 },
+  [`line1:sand:${HPC}`]: { limits: { 0.01: 200, 0.02: 260, 0.05: 350 }, finalRiskAtLimit: 0.03 },
+  [`line1:carbon:${HPC}`]: { limits: { 0.01: 300, 0.02: 390, 0.05: 540 }, finalRiskAtLimit: 0.041 },
+  [`line1:uv:${HPC}`]: { limits: { 0.01: 4, 0.02: 6, 0.05: 11 }, finalRiskAtLimit: 0.06 },
+  [`rinse:ro:${HPC}`]: { limits: { 0.01: 30, 0.02: 45, 0.05: 70 }, finalRiskAtLimit: 0.022 },
+  [`rinse:uv:${HPC}`]: { limits: { 0.01: 5, 0.02: 8, 0.05: 13 }, finalRiskAtLimit: 0.02 },
+};
+
 // Etapa que más aporta al riesgo final
 const topStage = (f: Flow) => [...f.stages].sort((a, b) => b.contribution - a.contribution)[0];
 
@@ -414,9 +439,32 @@ export default function WaterRiskPage() {
   const [flowId, setFlowId] = useState<string>(FLOWS[0].id);
   const flow = FLOWS.find((f) => f.id === flowId) ?? FLOWS[0];
   const [selected, setSelected] = useState<string>(topStage(FLOWS[0]).id);
+  const [target, setTarget] = useState<Target>(0.01);
+
+  // Tooltip ⓘ: se abre con toque/clic (móvil) o hover (escritorio); se cierra al tocar fuera o con Esc
+  const [infoOpen, setInfoOpen] = useState(false);
+  const infoRef = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    if (!infoOpen) return;
+    const onDown = (e: PointerEvent) => {
+      if (infoRef.current && !infoRef.current.contains(e.target as Node)) setInfoOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setInfoOpen(false);
+    };
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [infoOpen]);
   const stage = flow.stages.find((s) => s.id === selected) ?? topStage(flow);
   const delta = (flow.finalRisk - flow.prevRisk) * 100;
   const finalLevel = level(flow.finalRisk);
+  const isOutlet = stage.id === flow.stages[flow.stages.length - 1].id; // la salida usa la especificación oficial
+  const suggestionFor = (name: string) => (isOutlet ? undefined : SUGGESTED[`${flow.id}:${stage.id}:${name}`]);
+  const stageHasSuggestions = stage.indicators.some((i) => suggestionFor(i.name));
 
   // Al cambiar de flujo se abre la etapa que más aporta al riesgo
   const changeFlow = (id: string) => {
@@ -483,17 +531,25 @@ export default function WaterRiskPage() {
           <h2 className="text-center font-sora font-bold tracking-tight text-3xl md:text-4xl">Treatment flow</h2>
           <div className="mt-3 flex items-center justify-center gap-2 text-[#111111]/60">
             <p>Select a stage to see its results.</p>
-            <span className="group relative inline-flex">
+            <span ref={infoRef} className="group relative inline-flex">
               <button
                 type="button"
                 aria-label="What do these percentages mean?"
-                className="inline-flex text-[#111111]/40 hover:text-[#111111] focus-visible:text-[#111111] outline-none"
+                aria-expanded={infoOpen}
+                aria-describedby="flow-info"
+                onClick={() => setInfoOpen((o) => !o)}
+                className="inline-flex p-2 -m-2 text-[#111111]/40 hover:text-[#111111] focus-visible:text-[#111111] outline-none"
               >
                 <Info className="w-4 h-4" strokeWidth={1.75} />
               </button>
               <span
+                id="flow-info"
                 role="tooltip"
-                className="pointer-events-none absolute left-1/2 top-full z-30 mt-3 w-[280px] -translate-x-1/2 rounded-2xl bg-[#111111] p-4 text-left text-[13px] leading-relaxed text-white/80 opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+                className={`absolute top-full z-30 mt-3 -right-3 md:right-auto md:left-1/2 md:-translate-x-1/2 w-[min(300px,calc(100vw-48px))] rounded-2xl bg-[#111111] p-4 text-left text-[13px] leading-relaxed text-white/80 shadow-lg transition-opacity ${
+                  infoOpen
+                    ? "opacity-100 visible"
+                    : "opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible md:group-focus-within:opacity-100 md:group-focus-within:visible"
+                }`}
               >
                 <span className="block">
                   <span className="font-semibold text-white">Stage risk (%)</span>: probability that the next result at
@@ -506,6 +562,10 @@ export default function WaterRiskPage() {
                 <span className="block mt-2">
                   <span className="font-semibold text-white">Next ≈ and shaded bar</span>: predicted value and likely range
                   of the next result. &ldquo;Up to N× limit&rdquo; shows how far it could exceed the limit.
+                </span>
+                <span className="block mt-2">
+                  <span className="font-semibold text-white">Suggested limit</span>: the highest result at this stage that
+                  keeps the final water risk at or below the selected target.
                 </span>
               </span>
             </span>
@@ -562,6 +622,26 @@ export default function WaterRiskPage() {
                 <p className="text-sm text-[#111111]/45">Last sample {fmtDate(parseISO(stage.lastSample))}</p>
                 <h3 className="mt-1 font-sora font-bold tracking-tight text-2xl md:text-3xl">{stage.name}</h3>
                 <p className="mt-2 text-[#111111]/60">Probability that the next result exceeds each limit.</p>
+                {stageHasSuggestions && (
+                  <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-[#111111]/60">
+                    <span>Suggested limits for a final water risk of</span>
+                    <span className="inline-flex rounded-full bg-[#F5F5F7] p-1">
+                      {TARGETS.map((t) => (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => setTarget(t)}
+                          aria-pressed={target === t}
+                          className={`rounded-full px-3 py-1 text-sm font-medium tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-[#111111] ${
+                            target === t ? "bg-white text-[#111111] shadow-sm" : "text-[#111111]/50"
+                          }`}
+                        >
+                          {t * 100}%
+                        </button>
+                      ))}
+                    </span>
+                  </div>
+                )}
               </div>
               <div className="flex gap-10">
                 <div>
@@ -592,6 +672,28 @@ export default function WaterRiskPage() {
                       <p className="text-sm text-[#111111]/45">
                         Limit {ind.threshold === 0 ? "not detected" : `${ind.threshold} ${ind.unit}`}
                       </p>
+                      {(() => {
+                        const sug = suggestionFor(ind.name);
+                        if (!sug) return null;
+                        const v = sug.limits[target];
+                        const stricter = v < ind.threshold;
+                        return (
+                          <p className="mt-0.5 text-sm">
+                            <span className="text-[#111111]/45">Suggested </span>
+                            <span className="font-semibold tabular-nums">
+                              {v} {ind.unit}
+                            </span>
+                            {v !== ind.threshold && (
+                              <span className={`ml-1.5 text-xs font-medium ${stricter ? "text-[#FF270A]" : "text-[#16A34A]"}`}>
+                                {stricter ? "↓ stricter" : "↑ room to relax"}
+                              </span>
+                            )}
+                            <span className="block text-xs text-[#111111]/45">
+                              Current limit allows {pct(sug.finalRiskAtLimit)} final risk
+                            </span>
+                          </p>
+                        );
+                      })()}
                     </div>
                     <div className="hidden md:block tabular-nums">
                       <p className={over ? "text-[#FF270A] font-semibold" : ""}>
