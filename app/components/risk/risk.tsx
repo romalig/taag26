@@ -617,45 +617,52 @@ export default function WaterRiskPage() {
 
           {/* 2.2 Especificaciones y predicciones de la etapa seleccionada */}
           <div className="mt-12 md:mt-16 rounded-[1.75rem] bg-white p-7 md:p-12">
-            <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-              <div>
+            {/* Título + indicadores de la etapa, alineados por la base (también en móvil) */}
+            <div className="flex items-end justify-between gap-4 md:gap-8">
+              <div className="min-w-0">
                 <p className="text-sm text-[#111111]/45">Last sample {fmtDate(parseISO(stage.lastSample))}</p>
-                <h3 className="mt-1 font-sora font-bold tracking-tight text-2xl md:text-3xl">{stage.name}</h3>
-                <p className="mt-2 text-[#111111]/60">Probability that the next result exceeds each limit.</p>
-                {stageHasSuggestions && (
-                  <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-[#111111]/60">
-                    <span>Suggested limits for a final water risk of</span>
-                    <span className="inline-flex rounded-full bg-[#F5F5F7] p-1">
-                      {TARGETS.map((t) => (
-                        <button
-                          key={t}
-                          type="button"
-                          onClick={() => setTarget(t)}
-                          aria-pressed={target === t}
-                          className={`rounded-full px-3 py-1 text-sm font-medium tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-[#111111] ${
-                            target === t ? "bg-white text-[#111111] shadow-sm" : "text-[#111111]/50"
-                          }`}
-                        >
-                          {t * 100}%
-                        </button>
-                      ))}
-                    </span>
-                  </div>
-                )}
+                <h3 className="mt-1 font-sora font-bold tracking-tight leading-tight text-2xl md:text-3xl">{stage.name}</h3>
               </div>
-              <div className="flex gap-10">
+              <div className="flex shrink-0 gap-5 md:gap-10">
                 <div>
-                  <p className="text-sm text-[#111111]/45">Stage risk</p>
-                  <p className="mt-1 text-3xl font-semibold tracking-tight tabular-nums" style={{ color: level(stage.risk).color }}>
+                  <p className="text-xs md:text-sm text-[#111111]/45">Stage risk</p>
+                  <p
+                    className="mt-1 text-2xl md:text-3xl font-semibold tracking-tight leading-tight tabular-nums"
+                    style={{ color: level(stage.risk).color }}
+                  >
                     {pct(stage.risk)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-[#111111]/45">% of final</p>
-                  <p className="mt-1 text-3xl font-semibold tracking-tight tabular-nums">{pct(stage.contribution)}</p>
+                  <p className="text-xs md:text-sm text-[#111111]/45">% of final</p>
+                  <p className="mt-1 text-2xl md:text-3xl font-semibold tracking-tight leading-tight tabular-nums">
+                    {pct(stage.contribution)}
+                  </p>
                 </div>
               </div>
             </div>
+
+            <p className="mt-6 md:mt-8 text-[#111111]/60">Probability that the next result exceeds each limit.</p>
+            {stageHasSuggestions && (
+              <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-[#111111]/60">
+                <span>Suggested limits for a final water risk of</span>
+                <span className="inline-flex rounded-full bg-[#F5F5F7] p-1">
+                  {TARGETS.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setTarget(t)}
+                      aria-pressed={target === t}
+                      className={`rounded-full px-3 py-1 text-sm font-medium tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-[#111111] ${
+                        target === t ? "bg-white text-[#111111] shadow-sm" : "text-[#111111]/50"
+                      }`}
+                    >
+                      {t * 100}%
+                    </button>
+                  ))}
+                </span>
+              </div>
+            )}
 
             <ul className="mt-8 border-t border-[#111111]/10">
               {stage.indicators.map((ind) => {
