@@ -678,20 +678,22 @@ export default function WaterRiskPage() {
                         const v = sug.limits[target];
                         const stricter = v < ind.threshold;
                         return (
-                          <p className="mt-0.5 text-sm">
-                            <span className="text-[#111111]/45">Suggested </span>
-                            <span className="font-semibold tabular-nums">
-                              {v} {ind.unit}
-                            </span>
-                            {v !== ind.threshold && (
-                              <span className={`ml-1.5 text-xs font-medium ${stricter ? "text-[#FF270A]" : "text-[#16A34A]"}`}>
-                                {stricter ? "↓ stricter" : "↑ room to relax"}
+                          <>
+                            {/* riesgo final que acepta el límite actual */}
+                            <p className="text-xs text-[#111111]/45">Allows {pct(sug.finalRiskAtLimit)} final risk</p>
+                            {/* límite sugerido para el objetivo elegido */}
+                            <p className="mt-3 text-sm">
+                              <span className="text-[#111111]/45">Suggested </span>
+                              <span className="font-semibold tabular-nums">
+                                {v} {ind.unit}
                               </span>
-                            )}
-                            <span className="block text-xs text-[#111111]/45">
-                              Current limit allows {pct(sug.finalRiskAtLimit)} final risk
-                            </span>
-                          </p>
+                              {v !== ind.threshold && (
+                                <span className={`ml-1.5 text-xs font-medium ${stricter ? "text-[#FF270A]" : "text-[#16A34A]"}`}>
+                                  {stricter ? "↓ stricter" : "↑ room to relax"}
+                                </span>
+                              )}
+                            </p>
+                          </>
                         );
                       })()}
                     </div>
