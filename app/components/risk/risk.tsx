@@ -617,10 +617,10 @@ export default function WaterRiskPage() {
 
           {/* 2.2 Especificaciones y predicciones de la etapa seleccionada */}
           <div className="mt-12 md:mt-16 rounded-[1.75rem] bg-white p-7 md:p-12">
-            {/* Título + indicadores de la etapa, alineados por la base (también en móvil) */}
-            <div className="flex items-end justify-between gap-4 md:gap-8">
+            {/* Título + indicadores: en móvil los números van bajo el título; en escritorio, alineados con él */}
+            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between md:gap-8">
               <div className="min-w-0">
-                <p className="text-sm text-[#111111]/45">Last sample {fmtDate(parseISO(stage.lastSample))}</p>
+                <p className="text-sm text-[#111111]/45 whitespace-nowrap">Last sample {fmtDate(parseISO(stage.lastSample))}</p>
                 <h3 className="mt-1 font-sora font-bold tracking-tight leading-tight text-2xl md:text-3xl">{stage.name}</h3>
               </div>
               <div className="flex shrink-0 gap-5 md:gap-10">
