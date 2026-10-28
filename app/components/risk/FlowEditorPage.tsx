@@ -385,9 +385,9 @@ export default function FlowEditorPage() {
                             >
                               <span className="min-w-0 flex-1">
                                 <span className="block font-medium">{s.name}</span>
-                                <span className="mt-1 flex flex-col gap-0.5 sm:mt-1.5 sm:flex-row sm:flex-wrap sm:gap-1.5">
+                                <span className="hidden sm:flex mt-1.5 flex-wrap gap-1.5">
                                   {s.specs.length === 0 && (
-                                    <span className="text-xs font-medium text-[#C81E00] sm:whitespace-nowrap sm:rounded-full sm:bg-[#FF270A]/10 sm:px-2.5 sm:py-0.5">
+                                    <span className="whitespace-nowrap rounded-full bg-[#FF270A]/10 px-2.5 py-0.5 text-xs font-medium text-[#C81E00]">
                                       No analyses
                                     </span>
                                   )}
@@ -395,14 +395,14 @@ export default function FlowEditorPage() {
                                     specMissing(sp) ? (
                                       <span
                                         key={sp.analysis}
-                                        className="text-xs font-medium text-[#C81E00] sm:whitespace-nowrap sm:rounded-full sm:bg-[#FF270A]/10 sm:px-2.5 sm:py-0.5"
+                                        className="whitespace-nowrap rounded-full bg-[#FF270A]/10 px-2.5 py-0.5 text-xs font-medium text-[#C81E00]"
                                       >
                                         {shortName(sp.analysis)}: set limit
                                       </span>
                                     ) : (
                                       <span
                                         key={sp.analysis}
-                                        className="text-xs text-[#111111]/60 tabular-nums sm:whitespace-nowrap sm:rounded-full sm:bg-[#F5F5F7] sm:px-2.5 sm:py-0.5 sm:text-[#111111]/70"
+                                        className="whitespace-nowrap rounded-full bg-[#F5F5F7] px-2.5 py-0.5 text-xs text-[#111111]/70 tabular-nums"
                                       >
                                         {fmtSpec(sp)}
                                       </span>
@@ -445,6 +445,31 @@ export default function FlowEditorPage() {
                               </button>
                             </div>
                           </div>
+
+                          {/* Móvil: análisis en lista a todo el ancho de la tarjeta */}
+                          {!isOpen && (
+                            <ul className="sm:hidden mx-4 mb-3">
+                              {s.specs.length === 0 && (
+                                <li className="py-2.5 text-sm font-medium text-[#C81E00]">No analyses selected</li>
+                              )}
+                              {s.specs.map((sp) => (
+                                <li
+                                  key={sp.analysis}
+                                  className="flex items-baseline justify-between gap-4 py-1.5 text-sm"
+                                >
+                                  <span className="text-[#111111]/70">{sp.analysis}</span>
+                                  {specMissing(sp) ? (
+                                    <span className="shrink-0 font-medium text-[#C81E00]">Set limit</span>
+                                  ) : (
+                                    <span className="shrink-0 text-right font-medium tabular-nums">
+                                      {sp.type === "absent" ? "Not detected" : `≤ ${sp.value}`}
+                                      <span className="block text-xs font-normal text-[#111111]/45">{sp.unit}</span>
+                                    </span>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
 
                           {/* Abierta: editar análisis y especificación */}
                           {isOpen && (
