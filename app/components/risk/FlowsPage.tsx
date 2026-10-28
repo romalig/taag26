@@ -246,6 +246,8 @@ const TrainingBar = ({ f, wide = false }: { f: Flow; wide?: boolean }) => {
 
 type SortKey = "status" | "name" | "line" | "plant" | "training" | "created";
 type Sort = { key: SortKey; dir: "asc" | "desc" };
+// Filtros de más a menos importante
+const FILTER_ORDER: Status[] = ["active", "ready", "training", "paused", "draft", "inactive"];
 const STATUS_ORDER: Record<Status, number> = { active: 0, ready: 1, training: 2, paused: 3, draft: 4, inactive: 5 };
 
 const IconButton = ({
@@ -619,9 +621,9 @@ export default function FlowsPage() {
       <section className="px-6 pb-24 md:pb-32">
         <div className="mx-auto max-w-[1120px]">
           {/* Filtro por estado (con conteo) + búsqueda */}
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-4">
             <div className="flex gap-2 overflow-x-auto -mx-6 px-6 lg:mx-0 lg:px-0 [scrollbar-width:none]">
-              {(["all", ...(Object.keys(STATUS) as Status[]).filter((st) => counts[st] > 0)] as (Status | "all")[]).map((s) => {
+              {(["all", ...FILTER_ORDER.filter((st) => counts[st] > 0)] as (Status | "all")[]).map((s) => {
                 const active = statusFilter === s;
                 const n = s === "all" ? FLOWS.length : counts[s];
                 return (
@@ -643,7 +645,7 @@ export default function FlowsPage() {
                 );
               })}
             </div>
-            <label className="relative block lg:w-[260px]">
+            <label className="relative block sm:w-[300px]">
               <span className="sr-only">Search flows</span>
               <Search
                 aria-hidden

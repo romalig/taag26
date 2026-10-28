@@ -225,6 +225,43 @@ export default function FlowEditorPage() {
   const ready = checks.every((c) => c.ok);
   const missing = checks.filter((c) => !c.ok);
 
+  // Comprobación + guardar: en escritorio va en la columna derecha; en móvil, al final de todo
+  const SaveCard = (
+    <div className="rounded-[2rem] border border-[#111111]/10 p-6 md:p-7">
+                <ul className="space-y-2">
+                  {checks.map((c) => (
+                    <li key={c.text} className="flex items-center gap-2 text-sm">
+                      <span
+                        className={`w-4 h-4 rounded-full flex items-center justify-center ${
+                          c.ok ? "bg-[#16A34A] text-white" : "border border-[#111111]/20"
+                        }`}
+                      >
+                        {c.ok && <Check className="w-3 h-3" strokeWidth={3} />}
+                      </span>
+                      <span className={c.ok ? "text-[#111111]" : "text-[#111111]/50"}>{c.text}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-5 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setModal("draft")}
+                    className="flex-1 rounded-full px-4 py-3 text-sm font-medium bg-[#F5F5F7] hover:bg-[#ECECEE]"
+                  >
+                    Save draft
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!ready}
+                    onClick={() => setModal("train")}
+                    className="flex-1 rounded-full px-4 py-3 text-sm font-medium text-white bg-[#111111] disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    Save & start training
+                  </button>
+                </div>
+              </div>
+  );
+
   // Resumen del flujo para los modales
   const Summary = (
     <div className="mt-6 rounded-2xl bg-[#F5F5F7] p-5 md:p-6">
@@ -348,9 +385,9 @@ export default function FlowEditorPage() {
                             >
                               <span className="min-w-0 flex-1">
                                 <span className="block font-medium">{s.name}</span>
-                                <span className="mt-1.5 flex flex-wrap gap-1.5">
+                                <span className="mt-1 flex flex-col gap-0.5 sm:mt-1.5 sm:flex-row sm:flex-wrap sm:gap-1.5">
                                   {s.specs.length === 0 && (
-                                    <span className="rounded-full bg-[#FF270A]/10 px-2.5 py-0.5 text-xs font-medium text-[#C81E00]">
+                                    <span className="text-xs font-medium text-[#C81E00] sm:whitespace-nowrap sm:rounded-full sm:bg-[#FF270A]/10 sm:px-2.5 sm:py-0.5">
                                       No analyses
                                     </span>
                                   )}
@@ -358,14 +395,14 @@ export default function FlowEditorPage() {
                                     specMissing(sp) ? (
                                       <span
                                         key={sp.analysis}
-                                        className="rounded-full bg-[#FF270A]/10 px-2.5 py-0.5 text-xs font-medium text-[#C81E00]"
+                                        className="text-xs font-medium text-[#C81E00] sm:whitespace-nowrap sm:rounded-full sm:bg-[#FF270A]/10 sm:px-2.5 sm:py-0.5"
                                       >
                                         {shortName(sp.analysis)}: set limit
                                       </span>
                                     ) : (
                                       <span
                                         key={sp.analysis}
-                                        className="rounded-full bg-[#F5F5F7] px-2.5 py-0.5 text-xs text-[#111111]/70 tabular-nums"
+                                        className="text-xs text-[#111111]/60 tabular-nums sm:whitespace-nowrap sm:rounded-full sm:bg-[#F5F5F7] sm:px-2.5 sm:py-0.5 sm:text-[#111111]/70"
                                       >
                                         {fmtSpec(sp)}
                                       </span>
@@ -642,40 +679,11 @@ export default function FlowEditorPage() {
                 )}
               </div>
 
-              <div className="rounded-[2rem] border border-[#111111]/10 p-6 md:p-7">
-                <ul className="space-y-2">
-                  {checks.map((c) => (
-                    <li key={c.text} className="flex items-center gap-2 text-sm">
-                      <span
-                        className={`w-4 h-4 rounded-full flex items-center justify-center ${
-                          c.ok ? "bg-[#16A34A] text-white" : "border border-[#111111]/20"
-                        }`}
-                      >
-                        {c.ok && <Check className="w-3 h-3" strokeWidth={3} />}
-                      </span>
-                      <span className={c.ok ? "text-[#111111]" : "text-[#111111]/50"}>{c.text}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-5 flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setModal("draft")}
-                    className="flex-1 rounded-full px-4 py-3 text-sm font-medium bg-[#F5F5F7] hover:bg-[#ECECEE]"
-                  >
-                    Save draft
-                  </button>
-                  <button
-                    type="button"
-                    disabled={!ready}
-                    onClick={() => setModal("train")}
-                    className="flex-1 rounded-full px-4 py-3 text-sm font-medium text-white bg-[#111111] disabled:opacity-30 disabled:cursor-not-allowed"
-                  >
-                    Save & start training
-                  </button>
-                </div>
-              </div>
+              <div className="hidden lg:block">{SaveCard}</div>
             </aside>
+
+            {/* Móvil: comprobación y guardar como último bloque */}
+            <div className="order-3 lg:hidden">{SaveCard}</div>
           </div>
         </div>
       </section>
