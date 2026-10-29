@@ -97,6 +97,7 @@ const FEATURED: Featured[] = [
 const FeaturedTile = ({ item, onClick }: { item: Featured; onClick: () => void }) => (
   <Link
     href={item.href}
+    prefetch={false}
     onClick={onClick}
     className="snap-start shrink-0 w-[170px] h-[250px] rounded-2xl bg-[#F5F5F7] p-4 flex flex-col outline-none focus-visible:ring-2 focus-visible:ring-[#111111]"
   >
@@ -182,7 +183,19 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
     };
   }, [isMenuOpen, isLangOpen]);
 
-  const closeMenu = () => setIsMenuOpen(false);
+  // Al abrir/cerrar con botones: animado. Al tocar un link: cierre instantáneo
+  // (la página cambia igual; animar el cierre mientras navega se siente lento).
+  const [instantClose, setInstantClose] = useState(false);
+  const closeMenu = () => {
+    setInstantClose(false);
+    setIsMenuOpen(false);
+  };
+  const closeOnNavigate = () => {
+    setInstantClose(true);
+    setIsMenuOpen(false);
+  };
+  const panelAnim = instantClose ? "transition-none" : "transition-[transform,visibility] duration-300 ease-out";
+  const overlayAnim = instantClose ? "transition-none" : "transition-opacity duration-300";
 
   const headerBg = isScrolled
     ? dynamicTheme === "dark"
@@ -246,6 +259,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
               aria-expanded={isMenuOpen}
               className="p-1 transition-transform duration-300 hover:scale-110"
               onClick={() => {
+                setInstantClose(false);
                 setIsMenuOpen(!isMenuOpen);
                 setIsLangOpen(false);
               }}
@@ -258,7 +272,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
 
       {/* --- MENU LATERAL --- */}
       <div
-        className={`fixed inset-0 z-[90] bg-black/50 transition-opacity duration-300 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
+        className={`fixed inset-0 z-[90] bg-black/50 ${overlayAnim} ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
         onClick={closeMenu}
       />
 
@@ -266,7 +280,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
-        className={`fixed top-0 right-0 bottom-0 w-full sm:w-[400px] md:w-[480px] bg-white z-[100] sm:shadow-2xl transition-[transform,visibility] duration-300 ease-out will-change-transform flex flex-col ${isMenuOpen ? "translate-x-0 visible" : "translate-x-full invisible"}`}
+        className={`fixed top-0 right-0 bottom-0 w-full sm:w-[400px] md:w-[480px] bg-white z-[100] sm:shadow-2xl ${panelAnim} will-change-transform flex flex-col ${isMenuOpen ? "translate-x-0 visible" : "translate-x-full invisible"}`}
       >
         <div className="flex items-center justify-between p-6 border-b border-black/5 shrink-0">
           <span className="text-xl font-bold text-[#111111]">Menu</span>
@@ -292,7 +306,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
         <div className="flex-1 overflow-y-auto overscroll-contain">
           <div className="bg-[#F5F5F7] p-6 pb-8 border-b border-black/5">
             <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-4">Featured Technology</p>
-            <Link href="/aigor" onClick={closeMenu} className="bg-white rounded-2xl p-4 flex items-start gap-5 cursor-pointer block">
+            <Link href="/aigor" prefetch={false} onClick={closeOnNavigate} className="bg-white rounded-2xl p-4 flex items-start gap-5 cursor-pointer block">
               <div className="w-24 h-24 relative flex items-center justify-center rounded-xl overflow-hidden shrink-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#FF270A] via-purple-600 to-blue-600" />
                 <div className="absolute inset-[3px] bg-[#111111] rounded-[10px] flex flex-col items-center justify-center z-10 p-1 text-center">
@@ -312,7 +326,8 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
               <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest">Featured solutions</p>
               <Link
                 href="/solutions" /* TODO: URL real, misma que "All featured solutions" */
-                onClick={closeMenu}
+                prefetch={false}
+                onClick={closeOnNavigate}
                 className="inline-flex items-center gap-0.5 text-xs font-medium text-[#111111] hover:text-[#FF270A] transition-colors"
               >
                 See all <ChevronRight className="w-3.5 h-3.5" />
@@ -320,7 +335,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
             </div>
             <div className="flex gap-3 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scroll-px-6 px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {FEATURED.map((item) => (
-                <FeaturedTile key={item.href} item={item} onClick={closeMenu} />
+                <FeaturedTile key={item.href} item={item} onClick={closeOnNavigate} />
               ))}
               <div aria-hidden className="shrink-0 w-3" />
             </div>
@@ -333,7 +348,8 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
                 <Link
                   key={link.name}
                   href={link.href}
-                  onClick={closeMenu}
+                  prefetch={false}
+                  onClick={closeOnNavigate}
                   className="group flex items-center justify-between py-4 border-b border-black/5 text-lg font-medium text-[#111111] hover:text-[#FF270A] transition-colors"
                 >
                   {link.name}
