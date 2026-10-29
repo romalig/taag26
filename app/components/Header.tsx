@@ -61,7 +61,7 @@ const FEATURED: Featured[] = [
     visual: "3–6h",
     size: "text-[2rem]",
     gradient: true,
-    deco: <Image src="/aoac_elevia11.png" alt="AOAC Performance Tested Method" width={80} height={32} className="h-6 w-auto" />,
+    deco: <Image src="/aoac_elevia11.png" alt="AOAC Performance Tested Method" width={100} height={40} className="h-8 w-auto" />,
   },
   {
     href: "/solutions/seafood",
@@ -110,7 +110,7 @@ const FeaturedTile = ({ item, onClick }: { item: Featured; onClick: () => void }
         {item.visual}
       </span>
     </div>
-    <div className="h-8 flex items-center justify-center">{item.deco}</div>
+    <div className="h-10 flex items-center justify-center">{item.deco}</div>
   </Link>
 );
 
@@ -148,10 +148,20 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        handleScroll();
+        ticking = false;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
     handleScroll();
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, [theme]);
 
   // Bloqueo de scroll + cierre con Escape; limpia al desmontar
@@ -176,8 +186,8 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
 
   const headerBg = isScrolled
     ? dynamicTheme === "dark"
-      ? "bg-black/70 backdrop-blur-lg border-b border-white/10"
-      : "bg-white/100 backdrop-blur-md border-b border-black/5"
+      ? "bg-black/70 backdrop-blur-md border-b border-white/10"
+      : "bg-white border-b border-black/5"
     : "bg-transparent border-transparent";
 
   const useWhiteForeground =
@@ -188,7 +198,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
 
   return (
     <div className={sora.className}>
-      <header className={`fixed top-0 left-0 right-0 z-[50] transition-all duration-500 ${headerBg} py-4`}>
+      <header className={`fixed top-0 left-0 right-0 z-[50] transition-colors duration-300 ${headerBg} py-4`}>
         <div className="mx-auto max-w-7xl px-6 flex items-center justify-between">
           <Link
             href="/"
@@ -203,7 +213,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
                 src="/logo-red1.png"
                 alt="TAAG Logo"
                 fill
-                className={`object-contain object-left transition-all duration-500 ${logoClasses}`}
+                className={`object-contain object-left ${logoClasses}`}
                 priority
               />
             </div>
@@ -248,7 +258,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
 
       {/* --- MENU LATERAL --- */}
       <div
-        className={`fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm transition-opacity duration-500 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
+        className={`fixed inset-0 z-[90] bg-black/50 transition-opacity duration-300 ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
         onClick={closeMenu}
       />
 
@@ -256,7 +266,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
-        className={`fixed top-0 right-0 bottom-0 w-full sm:w-[400px] md:w-[480px] bg-white z-[100] shadow-2xl transition-transform duration-500 ease-in-out flex flex-col ${isMenuOpen ? "translate-x-0 visible" : "translate-x-full invisible"}`}
+        className={`fixed top-0 right-0 bottom-0 w-full sm:w-[400px] md:w-[480px] bg-white z-[100] sm:shadow-2xl transition-[transform,visibility] duration-300 ease-out will-change-transform flex flex-col ${isMenuOpen ? "translate-x-0 visible" : "translate-x-full invisible"}`}
       >
         <div className="flex items-center justify-between p-6 border-b border-black/5 shrink-0">
           <span className="text-xl font-bold text-[#111111]">Menu</span>
@@ -279,10 +289,10 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto overscroll-contain">
           <div className="bg-[#F5F5F7] p-6 pb-8 border-b border-black/5">
             <p className="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-4">Featured Technology</p>
-            <Link href="/aigor" onClick={closeMenu} className="bg-white rounded-2xl p-4 border border-black/5 flex items-start gap-5 cursor-pointer block">
+            <Link href="/aigor" onClick={closeMenu} className="bg-white rounded-2xl p-4 flex items-start gap-5 cursor-pointer block">
               <div className="w-24 h-24 relative flex items-center justify-center rounded-xl overflow-hidden shrink-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#FF270A] via-purple-600 to-blue-600" />
                 <div className="absolute inset-[3px] bg-[#111111] rounded-[10px] flex flex-col items-center justify-center z-10 p-1 text-center">
@@ -308,7 +318,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
                 See all <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
-            <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-px-6 px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex gap-3 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scroll-px-6 px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {FEATURED.map((item) => (
                 <FeaturedTile key={item.href} item={item} onClick={closeMenu} />
               ))}
@@ -324,7 +334,7 @@ export default function Header({ theme = "light" }: { theme?: "light" | "dark" |
                   key={link.name}
                   href={link.href}
                   onClick={closeMenu}
-                  className="group flex items-center justify-between py-4 border-b border-black/5 text-lg font-medium text-[#111111] hover:text-[#FF270A] hover:pl-2 transition-all"
+                  className="group flex items-center justify-between py-4 border-b border-black/5 text-lg font-medium text-[#111111] hover:text-[#FF270A] transition-colors"
                 >
                   {link.name}
                   <ChevronRight className="w-5 h-5 text-black/20 group-hover:text-[#FF270A]" />
